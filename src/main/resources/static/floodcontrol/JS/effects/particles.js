@@ -227,7 +227,7 @@ class ParticleSystem {
 let particleSystem = null;
 
 // 初始化粒子系统
-function initParticles() {
+async function initParticles() {
   if (!particleSystem) {
     particleSystem = new ParticleSystem();
   }

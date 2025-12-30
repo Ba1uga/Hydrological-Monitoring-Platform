@@ -6,7 +6,7 @@ import { getCurrentMode } from '../map/initMap.js';
 let radarChart = null;
 
 // 初始化雷达图
-function initRadarChart() {
+async function initRadarChart() {
   const container = document.getElementById('radarChart');
   if (!container) return;
   

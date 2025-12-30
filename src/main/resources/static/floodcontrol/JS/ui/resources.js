@@ -25,7 +25,7 @@ const RESOURCE_DATA = {
 
 let latestUpdateSeq = 0;
 
-export function initResourceInteractions(getCurrentModeFn) {
+export async function initResourceInteractions(getCurrentModeFn) {
   const mapBtn = document.querySelector('.map-view-btn');
   if (mapBtn) {
     mapBtn.addEventListener('click', () => {

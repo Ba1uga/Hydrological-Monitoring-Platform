@@ -2,7 +2,7 @@
 /* 防汛 ↔ 抗旱模式切换逻辑 */
 
 // 引入相关模块
-import { updateMapForFlood, updateMapForDrought, refreshMonitoringPointsOnMap, initRiskLegend, renderRiskLegend, RISK_LEVELS, getCurrentMode, getCurrentView, setCurrentMode, setCurrentView, getChart, initStationListHover } from '../map/initMap.js';
+import { updateMapForFlood, updateMapForDrought, refreshMonitoringPointsOnMap, initRiskLegend, renderRiskLegend, RISK_LEVELS, getCurrentMode, getCurrentView, setCurrentMode, setCurrentView, getChart } from '../map/initMap.js';
 import { updateParticlesForFlood, updateParticlesForDrought } from '../effects/particles.js';
 import { triggerSidePanelAnimations, initNumberAnimations } from '../effects/numberAnimation.js';
 import { update3DMapForCurrentMode, switchTo3DMap, switchTo2DMap } from '../map/map3D.js';
@@ -38,7 +38,7 @@ function updateTime() {
 }
 
 // 绑定模式切换按钮点击事件
-function initModeSwitch() {
+async function initModeSwitch() {
   const modeBtns = document.querySelectorAll('.mode-btn');
   modeBtns.forEach(btn => {
     btn.addEventListener('click', function () {

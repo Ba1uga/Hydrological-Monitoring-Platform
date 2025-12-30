@@ -138,12 +138,14 @@ function triggerSidePanelAnimations(currentMode = 'flood') {
   if (statValues.length > 0) {
     // 无论什么模式，资源统计数值都保持不变
     // 但在模式切换时重新动画化，增强视觉效果
-    setTimeout(() => {
-      animateNumber(statValues[0], 25, 1000, { unit: '' }); // 物资储备
-      animateNumber(statValues[1], 8, 1000, { unit: '' }); // 应急队伍
-      animateNumber(statValues[2], 15, 1000, { unit: '' }); // 运输车辆
-      animateNumber(statValues[3], 30, 1000, { unit: '' }); // 水泵设备
-    }, 100); // 轻微延迟，确保DOM已更新
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        animateNumber(statValues[0], 25, 1000, { unit: '' });
+        animateNumber(statValues[1], 8, 1000, { unit: '' });
+        animateNumber(statValues[2], 15, 1000, { unit: '' });
+        animateNumber(statValues[3], 30, 1000, { unit: '' });
+      });
+    });
   }
 }
 

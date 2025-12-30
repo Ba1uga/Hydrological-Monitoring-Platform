@@ -2,7 +2,7 @@
 /* 实现调度预案的翻页功能，包括按钮文字切换和页面显示/隐藏 */
 
 // 初始化调度预案翻页功能
-function initDispatchPager() {
+async function initDispatchPager() {
   const pagerButton = document.getElementById('dispatchPager');
   const pages = document.querySelectorAll('.dispatch-page');
   let pagerText = pagerButton.querySelector('.pager-text');

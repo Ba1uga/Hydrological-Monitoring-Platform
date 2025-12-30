@@ -149,7 +149,7 @@ function refreshMonitoringPointsOnMap() {
 }
 
 // 初始化风险等级图例的鼠标事件（悬浮高亮 + 单选过滤）
-function initRiskLegend() {
+async function initRiskLegend() {
   const legend = document.getElementById('riskLegend');
   if (!legend) return;
 
@@ -323,11 +323,12 @@ async function initMap() {
     return res.json();
   };
 
-  Promise.all([
-    loadJson('../../geojson/countries_10m.geojson'),
-    loadJson('../../geojson/states_provinces_10m.geojson'),
-    loadJson('../../geojson/china_rivers_10m.geojson')
-  ]).then(([chinaGeo, provincesGeo, riversGeo]) => {
+  try {
+    const [chinaGeo, provincesGeo, riversGeo] = await Promise.all([
+      loadJson('../../geojson/countries_10m.geojson'),
+      loadJson('../../geojson/states_provinces_10m.geojson'),
+      loadJson('../../geojson/china_rivers_10m.geojson')
+    ]);
     if (!chinaGeo || !provincesGeo || !riversGeo) {
       throw new Error('地图数据为空');
     }
@@ -438,7 +439,11 @@ async function initMap() {
     });
 
     // 5. 初始化 ECharts 实例
-    const newChart = echarts.init(document.getElementById('map'));
+    const mapEl = document.getElementById('map');
+    if (!mapEl) {
+      throw new Error('地图容器未找到');
+    }
+    const newChart = echarts.init(mapEl);
     setChart(newChart);
 
     const theme = getMapBaseTheme(currentMode);
@@ -804,14 +809,16 @@ async function initMap() {
     // 地图与数据全部加载完成，允许拖动缩放
     mapReady = true;
     if (loadingEl) loadingEl.style.display = 'none';
-  }).catch(err => {
+  } catch (err) {
     console.error(err);
+    mapReady = false;
     if (loadingEl) {
       loadingEl.innerHTML = '<span>地图加载失败，请稍后重试</span>';
     } else {
       alert('地图加载失败：' + err.message);
     }
-  });
+    throw err;
+  }
 }
 
 // 切换地图为防汛模式
@@ -1000,29 +1007,6 @@ async function updateMapForDrought() {
           data: getFilteredMonitoringPoints()
         }
       ]
-  });
-}
-
-// 初始化站点列表的鼠标悬停事件
-export function initStationListHover() {
-  const stationItems = document.querySelectorAll('.station-item');
-  if (!stationItems.length) return;
-
-  stationItems.forEach(item => {
-    const stationName = item.querySelector('.station-name').textContent.trim();
-    if (!stationName) return;
-
-    // 鼠标悬停：只显示当前站点
-    item.addEventListener('mouseenter', () => {
-      hoverStation = stationName;
-      refreshMonitoringPointsOnMap();
-    });
-
-    // 鼠标移出：恢复显示所有站点
-    item.addEventListener('mouseleave', () => {
-      hoverStation = null;
-      refreshMonitoringPointsOnMap();
-    });
   });
 }
 

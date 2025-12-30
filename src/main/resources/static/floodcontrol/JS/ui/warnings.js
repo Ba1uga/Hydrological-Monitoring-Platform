@@ -34,7 +34,7 @@ function renderWarningMessages(warningScroll, messages) {
 }
 
 // 初始化左侧预警信息滚动
-function initWarningScroll() {
+async function initWarningScroll() {
   const warningScroll = document.getElementById('warningScroll');
   if (!warningScroll) return;
 
