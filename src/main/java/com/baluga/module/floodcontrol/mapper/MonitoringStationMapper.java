@@ -23,6 +23,18 @@ public interface MonitoringStationMapper extends BaseMapper<MonitoringStation> {
             "<foreach collection='stationIds' item='id' open='(' separator=',' close=')'> #{id} </foreach>" +
             "</script>")
     BigDecimal sumAffectedAreaByStationIds(@Param("stationIds") List<Long> stationIds);
+
+    @Select("<script>" +
+            "SELECT COALESCE(SUM(s.affected_area), 0) " +
+            "FROM monitoring_station s " +
+            "JOIN monitoring_station_history h ON h.station_id = s.id " +
+            "WHERE h.record_date = #{time} " +
+            "AND h.is_warning = 1 " +
+            "<if test='mode != null and mode != \"all\"'> AND h.value_unit = #{valueUnit} </if>" +
+            "</script>")
+    BigDecimal sumAffectedAreaByWarningTime(@Param("time") LocalDateTime time,
+                                           @Param("mode") String mode,
+                                           @Param("valueUnit") String valueUnit);
     
     /**
      * 查询指定站点过去7天的历史数据（整点）

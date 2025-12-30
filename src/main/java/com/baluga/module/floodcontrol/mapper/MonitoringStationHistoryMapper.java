@@ -30,6 +30,36 @@ public interface MonitoringStationHistoryMapper extends BaseMapper<MonitoringSta
     List<MonitoringStationHistoryVO> searchHistory(@Param("startDate") LocalDateTime startDate, 
                                                   @Param("endDate") LocalDateTime endDate, 
                                                   @Param("stationName") String stationName);
+
+    @Select("<script>" +
+            "SELECT h.*, s.station_name, s.station_type, s.primary_mode " +
+            "FROM monitoring_station_history h " +
+            "LEFT JOIN monitoring_station s ON h.station_id = s.id " +
+            "WHERE 1=1 " +
+            "<if test='startDate != null'> AND h.record_date &gt;= #{startDate} </if>" +
+            "<if test='endDate != null'> AND h.record_date &lt;= #{endDate} </if>" +
+            "<if test='stationName != null and stationName != \"\"'> AND s.station_name LIKE CONCAT('%', #{stationName}, '%') </if>" +
+            "ORDER BY h.record_date DESC, h.id ASC " +
+            "LIMIT #{size} OFFSET #{offset}" +
+            "</script>")
+    List<MonitoringStationHistoryVO> searchHistoryPage(@Param("startDate") LocalDateTime startDate,
+                                                      @Param("endDate") LocalDateTime endDate,
+                                                      @Param("stationName") String stationName,
+                                                      @Param("offset") long offset,
+                                                      @Param("size") int size);
+
+    @Select("<script>" +
+            "SELECT COUNT(1) " +
+            "FROM monitoring_station_history h " +
+            "LEFT JOIN monitoring_station s ON h.station_id = s.id " +
+            "WHERE 1=1 " +
+            "<if test='startDate != null'> AND h.record_date &gt;= #{startDate} </if>" +
+            "<if test='endDate != null'> AND h.record_date &lt;= #{endDate} </if>" +
+            "<if test='stationName != null and stationName != \"\"'> AND s.station_name LIKE CONCAT('%', #{stationName}, '%') </if>" +
+            "</script>")
+    Long countHistory(@Param("startDate") LocalDateTime startDate,
+                      @Param("endDate") LocalDateTime endDate,
+                      @Param("stationName") String stationName);
     
     /**
      * 统计指定时间和模式的警戒站点数量

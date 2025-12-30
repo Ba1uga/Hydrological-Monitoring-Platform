@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 历史数据查询控制器
@@ -31,11 +32,13 @@ public class HistoryController {
      * @return 历史数据列表
      */
     @GetMapping("/list")
-    public Result<List<MonitoringStationHistoryVO>> getHistoryList(
+    public Result<Map<String, Object>> getHistoryList(
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startDate,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endDate,
-            @RequestParam(required = false) String stationName) {
+            @RequestParam(required = false) String stationName,
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "50") int size) {
         
-        return Result.success(monitoringStationService.getHistoryList(startDate, endDate, stationName));
+        return Result.success(monitoringStationService.getHistoryPage(startDate, endDate, stationName, page, size));
     }
 }

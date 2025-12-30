@@ -3,6 +3,7 @@ package com.baluga.module.floodcontrol.service;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import com.baluga.module.floodcontrol.pojo.MonitoringStation;
 import com.baluga.module.floodcontrol.vo.DashboardCardVO;
@@ -53,6 +54,8 @@ public interface MonitoringStationService extends IService<MonitoringStation> {
      * @param stationName 站点名称（模糊查询）
      */
     List<MonitoringStationHistoryVO> getHistoryList(LocalDateTime startDate, LocalDateTime endDate, String stationName);
+
+    Map<String, Object> getHistoryPage(LocalDateTime startDate, LocalDateTime endDate, String stationName, int page, int size);
     
     /**
      * 获取当前整点的站点数据

@@ -7,13 +7,16 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import com.baluga.module.floodcontrol.mapper.MonitoringStationHistoryMapper;
@@ -36,6 +39,10 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
 
     @Autowired
     private MonitoringStationHistoryMapper historyMapper;
+
+    @Autowired
+    @Lazy
+    private MonitoringStationService self;
 
     @Value("${app.demoTime.fixed:}")
     private String demoTimeFixed;
@@ -62,6 +69,14 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
         return now().truncatedTo(ChronoUnit.HOURS);
     }
 
+    private static LocalDateTime dayStart(LocalDate date) {
+        return date.atStartOfDay();
+    }
+
+    private static LocalDateTime nextDayStart(LocalDate date) {
+        return date.plusDays(1).atStartOfDay();
+    }
+
     private static LocalDateTime parseFixedDemoTime(String fixed) {
         if (fixed == null) return null;
         String trimmed = fixed.trim();
@@ -83,11 +98,34 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
     }
 
     @Override
+    public Map<String, Object> getHistoryPage(LocalDateTime startDate, LocalDateTime endDate, String stationName, int page, int size) {
+        int normalizedPage = Math.max(1, page);
+        int normalizedSize = Math.min(200, Math.max(1, size));
+        long offset = (long) (normalizedPage - 1) * normalizedSize;
+
+        Long total = historyMapper.countHistory(startDate, endDate, stationName);
+        if (total == null) total = 0L;
+        List<MonitoringStationHistoryVO> list = historyMapper.searchHistoryPage(startDate, endDate, stationName, offset, normalizedSize);
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("page", normalizedPage);
+        result.put("size", normalizedSize);
+        result.put("total", total);
+        result.put("list", list);
+        return result;
+    }
+
+    @Override
     @Cacheable(value = "warningStations", key = "#mode + ':' + #root.target.currentCacheDate()", unless = "#result == null")
     public List<MonitoringStation> getWarningStations(String mode) {
         LocalDate today = now().toLocalDate();
         QueryWrapper<MonitoringStation> query = new QueryWrapper<>();
-        query.apply("DATE(value_record_time) = {0}", today);
+        query.ge("value_record_time", dayStart(today)).lt("value_record_time", nextDayStart(today));
+        if ("flood".equals(mode)) {
+            query.eq("value_unit", "m");
+        } else if ("drought".equals(mode)) {
+            query.eq("value_unit", "%");
+        }
         
         List<MonitoringStation> allToday = this.list(query);
         
@@ -131,11 +169,13 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
         
         // 构建查询条件
         QueryWrapper<MonitoringStationHistory> todayQuery = new QueryWrapper<>();
-        todayQuery.apply("DATE(record_date) = {0}", today)
+        todayQuery.ge("record_date", dayStart(today))
+                  .lt("record_date", nextDayStart(today))
                   .eq("is_warning", 1);
         
         QueryWrapper<MonitoringStationHistory> yesterdayQuery = new QueryWrapper<>();
-        yesterdayQuery.apply("DATE(record_date) = {0}", yesterday)
+        yesterdayQuery.ge("record_date", dayStart(yesterday))
+                      .lt("record_date", nextDayStart(yesterday))
                       .eq("is_warning", 1);
         
         // 根据模式添加过滤条件
@@ -160,13 +200,15 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
         // 额外统计
         if ("all".equals(mode)) {
             QueryWrapper<MonitoringStationHistory> floodQuery = new QueryWrapper<>();
-            floodQuery.apply("DATE(record_date) = {0}", today)
+            floodQuery.ge("record_date", dayStart(today))
+                      .lt("record_date", nextDayStart(today))
                       .eq("value_unit", "m")
                       .eq("is_warning", 1);
             vo.setFloodWarningCount(historyMapper.selectCount(floodQuery).intValue());
             
             QueryWrapper<MonitoringStationHistory> droughtQuery = new QueryWrapper<>();
-            droughtQuery.apply("DATE(record_date) = {0}", today)
+            droughtQuery.ge("record_date", dayStart(today))
+                        .lt("record_date", nextDayStart(today))
                         .eq("value_unit", "%")
                         .eq("is_warning", 1);
             vo.setDroughtWarningCount(historyMapper.selectCount(droughtQuery).intValue());
@@ -177,7 +219,8 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
 
         // 4. 检查是否有昨日数据（用于计算趋势）
         QueryWrapper<MonitoringStationHistory> yesterdayDataCheck = new QueryWrapper<>();
-        yesterdayDataCheck.apply("DATE(record_date) = {0}", yesterday);
+        yesterdayDataCheck.ge("record_date", dayStart(yesterday))
+                          .lt("record_date", nextDayStart(yesterday));
         
         if ("flood".equals(mode)) yesterdayDataCheck.eq("value_unit", "m");
         if ("drought".equals(mode)) yesterdayDataCheck.eq("value_unit", "%");
@@ -230,7 +273,7 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
         
         // 1. 查询今日的 monitoring_station 列表
         QueryWrapper<MonitoringStation> query = new QueryWrapper<>();
-        query.apply("DATE(value_record_time) = {0}", today);
+        query.ge("value_record_time", dayStart(today)).lt("value_record_time", nextDayStart(today));
         if ("flood".equals(mode)) {
             query.eq("value_unit", "m");
         } else if ("drought".equals(mode)) {
@@ -248,7 +291,8 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
         List<String> stationNames = todayList.stream().map(MonitoringStation::getStationName).collect(Collectors.toList());
         
         QueryWrapper<MonitoringStation> yesterdayStationQuery = new QueryWrapper<>();
-        yesterdayStationQuery.apply("DATE(value_record_time) = {0}", yesterday)
+        yesterdayStationQuery.ge("value_record_time", dayStart(yesterday))
+                             .lt("value_record_time", nextDayStart(yesterday))
                              .in("station_name", stationNames);
         
         if ("flood".equals(mode)) {
@@ -314,7 +358,8 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
         if (stations.isEmpty()) {
             LocalDate today = now().toLocalDate();
             QueryWrapper<MonitoringStation> todayQuery = new QueryWrapper<>();
-            todayQuery.apply("DATE(value_record_time) = {0}", today);
+            todayQuery.ge("value_record_time", dayStart(today))
+                      .lt("value_record_time", nextDayStart(today));
             
             if ("flood".equals(mode)) {
                 todayQuery.eq("value_unit", "m");
@@ -394,7 +439,7 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
     @Override
     @Cacheable(value = "dashboardCardData", key = "#mode + ':' + #root.target.currentCacheHour()", unless = "#result == null")
     public DashboardCardVO getDashboardCardData(String mode) {
-        return getRealTimeCardData(mode);
+        return self.getRealTimeCardData(mode);
     }
     
     @Override
@@ -434,14 +479,8 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
             trendDirection = "flat";
         }
 
-        // 5. 获取受影响面积
-        // 5.1 获取当前整点的警戒站点ID列表
-        List<Long> warningStationIds = historyMapper.getWarningStationIdsByTime(currentHour, mode, valueUnit);
-        // 5.2 查询这些站点的受影响面积总和
-        BigDecimal affectedArea = BigDecimal.ZERO;
-        if (!warningStationIds.isEmpty()) {
-            affectedArea = baseMapper.sumAffectedAreaByStationIds(warningStationIds);
-        }
+        BigDecimal affectedArea = baseMapper.sumAffectedAreaByWarningTime(currentHour, mode, valueUnit);
+        if (affectedArea == null) affectedArea = BigDecimal.ZERO;
 
         // 6. 封装结果返回
         DashboardCardVO vo = new DashboardCardVO();

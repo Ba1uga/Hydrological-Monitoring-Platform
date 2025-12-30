@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.baluga.module.floodcontrol.controller.WebSocketHandler;
-import com.baluga.module.floodcontrol.service.MonitoringStationService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,9 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 public class TaskScheduler {
     
     @Autowired
-    private MonitoringStationService monitoringStationService;
-    
-    @Autowired
     private WebSocketHandler webSocketHandler;
     
     /**
@@ -36,17 +32,6 @@ public class TaskScheduler {
         log.info("开始执行每小时整点数据查询任务");
         
         try {
-            // 执行当前整点数据查询
-            // 查询所有模式的数据
-            monitoringStationService.getCurrentHourStationVOs("all");
-            monitoringStationService.getCurrentHourStationVOs("flood");
-            monitoringStationService.getCurrentHourStationVOs("drought");
-            
-            // 查询仪表盘卡片数据
-            monitoringStationService.getDashboardCardData("all");
-            monitoringStationService.getDashboardCardData("flood");
-            monitoringStationService.getDashboardCardData("drought");
-            
             // 推送数据到客户端
             webSocketHandler.pushAllData();
             
@@ -65,9 +50,6 @@ public class TaskScheduler {
         log.info("开始执行初始化数据查询任务");
         
         try {
-            // 执行当前整点数据查询
-            monitoringStationService.getCurrentHourStationVOs("all");
-            
             // 推送数据到客户端
             webSocketHandler.pushAllData();
             
