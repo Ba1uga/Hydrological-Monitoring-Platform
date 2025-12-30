@@ -22,6 +22,46 @@ const ROTATION_OSC_PERIOD_MS = 7000;
 
 let refresh3DMapListener = null;
 
+let cachedProvinceBorderLines3D = null;
+let cachedProvinceBorderLines3DKey = null;
+
+function getProvinceBorderLines3D(mapName, z, cacheKeyExtra = '') {
+  const zKey = Number.isFinite(z) ? z.toFixed(3) : String(z);
+  const key = `${mapName}:${zKey}:${cacheKeyExtra}`;
+  if (cachedProvinceBorderLines3D && cachedProvinceBorderLines3DKey === key) {
+    return cachedProvinceBorderLines3D;
+  }
+
+  const map = echarts && echarts.getMap ? echarts.getMap(mapName) : null;
+  const geoJson = map ? map.geoJson : null;
+  if (!geoJson || !Array.isArray(geoJson.features)) {
+    return [];
+  }
+
+  const lines = [];
+  geoJson.features.forEach((f) => {
+    const g = f && f.geometry ? f.geometry : null;
+    if (!g || !g.coordinates) return;
+    if (g.type === 'Polygon') {
+      g.coordinates.forEach((ring) => {
+        if (ring && ring.length > 3) lines.push({ coords: ring.map((p) => [p[0], p[1], z]) });
+      });
+      return;
+    }
+    if (g.type === 'MultiPolygon') {
+      g.coordinates.forEach((poly) => {
+        poly.forEach((ring) => {
+          if (ring && ring.length > 3) lines.push({ coords: ring.map((p) => [p[0], p[1], z]) });
+        });
+      });
+    }
+  });
+
+  cachedProvinceBorderLines3D = lines;
+  cachedProvinceBorderLines3DKey = key;
+  return cachedProvinceBorderLines3D;
+}
+
 function clamp01(value) {
   return Math.max(0, Math.min(1, value));
 }
@@ -313,6 +353,11 @@ function getBar3DData() {
 function build3DMapOption() {
   const currentMode = getCurrentMode();
   const theme = getMapBaseTheme(currentMode);
+  const borderWidth3D = 2.8;
+  const borderColor3D = currentMode === 'flood' ? '#ffffff' : '#ff8800';
+  const regionHeight = 2.849;
+  const borderZ = regionHeight + 0.25;
+  const provinceBorderLines3D = getProvinceBorderLines3D('china_provinces', borderZ, `${currentMode}:${regionHeight}`);
   const barData = getBar3DData();
   const maxScaledValue = barData.reduce((maxV, d) => {
     const v = d && d.value ? Number(d.value[2]) : 0;
@@ -533,11 +578,11 @@ function build3DMapOption() {
       roam: true,
       zoom: 1.25,
       center: [105, 35],
-      regionHeight: 2.849,        // 保持原本的区域高度
+      regionHeight,
       itemStyle: {
         color: theme.areaColor,       // 使用主题定义的区域颜色
-        borderColor: theme.borderColor ?? '#ff3c00', // 使用主题定义的边框颜色
-        borderWidth: theme.borderWidth ?? 1.2,       // 使用主题定义的边框宽度
+        borderColor: borderColor3D,
+        borderWidth: borderWidth3D,       // 使用主题定义的边框宽度
         opacity: 1.0            // 完全不透明
       },
       label: {
@@ -591,6 +636,34 @@ function build3DMapOption() {
       }
     },
     series: [
+      {
+        type: 'lines3D',
+        name: 'provinceBorderGlow',
+        coordinateSystem: 'geo3D',
+        polyline: true,
+        silent: true,
+        data: provinceBorderLines3D,
+        blendMode: 'lighter',
+        lineStyle: {
+          color: borderColor3D,
+          width: 7.2,
+          opacity: 0.22
+        }
+      },
+      {
+        type: 'lines3D',
+        name: 'provinceBorder',
+        coordinateSystem: 'geo3D',
+        polyline: true,
+        silent: true,
+        data: provinceBorderLines3D,
+        blendMode: 'lighter',
+        lineStyle: {
+          color: borderColor3D,
+          width: 2.4,
+          opacity: 1
+        }
+      },
       {
         type: 'bar3D',
         name: '水位柱',
