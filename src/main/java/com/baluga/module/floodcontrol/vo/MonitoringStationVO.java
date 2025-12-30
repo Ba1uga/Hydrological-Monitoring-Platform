@@ -1,12 +1,15 @@
 package com.baluga.module.floodcontrol.vo;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import lombok.Data;
 
 @Data
-public class MonitoringStationVO {
+public class MonitoringStationVO implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private Long id;
     private String stationName;
     private BigDecimal longitude;
@@ -28,4 +31,3 @@ public class MonitoringStationVO {
 
     private String trendDirection;
 }
-
