@@ -1,6 +1,7 @@
 package com.baluga.module.floodcontrol.service.impl;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -10,28 +11,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.baluga.module.floodcontrol.mapper.RescueMaterialCategoryMapper;
 import com.baluga.module.floodcontrol.mapper.RescueMaterialMapper;
-import com.baluga.module.floodcontrol.mapper.RescueMaterialUsageMapper;
 import com.baluga.module.floodcontrol.pojo.RescueMaterial;
 import com.baluga.module.floodcontrol.pojo.RescueMaterialCategory;
-import com.baluga.module.floodcontrol.pojo.RescueMaterialUsage;
 import com.baluga.module.floodcontrol.service.RescueMaterialService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class RescueMaterialServiceImpl extends ServiceImpl<RescueMaterialMapper, RescueMaterial> implements RescueMaterialService {
 
-    @Autowired
-    private RescueMaterialCategoryMapper categoryMapper;
-
-    @Autowired
-    private RescueMaterialUsageMapper usageMapper;
+    private final RescueMaterialCategoryMapper categoryMapper;
 
     @Override
     public List<Map<String, Object>> getFloodMaterials() {
@@ -176,7 +173,7 @@ public class RescueMaterialServiceImpl extends ServiceImpl<RescueMaterialMapper,
                         .map(RescueMaterial::getAvailableQuantity)
                         .reduce(BigDecimal.ZERO, BigDecimal::add);
                 
-                progress = totalAvailable.divide(totalValue, 2, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)).intValue();
+                progress = totalAvailable.divide(totalValue, 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100)).intValue();
             }
             categoryData.put("progress", progress);
             
@@ -211,73 +208,6 @@ public class RescueMaterialServiceImpl extends ServiceImpl<RescueMaterialMapper,
         if (categoryName.contains("车") || categoryName.contains("泵")) return "台/辆";
         if (categoryName.contains("箱") || categoryName.contains("水")) return "箱/吨";
         return "件/套";
-    }
-
-    private void calculateTrend(Map<String, Object> data, List<RescueMaterial> materials) {
-        if (materials.isEmpty()) {
-            return;
-        }
-
-        List<Long> materialIds = materials.stream().map(RescueMaterial::getId).collect(Collectors.toList());
-        LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
-
-        // Query usage records in the last 24 hours
-        List<RescueMaterialUsage> usages = usageMapper.selectList(new LambdaQueryWrapper<RescueMaterialUsage>()
-                .in(RescueMaterialUsage::getMaterialId, materialIds)
-                .ge(RescueMaterialUsage::getOperationTime, yesterday));
-
-        if (usages.isEmpty()) {
-            // No usage data for yesterday/today, so no trend or trend is 0
-            // User requirement: "if operation_time has previous day's data, calculate trend"
-            // If no data, we can either return 0% or null. Let's return 0%.
-            data.put("trend", "→ 0%");
-            data.put("trendClass", "");
-            return;
-        }
-
-        // Calculate Net Change
-        BigDecimal netChange = BigDecimal.ZERO;
-        for (RescueMaterialUsage u : usages) {
-            if (u.getOperationType() == 1) { // Inbound
-                netChange = netChange.add(u.getQuantity());
-            } else if (u.getOperationType() == 2 || u.getOperationType() == 4) { // Outbound or Scrap
-                netChange = netChange.subtract(u.getQuantity());
-            }
-            // Type 3 (Maintain) usually doesn't affect Total Quantity, only Available Quantity
-        }
-
-        // Current Value is already in data.get("value") but better to recalculate or pass it
-        BigDecimal currentValue = (BigDecimal) data.get("value");
-        
-        // Previous Value = Current - NetChange
-        // Example: Current 100, In +10, Out -5 => Net +5. Previous = 100 - 5 = 95.
-        // Trend = (5 / 95) * 100 = 5.26%
-        BigDecimal previousValue = currentValue.subtract(netChange);
-
-        if (previousValue.compareTo(BigDecimal.ZERO) == 0) {
-            if (netChange.compareTo(BigDecimal.ZERO) > 0) {
-                data.put("trend", "↑ 100%");
-                data.put("trendClass", "up");
-            } else {
-                data.put("trend", "→ 0%");
-                data.put("trendClass", "");
-            }
-        } else {
-            BigDecimal trendPercent = netChange.divide(previousValue, 2, BigDecimal.ROUND_HALF_UP)
-                    .multiply(new BigDecimal(100));
-            
-            int compare = trendPercent.compareTo(BigDecimal.ZERO);
-            if (compare > 0) {
-                data.put("trend", "↑ " + trendPercent.abs().intValue() + "%");
-                data.put("trendClass", "up");
-            } else if (compare < 0) {
-                data.put("trend", "↓ " + trendPercent.abs().intValue() + "%");
-                data.put("trendClass", "down");
-            } else {
-                data.put("trend", "→ 0%");
-                data.put("trendClass", "");
-            }
-        }
     }
 
     private String getProgressColor(String name, String mode) {

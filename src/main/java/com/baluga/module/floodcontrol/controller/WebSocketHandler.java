@@ -1,6 +1,5 @@
 package com.baluga.module.floodcontrol.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -13,6 +12,7 @@ import com.baluga.module.floodcontrol.service.MonitoringStationService;
 import com.baluga.module.floodcontrol.vo.DashboardCardVO;
 import com.baluga.module.floodcontrol.vo.MonitoringStationVO;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -21,13 +21,12 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class WebSocketHandler {
     
-    @Autowired
-    private MonitoringStationService monitoringStationService;
+    private final MonitoringStationService monitoringStationService;
     
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+    private final SimpMessagingTemplate messagingTemplate;
     
     /**
      * 处理客户端发送的消息
@@ -57,7 +56,7 @@ public class WebSocketHandler {
             // 推送数据到客户端
             messagingTemplate.convertAndSend("/topic/currentHourStations/" + mode, stations);
             log.info("已推送当前整点站点数据到主题: /topic/currentHourStations/{}", mode);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error("推送当前整点站点数据失败: {}", e.getMessage(), e);
         }
     }
@@ -73,7 +72,7 @@ public class WebSocketHandler {
             // 推送数据到客户端
             messagingTemplate.convertAndSend("/topic/dashboardCard/" + mode, cardData);
             log.info("已推送仪表盘卡片数据到主题: /topic/dashboardCard/{}", mode);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error("推送仪表盘卡片数据失败: {}", e.getMessage(), e);
         }
     }
@@ -89,7 +88,7 @@ public class WebSocketHandler {
             // 推送数据到客户端
             messagingTemplate.convertAndSend("/topic/realTimeCard/" + mode, cardData);
             log.info("已推送实时卡片数据到主题: /topic/realTimeCard/{}", mode);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             log.error("推送实时卡片数据失败: {}", e.getMessage(), e);
         }
     }
