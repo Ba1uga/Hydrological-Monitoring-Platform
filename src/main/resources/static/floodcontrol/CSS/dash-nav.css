@@ -2,10 +2,10 @@
    Left-top Horizontal Collapsible Navbar (Dashboard)
    ================================ */
 .dash-nav {
-  position: fixed;
-  left: 20px;
-  top: 20px;
-  z-index: 20000;
+  position: relative;
+  left: auto;
+  top: auto;
+  z-index: 110;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -80,7 +80,7 @@
   font-size: 12px;
   color: rgba(255,255,255,0.92);
   white-space: nowrap;
-  z-index: 9999;
+  z-index: 112;
   pointer-events: none;
   box-shadow: 0 0 10px rgba(0,0,0,0.35);
 }
@@ -95,7 +95,7 @@
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-bottom: 6px solid rgba(52, 134, 218, 0.45);
-  z-index: 10000;
+  z-index: 112;
   pointer-events: none;
 }
 .dash-nav ul li a .nav-icon,

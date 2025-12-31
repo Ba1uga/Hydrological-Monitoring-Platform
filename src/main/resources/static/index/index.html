@@ -175,7 +175,7 @@
             <script type="text/javascript" src="js/jquery.js"></script>
             <script type="text/javascript" src="js/echarts.min.js"></script>
             <script type="text/javascript" src="js/jquery.liMarquee.js"></script>
-            <script src="https://webapi.amap.com/maps?v=2.0&key=acfabaedbc77135c1d7665a5c46faee2&plugin=AMap.DistrictSearch"></script>
+            <script src="https://webapi.amap.com/maps?v=2.0&key=acfabaedbc77135c1d7665a5c46faee2&plugin=AMap.DistrictLayer"></script>
             <script type="text/javascript" src="js/js.js"></script>
             <script>
                 var t = null;
@@ -573,168 +573,139 @@ function addRainLegend() {
                 
 
 
-// ============ Province click -> dashboard refresh (frontend only) ============
-// Store polygons by province adcode so we can highlight the selected province.
-var provincePolygonMap = {};   // { [adcode]: AMap.Polygon[] }
 var selectedProvinceAdcode = null;
+var selectedProvinceName = null;
+var hoverProvinceAdcode = null;
 
-var provinceDefaultStyle = {
-    fillOpacity: 0,
-    strokeColor: '#0091ea',
-    strokeWeight: 1,
-    strokeOpacity: 0.6
-};
-var provinceHoverStyle = {
-    fillOpacity: 0.4,
-    strokeColor: '#ffffff',
-    strokeWeight: 2,
-    strokeOpacity: 0.9
-};
-var provinceSelectedStyle = {
-    fillOpacity: 0.55,
-    strokeColor: '#00e1ff',
-    strokeWeight: 3,
-    strokeOpacity: 1
-};
-
-function applyStyleToProvince(adcode, styleObj) {
-    var list = provincePolygonMap[adcode] || [];
-    for (var i = 0; i < list.length; i++) {
-        list[i].setOptions(styleObj);
+var distCountry = new AMap.DistrictLayer.Country({
+    zIndex: 11,
+    SOC: 'CHN',
+    depth: 1,
+    styles: {
+        'nation-stroke': '#0091ea',
+        'province-stroke': '#0091ea',
+        'stroke-width': 1,
+        'fill': [0, 0, 0, 0]
     }
+});
+distCountry.setMap(map);
+
+var hoverLayer = new AMap.DistrictLayer.Province({
+    zIndex: 12,
+    adcode: ['110000'],
+    depth: 0,
+    styles: {
+        'province-stroke': '#ffffff',
+        'stroke-width': 2,
+        'fill': [0, 0, 0, 0.25]
+    }
+});
+hoverLayer.hide();
+hoverLayer.setMap(map);
+
+var selectedLayer = new AMap.DistrictLayer.Province({
+    zIndex: 13,
+    adcode: ['110000'],
+    depth: 0,
+    styles: {
+        'province-stroke': '#00e1ff',
+        'stroke-width': 3,
+        'fill': [0, 225, 255, 0.22]
+    }
+});
+selectedLayer.hide();
+selectedLayer.setMap(map);
+
+function pickProvinceByPixel(pixel, onPicked) {
+    if (!distCountry || typeof distCountry.getDistrictByContainerPos !== 'function') {
+        onPicked(null);
+        return;
+    }
+
+    var returned = null;
+    try {
+        returned = distCountry.getDistrictByContainerPos(pixel, function(err, data) {
+            if (data) onPicked(data);
+        });
+    } catch (e) {
+        returned = null;
+    }
+
+    if (returned) onPicked(returned);
 }
 
-function selectProvince(adcode, provinceName) {
+function getProvinceInfoFromDistrictData(d) {
+    if (!d) return null;
+    var adcode = d.adcode || d.adcode_pro || null;
+    var name = d.NAME_CHN || d.name || d.NAME || null;
+    if (!adcode) return null;
+    return { adcode: String(adcode), name: name };
+}
+
+function setHoverProvince(adcode) {
+    if (!adcode) {
+        hoverProvinceAdcode = null;
+        hoverLayer.hide();
+        return;
+    }
+    if (selectedProvinceAdcode && adcode === selectedProvinceAdcode) {
+        hoverProvinceAdcode = null;
+        hoverLayer.hide();
+        return;
+    }
+    if (hoverProvinceAdcode === adcode) return;
+    hoverProvinceAdcode = adcode;
+    hoverLayer.setAdcode([adcode]);
+    hoverLayer.show();
+}
+
+function setSelectedProvince(adcode, name) {
     if (!adcode) return;
-
-    // reset previous selection
-    if (selectedProvinceAdcode && selectedProvinceAdcode !== adcode) {
-        applyStyleToProvince(selectedProvinceAdcode, provinceDefaultStyle);
-    }
-
     selectedProvinceAdcode = adcode;
-    applyStyleToProvince(adcode, provinceSelectedStyle);
-
-    // Trigger the right-side modules refresh (handled by frontend calling backend API)
-    if (window.ProvinceDashboard && typeof window.ProvinceDashboard.loadProvinceData === 'function') {
-        window.ProvinceDashboard.loadProvinceData({ adcode: adcode, name: provinceName });
-    } else {
-        console.warn('ProvinceDashboard.loadProvinceData not found (js/js.js not patched or not loaded).');
-    }
+    selectedProvinceName = name || null;
+    selectedLayer.setAdcode([adcode]);
+    selectedLayer.show();
+    hoverLayer.hide();
 }
-// ============================================================================
 
-// 1. 初始化行政区查询对象（保持不变）
-var districtSearch = new AMap.DistrictSearch({
-    subdistrict: 1,  // 返回下一级行政区
-    extensions: 'all',
-    level: 'country'
-});
+var hoverPickQueued = false;
+var hoverPickPixel = null;
+var requestAnimFrame = window.requestAnimationFrame || function(fn) { return setTimeout(fn, 16); };
 
-// 2. 查询中国，获取所有省份
-districtSearch.search('中华人民共和国', function(status, result) {
-    if (status === 'complete') {
-        var provinces = result.districtList[0].districtList || [];
-        console.log('总共获取到 ' + provinces.length + ' 个省级行政区');
-
-        var index = 0;
-        function loadNextProvince() {
-            if (index >= provinces.length) {
-                console.log('所有省份加载完成');
-                return;
-            }
-
-            var provinceName = provinces[index].name;
-            console.log('正在加载：' + provinceName + ' (' + (index+1) + '/' + provinces.length + ')');
-
-            drawProvince(provinceName, function(success) {
-                index++;
-                // 每加载完一个，等待 800ms ~ 1200ms 再请求下一个（避免限流）
-                setTimeout(loadNextProvince, success ? 800 : 2000); // 失败时等更久
-            });
-        }
-
-        // 开始加载
-        loadNextProvince();
-    } else {
-        console.error('获取全国省份列表失败', status, result);
-    }
-});
-
-// 3. 绘制单个省份（增加错误处理和回调）
-function drawProvince(provinceName, callback) {
-    var provSearch = new AMap.DistrictSearch({
-        subdistrict: 0,
-        extensions: 'all',
-        level: 'province'
-    });
-
-    provSearch.search(provinceName, function(status, result) {
-        var success = false;
-
-        if (status === 'complete' && result.districtList && result.districtList.length > 0) {
-            var bounds = result.districtList[0].boundaries;
-            if (bounds && bounds.length > 0) {
-                for (var i = 0; i < bounds.length; i++) {
-                    var adcode = (result.districtList[0] && result.districtList[0].adcode) ? result.districtList[0].adcode : '';
-                    var polygon = new AMap.Polygon({
-                        strokeWeight: 1,
-                        path: bounds[i],
-                        fillOpacity: 0,
-                        fillColor: '#00e1ff',
-                        strokeColor: '#0091ea',
-                        strokeOpacity: 0.6,
-                        bubble: true,
-                        cursor: 'pointer'
-                    });
-
-                    // attach province identity for click + hover logic
-                    polygon.setExtData({ adcode: adcode, name: provinceName });
-
-                    // cache polygons of the same province
-                    if (!provincePolygonMap[adcode]) provincePolygonMap[adcode] = [];
-                    provincePolygonMap[adcode].push(polygon);
-
-                    // 鼠标悬停发光效果（若已选中，则保持选中高亮）
-                    polygon.on('mouseover', function(e) {
-                        var ext = e.target.getExtData() || {};
-                        if (ext.adcode && ext.adcode === selectedProvinceAdcode) {
-                            e.target.setOptions(provinceSelectedStyle);
-                        } else {
-                            e.target.setOptions(provinceHoverStyle);
-                        }
-                    });
-
-                    polygon.on('mouseout', function(e) {
-                        var ext = e.target.getExtData() || {};
-                        if (ext.adcode && ext.adcode === selectedProvinceAdcode) {
-                            e.target.setOptions(provinceSelectedStyle);
-                        } else {
-                            e.target.setOptions(provinceDefaultStyle);
-                        }
-                    });
-
-                    // 点击：选中省份 + 通知右侧模块刷新
-                    polygon.on('click', function(e) {
-                        var ext = e.target.getExtData() || {};
-                        selectProvince(ext.adcode, ext.name);
-                    });
-
-                    map.add(polygon);
-}
-                success = true;
-                console.log(provinceName + ' 加载成功');
-            }
-        } else {
-            console.warn(provinceName + ' 加载失败:', status, result);
-        }
-
-        // 无论成功与否都执行回调
-        if (callback) {
-            callback(success);
-        }
+function queueHoverPick(pixel) {
+    hoverPickPixel = pixel;
+    if (hoverPickQueued) return;
+    hoverPickQueued = true;
+    requestAnimFrame(function() {
+        hoverPickQueued = false;
+        var px = hoverPickPixel;
+        hoverPickPixel = null;
+        if (!px) return;
+        pickProvinceByPixel(px, function(districtData) {
+            var info = getProvinceInfoFromDistrictData(districtData);
+            setHoverProvince(info ? info.adcode : null);
+        });
     });
 }
+
+map.on('mousemove', function(e) {
+    queueHoverPick(e.pixel);
+});
+
+map.on('mouseout', function() {
+    setHoverProvince(null);
+});
+
+map.on('click', function(e) {
+    pickProvinceByPixel(e.pixel, function(districtData) {
+        var info = getProvinceInfoFromDistrictData(districtData);
+        if (!info) return;
+        setSelectedProvince(info.adcode, info.name);
+        if (window.ProvinceDashboard && typeof window.ProvinceDashboard.loadProvinceData === 'function') {
+            window.ProvinceDashboard.loadProvinceData({ adcode: info.adcode, name: info.name });
+        }
+    });
+});
 
 
 

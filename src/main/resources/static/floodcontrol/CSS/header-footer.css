@@ -14,12 +14,18 @@
   z-index: 100;
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
 .title {
   font-size: 24px;
   font-weight: bold;
   color: var(--text-color);
   text-shadow: 0 0 10px var(--highlight-color);
-  margin-left: 45px;
+  margin-left: 0;
 }
 
 .header-right {
