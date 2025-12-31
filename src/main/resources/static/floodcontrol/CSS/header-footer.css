@@ -1,0 +1,65 @@
+/* =================== 顶部时间与底部状态栏 =================== */
+/* 顶部时间显示、模式切换按钮组、底部状态栏 */
+
+/* 顶部标题栏 */
+.header {
+  height: 60px;
+  background: rgba(10, 25, 47, 0.9);
+  border-bottom: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--text-color);
+  text-shadow: 0 0 10px var(--highlight-color);
+  margin-left: 45px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.time-weather {
+  font-size: 16px;
+  color: var(--text-color);
+}
+
+/* 模式切换按钮组 */
+.mode-switch {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 25px;
+  padding: 5px;
+  border: 2px solid var(--border-color);
+}
+
+/* 底部状态栏 */
+.footer {
+  height: 40px;
+  background: rgba(0, 0, 0, 0.6);
+  border-top: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  font-size: 13px;
+  color: var(--text-color);
+}
+
+.footer-stats {
+  display: flex;
+  gap: 5px;
+}
+
+.footer-copyright {
+  opacity: 0.7;
+}

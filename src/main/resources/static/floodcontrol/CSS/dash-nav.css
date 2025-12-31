@@ -1,0 +1,143 @@
+/* ================================
+   Left-top Horizontal Collapsible Navbar (Dashboard)
+   ================================ */
+.dash-nav {
+  position: fixed;
+  left: 20px;
+  top: 20px;
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border-radius: 50px;
+  background: rgba(13, 32, 60, 0.75);
+  border: 1px solid rgba(52, 134, 218, 0.45);
+  backdrop-filter: blur(6px);
+}
+.dash-nav input {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  opacity: 0;
+}
+.dash-nav span {
+  position: absolute;
+  left: 16px;
+  top: calc(50% - 6px);
+  width: 18px;
+  height: 2px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.75);
+  pointer-events: none;
+  transition: transform 0.3s ease-in-out, top 0.3s ease-in-out 0.3s;
+}
+.dash-nav span:nth-child(3) {
+  top: calc(50% + 2px);
+}
+.dash-nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 0;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: width 0.5s;
+}
+.dash-nav ul li {
+  list-style: none;
+  margin: 0;
+}
+.dash-nav ul li a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  position: relative;
+  line-height: 1;
+  transition: transform 260ms cubic-bezier(.2,.8,.2,1), filter 260ms cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+}
+.dash-nav ul li a .nav-text { display: none; }
+.dash-nav ul li a .nav-icon { display: inline-flex; align-items: center; justify-content: center; }
+.dash-nav ul li a[data-title]:hover::after {
+  content: attr(data-title);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(13, 32, 60, 0.92);
+  border: 1px solid rgba(52, 134, 218, 0.45);
+  font-size: 12px;
+  color: rgba(255,255,255,0.92);
+  white-space: nowrap;
+  z-index: 9999;
+  pointer-events: none;
+  box-shadow: 0 0 10px rgba(0,0,0,0.35);
+}
+.dash-nav ul li a[data-title]:hover::before {
+  content: "";
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid rgba(52, 134, 218, 0.45);
+  z-index: 10000;
+  pointer-events: none;
+}
+.dash-nav ul li a .nav-icon,
+.dash-nav ul li a .nav-text {
+  position: static;
+  left: auto;
+  top: auto;
+  width: auto;
+  height: auto;
+  background: none;
+  transform: none;
+  transition: none;
+}
+.dash-nav ul li a:hover {
+  color: #07e5ff;
+  transform: translateY(-2px) scale(1.12);
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
+}
+.dash-nav ul li a:hover .nav-icon {
+  animation: navPop 420ms cubic-bezier(.2,.8,.2,1);
+}
+.dash-nav input:checked ~ ul {
+  width: 250px;
+  overflow: visible;
+  justify-content: space-between;
+  padding: 0 12px;
+}
+.dash-nav input:checked ~ span:nth-child(2) {
+  top: calc(50% - 1px);
+  transform: rotate(-45deg);
+  background: #07e5ff;
+  transition: top 0.3s ease-in-out, transform 0.3s ease-in-out 0.3s;
+}
+.dash-nav input:checked ~ span:nth-child(3) {
+  top: calc(50% - 1px);
+  transform: rotate(45deg);
+  background: #07e5ff;
+  transition: top 0.3s ease-in-out, transform 0.3s ease-in-out 0.3s;
+}
+@keyframes navPop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.35); }
+  65% { transform: scale(0.95); }
+  100% { transform: scale(1.12); }
+}

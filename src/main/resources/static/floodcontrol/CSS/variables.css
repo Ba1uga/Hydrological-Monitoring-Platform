@@ -1,0 +1,53 @@
+/* =================== CSS 变量定义 =================== */
+/* 防汛/抗旱双主题的所有 CSS 变量 */
+:root {
+  /* 防汛：赛博蓝 + 霓虹青 */
+  --bg-color-flood: #050a14;
+  --border-color-flood: rgba(0, 243, 255, 0.3);
+  --text-color-flood: #e0f7fa;
+  --highlight-color-flood: #00f3ff;
+  --card-bg-flood: rgba(6, 20, 40, 0.65);
+  --button-bg-flood: #00f3ff;
+  --button-hover-bg-flood: #ffffff;
+  --button-text-flood: #050a14;
+  --card-border-flood: rgba(0, 255, 255, 0.3);
+  --card-shadow-flood: rgba(0, 255, 255, 0.15);
+
+  /* 抗旱：熔岩黑 + 霓虹橙 */
+  --bg-color-drought: #110500;
+  --border-color-drought: rgba(255, 81, 0, 0.4);
+  --text-color-drought: #fff3e0;
+  --highlight-color-drought: #ff3c00;
+  --card-bg-drought: rgba(30, 10, 5, 0.65);
+  --button-bg-drought: #ff3c00;
+  --button-hover-bg-drought: #ffffff;
+  --button-text-drought: #110500;
+  --card-border-drought: rgba(255, 81, 0, 0.3);
+  --card-shadow-drought: rgba(255, 81, 0, 0.15);
+
+  /* 当前模式颜色（默认防汛） */
+  --bg-color: var(--bg-color-flood);
+  --border-color: var(--border-color-flood);
+  --text-color: var(--text-color-flood);
+  --highlight-color: var(--highlight-color-flood);
+  --card-bg: var(--card-bg-flood);
+  --button-bg: var(--button-bg-flood);
+  --button-hover-bg: var(--button-hover-bg-flood);
+  --button-text: var(--button-text-flood);
+  --card-border: var(--card-border-flood);
+  --card-shadow: var(--card-shadow-flood);
+}
+
+/* 抗旱模式下覆盖当前颜色变量 */
+body.drought-mode {
+  --bg-color: var(--bg-color-drought);
+  --border-color: var(--border-color-drought);
+  --text-color: var(--text-color-drought);
+  --highlight-color: var(--highlight-color-drought);
+  --card-bg: var(--card-bg-drought);
+  --button-bg: var(--button-bg-drought);
+  --button-hover-bg: var(--button-hover-bg-drought);
+  --button-text: var(--button-text-drought);
+  --card-border: var(--card-border-drought);
+  --card-shadow: var(--card-shadow-drought);
+}

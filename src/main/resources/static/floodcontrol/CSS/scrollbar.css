@@ -1,0 +1,29 @@
+/* =================== 自定义滚动条 =================== */
+/* 自定义滚动条样式，支持 WebKit 和 Firefox */
+
+/* WebKit 浏览器（Chrome、Safari、Edge） */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--highlight-color);
+}
+
+/* Firefox 浏览器 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) rgba(0, 0, 0, 0.3);
+}

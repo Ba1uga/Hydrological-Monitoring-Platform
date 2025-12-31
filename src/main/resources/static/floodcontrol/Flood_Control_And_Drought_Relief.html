@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="中国防汛抗旱指挥调度中心 - 实时监测全国水情、旱情，提供智能调度服务">
+  <title>中国防汛抗旱指挥调度中心</title>
+
+  <base href="/floodcontrol/">
+  <link rel="icon" href="data:,">
+  
+  <!-- 预连接 Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  
+  <!-- 引入拆分后的 CSS 文件 -->
+  <link rel="stylesheet" href="CSS/variables.css">
+  <link rel="stylesheet" href="CSS/base.css">
+  <link rel="stylesheet" href="CSS/layout.css">
+  <link rel="stylesheet" href="CSS/header-footer.css">
+  <link rel="stylesheet" href="CSS/panels.css">
+  <link rel="stylesheet" href="CSS/map.css">
+  <link rel="stylesheet" href="CSS/warnings.css">
+  <link rel="stylesheet" href="CSS/resources.css">
+  <link rel="stylesheet" href="CSS/buttons.css">
+  <link rel="stylesheet" href="CSS/effects.css">
+  <link rel="stylesheet" href="CSS/scrollbar.css">
+  <link rel="stylesheet" href="CSS/responsive.css">
+  
+  <!-- ECharts 主库 -->
+  <script src="JS/lib/echarts.min.js"></script>
+  <!-- ECharts GL 扩展（必须放在 echarts.js 之后） -->
+  <script src="JS/lib/echarts-gl.min.js"></script>
+  <link rel="stylesheet" href="CSS/dash-nav.css">
+</head>
+<body>
+  <!-- Top-left collapsible nav (horizontal) -->
+  <div class="dash-nav" aria-label="Dashboard navigation">
+      <input id="dashNavToggle" type="checkbox" />
+      <span></span>
+      <span></span>
+      <ul>
+          <li><a href="../index/index.html" data-title="首页" title="首页"><span class="nav-icon">🏠</span><span class="nav-text">首页</span></a></li>
+          <li><a href="../waterproject/waterproject.html" data-title="水利工程"><span class="nav-icon">🏗️</span><span class="nav-text">水利工程</span></a></li>
+          <li><a href="../waterlevel/waterlevel.html" data-title="水位动态监测"><span class="nav-icon">🌊</span><span class="nav-text">水位动态监测</span></a></li>
+          <li><a href="../prediction/prediction.html" data-title="水位预测模型"><span class="nav-icon">🤖</span><span class="nav-text">水位预测模型</span></a></li> 
+          <!-- <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="防汛抗旱"><span class="nav-icon">🛡️</span><span class="nav-text">防汛抗旱</span></a></li>
+      </ul> -->
+  </div>
+  <!-- 跳过导航链接（无障碍） -->
+  <!-- <a href="#main-content" class="skip-link">跳到主要内容</a> -->
+  
+  <!-- 加载开场动画 -->
+  <div id="loading-screen" role="alert" aria-live="polite" aria-label="系统加载中">
+    <div class="loader-content">
+      <div class="spinner" aria-hidden="true"></div>
+      <div class="loading-text">SYSTEM INITIALIZING...</div>
+    </div>
+  </div>
+  
+  <!-- 粒子效果画布容器 -->
+  <div id="particles" aria-hidden="true"></div>
+  
+  
+
+  <div class="container">
+    <!-- 顶部标题栏 -->
+    <header class="header" role="banner">
+      <h1 class="title">中国防汛抗旱指挥调度中心</h1>
+      <div class="header-right">
+        <div class="time-weather" id="timeWeather" aria-live="polite">2025-12-16 14:30:00 | 晴 | 温度: 22°C</div>
+        <nav class="mode-switch" aria-label="模式切换">
+          <button class="mode-btn active" data-mode="flood" aria-pressed="true" title="切换到防汛模式">
+            <span aria-hidden="true">🌧️</span> 防汛模式
+          </button>
+          <button class="mode-btn" data-mode="drought" aria-pressed="false" title="切换到抗旱模式">
+            <span aria-hidden="true">🔥</span> 抗旱模式
+          </button>
+          <button class="mode-btn" id="view3dBtn" aria-pressed="false" title="切换3D/2D视图">3D视图</button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main id="main-content" class="main-content" role="main">
+      <!-- 左侧：实时监测与预警 -->
+      <aside class="left-panel" aria-label="实时监测与预警">
+        <h2 class="panel-title">实时监测与预警</h2>
+
+        <!-- 汇总信息卡片 -->
+        <section class="summary-section" aria-label="当前概况">
+          <h3>当前概况</h3>
+          <div class="summary-item">
+            <span>警戒站点数:</span>
+            <span class="summary-value" data-target="12" data-unit="">12</span>
+          </div>
+          <div class="summary-item">
+            <span>趋势:</span>
+            <span class="summary-value" data-target="5.2" data-unit="%" data-decimal="true" data-prefix="↑ ">↑ 5.2%</span>
+          </div>
+          <div class="summary-item">
+            <span>受影响面积:</span>
+            <span class="summary-value" data-target="1200" data-unit=" km²">1,200 km²</span>
+          </div>
+        </section>
+
+        <!-- 关键站点列表 -->
+        <section class="stations-section" aria-label="关键站点">
+          <h3>关键站点</h3>
+          <!-- 搜索栏 -->
+          <div class="station-search-box">
+            <input type="text" id="stationSearchInput" placeholder="搜索站点..." />
+            <span class="search-icon">🔍</span>
+          </div>
+          <!-- 站点列表容器 -->
+          <div id="stationListContainer" class="station-list-container">
+            <!-- 列表项将通过 JS 动态生成 -->
+          </div>
+        </section>
+
+        <!-- 预警信息滚动列表 -->
+        <section class="warning-section" aria-label="预警信息">
+          <h3>预警信息</h3>
+          <div class="warning-scroll" id="warningScroll" role="log" aria-live="polite">
+          </div>
+        </section>
+      </aside>
+
+      <!-- 中间：GIS 地图与风险图例 -->
+      <section class="map-container" aria-label="实时水情地图">
+        <!-- ECharts 地图挂载容器 -->
+        <div id="map" role="img" aria-label="中国水情监测地图"></div>
+
+        <!-- 地图加载遮罩 -->
+        <div class="map-loading" id="mapLoading" role="alert" aria-live="assertive">
+          <div class="spinner" aria-hidden="true"></div>
+          <span>地图加载中...</span>
+        </div>
+
+        <!-- 左上角站点风险等级图例 -->
+        <div class="risk-legend" id="riskLegend" role="group" aria-label="风险等级筛选">
+          <!-- 内容由 JS 动态渲染 -->
+        </div>
+      </section>
+
+      <!-- 右侧：调度与资源 -->
+      <aside class="right-panel" aria-labelledby="dispatch-resources-title">
+        <h2 id="dispatch-resources-title" class="panel-title">调度与资源</h2>
+
+        <!-- 资源统计卡片 -->
+        <section class="resources-section" aria-labelledby="resources-dist-title">
+          <div class="section-header">
+            <h3 id="resources-dist-title">资源分布</h3>
+            <button class="map-view-btn" aria-label="查看资源地图" title="查看资源地图">
+              <span class="icon">🗺️</span>
+            </button>
+          </div>
+          <div class="resource-stats">
+            <!-- 详情视图容器 (默认隐藏) -->
+            <div id="resourceDetailView" class="resource-detail-view" aria-hidden="true">
+              <div class="detail-header">
+                <span class="detail-title">物资详情</span>
+                <button class="back-btn" aria-label="返回列表">返回</button>
+              </div>
+              <div class="detail-content" id="detailContent">
+                <!-- 动态填充内容 -->
+              </div>
+            </div>
+
+            <div class="stat-card" tabindex="0" role="button" aria-label="救生转移: 850件, 同比增长 15%">
+              <div class="stat-top">
+                <div class="stat-value" data-target="850">0</div>
+                <div class="stat-trend up" aria-label="同比上升 15%">↑ 15%</div>
+              </div>
+              <div class="stat-label">救生转移</div>
+              <div class="stat-progress-container">
+                <div class="stat-progress-bar" style="width: 85%; --bar-color: var(--highlight-color);"></div>
+              </div>
+              <div class="stat-tooltip">冲锋舟15艘、救生衣800件、救援机器人5台</div>
+            </div>
+
+            <div class="stat-card" tabindex="0" role="group" aria-label="排水照明: 120台, 同比上升 8%">
+              <div class="stat-top">
+                <div class="stat-value" data-target="120">0</div>
+                <div class="stat-trend up" aria-label="同比上升 8%">↑ 8%</div>
+              </div>
+              <div class="stat-label">排水照明</div>
+               <div class="stat-progress-container">
+                <div class="stat-progress-bar" style="width: 65%; --bar-color: #00e676;"></div>
+              </div>
+              <div class="stat-tooltip">大流量泵50台、发电机40台、照明车30辆</div>
+            </div>
+
+            <div class="stat-card" tabindex="0" role="group" aria-label="生活安置: 3500件, 同比上升 20%">
+              <div class="stat-top">
+                <div class="stat-value" data-target="3500">0</div>
+                <div class="stat-trend up" aria-label="同比上升 20%">↑ 20%</div>
+              </div>
+              <div class="stat-label">生活安置</div>
+               <div class="stat-progress-container">
+                <div class="stat-progress-bar" style="width: 90%; --bar-color: var(--highlight-color);"></div>
+              </div>
+              <div class="stat-tooltip">帐篷500顶、折叠床1000张、食品2000箱</div>
+            </div>
+
+            <div class="stat-card" tabindex="0" role="group" aria-label="医疗防疫: 1500箱, 同比持平">
+              <div class="stat-top">
+                <div class="stat-value" data-target="1500">0</div>
+                <div class="stat-trend" aria-label="同比持平">→ 0%</div>
+              </div>
+              <div class="stat-label">医疗防疫</div>
+               <div class="stat-progress-container">
+                <div class="stat-progress-bar" style="width: 70%; --bar-color: #ff9800;"></div>
+              </div>
+              <div class="stat-tooltip">84消毒液、急救包、妇幼特殊包</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 雷达图分析区 -->
+        <section class="radar-section" aria-label="资源与风险分析雷达图">
+          <div class="section-header">
+            <h3 id="analysisTitle">能力评估与差距分析</h3>
+            <div class="chart-legend" id="radarLegend">
+              <span class="legend-item current"><span class="dot"></span>当前</span>
+              <span class="legend-item target"><span class="dot"></span>标准</span>
+            </div>
+          </div>
+          <div id="radarChart" class="radar-chart" role="img" aria-label="资源与风险分析图表"></div>
+          <!-- 智能研判摘要 -->
+          <div class="analysis-summary" id="analysisSummary">
+            <span class="icon">🤖</span>
+            <span class="text" id="analysisText">系统分析中...</span>
+          </div>
+        </section>
+
+        <!-- 调度预案按钮区 -->
+        <section class="dispatch-section" aria-label="调度预案">
+          <button id="dispatchPager" class="dispatch-pager c-button c-button--gooey" aria-label="翻页按钮">
+            <span class="pager-text">启动响应</span>
+            <div class="c-button__blobs">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </button>
+          
+          <!-- SVG滤镜 -->
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display: block; height: 0; width: 0; position: absolute;">
+            <defs>
+              <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"></feGaussianBlur>
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="goo"></feColorMatrix>
+                <feBlend in="SourceGraphic" in2="goo"></feBlend>
+              </filter>
+            </defs>
+          </svg>
+          <div class="dispatch-pages">
+            <!-- 第一页：等级响应 -->
+            <div class="dispatch-page active" data-page="1">
+              <div class="dispatch-buttons level-buttons" role="group" aria-label="响应级别按钮">
+                <button class="dispatch-btn flood-mode-only" data-action="flood-1">启动防汛Ⅰ级响应</button>
+                <button class="dispatch-btn flood-mode-only" data-action="flood-2">启动防汛Ⅱ级响应</button>
+                <button class="dispatch-btn flood-mode-only" data-action="flood-3">启动防汛Ⅲ级响应</button>
+                <button class="dispatch-btn drought-mode-only" data-action="drought-1">启动抗旱Ⅰ级响应</button>
+                <button class="dispatch-btn drought-mode-only" data-action="drought-2">启动抗旱Ⅱ级响应</button>
+                <button class="dispatch-btn drought-mode-only" data-action="drought-3">启动抗旱Ⅲ级响应</button>
+              </div>
+            </div>
+            <!-- 第二页：资源调度 -->
+            <div class="dispatch-page" data-page="2">
+              <div class="dispatch-buttons resource-buttons" role="group" aria-label="资源调度按钮">
+                <button class="dispatch-btn" data-action="material">物资调度</button>
+                <button class="dispatch-btn" data-action="team">队伍调度</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <!-- 底部状态栏
+    <footer class="footer" role="contentinfo">
+      <div id="footerStats">运行统计：当前警戒站点数 12 | 响应级别 Ⅲ级 | 受影响面积 1,200 km²</div>
+      <div>© 2025 中国防汛抗旱指挥调度中心</div>
+    </footer>
+  </div> -->
+
+  <!-- Axios for API calls -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.6.0/axios.min.js"></script>
+  <!-- 引入模块化的 JavaScript 文件 -->
+  <script type="module" src="JS/main.js"></script>
+</body>
+</html>

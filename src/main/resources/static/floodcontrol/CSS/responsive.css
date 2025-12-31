@@ -1,0 +1,86 @@
+/* =================== 响应式布局 =================== */
+/* 大屏 → 中屏 → 小屏的响应式适配 */
+
+/* 大屏设备（默认） */
+@media screen and (min-width: 1401px) {
+  .left-panel,
+  .right-panel {
+    width: 25%;
+  }
+}
+
+/* 中屏设备 */
+@media screen and (max-width: 1400px) {
+  .left-panel,
+  .right-panel {
+    width: 28%;
+  }
+}
+
+/* 中小屏设备 */
+@media screen and (max-width: 1200px) {
+  .left-panel,
+  .right-panel {
+    width: 30%;
+    min-width: 250px;
+  }
+  
+  .title {
+    font-size: 20px;
+  }
+  
+  .time-weather {
+    font-size: 14px;
+  }
+}
+
+/* 小屏设备 */
+@media screen and (max-width: 992px) {
+  .main-content {
+    flex-direction: column;
+  }
+  
+  .left-panel,
+  .right-panel {
+    width: 100%;
+    max-width: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    border: none;
+    border-bottom: 2px solid var(--border-color);
+  }
+  
+  .left-panel > *,
+  .right-panel > * {
+    flex: 1 1 300px;
+  }
+  
+  .map-container {
+    min-height: 400px;
+  }
+}
+
+/* 打印样式 */
+@media print {
+  body::before,
+  body::after,
+  #particles,
+  .decorative-ring,
+  #loading-screen {
+    display: none !important;
+  }
+  
+  .container {
+    display: block;
+  }
+  
+  .main-content {
+    display: block;
+  }
+  
+  .left-panel,
+  .right-panel {
+    width: 100%;
+    page-break-inside: avoid;
+  }
+}

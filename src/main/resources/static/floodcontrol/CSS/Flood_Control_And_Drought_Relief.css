@@ -1,0 +1,7 @@
+/* =================== 引入字体 =================== */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
+
+/* =================== 引入其他CSS文件 =================== */
+/* 注意：该文件已被拆分，主要样式已迁移至各个独立的CSS文件 */
+/* 保留此文件仅作为历史参考，实际样式从以下文件加载： */
+/* variables.css, base.css, layout.css, header-footer.css, panels.css, map.css, warnings.css, resources.css, buttons.css, effects.css, scrollbar.css, responsive.css */

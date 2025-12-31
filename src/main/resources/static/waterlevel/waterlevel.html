@@ -1,0 +1,2854 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态水位检测平台</title>
+    <script type="text/javascript">
+        window._AMapSecurityConfig = {
+            securityJsCode: '59c1f3efe6133790694b6495b4972cc4',
+        }
+    </script>
+    <!-- 仅加载2D核心插件，移除3D相关依赖 -->
+    <script src="https://webapi.amap.com/maps?v=2.0&key=2861fc871d947277400a946b999d5734&plugin=AMap.Scale,AMap.Geocoder"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+    /* 基础重置 */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Microsoft YaHei', Arial, sans-serif;
+    }
+
+    body {
+        background-color: #0a1625;
+        color: #e6f7ff;
+        line-height: 1.6;
+        min-height: 100vh;
+        padding: 8px; /* 减小内边距 */
+        overflow-x: hidden;
+        position: relative;
+        height: 100vh; /* 固定高度 */
+        overflow: hidden; /* 禁止滚动 */
+    }
+
+    .container {
+        max-width: 100%;
+        margin: 0 auto;
+        position: relative;
+        z-index: 10;
+        height: 100%; /* 使用100%高度 */
+        padding: 0;
+    }
+
+    /* ===== 从shuiwen.html复制的背景效果 ===== */
+    .grid-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image:
+            linear-gradient(rgba(0, 150, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(0, 150, 255, 0.03) 1px, transparent 1px);
+        background-size: 40px 40px;
+        z-index: -1;
+        animation: gridMove 30s linear infinite;
+        pointer-events: none;
+    }
+
+    @keyframes gridMove {
+        0% { transform: translate(0, 0); }
+        100% { transform: translate(40px, 40px); }
+    }
+
+    /* 科技粒子 */
+    .tech-particles {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    .particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: #00ffff;
+        border-radius: 50%;
+        box-shadow: 0 0 5px #00ffff;
+        animation: particleFloat 20s infinite linear;
+    }
+
+    @keyframes particleFloat {
+        0% {
+            transform: translateY(100vh) translateX(0);
+            opacity: 0;
+        }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% {
+            transform: translateY(-100px) translateX(100px);
+            opacity: 0;
+        }
+    }
+
+    /* 能量脉冲点 */
+    .energy-dots {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .energy-dot {
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        background: #00ffff;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+        animation: energyPulse 2s infinite;
+    }
+
+    @keyframes energyPulse {
+        0%, 100% { transform: scale(1); opacity: 0.7; }
+        50% { transform: scale(1.5); opacity: 0.3; }
+    }
+
+    .header-decoration {
+        text-align: center;
+        margin-bottom: 8px; /* 减小间距 */
+        padding: 6px 0; /* 减小内边距 */
+        position: relative;
+        height: 60px; /* 固定标题区域高度 */
+    }
+
+    .title-side-decoration {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px; /* 减小间隙 */
+        margin: 0 auto;
+        max-width: 100%;
+    }
+
+    /* 中心装饰容器 */
+    .center-decoration {
+        flex-shrink: 0;
+        position: relative;
+        z-index: 10;
+    }
+
+    .decoration-main {
+        display: inline-block;
+        padding: 6px 15px; /* 减小内边距 */
+        background: linear-gradient(135deg, rgba(20, 30, 45, 0.9), rgba(30, 40, 60, 0.9));
+        border-radius: 6px; /* 减小圆角 */
+        border: 1px solid rgba(0, 150, 255, 0.3);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5); /* 减小阴影 */
+        position: relative;
+        overflow: hidden;
+        min-width: 320px; /* 减小最小宽度 */
+    }
+
+    .decoration-main::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 150, 255, 0.1), transparent);
+        animation: shine 3s infinite;
+    }
+
+    @keyframes shine {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+
+    .decoration-title {
+        font-size: 1.2rem; /* 显著缩小标题字体 */
+        font-weight: 700;
+        background: linear-gradient(to right, #e6f7ff, #80d4ff, #4dabf7);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 2px 4px rgba(0, 150, 255, 0.3); /* 减小阴影 */
+        letter-spacing: 0.3px; /* 减小字间距 */
+        line-height: 1.2;
+    }
+
+    .decoration-line {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, #4dabf7, transparent);
+        margin: 3px auto; /* 减小间距 */
+        width: 25%; /* 减小宽度 */
+    }
+
+    /* 返回按钮 */
+    .back-button {
+        position: fixed;
+        top: 6px;
+        left: 6px;
+        z-index: 10000;
+        background: rgba(20, 30, 45, 0.9);
+        border: 1px solid rgba(0, 150, 255, 0.4);
+        border-radius: 4px;
+        padding: 4px 8px;
+        color: #80d4ff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        font-size: 10px;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 6px rgba(0, 150, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    /* 用户信息 */
+    .user-info {
+        position: absolute;
+        top: 6px;
+        right: 8px;
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        color: #a0a0ff;
+        padding: 2px 4px;
+        background: rgba(10, 15, 40, 0.7);
+        border-radius: 3px;
+        border: 1px solid rgba(64, 224, 208, 0.2);
+        font-size: 9px;
+        z-index: 100;
+    }
+
+    .user-avatar {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0c0c2e;
+        font-weight: bold;
+        font-size: 9px;
+    }
+
+    .real-time-clock {
+        text-align: center;
+        line-height: 1;
+    }
+
+    .time-date {
+        color: #40e0d0;
+        font-weight: bold;
+        font-size: 8px;
+    }
+
+    .time-week {
+        color: #a0a0ff;
+        font-size: 7px;
+    }
+
+    /* 主布局 - 更加紧凑 */
+    .main-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        gap: 3px;
+        height: calc(100vh - 76px); /* 精确计算高度 */
+        background: rgba(20, 30, 45, 0.9);
+        border-radius: 6px;
+        padding: 4px; /* 减小内边距 */
+        border: 1px solid rgba(0, 150, 255, 0.2);
+        overflow: hidden; /* 防止内部溢出 */
+    }
+
+    .left-column {
+        display: grid;
+        grid-template-rows: 1fr 0.8fr; /* 调整比例 */
+        gap: 3px;
+        height: 100%;
+    }
+
+    .middle-column {
+        height: 100%;
+        position: relative;
+    }
+
+    .right-column {
+        display: grid;
+        grid-template-rows: 0.8fr 1.2fr; /* 调整比例 */
+        gap: 3px;
+        height: 100%;
+    }
+
+    .right-bottom-sub {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3px;
+        height: 100%;
+    }
+
+    /* 地图容器 */
+    #mapContainer {
+        width: 100%;
+        height: 100%;
+        border-radius: 3px;
+        border: 1px solid rgba(64, 224, 208, 0.2);
+    }
+
+    /* 搜索框 */
+    .station-search {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        display: flex;
+        gap: 2px;
+        z-index: 10;
+    }
+
+    .search-input {
+        width: 130px;
+        padding: 2px 4px;
+        background: rgba(10, 15, 40, 0.9);
+        border: 1px solid rgba(64, 224, 208, 0.3);
+        border-radius: 2px;
+        color: #e0e0ff;
+        font-size: 9px;
+        backdrop-filter: blur(4px);
+    }
+
+    .search-btn {
+        padding: 2px 4px;
+        background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+        border: none;
+        border-radius: 2px;
+        color: #0c0c2e;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 9px;
+        display: flex;
+        align-items: center;
+        gap: 1px;
+    }
+
+    /* 卡片基础样式 */
+    .card {
+        background: rgba(16, 22, 58, 0.7);
+        border-radius: 3px;
+        padding: 2px;
+        border: 1px solid rgba(64, 224, 208, 0.1);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1px;
+        padding-bottom: 1px;
+        border-bottom: 1px solid rgba(64, 224, 208, 0.2);
+        height: 18px;
+        min-height: 18px;
+    }
+
+    .card-title {
+        font-size: 9px;
+        color: #40e0d0;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .card-title i {
+        font-size: 10px;
+    }
+
+    .card-body {
+        flex: 1;
+        padding: 0;
+        height: calc(100% - 20px);
+        position: relative;
+    }
+
+    .chart-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    /* 水位实时监测卡片 */
+    .water-level-info {
+        display: flex;
+        gap: 1px;
+        flex-wrap: wrap;
+        font-size: 6px;
+        color: #a0a0ff;
+    }
+
+    .level-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.5px;
+    }
+
+    /* 水位占比卡片特殊调整 */
+    .ratio-card .card-body {
+        padding: 0.5px;
+        height: calc(100% - 20px);
+    }
+
+    .ratio-card .chart-container {
+        height: 100%;
+        min-height: 60px;
+    }
+
+    /* 预测参数和预警信息卡片 - 字体显著放大 */
+    .param-alert-card {
+        display: grid;
+        grid-template-rows: 1fr 0.9fr;
+        gap: 2px;
+        height: 100%;
+    }
+
+    .prediction-controls, .alert-container {
+        padding: 1px;
+        border-radius: 2px;
+        background: rgba(10, 15, 40, 0.5);
+        border: 1px solid rgba(64, 224, 208, 0.1);
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .control-group {
+        margin-bottom: 1px;
+    }
+
+    .control-label {
+        display: block;
+        margin-bottom: 0.5px;
+        color: #a0a0ff;
+        font-weight: 500;
+        font-size: 11px; /* 显著增大字体 */
+        line-height: 1.2;
+    }
+
+    .slider-container {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+    }
+
+    .slider {
+        flex: 1;
+        height: 1.5px;
+        -webkit-appearance: none;
+        background: rgba(10, 15, 40, 0.8);
+        border-radius: 1px;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #40e0d0;
+        cursor: pointer;
+        box-shadow: 0 0 2px rgba(64, 224, 208, 0.8);
+    }
+
+    .slider-value {
+        min-width: 16px;
+        text-align: center;
+        color: #40e0d0;
+        font-weight: bold;
+        font-size: 11px; /* 显著增大字体 */
+    }
+
+    /* 模型选择器 */
+    .model-selector {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        margin-top: 1px;
+    }
+
+    .model-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1px;
+        background: rgba(10, 15, 40, 0.8);
+        border-radius: 1px;
+        border: 1px solid rgba(64, 224, 208, 0.2);
+        cursor: pointer;
+        font-size: 10px; /* 显著增大字体 */
+        line-height: 1.1;
+    }
+
+    .model-icon {
+        font-size: 8px;
+        color: #a0a0ff;
+        margin-bottom: 0.5px;
+    }
+
+    /* 预警信息 - 字体显著放大 */
+    .alert-count {
+        background: rgba(255, 50, 50, 0.2);
+        color: #ff3232;
+        padding: 0.5px 1px;
+        border-radius: 1px;
+        font-size: 11px; /* 显著增大字体 */
+        font-weight: bold;
+    }
+
+    .alert-list {
+        max-height: 45px;
+        overflow-y: auto;
+        padding-right: 1px;
+        margin-top: 1px;
+    }
+
+    .alert-item {
+        padding: 0.5px;
+        background: rgba(255, 50, 50, 0.1);
+        border-left: 1.5px solid #ff3232;
+        border-radius: 1px;
+        margin-bottom: 0.5px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 10px; /* 显著增大字体 */
+        line-height: 1.1;
+    }
+
+    /* 结果卡片 */
+    .result-chart-card {
+        display: grid;
+        grid-template-rows: 0.9fr 1.1fr;
+        gap: 2px;
+        height: 100%;
+    }
+
+    .prediction-results {
+        padding: 1px;
+        border-radius: 2px;
+        background: rgba(10, 15, 40, 0.5);
+        border: 1px solid rgba(64, 224, 208, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 100%;
+    }
+
+    .result-card {
+        background: rgba(10, 15, 40, 0.8);
+        border-radius: 2px;
+        padding: 1px;
+        border: 1px solid rgba(64, 224, 208, 0.2);
+        display: flex;
+        align-items: center;
+        gap: 1px;
+        margin-bottom: 0.5px;
+        min-height: 22px;
+    }
+
+    .result-icon {
+        width: 16px;
+        height: 16px;
+        background: linear-gradient(135deg, rgba(64, 224, 208, 0.2), rgba(79, 172, 254, 0.2));
+        border-radius: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 9px;
+        color: #40e0d0;
+    }
+
+    .result-value {
+        font-size: 11px;
+        font-weight: bold;
+        color: #40e0d0;
+        margin: 0;
+    }
+
+    .result-label {
+        font-size: 7px;
+        color: #a0a0ff;
+    }
+
+    .result-trend {
+        font-size: 6px;
+    }
+
+    /* 历史图表 */
+    .history-chart-item {
+        padding: 1px;
+        border-radius: 2px;
+        background: rgba(10, 15, 40, 0.5);
+        border: 1px solid rgba(64, 224, 208, 0.1);
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .history-chart-item .card-header {
+        margin-bottom: 0;
+        padding-bottom: 0.5px;
+        height: 16px;
+    }
+
+    .history-chart-item .card-title {
+        font-size: 8px;
+    }
+
+    /* 模态框样式 */
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 9999;
+        display: none;
+        backdrop-filter: blur(5px);
+    }
+
+    .water-level-3d-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 85%;
+        max-width: 700px;
+        height: 75%;
+        background: rgba(16, 22, 58, 0.98);
+        border-radius: 8px;
+        border: 2px solid rgba(64, 224, 208, 0.5);
+        z-index: 10000;
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background: rgba(20, 30, 45, 0.95);
+        border-bottom: 1px solid rgba(64, 224, 208, 0.3);
+    }
+
+    .modal-title {
+        font-size: 14px;
+        color: #40e0d0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .close-modal {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: rgba(255, 50, 50, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #ff3232;
+        font-size: 14px;
+        transition: all 0.3s;
+    }
+
+    .close-modal:hover {
+        background: rgba(255, 50, 50, 0.3);
+        transform: scale(1.1);
+    }
+
+    .modal-body {
+        display: flex;
+        flex: 1;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    #water3DMapContainer {
+        flex: 2;
+        height: 100%;
+        background: rgba(10, 15, 40, 0.8);
+    }
+
+    .water-3d-info {
+        flex: 1;
+        padding: 8px;
+        background: rgba(16, 22, 58, 0.9);
+        border-left: 1px solid rgba(64, 224, 208, 0.2);
+        overflow-y: auto;
+    }
+
+    .info-item {
+        padding: 6px;
+        margin-bottom: 6px;
+        background: rgba(10, 15, 40, 0.6);
+        border-radius: 4px;
+        border: 1px solid rgba(64, 224, 208, 0.1);
+    }
+
+    .info-label {
+        font-size: 10px;
+        color: #a0a0ff;
+        margin-bottom: 2px;
+    }
+
+    .info-value {
+        font-size: 14px;
+        font-weight: bold;
+        color: #40e0d0;
+        margin-bottom: 2px;
+    }
+
+    .info-desc {
+        font-size: 8px;
+        color: #80d4ff;
+        line-height: 1.2;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 1024px) {
+        .main-wrapper {
+            grid-template-columns: 1fr 1.5fr 1fr;
+        }
+
+        .search-input {
+            width: 110px;
+        }
+
+        .decoration-title {
+            font-size: 1.1rem;
+        }
+
+        .decoration-main {
+            min-width: 280px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        body {
+            padding: 6px;
+        }
+
+        .header-decoration {
+            margin-bottom: 6px;
+            padding: 4px 0;
+            height: 50px;
+        }
+
+        .decoration-title {
+            font-size: 1.0rem;
+            letter-spacing: 0.2px;
+        }
+
+        .decoration-line {
+            width: 120px;
+        }
+
+        .main-wrapper {
+            grid-template-columns: 1fr;
+            grid-template-rows: 0.8fr 1.2fr 0.8fr;
+            gap: 2px;
+            padding: 3px;
+            height: calc(100vh - 62px);
+        }
+
+        .left-column, .right-column {
+            grid-template-rows: 1fr 0.8fr;
+        }
+
+        .right-bottom-sub {
+            grid-template-columns: 1fr;
+            grid-template-rows: 0.9fr 1.1fr;
+        }
+
+        .water-level-3d-modal {
+            width: 95%;
+            height: 70%;
+        }
+
+        .ratio-card .chart-container {
+            min-height: 50px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 4px;
+        }
+
+        .header-decoration {
+            padding: 3px 0;
+            height: 45px;
+        }
+
+        .decoration-title {
+            font-size: 0.9rem;
+            padding: 0 8px;
+        }
+
+        .decoration-line {
+            width: 100px;
+            height: 1px;
+        }
+
+        .user-info {
+            top: 4px;
+            right: 4px;
+        }
+
+        .main-wrapper {
+            height: calc(100vh - 55px);
+        }
+
+        .card-header {
+            height: 16px;
+        }
+
+        .card-title {
+            font-size: 8px;
+        }
+
+        .result-card {
+            min-height: 20px;
+        }
+
+        .result-value {
+            font-size: 10px;
+        }
+    }
+</style>
+</head>
+<style>
+/* ================================
+   Left-top Horizontal Collapsible Navbar (Dashboard)
+   ================================ */
+.dash-nav {
+  position: fixed;
+  left: 20px;
+  top: 20px;
+  z-index: 20000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 10px;
+  border-radius: 50px;
+  background: rgba(13, 32, 60, 0.75);
+  border: 1px solid rgba(52, 134, 218, 0.45);
+  backdrop-filter: blur(6px);
+}
+.dash-nav input {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  opacity: 0;
+}
+.dash-nav span {
+  position: absolute;
+  left: 16px;
+  top: calc(50% - 6px);
+  width: 18px;
+  height: 2px;
+  border-radius: 15px;
+  background: rgba(255,255,255,0.75);
+  pointer-events: none;
+  transition: transform 0.3s ease-in-out, top 0.3s ease-in-out 0.3s;
+}
+.dash-nav span:nth-child(3) {
+  top: calc(50% + 2px);
+}
+.dash-nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 0;
+  width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: width 0.5s;
+}
+.dash-nav ul li {
+  list-style: none;
+  margin: 0;
+}
+.dash-nav ul li a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  position: relative;
+  line-height: 1;
+  transition: transform 260ms cubic-bezier(.2,.8,.2,1), filter 260ms cubic-bezier(.2,.8,.2,1);
+  will-change: transform;
+}
+.dash-nav ul li a .nav-text { display: none; }
+.dash-nav ul li a .nav-icon { display: inline-flex; align-items: center; justify-content: center; }
+.dash-nav ul li a[data-title]:hover::after {
+  content: attr(data-title);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(13, 32, 60, 0.92);
+  border: 1px solid rgba(52, 134, 218, 0.45);
+  font-size: 12px;
+  color: rgba(255,255,255,0.92);
+  white-space: nowrap;
+  z-index: 9999;
+  pointer-events: none;
+  box-shadow: 0 0 10px rgba(0,0,0,0.35);
+}
+.dash-nav ul li a[data-title]:hover::before {
+  content: "";
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid rgba(52, 134, 218, 0.45);
+  z-index: 10000;
+  pointer-events: none;
+}
+.dash-nav ul li a .nav-icon,
+.dash-nav ul li a .nav-text {
+  position: static;
+  left: auto;
+  top: auto;
+  width: auto;
+  height: auto;
+  background: none;
+  transform: none;
+  transition: none;
+}
+.dash-nav ul li a:hover {
+  color: #07e5ff;
+  transform: translateY(-2px) scale(1.12);
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
+}
+.dash-nav ul li a:hover .nav-icon {
+  animation: navPop 420ms cubic-bezier(.2,.8,.2,1);
+}
+.dash-nav input:checked ~ ul {
+  width: 250px;
+  overflow: visible;
+  justify-content: space-between;
+  padding: 0 12px;
+}
+.dash-nav input:checked ~ span:nth-child(2) {
+  top: calc(50% - 1px);
+  transform: rotate(-45deg);
+  background: #07e5ff;
+  transition: top 0.3s ease-in-out, transform 0.3s ease-in-out 0.3s;
+}
+.dash-nav input:checked ~ span:nth-child(3) {
+  top: calc(50% - 1px);
+  transform: rotate(45deg);
+  background: #07e5ff;
+  transition: top 0.3s ease-in-out, transform 0.3s ease-in-out 0.3s;
+}
+@keyframes navPop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.35); }
+  65% { transform: scale(0.95); }
+  100% { transform: scale(1.12); }
+}
+</style>
+</head>
+<body>
+    <!-- Top-left collapsible nav (horizontal) -->
+    <div class="dash-nav" aria-label="Dashboard navigation">
+        <input id="dashNavToggle" type="checkbox" />
+        <span></span>
+        <span></span>
+        <ul>
+            <li><a href="../index/index.html" data-title="首页" title="首页"><span class="nav-icon">🏠</span><span class="nav-text">首页</span></a></li>
+            <li><a href="../waterproject/waterproject.html" data-title="水利工程"><span class="nav-icon">🏗️</span><span class="nav-text">水利工程</span></a></li>
+            <!-- <li><a href="../waterlevel/waterlevel.html" data-title="水位动态监测"><span class="nav-icon">🌊</span><span class="nav-text">水位动态监测</span></a></li> -->
+            <li><a href="../prediction/prediction.html" data-title="水位预测模型"><span class="nav-icon">🤖</span><span class="nav-text">水位预测模型</span></a></li>
+            <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="防汛抗旱"><span class="nav-icon">🛡️</span><span class="nav-text">防汛抗旱</span></a></li>
+        </ul>
+    </div>
+    <!-- 从shuiwen.html复制的背景效果 -->
+    <div class="grid-bg"></div>
+    <div class="tech-particles" id="techParticles"></div>
+    <div class="energy-dots" id="energyDots"></div>
+
+    <div class="container">
+        <!-- 新增的返回按钮 (已隐藏，由导航栏替代) -->
+        <!-- <button class="back-button" id="backButton">
+            <span class="back-icon">←</span>
+            <span>返回主页</span>
+        </button> -->
+
+        <!-- 修改后的标题装饰 -->
+        <div class="header-decoration">
+            <div class="title-side-decoration">
+                <!-- 中心标题 -->
+                <div class="center-decoration">
+                    <div class="decoration-main">
+                        <div class="decoration-title">动态水位检测平台</div>
+                        <div class="decoration-line"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-info">
+                <div class="user-avatar">
+                    <span>AD</span>
+                </div>
+                <div class="real-time-clock" id="realTimeClock">
+                    <div class="time-date" id="currentDate">2024-01-01 00:00:00</div>
+                    <div class="time-week" id="currentWeek">星期一</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="left-column">
+            <div class="card level-card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-chart-area"></i> 水位实时监测趋势</h2>
+                    <div class="water-level-info">
+                        <div class="level-indicator">
+                            <i class="fas fa-water"></i>
+                            <span>当前: <span id="currentLevel">2.34</span>m</span>
+                        </div>
+                        <div class="level-indicator warning-level">
+                            <i class="fas fa-exclamation"></i>
+                            <span>警戒: 3.50m</span>
+                        </div>
+                        <div class="level-indicator danger-level">
+                            <i class="fas fa-skull-crossbones"></i>
+                            <span>危险: 4.00m</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" id="waterLevelChart"></div>
+                </div>
+            </div>
+
+            <div class="card weather-card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-cloud-sun-rain"></i> 天气影响水位预测</h2>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" id="weatherImpactChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="middle-column">
+            <div class="station-search">
+                <input type="text" class="search-input" id="stationSearch" placeholder="输入站点名称搜索...">
+                <button class="search-btn" id="searchBtn"><i class="fas fa-search"></i> 搜索</button>
+            </div>
+            <div id="mapContainer"></div>
+        </div>
+
+        <div class="right-column">
+            <div class="card ratio-card">
+                <div class="card-header">
+                    <h2 class="card-title"><i class="fas fa-chart-pie"></i> 全水位占比分析</h2>
+                    <div class="water-level-info">
+                        <div class="level-indicator">
+                            <i class="fas fa-water"></i>
+                            <span>总计: <span id="totalStations">24</span>站</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" id="levelRatioChart"></div>
+                </div>
+            </div>
+
+            <div class="right-bottom-sub">
+                <div class="card param-alert-card">
+                    <div class="prediction-controls">
+                        <div class="card-header" style="margin-bottom: 0; padding-bottom: 1px; height: 22px;">
+                            <h2 class="card-title"><i class="fas fa-sliders-h"></i> 预测参数</h2>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">预测时长 (小时)</label>
+                            <div class="slider-container">
+                                <input type="range" min="1" max="72" value="24" class="slider" id="predictionHours">
+                                <span class="slider-value" id="hoursValue">24</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">采样频率 (分钟)</label>
+                            <div class="slider-container">
+                                <input type="range" min="5" max="60" step="5" value="15" class="slider" id="sampleRate">
+                                <span class="slider-value" id="rateValue">15</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label">预测模型</label>
+                            <div class="model-selector">
+                                <label class="model-option">
+                                    <input type="radio" name="model" value="lstm" checked style="margin-bottom: 0.5px;">
+                                    <div class="model-icon"><i class="fas fa-brain"></i></div>
+                                    <div class="model-text">LSTM</div>
+                                </label>
+                                <label class="model-option">
+                                    <input type="radio" name="model" value="arima" style="margin-bottom: 0.5px;">
+                                    <div class="model-icon"><i class="fas fa-chart-bar"></i></div>
+                                    <div class="model-text">ARIMA</div>
+                                </label>
+                                <label class="model-option">
+                                    <input type="radio" name="model" value="svm" style="margin-bottom: 0.5px;">
+                                    <div class="model-icon"><i class="fas fa-project-diagram"></i></div>
+                                    <div class="model-text">SVM</div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert-container">
+                        <div class="card-header" style="margin-bottom: 0; padding-bottom: 1px; height: 22px;">
+                            <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> 预警信息</h2>
+                            <span class="alert-count" id="alertCount">3 条</span>
+                        </div>
+                        <div class="alert-list" id="alertList">
+                            <div class="alert-item">
+                                <div class="alert-details">
+                                    <div class="alert-title">北京通惠河水位异常上升</div>
+                                    <div class="alert-desc">30分钟上升0.5米，超警戒阈值</div>
+                                </div>
+                                <div class="alert-time">10:23</div>
+                            </div>
+                            <div class="alert-item warning">
+                                <div class="alert-details">
+                                    <div class="alert-title">上海黄浦江流速增加</div>
+                                    <div class="alert-desc">流速2.3m/s，接近警戒值</div>
+                                </div>
+                                <div class="alert-time">09:45</div>
+                            </div>
+                            <div class="alert-item info">
+                                <div class="alert-details">
+                                    <div class="alert-title">深圳监测站离线</div>
+                                    <div class="alert-desc">设备通讯中断，请检查</div>
+                                </div>
+                                <div class="alert-time">08:15</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card result-chart-card">
+                    <div class="prediction-results">
+                        <div class="result-card">
+                            <div class="result-icon"><i class="fas fa-arrow-up"></i></div>
+                            <div class="result-content">
+                                <div class="result-label">预测最高水位</div>
+                                <div class="result-value">2.87</div>
+                                <div class="result-trend trend-up">
+                                    <i class="fas fa-chevron-up"></i>
+                                    <span>+0.53m</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-icon"><i class="fas fa-clock"></i></div>
+                            <div class="result-content">
+                                <div class="result-label">预计到达时间</div>
+                                <div class="result-value">16:45</div>
+                                <div class="result-trend">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span>5小时后</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-icon"><i class="fas fa-exclamation-circle"></i></div>
+                            <div class="result-content">
+                                <div class="result-label">风险等级</div>
+                                <div class="result-value">中</div>
+                                <div class="result-trend trend-up">
+                                    <i class="fas fa-chevron-up"></i>
+                                    <span>+1级</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="history-chart-item">
+                        <div class="card-header" style="margin-bottom: 0; padding-bottom: 0.5px; height: 18px;">
+                            <h2 class="card-title" style="font-size: 10px;"><i class="fas fa-chart-line"></i> 历史水位对比</h2>
+                        </div>
+                        <div class="chart-container" id="historyLevelChart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="overlay"></div>
+<div class="water-level-3d-modal" id="water3DModal">
+    <div class="modal-header">
+        <h3 class="modal-title"><i class="fas fa-map"></i> <span id="modalAreaName">北京市通惠河</span> 水位视图</h3>
+        <div class="close-modal" id="closeModalBtn">
+            <i class="fas fa-times"></i>
+        </div>
+    </div>
+    <div class="modal-body">
+        <div id="water3DMapContainer"></div>
+        <div class="water-3d-info">
+            <div class="info-item">
+                <div class="info-label">当前水位高度</div>
+                <div class="info-value" id="modalWaterLevel">2.34 m</div>
+                <div class="info-desc">较昨日同期上升 0.19m</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">水体流速</div>
+                <div class="info-value" id="modalWaterSpeed">1.8 m/s</div>
+                <div class="info-desc">流速稳定，无异常波动</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">水质状况</div>
+                <div class="info-value" id="modalWaterQuality">良好</div>
+                <div class="info-desc">pH值: 7.2，溶解氧: 8.5 mg/L，浊度: 5 NTU</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">预警等级</div>
+                <div class="info-value" style="color: #ffa500;">黄色预警</div>
+                <div class="info-desc">未来12小时水位可能达到警戒值3.50m，建议加强监测频次</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">水文参数</div>
+                <div class="info-value">-</div>
+                <div class="info-desc">水温: 18.5℃，含沙量: 0.2 kg/m³，流量: 125 m³/s</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        // 全局变量
+        let map = null;
+        let markers = [];
+        let levelChart = null;
+        let weatherImpactChart = null;
+        let levelRatioChart = null;
+        let historyLevelChart = null;
+        let water2DMap = null;
+        let waterPolygon = null;
+        let waterAnimationInterval = null;
+        let selectedAreaData = {
+            name: '北京市通惠河',
+            level: 2.34,
+            speed: 1.8,
+            quality: '良好'
+        };
+
+        // 实时更新相关变量
+        let realTimeUpdateInterval = null;
+        let stationDataCache = {};
+        let lastUpdateTime = Date.now();
+
+        // API基础URL
+        const API_BASE_URL = 'http://localhost:8080/api'; // 根据你的后端地址修改
+
+        // 星期映射
+        const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+
+        // 更新实时时间
+        function updateRealTime() {
+            const now = new Date();
+
+            // 格式化年月日时分秒
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            // 获取星期
+            const weekDay = weekDays[now.getDay()];
+
+            // 更新显示
+            document.getElementById('currentDate').textContent =
+                `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            document.getElementById('currentWeek').textContent = weekDay;
+        }
+
+        // 从shuiwen.html复制的粒子效果函数
+        function createTechParticles() {
+            const container = document.getElementById('techParticles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.opacity = Math.random() * 0.3 + 0.1;
+                particle.style.width = Math.random() * 2 + 1 + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+
+        // 从shuiwen.html复制的能量点函数
+        function createEnergyDots() {
+            const container = document.getElementById('energyDots');
+            for (let i = 0; i < 20; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'energy-dot';
+                dot.style.left = Math.random() * 100 + '%';
+                dot.style.top = Math.random() * 100 + '%';
+                dot.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(dot);
+            }
+        }
+
+        // 初始化入口
+        function initAll() {
+            try {
+                // 立即更新时间
+                updateRealTime();
+                // 每秒更新一次时间
+                setInterval(updateRealTime, 1000);
+
+                // 创建粒子效果
+                createTechParticles();
+                createEnergyDots();
+
+                initMainMap();
+                initCharts();
+                bindEvents();
+                bindBackHomeEvent();
+
+                // 启动实时数据更新
+                startRealTimeUpdates();
+            } catch (e) {
+                console.error('初始化错误:', e);
+                alert('初始化失败: ' + e.message);
+            }
+        }
+
+        // 启动实时数据更新
+        function startRealTimeUpdates() {
+            // 立即获取一次数据
+            fetchRealTimeData();
+
+            // 每10秒更新一次数据
+            realTimeUpdateInterval = setInterval(fetchRealTimeData, 10000);
+
+            // 每3秒更新一次模拟数据（如果API不可用）
+            simulateRealTimeData();
+        }
+
+
+        async function fetchRealTimeData() {
+            console.log('获取实时数据...');
+
+            try {
+                // 1. 尝试获取所有站点的最新水位
+                let waterLevels = [];
+                try {
+                    // 修改这里：加上 /api 前缀
+                    const waterRes = await fetch(`${API_BASE_URL}/waterlevel/data/current/all`);
+                    console.log('水位API响应状态:', waterRes.status);
+
+                    if (waterRes.ok) {
+                        const waterResult = await waterRes.json();
+                        console.log('水位API响应数据:', waterResult);
+
+                        if (waterResult.code === 200 && waterResult.data) {
+                            waterLevels = waterResult.data;
+                            console.log('成功获取水位数据:', waterLevels.length, '条记录');
+
+                            // 如果水位数据中有站点信息，直接使用
+                            if (waterLevels.length > 0) {
+                                updateWaterLevelData(waterLevels);
+                            } else {
+                                console.log('水位数据为空，使用模拟数据');
+                                updateWaterLevelDataWithSimulation();
+                            }
+                        } else {
+                            console.log('水位API返回非200状态:', waterResult);
+                            updateWaterLevelDataWithSimulation();
+                        }
+                    } else {
+                        console.warn('水位API请求失败，状态码:', waterRes.status);
+                        updateWaterLevelDataWithSimulation();
+                    }
+                } catch (waterError) {
+                    console.warn('水位API调用异常:', waterError);
+                    updateWaterLevelDataWithSimulation();
+                }
+
+                // 2. 获取预警数据
+                let warnings = [];
+                try {
+                    // 修改这里：加上 /api 前缀
+                    const warningRes = await fetch(`${API_BASE_URL}/waterlevel/warning/unprocessed`);
+                    console.log('预警API响应状态:', warningRes.status);
+
+                    if (warningRes.ok) {
+                        const warningResult = await warningRes.json();
+                        console.log('预警API响应数据:', warningResult);
+
+                        if (warningResult.code === 200 && warningResult.data) {
+                            warnings = warningResult.data;
+                            console.log('成功获取预警数据:', warnings.length, '条预警');
+                            updateWarningData(warnings);
+                        }
+                    }
+                } catch (warningError) {
+                    console.warn('预警API调用失败:', warningError);
+                }
+
+                // 3. 获取站点数据
+                try {
+                    // 修改这里：加上 /api 前缀
+                    const stationRes = await fetch(`${API_BASE_URL}/waterlevel/station/all`);
+                    console.log('站点API响应状态:', stationRes.status);
+
+                    if (stationRes.ok) {
+                        const stationResult = await stationRes.json();
+                        console.log('站点API响应数据:', stationResult);
+
+                        if (stationResult.code === 200 && stationResult.data) {
+                            const stations = stationResult.data;
+                            console.log('成功获取站点数据:', stations.length, '个站点');
+                            updateStationData(stations);
+                            updateMapMarkersWithStations(stations, waterLevels);
+                        }
+                    }
+                } catch (stationError) {
+                    console.warn('站点API调用失败:', stationError);
+                }
+
+                lastUpdateTime = Date.now();
+            } catch (error) {
+                console.error('获取实时数据失败:', error);
+                updateWaterLevelDataWithSimulation();
+            }
+        }
+
+        // 添加更新地图标记的函数
+        function updateMapMarkersWithStations(stations, waterLevels) {
+            if (!map || !markers.length) return;
+
+            // 清除旧标记
+            markers.forEach(marker => map.remove(marker));
+            markers = [];
+
+            // 添加新标记
+            stations.forEach(station => {
+                const waterData = waterLevels.find(item => item.stationId === station.id);
+                const level = waterData ? waterData.level : 0;
+                const status = waterData ? waterData.status : '离线';
+
+                const position = new AMap.LngLat(station.longitude, station.latitude);
+
+                // 根据水位状态选择标记颜色
+                let iconUrl = 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png'; // 默认蓝色
+                if (status === '危险' || level >= (station.dangerLevel || 4.0)) {
+                    iconUrl = 'https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png'; // 红色
+                } else if (status === '预警' || level >= (station.warningLevel || 3.5)) {
+                    iconUrl = 'https://webapi.amap.com/theme/v1.3/markers/n/mark_y.png'; // 黄色
+                } else if (station.status === 0) {
+                    iconUrl = 'https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png'; // 红色（离线）
+                }
+
+                const marker = new AMap.Marker({
+                    position: position,
+                    title: `${station.name} - ${level.toFixed(2)}m`,
+                    icon: new AMap.Icon({
+                        size: new AMap.Size(18, 18),
+                        image: iconUrl,
+                        imageSize: new AMap.Size(18, 18)
+                    }),
+                    anchor: 'bottom-center'
+                });
+
+                const infoWindow = new AMap.InfoWindow({
+                    content: `<div style="color:#333;padding:5px;font-size:10px;">
+                <h3 style="margin:0 0 2px 0;color:#0088ff;font-size:11px;">${station.name}</h3>
+                <p style="margin:0;">位置: ${station.location}</p>
+                <p style="margin:0;">状态: ${station.status === 1 ? '在线' : '离线'}</p>
+                <p style="margin:0;">水位: ${level.toFixed(2)}m</p>
+                <p style="margin:0;">警戒: ${station.warningLevel || 3.5}m</p>
+                <button style="margin-top:3px;padding:1px 4px;background:#0088ff;color:white;border:none;border-radius:2px;font-size:9px;cursor:pointer;"
+                        onclick="window.showWater2DView('${station.name}', '${level.toFixed(2)}m', ${station.longitude}, ${station.latitude})">
+                    查看水位视图
+                </button>
+            </div>`
+                });
+
+                marker.on('click', () => {
+                    infoWindow.open(map, marker.getPosition());
+                    document.getElementById('currentLevel').textContent = level.toFixed(2);
+                    selectedAreaData = {
+                        name: station.name,
+                        level: level,
+                        speed: waterData ? waterData.flowRate || 1.5 : 1.5,
+                        quality: '良好'
+                    };
+                });
+
+                markers.push(marker);
+                map.add(marker);
+            });
+        }
+
+        // 更新水位数据
+        function updateWaterLevelData(waterLevels) {
+            if (!waterLevels || !Array.isArray(waterLevels) || waterLevels.length === 0) {
+                updateWaterLevelDataWithSimulation();
+                return;
+            }
+
+            // 更新水位图表
+            updateLevelChart(waterLevels);
+
+            // 更新水位占比图表
+            updateLevelRatioChart(waterLevels);
+
+            // 更新地图标记
+            updateMapMarkers(waterLevels);
+
+            // 更新当前水位显示
+            updateCurrentLevelDisplay(waterLevels);
+        }
+
+        // 使用模拟数据更新水位
+        function updateWaterLevelDataWithSimulation() {
+            // 生成模拟水位数据
+            const simulatedData = generateSimulatedWaterData();
+            updateLevelChart(simulatedData);
+            updateLevelRatioChart(simulatedData);
+            updateCurrentLevelDisplay(simulatedData);
+        }
+
+        // 生成模拟水位数据
+        function generateSimulatedWaterData() {
+            const now = new Date();
+            const baseLevel = 2.0 + Math.sin(now.getHours() * Math.PI / 12) * 0.5;
+            const randomFactor = (Math.random() - 0.5) * 0.1;
+
+            return [
+                {
+                    stationId: 1,
+                    level: baseLevel + randomFactor,
+                    recordTime: now.toISOString(),
+                    station: { name: '北京通惠河监测站' }
+                },
+                {
+                    stationId: 2,
+                    level: baseLevel * 1.1 + randomFactor,
+                    recordTime: now.toISOString(),
+                    station: { name: '上海黄浦江监测站' }
+                },
+                {
+                    stationId: 3,
+                    level: baseLevel * 0.9 + randomFactor,
+                    recordTime: now.toISOString(),
+                    station: { name: '广州珠江监测站' }
+                },
+                {
+                    stationId: 4,
+                    level: baseLevel * 1.2 + randomFactor,
+                    recordTime: now.toISOString(),
+                    station: { name: '深圳深圳河监测站' }
+                }
+            ];
+        }
+
+        // 更新水位图表
+        function updateLevelChart(waterLevels) {
+            if (!levelChart) return;
+
+            const now = new Date();
+            const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+
+            // 获取当前图表数据
+            const option = levelChart.getOption();
+            const timeData = option.xAxis[0].data || [];
+            const realData = option.series[0].data || [];
+            const predictData = option.series[2].data || [];
+
+            // 限制数据长度，保留最近20个点
+            if (timeData.length >= 20) {
+                timeData.shift();
+                realData.shift();
+                predictData.shift();
+            }
+
+            // 添加新数据点
+            timeData.push(currentTime);
+
+            // 计算平均水位
+            const avgLevel = waterLevels.reduce((sum, item) => sum + (item.level || 0), 0) / waterLevels.length;
+            realData.push(Number(avgLevel.toFixed(2)));
+
+            // 预测数据（基于当前趋势）
+            const lastReal = realData[realData.length - 2] || avgLevel;
+            const trend = avgLevel - lastReal;
+            const lastPredict = predictData[predictData.length - 1] || avgLevel;
+            const newPredict = Number((lastPredict + trend * 0.8 + (Math.random() - 0.5) * 0.05).toFixed(2));
+            predictData.push(newPredict);
+
+            // 更新图表
+            levelChart.setOption({
+                xAxis: [{
+                    data: timeData
+                }],
+                series: [
+                    {
+                        data: realData
+                    },
+                    {
+                        data: Array(timeData.length).fill(3.5) // 警戒线
+                    },
+                    {
+                        data: predictData
+                    }
+                ]
+            });
+        }
+
+        // 更新水位占比图表
+        function updateLevelRatioChart(waterLevels) {
+            if (!levelRatioChart) return;
+
+            // 根据水位计算分类
+            const categories = {
+                safe: { count: 0, totalLevel: 0, color: '#40e0d0' },
+                lowRisk: { count: 0, totalLevel: 0, color: '#4dabf7' },
+                warning: { count: 0, totalLevel: 0, color: '#ffa500' },
+                danger: { count: 0, totalLevel: 0, color: '#ff3232' }
+            };
+
+            waterLevels.forEach(item => {
+                const level = item.level || 0;
+                if (level < 2.5) {
+                    categories.safe.count++;
+                    categories.safe.totalLevel += level;
+                } else if (level < 3.0) {
+                    categories.lowRisk.count++;
+                    categories.lowRisk.totalLevel += level;
+                } else if (level < 3.5) {
+                    categories.warning.count++;
+                    categories.warning.totalLevel += level;
+                } else {
+                    categories.danger.count++;
+                    categories.danger.totalLevel += level;
+                }
+            });
+
+            // 计算占比
+            const totalStations = waterLevels.length;
+            const richColors = [
+                {
+                    name: '安全区',
+                    value: totalStations > 0 ? Math.round((categories.safe.count / totalStations) * 100) : 25,
+                    color: '#40e0d0',
+                    subColor: '#00cccc',
+                    textColor: '#40e0d0',
+                    stations: categories.safe.count,
+                    avgLevel: categories.safe.count > 0 ? (categories.safe.totalLevel / categories.safe.count).toFixed(2) + 'm' : '0.00m',
+                    status: '正常'
+                },
+                {
+                    name: '低风险区',
+                    value: totalStations > 0 ? Math.round((categories.lowRisk.count / totalStations) * 100) : 25,
+                    color: '#4dabf7',
+                    subColor: '#2196f3',
+                    textColor: '#4dabf7',
+                    stations: categories.lowRisk.count,
+                    avgLevel: categories.lowRisk.count > 0 ? (categories.lowRisk.totalLevel / categories.lowRisk.count).toFixed(2) + 'm' : '0.00m',
+                    status: '关注'
+                },
+                {
+                    name: '警戒区',
+                    value: totalStations > 0 ? Math.round((categories.warning.count / totalStations) * 100) : 25,
+                    color: '#ffa500',
+                    subColor: '#ff8c00',
+                    textColor: '#ffa500',
+                    stations: categories.warning.count,
+                    avgLevel: categories.warning.count > 0 ? (categories.warning.totalLevel / categories.warning.count).toFixed(2) + 'm' : '0.00m',
+                    status: '警告'
+                },
+                {
+                    name: '危险区',
+                    value: totalStations > 0 ? Math.round((categories.danger.count / totalStations) * 100) : 25,
+                    color: '#ff3232',
+                    subColor: '#ff0000',
+                    textColor: '#ff3232',
+                    stations: categories.danger.count,
+                    avgLevel: categories.danger.count > 0 ? (categories.danger.totalLevel / categories.danger.count).toFixed(2) + 'm' : '0.00m',
+                    status: '危险'
+                }
+            ];
+
+            // 更新总数显示
+            document.getElementById('totalStations').textContent = totalStations;
+
+            // 更新图表
+            levelRatioChart.setOption({
+                series: [
+                    {
+                        data: richColors.map(item => ({
+                            value: item.value,
+                            name: item.name,
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                    { offset: 0, color: item.color },
+                                    { offset: 1, color: item.subColor }
+                                ])
+                            },
+                            textColor: item.textColor,
+                            stations: item.stations,
+                            avgLevel: item.avgLevel,
+                            status: item.status
+                        }))
+                    },
+                    {
+                        data: [
+                            {
+                                value: categories.safe.count > 0 ? 70 : 40,
+                                name: '正常',
+                                itemStyle: { color: 'rgba(64, 224, 208, 0.7)' }
+                            },
+                            {
+                                value: categories.lowRisk.count > 0 ? 20 : 30,
+                                name: '预警',
+                                itemStyle: { color: 'rgba(255, 165, 0, 0.7)' }
+                            },
+                            {
+                                value: categories.danger.count > 0 ? 10 : 30,
+                                name: '报警',
+                                itemStyle: { color: 'rgba(255, 50, 50, 0.7)' }
+                            }
+                        ]
+                    }
+                ],
+                graphic: [
+                    {
+                        style: {
+                            stroke: `rgba(64, 224, 208, ${0.2 + Math.sin(Date.now() / 1000) * 0.1})`
+                        }
+                    }
+                ]
+            });
+        }
+
+        // 更新预警数据
+        function updateWarningData(warnings) {
+            if (!warnings || !Array.isArray(warnings)) return;
+
+            // 更新预警数量
+            document.getElementById('alertCount').textContent = `${warnings.length} 条`;
+
+            // 更新预警列表
+            const alertList = document.getElementById('alertList');
+            alertList.innerHTML = '';
+
+            warnings.slice(0, 5).forEach(warning => {
+                const alertItem = document.createElement('div');
+                alertItem.className = 'alert-item';
+
+                const time = new Date(warning.createTime || Date.now());
+                const timeStr = `${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`;
+
+                alertItem.innerHTML = `
+                <div class="alert-details">
+                    <div class="alert-title">${warning.title || '水位预警'}</div>
+                    <div class="alert-desc">${warning.content || '水位异常'}</div>
+                </div>
+                <div class="alert-time">${timeStr}</div>
+            `;
+
+                alertList.appendChild(alertItem);
+            });
+        }
+
+        // 更新站点数据
+        function updateStationData(stations) {
+            if (!stations || !Array.isArray(stations)) return;
+
+            // 缓存站点数据
+            stations.forEach(station => {
+                stationDataCache[station.id] = station;
+            });
+        }
+
+        // 更新地图标记
+        function updateMapMarkers(waterLevels) {
+            if (!map || !markers.length) return;
+
+            markers.forEach((marker, index) => {
+                const stationId = index + 1;
+                const waterData = waterLevels.find(item => item.stationId === stationId);
+
+                if (waterData) {
+                    // 更新标记颜色（根据水位状态）
+                    const level = waterData.level || 0;
+                    const status = level < 2.5 ? '正常' : level < 3.5 ? '预警' : '危险';
+
+                    const iconUrl = status === '危险'
+                        ? 'https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png'
+                        : status === '预警'
+                            ? 'https://webapi.amap.com/theme/v1.3/markers/n/mark_y.png'
+                            : 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png';
+
+                    marker.setIcon(new AMap.Icon({
+                        size: new AMap.Size(18, 18),
+                        image: iconUrl,
+                        imageSize: new AMap.Size(18, 18)
+                    }));
+
+                    // 更新信息窗口内容
+                    const stationName = waterData.station?.name || `监测站${stationId}`;
+                    marker.setTitle(`${stationName} - ${level.toFixed(2)}m`);
+                }
+            });
+        }
+
+        // 更新当前水位显示
+        function updateCurrentLevelDisplay(waterLevels) {
+            if (!waterLevels || waterLevels.length === 0) return;
+
+            // 找到第一个站点的水位（或者计算平均水位）
+            const firstStation = waterLevels[0];
+            if (firstStation && firstStation.level !== undefined) {
+                document.getElementById('currentLevel').textContent = firstStation.level.toFixed(2);
+            }
+        }
+
+        // 模拟实时数据更新（独立于API）
+        function simulateRealTimeData() {
+            setInterval(() => {
+                // 更新天气影响雷达图
+                if (weatherImpactChart) {
+                    const now = new Date();
+                    const hour = now.getHours();
+
+                    // 模拟天气数据变化
+                    const rainfall = 45 + Math.sin(hour * Math.PI / 12) * 20 + (Math.random() - 0.5) * 5;
+                    const windSpeed = 8 + Math.sin(hour * Math.PI / 6) * 4 + (Math.random() - 0.5) * 2;
+                    const temperature = 18 + Math.sin(hour * Math.PI / 12) * 5 + (Math.random() - 0.5) * 1;
+
+                    weatherImpactChart.setOption({
+                        series: [{
+                            data: [
+                                {
+                                    value: [
+                                        Math.max(0, Math.min(100, rainfall)),
+                                        Math.max(0, Math.min(20, windSpeed)),
+                                        Math.max(-10, Math.min(40, temperature)),
+                                        75 + (Math.random() - 0.5) * 10,
+                                        1012 + (Math.random() - 0.5) * 5,
+                                        15 + (Math.random() - 0.5) * 3
+                                    ]
+                                },
+                                {
+                                    value: [
+                                        Math.max(0, Math.min(100, rainfall * 1.2)),
+                                        Math.max(0, Math.min(20, windSpeed * 1.1)),
+                                        Math.max(-10, Math.min(40, temperature + 2)),
+                                        85 + (Math.random() - 0.5) * 10,
+                                        1008 + (Math.random() - 0.5) * 5,
+                                        10 + (Math.random() - 0.5) * 3
+                                    ]
+                                }
+                            ]
+                        }]
+                    });
+                }
+
+                // 更新预测结果卡片
+                const now = new Date();
+                const hour = now.getHours();
+                const minute = now.getMinutes();
+
+                // 计算预测最高水位（基于正弦曲线模拟）
+                const peakLevel = 2.34 + Math.sin((hour + 6) * Math.PI / 12) * 0.5 + (Math.random() - 0.5) * 0.1;
+                const peakTimeHour = (hour + Math.floor(Math.random() * 3 + 5)) % 24;
+                const peakTimeMinute = Math.floor(Math.random() * 60);
+
+                // 更新预测结果
+                document.querySelector('.result-card:nth-child(1) .result-value').textContent = peakLevel.toFixed(2);
+                document.querySelector('.result-card:nth-child(2) .result-value').textContent =
+                    `${peakTimeHour.toString().padStart(2, '0')}:${peakTimeMinute.toString().padStart(2, '0')}`;
+
+                // 更新历史水位对比图
+                if (historyLevelChart) {
+                    const option = historyLevelChart.getOption();
+                    const todayData = option.series[0].data || [];
+
+                    if (todayData.length >= 4) {
+                        todayData.shift();
+                    }
+
+                    // 添加新的模拟数据
+                    const newLevel = 2.0 + Math.sin(hour * Math.PI / 12) * 0.4 + (Math.random() - 0.5) * 0.1;
+                    todayData.push(Number(newLevel.toFixed(2)));
+
+                    historyLevelChart.setOption({
+                        series: [
+                            { data: todayData },
+                            option.series[1],
+                            option.series[2]
+                        ]
+                    });
+                }
+
+            }, 3000); // 每3秒更新一次模拟数据
+        }
+
+        // 绑定返回主页按钮事件
+        function bindBackHomeEvent() {
+            const backBtn = document.getElementById('backButton');
+            if (backBtn) {
+                backBtn.addEventListener('click', function() {
+                    alert('返回主页功能已触发，可替换为实际的跳转URL');
+                });
+            }
+        }
+
+        // 初始化主地图（纯2D正俯视）
+        function initMainMap() {
+            // 2D地图配置：取消倾斜、3D模式
+            map = new AMap.Map('mapContainer', {
+                zoom: 10,
+                center: new AMap.LngLat(116.39748, 39.908823),
+                mapStyle: 'amap://styles/darkblue',
+                pitch: 0,
+                rotation: 0,
+                viewMode: '2D',
+                resizeEnable: true,
+                renderOptions: {
+                    canvasOptions: {
+                        willReadFrequently: true
+                    }
+                }
+            });
+
+            // 地图加载完成后添加控件
+            map.on('complete', function() {
+                AMap.plugin(['AMap.Scale'], function() {
+                    map.addControl(new AMap.Scale({ position: 'bottom-left' }));
+                });
+            });
+
+            // 添加监测站标记
+            const stations = [
+                { id: 1, lng: 116.39748, lat: 39.908823, name: '北京通惠河监测站', level: '2.34m', update: '1分钟前', status: '在线' },
+                { id: 2, lng: 121.4737, lat: 31.2304, name: '上海黄浦江监测站', level: '3.12m', update: '3分钟前', status: '在线' },
+                { id: 3, lng: 113.2644, lat: 23.1291, name: '广州珠江监测站', level: '1.89m', update: '2分钟前', status: '在线' },
+                { id: 4, lng: 114.0579, lat: 22.5431, name: '深圳深圳河监测站', level: '--', update: '2小时前', status: '离线' },
+                { id: 5, lng: 114.3055, lat: 30.5931, name: '武汉监测站', level: '2.85m', update: '1分钟前', status: '在线'}
+            ];
+
+            stations.forEach(station => {
+                const position = new AMap.LngLat(station.lng, station.lat);
+
+                const marker = new AMap.Marker({
+                    position: position,
+                    title: station.name,
+                    icon: new AMap.Icon({
+                        size: new AMap.Size(18, 18),
+                        image: station.status === '在线'
+                            ? 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png'
+                            : 'https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png',
+                        imageSize: new AMap.Size(18, 18)
+                    }),
+                    anchor: 'bottom-center'
+                });
+
+                const infoWindow = new AMap.InfoWindow({
+                    content: `<div style="color:#333;padding:5px;font-size:10px;">
+                    <h3 style="margin:0 0 2px 0;color:#0088ff;font-size:11px;">${station.name}</h3>
+                    <p style="margin:0;">状态: ${station.status}</p>
+                    <p style="margin:0;">水位: ${station.level}</p>
+                    <p style="margin:0;color:#666;font-size:9px;">${station.update}</p>
+                    <button style="margin-top:3px;padding:1px 4px;background:#0088ff;color:white;border:none;border-radius:2px;font-size:9px;cursor:pointer;"
+                            onclick="window.showWater2DView('${station.name.replace('监测站', '')}', '${station.level}', ${station.lng}, ${station.lat})">
+                        查看水位视图
+                    </button>
+                </div>`
+                });
+
+                marker.on('click', () => {
+                    infoWindow.open(map, marker.getPosition());
+                    document.getElementById('currentLevel').textContent = station.level.replace('m', '') || '0';
+                    selectedAreaData = {
+                        name: station.name.replace('监测站', ''),
+                        level: parseFloat(station.level) || 0,
+                        speed: station.id === 1 ? 1.8 : station.id === 2 ? 2.3 : 1.5,
+                        quality: station.id === 1 ? '良好' : station.id === 2 ? '一般' : '优'
+                    };
+                });
+
+                markers.push(marker);
+                map.add(marker);
+            });
+
+            // 地图点击事件
+            map.on('click', (e) => {
+                if (!e || !e.lnglat) return;
+
+                const lng = parseFloat(e.lnglat.getLng());
+                const lat = parseFloat(e.lnglat.getLat());
+
+                if (isNaN(lng) || isNaN(lat)) return;
+
+                AMap.plugin('AMap.Geocoder', () => {
+                    const geocoder = new AMap.Geocoder({
+                        radius: 1000,
+                        extensions: 'all'
+                    });
+
+                    geocoder.getAddress([lng, lat], (status, result) => {
+                        let address = '未知区域';
+                        let randomLevel = (Math.random() * 1.5 + 1).toFixed(2);
+                        let randomSpeed = (Math.random() * 1 + 1).toFixed(1);
+
+                        if (status === 'complete' && result && result.regeocode) {
+                            address = result.regeocode.formattedAddress || '未知区域';
+                        }
+
+                        selectedAreaData = {
+                            name: address,
+                            level: parseFloat(randomLevel) || 0,
+                            speed: parseFloat(randomSpeed) || 1.0,
+                            quality: Math.random() > 0.5 ? '良好' : '一般'
+                        };
+
+                        window.showWater2DView(address, randomLevel + 'm', lng, lat);
+                    });
+                });
+            });
+        }
+
+        // 初始化2D水位地图（替代3D）
+        function initWater2DMap(lng, lat) {
+            // 清理旧地图
+            if (water2DMap) {
+                water2DMap.destroy();
+                water2DMap = null;
+            }
+            if (waterAnimationInterval) {
+                clearInterval(waterAnimationInterval);
+                waterAnimationInterval = null;
+            }
+            if (waterPolygon) {
+                waterPolygon = null;
+            }
+
+            // 强制坐标校验
+            const validLng = parseFloat(lng) || 116.39748;
+            const validLat = parseFloat(lat) || 39.908823;
+
+            // 2D地图配置（纯俯视）
+            water2DMap = new AMap.Map('water3DMapContainer', {
+                zoom: 16,
+                center: new AMap.LngLat(validLng, validLat),
+                mapStyle: 'amap://styles/darkblue',
+                pitch: 0,
+                rotation: 0,
+                viewMode: '2D',
+                resizeEnable: true,
+                features: ['road', 'building'],
+                renderOptions: {
+                    antialias: true,
+                    canvasOptions: {
+                        willReadFrequently: true
+                    }
+                }
+            });
+
+            // 地图加载完成后添加元素
+            water2DMap.on('complete', function() {
+                AMap.plugin(['AMap.Scale'], function() {
+                    water2DMap.addControl(new AMap.Scale({ position: 'bottom-left' }));
+                });
+
+                createWater2DPolygon(validLng, validLat);
+
+                // 添加中心点标记
+                const centerMarker = new AMap.Marker({
+                    position: new AMap.LngLat(validLng, validLat),
+                    icon: new AMap.Icon({
+                        size: new AMap.Size(14, 14),
+                        image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
+                        imageSize: new AMap.Size(14, 14)
+                    }),
+                    anchor: 'bottom-center'
+                });
+                water2DMap.add(centerMarker);
+            });
+        }
+
+        // 创建2D水位多边形（无高程）
+        function createWater2DPolygon(lng, lat) {
+            const radius = 0.01;
+            const points = [];
+            const numPoints = 36;
+
+            for (let i = 0; i < numPoints; i++) {
+                const angle = (i / numPoints) * 2 * Math.PI;
+                const newLng = parseFloat(lng) + radius * Math.cos(angle);
+                const newLat = parseFloat(lat) + radius * Math.sin(angle);
+
+                if (!isNaN(newLng) && !isNaN(newLat)) {
+                    points.push(new AMap.LngLat(newLng, newLat));
+                }
+            }
+            if (points.length > 0) {
+                points.push(points[0]); // 闭合
+            }
+
+            // 创建2D多边形（无高程）
+            waterPolygon = new AMap.Polygon({
+                path: points,
+                fillColor: 'rgba(0, 170, 220, 0.7)',
+                strokeColor: 'rgba(0, 200, 255, 0.9)',
+                strokeWeight: 1,
+                zIndex: 100
+            });
+
+            if (water2DMap && waterPolygon) {
+                water2DMap.add(waterPolygon);
+
+                // 水位波动动画
+                let waveOffset = 0;
+                waterAnimationInterval = setInterval(() => {
+                    try {
+                        if (!waterPolygon || !water2DMap) return;
+
+                        waveOffset += 0.1;
+                        const alpha = 0.6 + Math.sin(waveOffset) * 0.1;
+
+                        waterPolygon.setOptions({
+                            fillColor: `rgba(0, 170, 220, ${alpha})`
+                        });
+                    } catch (e) {
+                        console.warn('动画执行异常:', e);
+                        clearInterval(waterAnimationInterval);
+                    }
+                }, 100);
+            }
+        }
+
+        // 显示2D水位视图
+        function showWater2DView(areaName, waterLevel, lng, lat) {
+            const validLng = parseFloat(lng) || 116.39748;
+            const validLat = parseFloat(lat) || 39.908823;
+            const validLevel = waterLevel || '0.00 m';
+
+            // 更新弹窗信息
+            document.getElementById('modalAreaName').textContent = areaName || '未知区域';
+            document.getElementById('modalWaterLevel').textContent = validLevel;
+            document.getElementById('modalWaterSpeed').textContent = selectedAreaData.speed + ' m/s';
+            document.getElementById('modalWaterQuality').textContent = selectedAreaData.quality || '良好';
+
+            // 初始化2D地图
+            initWater2DMap(validLng, validLat);
+
+            // 显示弹窗
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('water3DModal').style.display = 'flex';
+
+            setTimeout(() => {
+                if (water2DMap) {
+                    water2DMap.resize();
+                }
+            }, 200);
+        }
+
+        // 将函数设为全局可访问
+        window.showWater2DView = showWater2DView;
+
+        // 关闭水位视图
+        function closeWater2DView() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('water3DModal').style.display = 'none';
+
+            if (waterAnimationInterval) {
+                clearInterval(waterAnimationInterval);
+                waterAnimationInterval = null;
+            }
+
+            if (waterPolygon && water2DMap) {
+                water2DMap.remove(waterPolygon);
+                waterPolygon = null;
+            }
+        }
+
+        // 初始化图表
+        function initCharts() {
+            // 实时水位趋势图
+            const levelChartDom = document.getElementById('waterLevelChart');
+            if (levelChartDom) {
+                levelChart = echarts.init(levelChartDom);
+                const now = new Date();
+                const initialTimes = [];
+                const initialData = [];
+
+                // 初始化时间序列（过去2小时）
+                for (let i = 12; i >= 0; i--) {
+                    const time = new Date(now.getTime() - i * 10 * 60000);
+                    initialTimes.push(`${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`);
+                    initialData.push(2.0 + Math.sin((time.getHours() + time.getMinutes()/60) * Math.PI / 12) * 0.3);
+                }
+
+                levelChart.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: {
+                        trigger: 'axis',
+                        textStyle: { color: '#e0e0ff', fontSize: 7 },
+                        backgroundColor: 'rgba(16, 22, 58, 0.8)',
+                        borderColor: 'rgba(64, 224, 208, 0.3)',
+                        borderWidth: 1
+                    },
+                    legend: {
+                        data: ['实时水位', '警戒水位', '预测水位'],
+                        textStyle: { color: '#a0a0ff', fontSize: 7 },
+                        top: '0%',
+                        itemGap: 1,
+                        itemWidth: 6,
+                        itemHeight: 3
+                    },
+                    grid: {
+                        left: '0%',
+                        right: '0%',
+                        bottom: '0%',
+                        top: '10%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        boundaryGap: false,
+                        data: initialTimes,
+                        axisLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.3)', width: 0.5 } },
+                        axisLabel: {
+                            color: '#a0a0ff',
+                            fontSize: 6,
+                            interval: 2
+                        },
+                        axisTick: {
+                            show: false,
+                            length: 2
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        name: 'm',
+                        nameTextStyle: { color: '#40e0d0', fontSize: 7 },
+                        axisLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.3)', width: 0.5 } },
+                        axisLabel: {
+                            color: '#a0a0ff',
+                            fontSize: 6,
+                            margin: 0
+                        },
+                        splitLine: {
+                            lineStyle: {
+                                color: 'rgba(64, 224, 208, 0.05)',
+                                width: 0.3
+                            }
+                        },
+                        min: 1.5,
+                        max: 4.5
+                    },
+                    series: [
+                        {
+                            name: '实时水位',
+                            type: 'line',
+                            data: initialData,
+                            smooth: true,
+                            lineStyle: { color: '#40e0d0', width: 1.2 },
+                            itemStyle: { color: '#40e0d0' },
+                            symbolSize: 2,
+                            areaStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: 'rgba(64, 224, 208, 0.3)' },
+                                    { offset: 1, color: 'rgba(64, 224, 208, 0.05)' }
+                                ])
+                            }
+                        },
+                        {
+                            name: '警戒水位',
+                            type: 'line',
+                            data: Array(initialTimes.length).fill(3.5),
+                            lineStyle: { color: '#ffa500', type: 'dashed', width: 0.8 },
+                            itemStyle: { color: '#ffa500' },
+                            symbol: 'none'
+                        },
+                        {
+                            name: '预测水位',
+                            type: 'line',
+                            data: initialData.map(d => d * 1.1),
+                            smooth: true,
+                            lineStyle: { color: '#ff3232', width: 1.2 },
+                            itemStyle: { color: '#ff3232' },
+                            symbolSize: 2
+                        }
+                    ]
+                });
+            }
+
+            // 天气影响雷达图
+            const weatherChartDom = document.getElementById('weatherImpactChart');
+            if (weatherChartDom) {
+                weatherImpactChart = echarts.init(weatherChartDom);
+                weatherImpactChart.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: {
+                        trigger: 'item',
+                        textStyle: { color: '#e0e0ff', fontSize: 7 },
+                        backgroundColor: 'rgba(16, 22, 58, 0.8)',
+                        borderColor: 'rgba(64, 224, 208, 0.3)',
+                        borderWidth: 1
+                    },
+                    legend: {
+                        orient: 'horizontal',
+                        bottom: '0%',
+                        left: 'center',
+                        textStyle: { color: '#a0a0ff', fontSize: 7 },
+                        data: ['当前', '预测', '阈值'],
+                        itemGap: 2,
+                        itemWidth: 6,
+                        itemHeight: 3
+                    },
+                    radar: {
+                        indicator: [
+                            { name: '降雨量', max: 100 },
+                            { name: '风速', max: 20 },
+                            { name: '温度', max: 40 },
+                            { name: '湿度', max: 100 },
+                            { name: '气压', max: 1050 },
+                            { name: '蒸发量', max: 50 }
+                        ],
+                        shape: 'polygon',
+                        axisName: {
+                            color: '#40e0d0',
+                            fontSize: 7,
+                            padding: [0, 0]
+                        },
+                        splitLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.1)', width: 0.5 } },
+                        splitArea: { areaStyle: { color: 'rgba(16, 22, 58, 0.2)' } },
+                        axisLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.3)', width: 0.5 } },
+                        center: ['50%', '38%'],
+                        radius: '45%'
+                    },
+                    series: [{
+                        name: '天气影响',
+                        type: 'radar',
+                        lineStyle: { width: 1 },
+                        symbolSize: 2,
+                        data: [
+                            {
+                                value: [45, 8, 18, 75, 1012, 15],
+                                name: '当前',
+                                areaStyle: { color: 'rgba(64, 224, 208, 0.2)' },
+                                lineStyle: { color: '#40e0d0' },
+                                itemStyle: { color: '#40e0d0' }
+                            },
+                            {
+                                value: [65, 12, 20, 85, 1008, 10],
+                                name: '预测',
+                                areaStyle: { color: 'rgba(255, 50, 50, 0.2)' },
+                                lineStyle: { color: '#ff3232' },
+                                itemStyle: { color: '#ff3232' }
+                            },
+                            {
+                                value: [80, 15, 35, 90, 1000, 20],
+                                name: '阈值',
+                                areaStyle: { color: 'rgba(255, 165, 0, 0.1)' },
+                                lineStyle: { color: '#ffa500', type: 'dashed' },
+                                itemStyle: { color: '#ffa500' }
+                            }
+                        ]
+                    }]
+                });
+            }
+
+            // 水位占比饼图
+            const ratioChartDom = document.getElementById('levelRatioChart');
+            if (ratioChartDom) {
+                levelRatioChart = echarts.init(ratioChartDom);
+
+                const richColors = [
+                    {
+                        name: '安全区',
+                        value: 16,
+                        color: '#40e0d0',
+                        subColor: '#00cccc',
+                        textColor: '#40e0d0',
+                        stations: 16,
+                        avgLevel: '2.15m',
+                        status: '正常'
+                    },
+                    {
+                        name: '低风险区',
+                        value: 8,
+                        color: '#4dabf7',
+                        subColor: '#2196f3',
+                        textColor: '#4dabf7',
+                        stations: 8,
+                        avgLevel: '2.85m',
+                        status: '关注'
+                    },
+                    {
+                        name: '警戒区',
+                        value: 6,
+                        color: '#ffa500',
+                        subColor: '#ff8c00',
+                        textColor: '#ffa500',
+                        stations: 6,
+                        avgLevel: '3.45m',
+                        status: '警告'
+                    },
+                    {
+                        name: '危险区',
+                        value: 4,
+                        color: '#ff3232',
+                        subColor: '#ff0000',
+                        textColor: '#ff3232',
+                        stations: 4,
+                        avgLevel: '3.92m',
+                        status: '危险'
+                    }
+                ];
+
+                levelRatioChart.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: function(params) {
+                            const data = params.data;
+                            return `<div style="font-size:8px;padding:3px;">
+                            <div style="color:${data.textColor};font-weight:bold;margin-bottom:2px;">${data.name}</div>
+                            <div style="color:#a0a0ff;">占比: ${data.value}%</div>
+                            <div style="color:#a0a0ff;">站点数: ${data.stations}个</div>
+                            <div style="color:#a0a0ff;">平均水位: ${data.avgLevel}</div>
+                            <div style="color:${data.textColor};font-weight:bold;">状态: ${data.status}</div>
+                        </div>`;
+                        },
+                        textStyle: {
+                            color: '#e0e0ff',
+                            fontSize: 8
+                        },
+                        backgroundColor: 'rgba(16, 22, 58, 0.95)',
+                        borderColor: 'rgba(64, 224, 208, 0.4)',
+                        borderWidth: 1,
+                        extraCssText: 'box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);'
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        right: '1%',
+                        top: 'middle',
+                        textStyle: {
+                            color: '#a0a0ff',
+                            fontSize: 7,
+                            lineHeight: 9,
+                            fontWeight: 'normal'
+                        },
+                        itemWidth: 8,
+                        itemHeight: 8,
+                        itemGap: 3,
+                        data: richColors.map(item => item.name),
+                        formatter: function(name) {
+                            const item = richColors.find(d => d.name === name);
+                            return `{name|${name}} {value|${item.value}%}\n{stations|${item.stations}站}`;
+                        },
+                        rich: {
+                            name: {
+                                color: '#e0e0ff',
+                                fontSize: 7,
+                                fontWeight: 'bold'
+                            },
+                            value: {
+                                color: '#40e0d0',
+                                fontSize: 8,
+                                fontWeight: 'bold',
+                                padding: [0, 0, 0, 5]
+                            },
+                            stations: {
+                                color: '#80d4ff',
+                                fontSize: 6,
+                                padding: [0, 0, 0, 5]
+                            }
+                        }
+                    },
+                    series: [
+                        {
+                            name: '水位占比',
+                            type: 'pie',
+                            radius: ['35%', '55%'],
+                            center: ['30%', '50%'],
+                            avoidLabelOverlap: true,
+                            label: {
+                                show: true,
+                                position: 'inside',
+                                formatter: '{d}%',
+                                color: '#ffffff',
+                                fontSize: 7,
+                                fontWeight: 'bold',
+                                textShadowColor: 'rgba(0, 0, 0, 0.8)',
+                                textShadowBlur: 2,
+                                textShadowOffsetX: 1,
+                                textShadowOffsetY: 1
+                            },
+                            labelLine: {
+                                show: false
+                            },
+                            emphasis: {
+                                scale: true,
+                                scaleSize: 5,
+                                label: {
+                                    show: true,
+                                    fontSize: 9,
+                                    fontWeight: 'bold'
+                                },
+                                itemStyle: {
+                                    shadowBlur: 10,
+                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                }
+                            },
+                            data: richColors.map(item => ({
+                                value: item.value,
+                                name: item.name,
+                                itemStyle: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                                        { offset: 0, color: item.color },
+                                        { offset: 1, color: item.subColor }
+                                    ]),
+                                    borderWidth: 1,
+                                    borderColor: 'rgba(255, 255, 255, 0.3)',
+                                    shadowBlur: 5,
+                                    shadowColor: 'rgba(0, 0, 0, 0.3)'
+                                },
+                                textColor: item.textColor,
+                                stations: item.stations,
+                                avgLevel: item.avgLevel,
+                                status: item.status
+                            })),
+                            itemStyle: {
+                                borderRadius: 3,
+                                borderColor: 'rgba(16, 22, 58, 0.8)',
+                                borderWidth: 1
+                            }
+                        },
+                        {
+                            name: '状态分布',
+                            type: 'pie',
+                            radius: ['20%', '28%'],
+                            center: ['30%', '50%'],
+                            avoidLabelOverlap: false,
+                            label: {
+                                show: false
+                            },
+                            emphasis: {
+                                scale: false
+                            },
+                            data: [
+                                {
+                                    value: 70,
+                                    name: '正常',
+                                    itemStyle: { color: 'rgba(64, 224, 208, 0.7)' }
+                                },
+                                {
+                                    value: 20,
+                                    name: '预警',
+                                    itemStyle: { color: 'rgba(255, 165, 0, 0.7)' }
+                                },
+                                {
+                                    value: 10,
+                                    name: '报警',
+                                    itemStyle: { color: 'rgba(255, 50, 50, 0.7)' }
+                                }
+                            ],
+                            itemStyle: {
+                                borderWidth: 1,
+                                borderColor: 'rgba(255, 255, 255, 0.2)'
+                            }
+                        },
+                        {
+                            name: '中心文字',
+                            type: 'pie',
+                            radius: ['0%', '15%'],
+                            center: ['30%', '50%'],
+                            label: {
+                                show: true,
+                                position: 'center',
+                                formatter: '总计\n{total|24站}',
+                                rich: {
+                                    total: {
+                                        fontSize: 10,
+                                        fontWeight: 'bold',
+                                        color: '#40e0d0',
+                                        lineHeight: 15
+                                    }
+                                },
+                                fontSize: 7,
+                                color: '#a0a0ff'
+                            },
+                            data: [{ value: 1 }],
+                            silent: true,
+                            itemStyle: {
+                                color: 'transparent'
+                            }
+                        }
+                    ],
+                    graphic: [
+                        {
+                            type: 'circle',
+                            shape: {
+                                cx: '30%',
+                                cy: '50%',
+                                r: 58
+                            },
+                            style: {
+                                stroke: 'rgba(64, 224, 208, 0.2)',
+                                fill: 'transparent',
+                                lineWidth: 1
+                            },
+                            silent: true
+                        },
+                        {
+                            type: 'circle',
+                            shape: {
+                                cx: '30%',
+                                cy: '50%',
+                                r: 60
+                            },
+                            style: {
+                                stroke: 'rgba(64, 224, 208, 0.1)',
+                                fill: 'transparent',
+                                lineWidth: 0.5
+                            },
+                            silent: true
+                        }
+                    ],
+                    animation: true,
+                    animationDuration: 1000,
+                    animationEasing: 'cubicOut'
+                });
+            }
+
+            // 历史水位对比图
+            const historyChartDom = document.getElementById('historyLevelChart');
+            if (historyChartDom) {
+                historyLevelChart = echarts.init(historyChartDom);
+
+                const now = new Date();
+                const timeLabels = ['0时', '6时', '12时', '18时'];
+
+                historyLevelChart.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: {
+                        trigger: 'axis',
+                        textStyle: { color: '#e0e0ff', fontSize: 7 },
+                        backgroundColor: 'rgba(16, 22, 58, 0.8)',
+                        borderColor: 'rgba(64, 224, 208, 0.3)',
+                    },
+                    legend: {
+                        data: ['今日', '昨日', '上周同期'],
+                        textStyle: { color: '#a0a0ff', fontSize: 6 },
+                        top: '0%',
+                        itemGap: 1,
+                        itemWidth: 6,
+                        itemHeight: 3
+                    },
+                    grid: {
+                        left: '1%',
+                        right: '1%',
+                        bottom: '0%',
+                        top: '10%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: timeLabels,
+                        axisLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.3)', width: 0.5 } },
+                        axisLabel: {
+                            color: '#a0a0ff',
+                            fontSize: 6,
+                            margin: 0
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.3)', width: 0.5 } },
+                        axisLabel: {
+                            color: '#a0a0ff',
+                            fontSize: 6,
+                            margin: 0
+                        },
+                        splitLine: {
+                            lineStyle: {
+                                color: 'rgba(64, 224, 208, 0.05)',
+                                width: 0.3
+                            }
+                        },
+                        min: 1.5,
+                        max: 2.5
+                    },
+                    series: [
+                        {
+                            name: '今日',
+                            type: 'line',
+                            data: [1.98, 2.15, 2.34, 2.42],
+                            smooth: true,
+                            lineStyle: { color: '#00f2fe', width: 1 },
+                            itemStyle: { color: '#00f2fe' },
+                            symbolSize: 1.5
+                        },
+                        {
+                            name: '昨日',
+                            type: 'line',
+                            data: [1.85, 2.02, 2.18, 2.25],
+                            smooth: true,
+                            lineStyle: { color: '#4facfe', width: 1 },
+                            itemStyle: { color: '#4facfe' },
+                            symbolSize: 1.5
+                        },
+                        {
+                            name: '上周同期',
+                            type: 'line',
+                            data: [1.72, 1.88, 2.05, 2.12],
+                            smooth: true,
+                            lineStyle: { color: '#9966ff', width: 1 },
+                            itemStyle: { color: '#9966ff' },
+                            symbolSize: 1.5
+                        }
+                    ]
+                });
+            }
+        }
+
+        // 绑定所有事件
+        function bindEvents() {
+            // 滑块事件
+            document.getElementById('predictionHours').addEventListener('input', function() {
+                document.getElementById('hoursValue').textContent = this.value;
+            });
+            document.getElementById('sampleRate').addEventListener('input', function() {
+                document.getElementById('rateValue').textContent = this.value;
+            });
+
+            // 关闭水位视图事件
+            document.getElementById('closeModalBtn').addEventListener('click', closeWater2DView);
+            document.getElementById('overlay').addEventListener('click', closeWater2DView);
+
+            // 搜索站点事件
+            document.getElementById('searchBtn').addEventListener('click', searchStation);
+            document.getElementById('stationSearch').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') searchStation();
+            });
+
+            // 窗口大小调整事件
+            window.addEventListener('resize', function() {
+                if (levelChart) levelChart.resize();
+                if (weatherImpactChart) weatherImpactChart.resize();
+                if (levelRatioChart) levelRatioChart.resize();
+                if (historyLevelChart) historyLevelChart.resize();
+                if (map) map.resize();
+                if (water2DMap) setTimeout(() => water2DMap.resize(), 100);
+            });
+
+            // 防止弹窗内部点击穿透
+            document.getElementById('water3DModal').addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+
+            // 页面卸载时清理资源
+            window.addEventListener('beforeunload', function() {
+                if (realTimeUpdateInterval) clearInterval(realTimeUpdateInterval);
+                if (waterAnimationInterval) clearInterval(waterAnimationInterval);
+                if (map) map.destroy();
+                if (water2DMap) water2DMap.destroy();
+            });
+        }
+
+        // 搜索站点功能
+        function searchStation() {
+            const keyword = document.getElementById('stationSearch').value.trim().toLowerCase();
+            if (!keyword) {
+                alert('请输入站点名称关键词');
+                return;
+            }
+
+            const matchedStations = markers.filter(marker => {
+                const title = (marker.getTitle() || '').toLowerCase();
+                return title.includes(keyword);
+            });
+
+            if (matchedStations.length > 0) {
+                const targetMarker = matchedStations[0];
+                const position = targetMarker.getPosition();
+                if (position && map) {
+                    map.setCenter(position);
+                    map.setZoom(12);
+                    targetMarker.emit('click');
+                }
+                document.getElementById('stationSearch').value = '';
+            } else {
+                alert(`未搜索到包含"${keyword}"的站点`);
+            }
+        }
+
+        // 全局错误处理
+        window.addEventListener('error', function(e) {
+            console.error('运行时错误:', e.message, e.filename, e.lineno);
+
+            if (e.message.includes('NaN') && e.filename.includes('amap.com')) {
+                return;
+            }
+
+            alert('系统发生错误: ' + e.message);
+        });
+
+        // 页面加载完成后初始化
+        if (document.readyState === 'complete') {
+            initAll();
+        } else {
+            window.addEventListener('load', initAll);
+        }
+    </script>
+</body>
+</html>

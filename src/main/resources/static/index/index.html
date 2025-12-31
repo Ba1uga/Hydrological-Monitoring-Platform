@@ -1,0 +1,745 @@
+﻿<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1.2, user-scalable=no" name="viewport">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>中国水文检测可视化平台</title>
+
+
+        <link rel="stylesheet" href="css/style.css">
+</head>
+        <body>
+<!--            <div class="videobg style1">-->
+<!--                <video id="video" src="images/2.mp4" style="width: 100%; height:100%;" autoplay=""-->
+<!--                       muted="" loop=""></video>-->
+<!--            </div>-->
+
+            <div class="head">
+                <h1>中国水文检测可视化平台</h1>
+                <!-- Top-left collapsible nav (horizontal) -->
+                <div class="dash-nav" aria-label="Dashboard navigation">
+                    <input id="dashNavToggle" type="checkbox" />
+                    <span></span>
+                    <span></span>
+
+                <ul>
+                    <li><a href="../waterproject/waterproject.html" data-title="水利工程" title="水利工程" aria-label="水利工程"><span class="nav-icon">🏗️</span><span class="nav-text">水利工程</span></a></li>
+                    <li><a href="../waterlevel/waterlevel.html" data-title="水位动态监测" title="水位动态监测" aria-label="水位动态监测"><span class="nav-icon">🌊</span><span class="nav-text">水位动态监测</span></a></li>
+                    <li><a href="../prediction/prediction.html" data-title="水位测模型" title="AI预测模型" aria-label="水位预测模型"><span class="nav-icon">🤖</span><span class="nav-text">水位预测</span></a></li>
+                    <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="防汛抗旱" title="防汛抗旱" aria-label="防汛抗旱"><span class="nav-icon">🛡️</span><span class="nav-text">防汛抗旱</span></a></li>
+                </ul>
+                </div>
+
+                <div class="time" id="time">2024.12.12 12:00:00</div>
+            </div>
+            <div class="mainbox">
+                <div id="map_container"></div>
+                <ul class="clearfix" style="height: 100%;">
+                    <li>
+                        <div class="boxall " style="height: calc(33% - 15px)">
+                            <div class="tit01">
+                                重点流域 24 小时来水趋势
+                                
+                            </div>
+                            <div class="boxnav" id="echarts1"></div>
+                            <div class="boxfoot"></div>
+                        </div>
+                        <div class="boxall " style="height: calc(33% - 15px);">
+                            <div class="tit01">水质量分布情况</div>
+                            <div class="boxnav" id="leida"></div>
+                            <div class="boxfoot"></div>
+                        </div>
+                        <div class="boxall " style="height: calc(34% - 15px);">
+                            <div class="tit01">重点水利工程</div>
+                            <div class="boxnav" id="echarts3"></div>
+                            <div class="boxfoot"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="boxall " style="height: calc(66% - 15px); padding: 0;">
+                            <div class="boxnav" id="map" style="height: 100%"></div>
+                            <div class="boxfoot"></div>
+                        </div>
+
+                        <div class="boxall " style="height: calc(34% - 15px);">
+                            <div class="tit01">全国主要河流水文特征</div>
+                            <div class="boxnav" id="echarts4"></div>
+                            <div class="boxfoot"></div>
+                        </div>
+                    </li>
+<!-- 右侧（三个水文模块） -->
+<li>
+    <!-- 1. 实时水文异常TOP5 -->
+    <div class="boxall" style="height: calc(30% - 15px);">
+        <div class="tit01">实时水文异常</div>
+        <div class="boxnav" style="padding: 15px 10px; overflow: hidden;">
+            <div id="anomaly-scroll" class="anomaly-scroll">
+            <ul class="top5-ul" id="anomaly-list">
+                <!-- 动态填充或静态示例 -->
+                <li>
+                    <span>1</span>
+                    <span class="badge badge-red">↑超警戒</span>
+                    <span>水位超警</span>
+                    <span>长江汉口站</span>
+                    <span class="text-red">+1.52m</span>
+                </li>
+                <li>
+                    <span>2</span>
+                    <span class="badge badge-orange">低水位</span>
+                    <span>流量异常</span>
+                    <span>黄河下游</span>
+                    <span class="text-orange">-30%</span>
+                </li>
+                <li>
+                    <span>3</span>
+                    <span class="badge badge-yellow">水质超标</span>
+                    <span>氨氮超标</span>
+                    <span>珠江广州段</span>
+                    <span class="text-yellow">2.1mg/L</span>
+                </li>
+                <li>
+                    <span>4</span>
+                    <span class="badge badge-gray">流量异常</span>
+                    <span>枯水期</span>
+                    <span>松花江哈尔滨</span>
+                    <span class="text-gray">-45%</span>
+                </li>
+                <li>
+                    <span>5</span>
+                    <span class="badge badge-red">↑超警戒</span>
+                    <span>水位超警</span>
+                    <span>淮河蚌埠</span>
+                    <span class="text-red">+0.8m</span>
+                </li>
+            </ul>
+        </div>
+        </div>
+        <div class="boxfoot"></div>
+    </div>
+
+    <!-- 2. 全国水文站点类型分布（高度不变） -->
+    <div class="boxall" style="height: calc(30% - 15px);">
+        <div class="tit01">水文站点类型分布</div>
+        <div class="boxnav" id="huaxing"></div>
+        <div class="boxfoot"></div>
+    </div>
+
+    <!-- 3. 主要地区水流量（高度增加） -->
+    <div class="boxall" style="height: calc(40% - 15px);">
+        <div class="tit01">主要地区水流量（2020-2025）</div>
+        <div class="boxnav" id="zhexian"></div>
+        <div class="boxfoot"></div>
+    </div>
+</li>
+
+                    
+                </ul>
+            </div>
+
+            <div class="datatime">
+                <ul>
+                    <li class="card">
+                        <div class="card-arrow">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        <p class="count-waterlevel">0</p><span>水位站</span>
+                    </li>
+                    <li class="card">
+                        <div class="card-arrow">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        <p class="count-rain">0</p><span>雨量站</span>
+                    </li>
+                    <li class="card">
+                        <div class="card-arrow">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        <p class="count-quality">0</p><span>水质站</span>
+                    </li>
+                    <li class="card">
+                        <div class="card-arrow">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        <p class="count-gate">0</p><span>闸坝站</span>
+                    </li>
+                    <li class="card">
+                        <div class="card-arrow">
+                            <span></span><span></span><span></span><span></span>
+                        </div>
+                        <p class="count-tide">0</p><span>潮位站</span>
+                    </li>
+                </ul>
+            </div>
+            <script type="text/javascript" src="js/jquery.js"></script>
+            <script type="text/javascript" src="js/echarts.min.js"></script>
+            <script type="text/javascript" src="js/jquery.liMarquee.js"></script>
+            <script src="https://webapi.amap.com/maps?v=2.0&key=acfabaedbc77135c1d7665a5c46faee2&plugin=AMap.DistrictSearch"></script>
+            <script type="text/javascript" src="js/js.js"></script>
+            <script>
+                var t = null;
+                var hs
+                var ms
+                var ss
+                var dd
+                t = setTimeout(time, 1000); //開始运行
+                function time() {
+                    clearTimeout(t); //清除定时器
+                    dt = new Date();
+                    var y = dt.getFullYear();
+                    var mt = dt.getMonth() + 1;
+                    var day = dt.getDate();
+                    var h = dt.getHours(); //获取时
+                    var m = dt.getMinutes(); //获取分
+                    var s = dt.getSeconds(); //获取秒
+                    var t = null;
+                    document.getElementById("time").innerHTML = y + "." + Appendzero(mt) + "." + Appendzero(day) + " " + Appendzero(h) + ":" + Appendzero(m) + ":" + Appendzero(s) + "";
+                    hs = Appendzero(h)
+                    ms = Appendzero(m)
+                    ss = Appendzero(s)
+                    dd = dt.getDate();
+                    function Appendzero(obj) {
+                        if (obj < 10) return "0" + "" + obj;
+                        else return obj;
+                    }
+                    t = setTimeout(time, 1000); //设定定时器,循环运行
+                }
+
+                // 站点数量由 js/js.js 中 stationTypeData 统一维护，并同步到顶部卡片与“全国水文站点类型分布”模块
+// 实时水文异常：滚动播放（向上滚动）
+                $(function () {
+                    var $box = $('#anomaly-scroll');
+                    if ($box.length) {
+                        // 防止重复初始化
+                        if ($box.hasClass('str_wrap')) {
+                            try { $box.liMarquee('destroy'); } catch (e) {}
+                        }
+                        $box.liMarquee({
+                            direction: 'up',
+                            loop: -1,
+                            scrolldelay: 0,
+                            scrollamount: 25,
+                            circular: true,
+                            drag: true,
+                            runshort: true,
+                            hoverstop: true
+                        });
+                    }
+                });
+
+
+
+
+                var data = [
+                    { name: "成都", val: "415", longitude: "104.019034", latitude: "30.609582" },
+                    { name: "东莞", val: "339", longitude: "113.749981", latitude: "23.025519" },
+                    { name: "杭州", val: "362", longitude: "120.166582", latitude: "30.323511" },
+                    { name: "厦门", val: "377", longitude: "118.087028", latitude: "24.482183" },
+                    { name: "深圳", val: "415", longitude: "114.059658", latitude: "21.545662" },
+                    { name: "沈阳", val: "155", longitude: "123.470974", latitude: "41.682243" },
+                    { name: "西安", val: "260", longitude: "108.926983", latitude: "34.322" },
+                    { name: "重庆", val: "195", longitude: "106.54589", latitude: "29.54482" },
+                    { name: "广州", val: "0", longitude: "113.271429", latitude: "23.135336" },
+                    { name: "郑州", val: "0", longitude: "113.631416", latitude: "34.75344" },
+                    { name: "宁波", val: "0", longitude: "121.630844", latitude: "29.866069" },
+                    { name: "苏州", val: "0", longitude: "120.592412", latitude: "31.303565" },
+                    { name: "武汉", val: "0", longitude: "114.311586", latitude: "30.598467" },
+                    { name: "济南", val: "0", longitude: "117.126399", latitude: "36.656554" },
+                    { name: "福州", val: "0", longitude: "119.30347", latitude: "26.080429" },
+                    { name: "合肥", val: "0", longitude: "117.233441", latitude: "31.826578" },
+                    { name: "青岛", val: "0", longitude: "120.389458", latitude: "36.072227" },
+                    { name: "南京", val: "0", longitude: "118.802422", latitude: "32.064652" },
+                    { name: "天津", val: "0", longitude: "117.208091", latitude: "39.091103" },
+                ]
+                //11天数据
+                // 来水趋势数据由 renderBasinInflowTrend() 动态生成
+
+                
+
+                var mychart1 = echarts.init(document.getElementById('echarts1'));
+                var mychart2 = echarts.init(document.getElementById('leida'));
+                var mychart3 = echarts.init(document.getElementById('echarts3'));
+                var mychart4 = echarts.init(document.getElementById('echarts4'));
+
+
+                // 重点流域 24 小时来水趋势（长江/黄河/淮河/珠江）
+function buildLast24HoursLabels() {
+    const labels = [];
+    const now = new Date();
+    // 对齐到整点
+    now.setMinutes(0, 0, 0);
+    for (let i = 23; i >= 0; i--) {
+        const t = new Date(now.getTime() - i * 60 * 60 * 1000);
+        const hh = String(t.getHours()).padStart(2, '0');
+        labels.push(hh + ':00');
+    }
+    return labels;
+}
+
+// 生成一组“来水量”演示数据（接入真实接口时，用接口返回的 24 点数组替换即可）
+function generateInflowSeries(base, amplitude) {
+    const arr = [];
+    for (let i = 0; i < 24; i++) {
+        const wave = Math.sin((i / 24) * Math.PI * 2) * amplitude;
+        const noise = (Math.random() - 0.5) * amplitude * 0.25;
+        const v = Math.max(0, Math.round(base + wave + noise));
+        arr.push(v);
+    }
+    return arr;
+}
+
+function renderBasinInflowTrend() {
+    const xData = buildLast24HoursLabels();
+
+    option1.legend.data = ['长江', '黄河', '淮河', '珠江'];
+    option1.xAxis.data = xData;
+
+    option1.yAxis.name = '来水量 (m³/s)';
+    option1.yAxis.nameTextStyle = { color: 'rgba(255,255,255,.6)' };
+    option1.yAxis.axisLabel = { textStyle: { color: 'rgba(255,255,255,.4)', fontSize: 12 } };
+
+    // 演示数据（你接入真实数据后，把下面 4 行替换为接口返回值即可）
+    option1.series[0].name = '长江';
+    option1.series[0].data = generateInflowSeries(26000, 3500);
+
+    option1.series[1].name = '黄河';
+    option1.series[1].data = generateInflowSeries(12000, 2200);
+
+    option1.series[2].name = '淮河';
+    option1.series[2].data = generateInflowSeries(8000, 1600);
+
+    option1.series[3].name = '珠江';
+    option1.series[3].data = generateInflowSeries(14000, 2600);
+
+    mychart1.setOption(option1);
+}
+
+renderBasinInflowTrend();
+// 如需定时刷新（演示）：建议 1-5 分钟一次
+// setInterval(renderBasinInflowTrend, 60 * 1000);
+
+// 水质量分布情况（雷达图）
+var optionLeida = {
+    color: ['#00E4FF', '#F0C725', '#E92B77'],
+    tooltip: {
+        trigger: 'item',
+        backgroundColor: 'rgba(12, 26, 63, 0.9)',
+        borderColor: '#00E4FF',
+        textStyle: { color: '#fff' }
+    },
+    legend: {
+        show: true,
+        bottom: 5,
+        itemWidth: 14,
+        itemHeight: 14,
+        itemGap: 15,
+        textStyle: { color: '#c1cadf', fontSize: 12 },
+        data: ['2023', '2024', '2025']
+    },
+    radar: {
+        radius: '60%',
+        center: ['50%', '42%'],
+        nameGap: 10,
+        indicator: [
+            { name: '溶解氧', max: 10 },
+            { name: '高锰酸盐', max: 15 },
+            { name: '氨氮', max: 5 },
+            { name: '总磷', max: 1.5 },
+            { name: 'COD', max: 30 },
+            { name: 'pH', max: 14 }
+        ],
+        name: {
+            textStyle: {
+                color: '#fff',
+                backgroundColor: 'rgba(0,0,0,0.3)',
+                borderRadius: 3,
+                padding: [3, 5],
+                fontSize: 14
+            }
+        },
+        splitArea: {
+            show: true,
+            areaStyle: { color: ['rgba(12, 26, 63, 0.9)', 'rgba(12, 26, 63, 0.7)', 'rgba(12, 26, 63, 0.5)', 'rgba(12, 26, 63, 0.3)'] }
+        },
+        splitLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.1)', width: 1 } },
+        axisLine: { lineStyle: { color: 'rgba(255, 255, 255, 0.2)' } }
+    },
+    series: [{
+        name: '水质量分布',
+        type: 'radar',
+        symbol: 'circle',
+        symbolSize: 6,
+        data: [
+            {
+                value: [8.5, 9.2, 1.5, 0.4, 12, 7.2],
+                name: '2023',
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: 'rgba(0, 228, 255, 0.8)' },
+                            { offset: 1, color: 'rgba(0, 228, 255, 0.1)' }
+                        ])
+                    }
+                },
+                lineStyle: { normal: { color: '#00E4FF', width: 2, shadowColor: '#00E4FF', shadowBlur: 10 } }
+            },
+            {
+                value: [7.1, 11.5, 2.8, 0.8, 18, 6.8],
+                name: '2024',
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: 'rgba(240, 199, 37, 0.8)' },
+                            { offset: 1, color: 'rgba(240, 199, 37, 0.1)' }
+                        ])
+                    }
+                },
+                lineStyle: { normal: { color: '#F0C725', width: 2 } }
+            },
+            {
+                value: [9.0, 5.5, 0.8, 0.2, 8, 7.5],
+                name: '2025',
+                areaStyle: {
+                    normal: {
+                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                            { offset: 0, color: 'rgba(233, 43, 119, 0.8)' },
+                            { offset: 1, color: 'rgba(233, 43, 119, 0.1)' }
+                        ])
+                    }
+                },
+                lineStyle: { normal: { color: '#E92B77', width: 2, type: 'dashed' } }
+            }
+        ]
+    }]
+};
+
+mychart2.setOption(optionLeida);
+
+// 套餐消费分布
+
+                option2.series[0].data = [
+                    { value: 1385, name: '大型枢纽' },
+                    { value: 2396, name: '水利发电' },
+                    { value: 1766, name: '供水工程' },
+                    { value: 1453, name: '防洪工程' },
+                ]
+                mychart3.setOption(option2);
+
+                // 全国主要河流水文特征
+                option4.xAxis.data = ["长江", "黄河", "松花江", "淮河", "黑龙江", "塔里木河", "怒江", "澜沧江", "雅鲁藏布江", "珠江"]
+
+                // tooltip 扩展信息
+                var riverMeta4 = [
+                {
+                                "流域面积": "180万km²",
+                                "年径流量": "9776亿m³",
+                                "年均流量": "30480m³/s",
+                                "主要支流": "49条"
+                },
+                {
+                                "流域面积": "79.5万km²",
+                                "年径流量": "580亿m³",
+                                "年均流量": "1840m³/s",
+                                "主要支流": "220条"
+                },
+                {
+                                "流域面积": "55.72万km²",
+                                "年径流量": "762亿m³",
+                                "年均流量": "2530m³/s",
+                                "主要支流": "86条"
+                },
+                {
+                                "流域面积": "27万km²",
+                                "年径流量": "621亿m³",
+                                "年均流量": "1110m³/s",
+                                "主要支流": "21条"
+                },
+                {
+                                "流域面积": "89.1万km²",
+                                "年径流量": "3465亿m³",
+                                "年均流量": "10900m³/s",
+                                "主要支流": "221条"
+                },
+                {
+                                "流域面积": "19.8万km²",
+                                "年径流量": "205亿m³",
+                                "年均流量": "650m³/s",
+                                "主要支流": "144条"
+                },
+                {
+                                "流域面积": "13.78万km²",
+                                "年径流量": "689亿m³",
+                                "年均流量": "2185m³/s",
+                                "主要支流": "6条"
+                },
+                {
+                                "流域面积": "16.5万km²",
+                                "年径流量": "740亿m³",
+                                "年均流量": "2410m³/s",
+                                "主要支流": "41条"
+                },
+                {
+                                "流域面积": "24万km²",
+                                "年径流量": "1654亿m³",
+                                "年均流量": "5240m³/s",
+                                "主要支流": "5条"
+                },
+                {
+                                "流域面积": "44.2万km²",
+                                "年径流量": "3360亿m³",
+                                "年均流量": "10650m³/s",
+                                "主要支流": "6条"
+                }
+];
+
+                option4.tooltip = option4.tooltip || {};
+                option4.tooltip.formatter = function (params) {
+                    // params: axis trigger -> array
+                    var p = params && params[0] ? params[0] : params;
+                    var idx = (p && p.dataIndex != null) ? p.dataIndex : 0;
+                    var name = p && p.name != null ? p.name : (option4.xAxis.data[idx] || '');
+                    var length = (p && p.value != null) ? p.value : '-';
+                    var info = riverMeta4[idx] || {};
+                    return name
+                        + '<br/>长度：' + length+'km'
+                        + '<br/>流域面积：' + (info['流域面积'] ?? '—')
+                        + '<br/>年径流量：' + (info['年径流量'] ?? '—')
+                        + '<br/>年均流量：' + (info['年均流量'] ?? '—')
+                        + '<br/>主要支流：' + (info['主要支流'] ?? '—');
+                };
+                option4.series[0].data = [6397, 5464, 4444, 4880, 3848, 2320, 3240, 2321, 1927, 1000]
+                mychart4.setOption(option4);
+
+                window.addEventListener("resize", function () {
+                    mychart1.resize();
+                    mychart2.resize();
+                    mychart3.resize();
+                    mychart4.resize();
+                });
+
+                //初始化地图
+                var map = new AMap.Map('map', {
+                    zoom: 4,
+                    viewMode: '3D',
+                    pitch: 20,
+                    mapStyle: "amap://styles/darkblue",
+                    skyColor: '#151516',
+                    features: ['bg', 'road', 'point'],
+                    center: [105.266234, 37.473396],
+                });
+
+
+
+
+
+                // --- 添加 OpenWeatherMap 实时降雨瓦片图层 ---
+var owmApiKey = '363f246a3b84b81cfa755afa1e607e03';  // 和当前页面相同的免费API Key
+
+var rainLayer = new AMap.TileLayer({
+    getTileUrl: function(x, y, z) {
+        return 'https://tile.openweathermap.org/map/precipitation/' + z + '/' + x + '/' + y + '.png?appid=' + owmApiKey;
+    },
+    zIndex: 10,          // 确保在行政区划之上，但低于其他标注
+    opacity: 0.4,       // 透明度适中，避免遮挡太多
+    tileSize: 256
+});
+
+// 将降雨图层添加到地图
+rainLayer.setMap(map);
+
+// --- 添加降雨图例（和当前页面一致） ---
+addRainLegend();
+
+// 辅助函数：添加降雨图例
+function addRainLegend() {
+    var legendHtml = `
+        <div class="rain-legend">
+            <div class="legend-title">实时降雨量 (mm/h)</div>
+            <div class="legend-item"><span style="background:#00bfff"></span> 小雨 (0.1 ~ 2)</div>
+            <div class="legend-item"><span style="background:#00ff00"></span> 中雨 (2 ~ 8)</div>
+            <div class="legend-item"><span style="background:#ffff00"></span> 大雨 (8 ~ 30)</div>
+            <div class="legend-item"><span style="background:#ff8000"></span> 暴雨 (30 ~ 50)</div>
+            <div class="legend-item"><span style="background:#ff0000"></span> 大暴雨 (>50)</div>
+            <div class="legend-item"><span style="background:transparent"></span> 无雨</div>
+        </div>
+    `;
+    // 避免重复添加
+    if ($('#map .rain-legend').length === 0) {
+        $('#map').append(legendHtml);  // 注意：这里用你的地图容器 ID，例如 #map
+    }
+}
+
+                
+
+
+// ============ Province click -> dashboard refresh (frontend only) ============
+// Store polygons by province adcode so we can highlight the selected province.
+var provincePolygonMap = {};   // { [adcode]: AMap.Polygon[] }
+var selectedProvinceAdcode = null;
+
+var provinceDefaultStyle = {
+    fillOpacity: 0,
+    strokeColor: '#0091ea',
+    strokeWeight: 1,
+    strokeOpacity: 0.6
+};
+var provinceHoverStyle = {
+    fillOpacity: 0.4,
+    strokeColor: '#ffffff',
+    strokeWeight: 2,
+    strokeOpacity: 0.9
+};
+var provinceSelectedStyle = {
+    fillOpacity: 0.55,
+    strokeColor: '#00e1ff',
+    strokeWeight: 3,
+    strokeOpacity: 1
+};
+
+function applyStyleToProvince(adcode, styleObj) {
+    var list = provincePolygonMap[adcode] || [];
+    for (var i = 0; i < list.length; i++) {
+        list[i].setOptions(styleObj);
+    }
+}
+
+function selectProvince(adcode, provinceName) {
+    if (!adcode) return;
+
+    // reset previous selection
+    if (selectedProvinceAdcode && selectedProvinceAdcode !== adcode) {
+        applyStyleToProvince(selectedProvinceAdcode, provinceDefaultStyle);
+    }
+
+    selectedProvinceAdcode = adcode;
+    applyStyleToProvince(adcode, provinceSelectedStyle);
+
+    // Trigger the right-side modules refresh (handled by frontend calling backend API)
+    if (window.ProvinceDashboard && typeof window.ProvinceDashboard.loadProvinceData === 'function') {
+        window.ProvinceDashboard.loadProvinceData({ adcode: adcode, name: provinceName });
+    } else {
+        console.warn('ProvinceDashboard.loadProvinceData not found (js/js.js not patched or not loaded).');
+    }
+}
+// ============================================================================
+
+// 1. 初始化行政区查询对象（保持不变）
+var districtSearch = new AMap.DistrictSearch({
+    subdistrict: 1,  // 返回下一级行政区
+    extensions: 'all',
+    level: 'country'
+});
+
+// 2. 查询中国，获取所有省份
+districtSearch.search('中华人民共和国', function(status, result) {
+    if (status === 'complete') {
+        var provinces = result.districtList[0].districtList || [];
+        console.log('总共获取到 ' + provinces.length + ' 个省级行政区');
+
+        var index = 0;
+        function loadNextProvince() {
+            if (index >= provinces.length) {
+                console.log('所有省份加载完成');
+                return;
+            }
+
+            var provinceName = provinces[index].name;
+            console.log('正在加载：' + provinceName + ' (' + (index+1) + '/' + provinces.length + ')');
+
+            drawProvince(provinceName, function(success) {
+                index++;
+                // 每加载完一个，等待 800ms ~ 1200ms 再请求下一个（避免限流）
+                setTimeout(loadNextProvince, success ? 800 : 2000); // 失败时等更久
+            });
+        }
+
+        // 开始加载
+        loadNextProvince();
+    } else {
+        console.error('获取全国省份列表失败', status, result);
+    }
+});
+
+// 3. 绘制单个省份（增加错误处理和回调）
+function drawProvince(provinceName, callback) {
+    var provSearch = new AMap.DistrictSearch({
+        subdistrict: 0,
+        extensions: 'all',
+        level: 'province'
+    });
+
+    provSearch.search(provinceName, function(status, result) {
+        var success = false;
+
+        if (status === 'complete' && result.districtList && result.districtList.length > 0) {
+            var bounds = result.districtList[0].boundaries;
+            if (bounds && bounds.length > 0) {
+                for (var i = 0; i < bounds.length; i++) {
+                    var adcode = (result.districtList[0] && result.districtList[0].adcode) ? result.districtList[0].adcode : '';
+                    var polygon = new AMap.Polygon({
+                        strokeWeight: 1,
+                        path: bounds[i],
+                        fillOpacity: 0,
+                        fillColor: '#00e1ff',
+                        strokeColor: '#0091ea',
+                        strokeOpacity: 0.6,
+                        bubble: true,
+                        cursor: 'pointer'
+                    });
+
+                    // attach province identity for click + hover logic
+                    polygon.setExtData({ adcode: adcode, name: provinceName });
+
+                    // cache polygons of the same province
+                    if (!provincePolygonMap[adcode]) provincePolygonMap[adcode] = [];
+                    provincePolygonMap[adcode].push(polygon);
+
+                    // 鼠标悬停发光效果（若已选中，则保持选中高亮）
+                    polygon.on('mouseover', function(e) {
+                        var ext = e.target.getExtData() || {};
+                        if (ext.adcode && ext.adcode === selectedProvinceAdcode) {
+                            e.target.setOptions(provinceSelectedStyle);
+                        } else {
+                            e.target.setOptions(provinceHoverStyle);
+                        }
+                    });
+
+                    polygon.on('mouseout', function(e) {
+                        var ext = e.target.getExtData() || {};
+                        if (ext.adcode && ext.adcode === selectedProvinceAdcode) {
+                            e.target.setOptions(provinceSelectedStyle);
+                        } else {
+                            e.target.setOptions(provinceDefaultStyle);
+                        }
+                    });
+
+                    // 点击：选中省份 + 通知右侧模块刷新
+                    polygon.on('click', function(e) {
+                        var ext = e.target.getExtData() || {};
+                        selectProvince(ext.adcode, ext.name);
+                    });
+
+                    map.add(polygon);
+}
+                success = true;
+                console.log(provinceName + ' 加载成功');
+            }
+        } else {
+            console.warn(provinceName + ' 加载失败:', status, result);
+        }
+
+        // 无论成功与否都执行回调
+        if (callback) {
+            callback(success);
+        }
+    });
+}
+
+
+
+
+            </script>
+        </body>
+
+</html>

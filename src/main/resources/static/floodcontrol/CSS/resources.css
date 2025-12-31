@@ -1,0 +1,511 @@
+/* =================== 右侧资源统计卡片 =================== */
+/* 右侧资源统计卡片、资源分布样式 */
+
+/* 针对右侧面板的整体布局优化，使其能在一屏内显示全 */
+.right-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  gap: 8px; /* 减小各板块间距 */
+  padding-bottom: 5px;
+}
+
+.right-panel .panel-title {
+  margin-bottom: 10px; /* 减小标题下方间距 */
+  flex-shrink: 0;
+}
+
+/* 覆盖面板通用样式，使其更紧凑 */
+.right-panel .resources-section,
+.right-panel .radar-section,
+.right-panel .dispatch-section {
+  margin-bottom: 0;
+  padding: 10px 12px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* 资源统计卡片 */
+.resources-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative; /* 为详情视图绝对定位做准备 */
+}
+
+/* 抗旱模式下的详情视图卡片样式 */
+body.drought-mode .detail-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-left-color: transparent;
+}
+
+body.drought-mode .detail-item:hover {
+    background: rgba(255, 60, 0, 0.15);
+    border-left-color: #ff3c00;
+}
+
+body.drought-mode .detail-title {
+    color: #ff3c00;
+}
+
+body.drought-mode .back-btn {
+    border-color: #ff3c00;
+    color: #ff3c00;
+}
+
+body.drought-mode .back-btn:hover {
+    background: rgba(255, 60, 0, 0.2);
+}
+
+body.drought-mode .detail-item .value {
+    color: #ff3c00;
+}
+
+body.drought-mode .detail-item .location {
+    color: #ff9800;
+}
+.resource-detail-view {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 20, 40, 0.95);
+  border-radius: 6px;
+  z-index: 20;
+  padding: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--highlight-color);
+  flex-direction: column;
+}
+
+/* 抗旱模式下的详情视图背景 */
+body.drought-mode .resource-detail-view {
+  background: rgba(20, 5, 0, 0.95); /* 红色调背景 */
+  border-color: #ff3c00; /* 红色边框 */
+}
+
+.resource-detail-view.active {
+  display: flex;
+  opacity: 1;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.detail-title {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--highlight-color);
+}
+
+.back-btn {
+  background: transparent;
+  border: 1px solid var(--highlight-color);
+  color: var(--highlight-color);
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 2px 8px;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background: rgba(0, 255, 255, 0.2);
+}
+
+.detail-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  border-left: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.detail-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-left-color: var(--highlight-color);
+}
+
+.detail-item .info-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.detail-item .name { 
+    color: #fff; 
+    font-weight: 500;
+}
+
+.detail-item .spec {
+    font-size: 11px;
+    color: #888;
+}
+
+.detail-item .location {
+    font-size: 10px;
+    color: #4fc3f7; /* 使用淡蓝色或其他区分颜色 */
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.detail-item .location i {
+    font-size: 9px;
+}
+
+.detail-item .value { 
+    color: var(--highlight-color); 
+    font-weight: bold; 
+    font-size: 14px;
+    font-family: 'Share Tech Mono', monospace;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 1rem; /* 稍微减小字体 */
+}
+
+.map-view-btn {
+  background: transparent;
+  border: 1px solid var(--highlight-color);
+  color: var(--highlight-color);
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 2px 6px;
+  transition: all 0.3s ease;
+}
+
+.map-view-btn:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 10px var(--highlight-color);
+}
+
+.resource-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 0;
+}
+
+.stat-card {
+  position: relative;
+  background: rgba(0, 20, 40, 0.6);
+  border-radius: 6px;
+  padding: 8px 10px; /* 减小内边距 */
+  text-align: left;
+  border: 1px solid var(--border-color);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+  outline: none;
+}
+
+.stat-card:focus-visible {
+  box-shadow: 0 0 0 2px var(--highlight-color);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+  border-color: var(--highlight-color);
+}
+
+/* 抗旱模式下的资源分布子卡片样式 */
+body.drought-mode .stat-card {
+  background: rgba(20, 5, 0, 0.6);
+  border-color: #ff3c00;
+}
+
+body.drought-mode .stat-card:hover {
+  box-shadow: 0 5px 15px rgba(255, 60, 0, 0.2);
+  border-color: #ff3c00;
+}
+
+body.drought-mode .stat-value {
+  color: #ff3c00;
+  text-shadow: 0 0 5px rgba(255, 60, 0, 0.5);
+}
+
+body.drought-mode .stat-card:focus-visible {
+  box-shadow: 0 0 0 2px #ff3c00;
+}
+
+.stat-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.stat-value {
+  font-size: 20px; /* 稍微减小字体 */
+  font-weight: bold;
+  color: var(--highlight-color);
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+.stat-trend {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.stat-trend.up { color: #00e676; }
+.stat-trend.down { color: #ff5252; }
+
+.stat-label {
+  font-size: 12px;
+  color: #ccc;
+  margin-bottom: 4px;
+}
+
+/* 进度条样式 */
+.stat-progress-container {
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.stat-progress-bar {
+  height: 100%;
+  background-color: var(--bar-color, var(--highlight-color));
+  border-radius: 2px;
+  transition: width 1s ease-out;
+  box-shadow: 0 0 5px var(--bar-color, var(--highlight-color));
+}
+
+/* Tooltip */
+.stat-tooltip {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  font-size: 10px;
+  padding: 4px;
+  text-align: center;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.stat-card:hover .stat-tooltip {
+  transform: translateY(0);
+}
+
+/* 图例样式 */
+.chart-legend {
+  display: flex;
+  gap: 10px;
+  font-size: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  color: #ccc;
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.legend-item:hover {
+  opacity: 0.8;
+}
+
+.legend-item .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 4px;
+  display: inline-block;
+}
+
+.legend-item.current .dot {
+  background-color: var(--highlight-color);
+  box-shadow: 0 0 5px var(--highlight-color);
+}
+
+.legend-item.target .dot {
+  background-color: #ff9800; /* 标准/目标颜色 */
+  box-shadow: 0 0 5px #ff9800;
+}
+
+/* 智能研判摘要 */
+.analysis-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+  color: #ddd;
+  min-height: 32px;
+}
+
+.analysis-summary .icon {
+  font-size: 14px;
+  animation: pulse 2s infinite;
+}
+
+.analysis-summary .text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* 打字机效果光标 */
+  border-right: 2px solid var(--highlight-color);
+  padding-right: 4px;
+  animation: blink-caret 0.75s step-end infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: var(--highlight-color); }
+}
+
+/* 雷达图分析区 - 设为 Flex 1 以占据剩余空间 */
+.radar-section {
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  min-height: 220px; /* 稍微增加高度以容纳新内容 */
+  overflow: hidden;
+  /* 使用与 .stat-card 一致的背景样式 */
+  position: relative;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.6));
+  border-radius: 10px;
+  padding: 15px; /* Match warning-section */
+  border: 1px solid var(--card-border);
+  box-shadow: 0 0 25px var(--card-shadow);
+  backdrop-filter: blur(10px);
+  
+  /* 四角高亮装饰 */
+  background-image:  
+    linear-gradient(to right, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to bottom, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to left, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to bottom, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to left, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to top, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to right, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to top, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.6));
+  background-repeat: no-repeat;
+  background-size: 
+    15px 15px, 15px 15px, 15px 15px, 15px 15px,
+    15px 15px, 15px 15px, 15px 15px, 15px 15px,
+    100% 100%;
+  background-position: 
+    0 0, 0 0, 100% 0, 100% 0,
+    100% 100%, 100% 100%, 0 100%, 0 100%,
+    0 0;
+}
+
+/* 扫描线纹理 */
+.radar-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* 默认（防汛模式）背景网格 - 浅白色 */
+  background: 
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 6px;
+}
+
+
+
+.radar-section h3 {
+  /* 移除原有的 h3 样式，使用 .section-header h3 */
+  display: none; 
+}
+
+/* 确保 section-header h3 显示 */
+.section-header h3 {
+  display: block;
+}
+
+.radar-chart {
+  width: 100%;
+  height: 100%; /* 自适应高度 */
+  flex: 1;
+  min-height: 0; /* 允许 flex item 收缩 */
+}
+
+/* 调度按钮区 */
+.dispatch-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0; /* 不收缩，保证按钮可用 */
+}
+
+.dispatch-section h3 {
+  display: none; /* 隐藏标题以节省空间，或者保留 */
+}
+
+.dispatch-pager {
+  width: 100%;
+  margin-bottom: 5px;
+  padding: 0.6em 1em;
+  font-size: 13px;
+}
+
+.dispatch-pages {
+  width: 100%;
+}
+
+.dispatch-buttons {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.dispatch-btn {
+  padding: 8px 10px;
+  font-size: 12px;
+  text-align: center;
+  width: 100%;
+}

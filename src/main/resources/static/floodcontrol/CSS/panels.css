@@ -1,0 +1,174 @@
+/* =================== 通用面板与卡片 =================== */
+/* 通用面板、卡片、标题样式，玻璃拟物效果 */
+
+/* 面板标题 */
+.panel-title {
+  position: relative;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: var(--highlight-color);
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.panel-title::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -6px;
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--highlight-color), transparent);
+}
+
+.panel-title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -10px;
+  width: 14px;
+  height: 4px;
+  background: var(--highlight-color);
+  box-shadow: 0 0 12px var(--highlight-color);
+}
+
+/* 通用卡片样式（玻璃拟物） */
+.summary-section,
+.stations-section,
+.warning-section,
+.resources-section,
+.dispatch-section {
+  position: relative;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  box-shadow: 0 0 25px var(--card-shadow);
+  backdrop-filter: blur(10px);
+  
+  /* 玻璃背景 */
+  background: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.6));
+  
+  /* 四角高亮装饰 */
+  background-image:  
+    linear-gradient(to right, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to bottom, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to left, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to bottom, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to left, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to top, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to right, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(to top, var(--highlight-color) 2px, transparent 2px),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.6));
+  background-repeat: no-repeat;
+  background-size: 
+    15px 15px, 15px 15px, 15px 15px, 15px 15px,
+    15px 15px, 15px 15px, 15px 15px, 15px 15px,
+    100% 100%;
+  background-position: 
+    0 0, 0 0, 100% 0, 100% 0,
+    100% 100%, 100% 100%, 0 100%, 0 100%,
+    0 0;
+}
+
+/* 卡片扫描线纹理 */
+.summary-section::before,
+.stations-section::before,
+.warning-section::before,
+.resources-section::before,
+.dispatch-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: 
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 10px;
+}
+
+/* 卡片标题 */
+.summary-section h3,
+.stations-section h3,
+.warning-section h3,
+.resources-section h3,
+.dispatch-section h3 {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--highlight-color);
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* 卡片悬停效果 */
+.summary-section:hover,
+.stations-section:hover,
+.warning-section:hover,
+.resources-section:hover,
+.dispatch-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+/* 站点搜索栏 */
+.station-search-box {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.station-search-box input {
+  width: 100%;
+  padding: 8px 35px 8px 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.station-search-box input:focus {
+  border-color: var(--highlight-color);
+  box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+}
+
+.station-search-box .search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-color);
+  opacity: 0.6;
+  font-size: 14px;
+  pointer-events: none;
+}
+
+/* 站点列表容器 */
+.station-list-container {
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+/* 滚动条样式 */
+.station-list-container::-webkit-scrollbar {
+  width: 4px;
+}
+
+.station-list-container::-webkit-scrollbar-thumb {
+  background: var(--highlight-color);
+  border-radius: 2px;
+}
+
+.station-list-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}

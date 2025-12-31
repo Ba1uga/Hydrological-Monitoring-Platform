@@ -1,0 +1,132 @@
+/* =================== 地图相关样式 =================== */
+/* 地图容器、风险图例、监测点样式 */
+
+/* 中间：GIS 地图与风险图例 */
+.map-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-color);
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* 地图加载遮罩 */
+.map-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #ffffff;
+  font-size: 16px;
+  z-index: 20;
+  pointer-events: auto;
+}
+
+.map-loading.hidden {
+  display: none;
+}
+
+.map-loading .spinner {
+  width: 40px;
+  height: 40px;
+}
+
+/* 风险等级图例 */
+.risk-legend {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 10;
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.6);
+  font-size: 13px;
+  backdrop-filter: blur(5px);
+}
+
+.risk-legend-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.risk-legend-title {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.risk-legend-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  margin: 2px 0;
+  cursor: pointer;
+  user-select: none;
+  color: #ffffff;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.risk-legend-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.risk-legend-item:focus {
+  outline: 2px solid var(--highlight-color);
+  outline-offset: -2px;
+}
+
+.risk-legend-item.disabled {
+  opacity: 0.35;
+}
+
+.risk-color-box {
+  width: 18px;
+  height: 14px;
+  border-radius: 3px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.risk-label {
+  font-size: 13px;
+}
+
+/* 风险等级颜色 */
+.risk-extreme {
+  background-color: #ff003c;
+  box-shadow: 0 0 6px #ff003c;
+}
+
+.risk-high {
+  background-color: #ff3c00;
+  box-shadow: 0 0 6px #ff3c00;
+}
+
+.risk-medium {
+  background-color: #ffff00;
+  box-shadow: 0 0 6px #ffff00;
+}
+
+.risk-low {
+  background-color: #00ff99;
+  box-shadow: 0 0 6px #00ff99;
+}
+
+.risk-safe {
+  background-color: #00f3ff;
+  box-shadow: 0 0 6px #00f3ff;
+}

@@ -1,0 +1,99 @@
+/* =================== 全局基础样式 =================== */
+/* 全局重置、基础样式、字体引入 */
+
+/* 引入字体（如果CSS中需要直接使用字体） */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap');
+
+/* 全局重置 */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 模式切换相关样式 */
+/* 防汛模式下隐藏抗旱按钮 */
+body:not(.drought-mode) .drought-mode-only {
+  display: none;
+}
+
+/* 抗旱模式下隐藏防汛按钮 */
+body.drought-mode .flood-mode-only {
+  display: none;
+}
+
+/* 针对性过渡效果 */
+body,
+.header,
+.footer,
+.left-panel,
+.right-panel,
+.map-container,
+.summary-section,
+.stations-section,
+.warning-section,
+.resources-section,
+.dispatch-section,
+.mode-btn,
+.dispatch-btn,
+.risk-reset-btn,
+.stat-card,
+.station-item,
+.panel-title {
+  transition: 
+    background-color 0.6s ease,
+    border-color 0.6s ease,
+    color 0.6s ease,
+    box-shadow 0.6s ease;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  height: 100vh;
+  overflow: hidden;
+  font-family: "Microsoft YaHei", Arial, sans-serif;
+  color: var(--text-color);
+  background: var(--bg-color);
+  position: relative;
+  line-height: 1.5;
+}
+
+/* 跳过导航链接（无障碍） */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  background: var(--highlight-color);
+  color: var(--bg-color);
+  padding: 10px 20px;
+  z-index: 10000;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 0 0 5px 0;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* 字体样式 */
+.summary-value,
+.stat-value,
+.station-value,
+#timeWeather {
+  font-family: 'Share Tech Mono', monospace;
+  letter-spacing: 1px;
+}
+
+.title,
+.panel-title {
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 2px;
+}
