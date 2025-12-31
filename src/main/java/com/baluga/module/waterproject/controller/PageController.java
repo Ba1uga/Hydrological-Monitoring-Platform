@@ -8,6 +8,6 @@ public class PageController {
 
     @GetMapping("/waterproject")
     public String index() {
-        return "redirect:/waterproject/shuiwen.html";
+        return "redirect:/waterproject/waterproject.html";
     }
 }

@@ -10,11 +10,11 @@ public class HomeController {
 
     @GetMapping({"", "/"})
     public String home() {
-        return "redirect:/prediction/wyy.html";
+        return "redirect:/prediction/prediction.html";
     }
 
     @GetMapping("/wyy")
     public String wyy() {
-        return "redirect:/prediction/wyy.html";
+        return "redirect:/prediction/prediction.html";
     }
 }
