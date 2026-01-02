@@ -64,6 +64,7 @@ public class RescueMaterialServiceImpl extends ServiceImpl<RescueMaterialMapper,
         
         // 2. 查询该分类下的所有子分类
         List<RescueMaterialCategory> subCategories = categoryMapper.selectList(new LambdaQueryWrapper<RescueMaterialCategory>()
+                .eq(RescueMaterialCategory::getModeType, modeType)
                 .eq(RescueMaterialCategory::getParentId, category.getId()));
         
         List<Long> categoryIds = new ArrayList<>();
@@ -139,24 +140,18 @@ public class RescueMaterialServiceImpl extends ServiceImpl<RescueMaterialMapper,
             
             // 2. 查询该分类下的所有子分类ID
             List<RescueMaterialCategory> subCategories = categoryMapper.selectList(new LambdaQueryWrapper<RescueMaterialCategory>()
+                    .eq(RescueMaterialCategory::getModeType, modeType)
                     .eq(RescueMaterialCategory::getParentId, category.getId()));
             
-            List<Long> subCategoryIds = subCategories.stream().map(RescueMaterialCategory::getId).collect(Collectors.toList());
-            
-            if (subCategoryIds.isEmpty()) {
-                categoryData.put("value", 0);
-                categoryData.put("trend", "→ 0%");
-                categoryData.put("trendClass", "");
-                categoryData.put("progress", 0);
-                categoryData.put("progressColor", "#ccc");
-                categoryData.put("tooltip", "暂无数据");
-                result.add(categoryData);
-                continue;
+            List<Long> categoryIds = new ArrayList<>();
+            categoryIds.add(category.getId());
+            if (!subCategories.isEmpty()) {
+                categoryIds.addAll(subCategories.stream().map(RescueMaterialCategory::getId).collect(Collectors.toList()));
             }
 
             // 3. 统计该分类下的物资总数
             List<RescueMaterial> materials = this.list(new LambdaQueryWrapper<RescueMaterial>()
-                    .in(RescueMaterial::getCategoryId, subCategoryIds)
+                    .in(RescueMaterial::getCategoryId, categoryIds)
                     .eq(RescueMaterial::getStatus, 1)); // 只统计状态正常的
 
             BigDecimal totalValue = materials.stream()

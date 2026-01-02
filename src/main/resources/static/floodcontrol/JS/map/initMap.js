@@ -30,6 +30,9 @@ export function getCurrentMode() {
 
 export function setCurrentMode(mode) {
   currentMode = mode;
+  if (typeof document !== 'undefined' && document.body) {
+    document.body.setAttribute('data-mode', mode);
+  }
 }
 
 export function getCurrentView() {

@@ -29,7 +29,7 @@ i,em{font-style: normal;}
   ::-webkit-scrollbar-track {background-color:transparent}
 
 html,body {	width: 100%;height: 100%;margin: 0;	padding: 0;  overflow: hidden}
-.videobg{ position: fixed;; width: 100%; height: 100%; left: 0; top: 0; 
+.videobg{ position: fixed;; width: 100%; height: 100%; left: 0; top: 0;
 background: #000;background:-webkit-radial-gradient(50% 10%,farthest-corner, #09152a 0%, #09152a 50%,#090d1b,#000);}
 .videobg video{ object-fit: cover; filter:blur(2px); opacity: .05;filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='5'); position: relative; }
 
@@ -41,7 +41,7 @@ background: #000;background:-webkit-radial-gradient(50% 10%,farthest-corner, #09
     font-size: 24px;                /* 保持原有大小感 */
     font-weight: bold;
     color: #00f0ff;                 /* 青色主调 */
-    text-shadow: 
+    text-shadow:
         0 0 5px #00f0ff,
         0 0 10px #00f0ff,
         0 0 20px #00f0ff,
@@ -58,7 +58,7 @@ background: #000;background:-webkit-radial-gradient(50% 10%,farthest-corner, #09
 /* 呼吸辉光动画 */
 @keyframes neonPulse {
     from {
-        text-shadow: 
+        text-shadow:
             0 0 5px #00f0ff,
             0 0 10px #00f0ff,
             0 0 20px #00f0ff,
@@ -66,7 +66,7 @@ background: #000;background:-webkit-radial-gradient(50% 10%,farthest-corner, #09
         box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
     }
     to {
-        text-shadow: 
+        text-shadow:
             0 0 10px #00f0ff,
             0 0 20px #00f0ff,
             0 0 40px #00f0ff,
@@ -101,7 +101,7 @@ html,body{height: 100%;}
 .tit01{
 	/* background: linear-gradient(to right,rgba(48,82,174,0),rgba(48,82,174, 0.1),rgba(48,82,174,0));  */
 	color: rgba(255,255,255,.9); font-size:16px; padding: 0 ; line-height: 30px;position: relative; z-index: 12; display: flex; justify-content: space-between;}
-/* 
+/*
  .tabs{ display: flex; }
  .tabs a{ display: flex; color: rgba(255,255,255,.55); font-size: 12px; margin-left: 10px; border-bottom: 1px solid transparent;}
  .tabs a.active{color: #38b3ff;  border-bottom: 1px solid #38b3ff;} */
@@ -114,7 +114,7 @@ html,body{height: 100%;}
 .titright div li{ cursor: pointer; border-bottom: 1px solid rgba(255,255,255,.1); font-size: 13px; width: 50%; text-align: center;}
 .titright div li.active{ color: #399bff;}
  .map{ height: 100%;  position: relative;}
- 
+
 @media (max-width: 990px){
 }
 .markers span::after,
@@ -133,7 +133,7 @@ html,body{height: 100%;}
 
 .markers i{  font-size: 12px; font-style: normal;white-space: nowrap; position: relative; z-index: 100;}
 .markers i:nth-child(2){ color: #fff;  font-size: 18px; line-height: 1; padding-bottom: 4px;;}
-.markers span{ border-radius: 100px; width: 48px; height: 48px;  display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto; 
+.markers span{ border-radius: 100px; width: 48px; height: 48px;  display: flex; flex-direction: column; justify-content: center; align-items: center; margin: 0 auto;
 	background: rgb(0, 162, 255);  position: relative;
 }
 .markers2{ pointer-events: none;}
@@ -164,8 +164,8 @@ html,body{height: 100%;}
 	position: relative;
 	border: none;
  }
- 
- 
+
+
  .card:after, .card:before {
 	content: "";
 	position: absolute;
@@ -189,7 +189,7 @@ html,body{height: 100%;}
 	border-left: 1px solid var(--bs-border-color);
 	border-right: 1px solid var(--bs-border-color);
  }
- 
+
  .card .card-arrow {
 	pointer-events: none;
 	position: absolute;
@@ -203,7 +203,7 @@ html,body{height: 100%;}
  .card .card-arrow span:nth-child(2){ right: 0; top: 0; border-right: 2px solid var(--bs-border-color); border-top: 2px solid var(--bs-border-color);}
  .card .card-arrow span:nth-child(3){ left: 0; bottom: 0; border-left: 2px solid var(--bs-border-color); border-bottom: 2px solid var(--bs-border-color);}
  .card .card-arrow span:nth-child(4){ right: 0; bottom: 0; border-right: 2px solid var(--bs-border-color); border-bottom: 2px solid var(--bs-border-color);}
- 
+
  .citylist{ overflow-y: scroll; margin-right: -10px; padding-right: 10px; display: none;}
  /* .citylist ul{display: none;}
  .citylist ul:first-child{display: block;} */
@@ -212,7 +212,7 @@ html,body{height: 100%;}
  .citylist li span{font-size: 12px; opacity: .3;}
  .citylist li:nth-child(odd){ background: linear-gradient(to right,rgba(255,255,255,0),rgba(94, 182, 255, 0.05),rgba(255,255,255,0));}
 
- 
+
 /*Plugin CSS*/
 .str_wrap {
 	overflow:hidden;
@@ -220,22 +220,22 @@ html,body{height: 100%;}
 	position:relative;
 	-moz-user-select: none;
 	-khtml-user-select: none;
-	user-select: none;  
+	user-select: none;
 	white-space:nowrap;
 }
 
 
-.str_move { 
+.str_move {
 	white-space:nowrap;
-	position:absolute; 
-	top:0; 
+	position:absolute;
+	top:0;
 	left:0;
 	cursor:move;
 }
 .str_move_clone {
 	display:inline-block;
 	vertical-align:top;
-	position:absolute; 
+	position:absolute;
 	left:100%;
 	top:0;
 }
@@ -258,7 +258,7 @@ html,body{height: 100%;}
 	cursor:inherit;
 }
 .str_wrap img {
-	max-width:none !important;	
+	max-width:none !important;
 }
 
 .payment-time{

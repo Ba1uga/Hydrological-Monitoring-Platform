@@ -1,4 +1,4 @@
-option1 = {
+﻿option1 = {
     tooltip: {
         trigger: 'axis'
     },
@@ -444,42 +444,20 @@ $(function() {
 //   "projects": [{"name":"大型枢纽","value":1385}, ...]
 // }
 (function () {
-    const CHART_IDS = ['huaxing', 'zhexian', 'leida', 'echarts3'];
-    const LOADING_DELAY_MS = 150;
-    const LOADING_MIN_MS = 350;
-    const CACHE_TTL_MS = 30 * 1000;
-    const provinceCache = Object.create(null);
-    let activeXhr = null;
-    let activeRequestSeq = 0;
-    let activeShowTimer = null;
-    let loadingShownAt = 0;
-    let loadingShownSeq = 0;
-
     function getChart(domId) {
         const el = document.getElementById(domId);
         if (!el) return null;
         return echarts.getInstanceByDom(el) || echarts.init(el);
     }
 
-    function showAllLoading(text) {
-        const opts = {
-            text: text || '加载中...',
-            color: '#ffffff',
-            textColor: '#ffffff',
-            maskColor: 'rgba(0,0,0,0.12)',
-            fontSize: 14,
-            showSpinner: true,
-            spinnerRadius: 12,
-            lineWidth: 2
-        };
-
-        CHART_IDS.forEach(id => {
+    function showAllLoading() {
+        ['huaxing', 'zhexian', 'leida', 'echarts3'].forEach(id => {
             const c = getChart(id);
-            if (c) c.showLoading('default', opts);
+            if (c) c.showLoading('default', { text: '加载中...' });
         });
     }
     function hideAllLoading() {
-        CHART_IDS.forEach(id => {
+        ['huaxing', 'zhexian', 'leida', 'echarts3'].forEach(id => {
             const c = getChart(id);
             if (c) c.hideLoading();
         });
@@ -676,98 +654,22 @@ $(function() {
         const name = params && params.name ? String(params.name) : '';
         if (!adcode) return;
 
-        const now = Date.now();
-        const cached = provinceCache[adcode];
-        if (cached && cached.data && (now - cached.ts) < CACHE_TTL_MS) {
-            applyProvinceData(cached.data);
-            return;
-        }
 
-        activeRequestSeq += 1;
-        const mySeq = activeRequestSeq;
-        if (activeXhr && typeof activeXhr.abort === 'function') {
-            try { activeXhr.abort(); } catch (e) {}
-        }
-        if (activeShowTimer) {
-            clearTimeout(activeShowTimer);
-            activeShowTimer = null;
-        }
-        hideAllLoading();
-        loadingShownAt = 0;
-        loadingShownSeq = 0;
-
-        activeShowTimer = setTimeout(function () {
-            if (mySeq !== activeRequestSeq) return;
-            loadingShownSeq = mySeq;
-            loadingShownAt = Date.now();
-            showAllLoading(name ? (name + ' 加载中...') : '加载中...');
-        }, LOADING_DELAY_MS);
-
-        // You can change this endpoint to match your backend
         const url = (window.ProvinceDashboard && window.ProvinceDashboard.config && window.ProvinceDashboard.config.endpoint)
             ? window.ProvinceDashboard.config.endpoint
             : '/api/province/dashboard';
 
-        activeXhr = $.ajax({
+        $.ajax({
             url: url,
             method: 'GET',
             dataType: 'json',
             data: { adcode: adcode, name: name },
             timeout: 12000
         }).done(function (res) {
-            if (mySeq !== activeRequestSeq) return;
-            if (res) provinceCache[adcode] = { ts: Date.now(), data: res };
-
-            const finish = function () {
-                if (loadingShownSeq === mySeq) hideAllLoading();
-                applyProvinceData(res);
-            };
-
-            if (loadingShownSeq !== mySeq) {
-                if (activeShowTimer) {
-                    clearTimeout(activeShowTimer);
-                    activeShowTimer = null;
-                }
-                finish();
-                return;
-            }
-
-            if (activeShowTimer) {
-                clearTimeout(activeShowTimer);
-                activeShowTimer = null;
-            }
-
-            const elapsed = Date.now() - (loadingShownAt || Date.now());
-            const wait = Math.max(0, LOADING_MIN_MS - elapsed);
-            if (wait) setTimeout(finish, wait);
-            else finish();
+            applyProvinceData(res);
         }).fail(function (xhr, status) {
-            if (mySeq !== activeRequestSeq) return;
-            if (status === 'abort') return;
-
-            const finish = function () {
-                if (loadingShownSeq === mySeq) hideAllLoading();
-                console.warn('Province data load failed:', status, xhr && xhr.responseText);
-            };
-
-            if (loadingShownSeq !== mySeq) {
-                if (activeShowTimer) {
-                    clearTimeout(activeShowTimer);
-                    activeShowTimer = null;
-                }
-                finish();
-                return;
-            }
-
-            if (activeShowTimer) {
-                clearTimeout(activeShowTimer);
-                activeShowTimer = null;
-            }
-
-            const elapsed = Date.now() - (loadingShownAt || Date.now());
-            const wait = Math.max(0, LOADING_MIN_MS - elapsed);
-            if (wait) setTimeout(finish, wait);
-            else finish();
+            hideAllLoading();
+            console.warn('Province data load failed:', status, xhr && xhr.responseText);
 
             // Optional: keep current data, or inject a small hint in console
         });

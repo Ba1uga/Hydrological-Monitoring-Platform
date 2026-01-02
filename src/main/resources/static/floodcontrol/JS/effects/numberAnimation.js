@@ -86,13 +86,6 @@ async function initNumberAnimations(mode = 'flood') {
         console.error("获取汇总数据失败", e);
     }
   }
-  
-  // 资源统计数值动画（右侧面板）
-  const statValues = document.querySelectorAll('.resource-stats .stat-value');
-  statValues.forEach(el => {
-    const target = parseFloat(el.dataset.target || 0);
-    animateNumber(el, target, 1000, { unit: '' });
-  });
 
   
   // 延迟触发站点数值动画，确保DOM已更新

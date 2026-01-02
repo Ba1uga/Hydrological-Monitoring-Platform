@@ -93,7 +93,7 @@ async function switchMode(mode) {
   updatePanelTitles(mode);
   
   // 5.1 更新右侧资源面板数据
-  updateResourcesForMode(mode);
+  await updateResourcesForMode(mode);
 
   // 5.2 更新关键站点列表 (根据模式过滤)
   refreshStationList();

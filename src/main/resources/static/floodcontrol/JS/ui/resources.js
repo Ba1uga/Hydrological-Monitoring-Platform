@@ -23,6 +23,8 @@ const RESOURCE_DATA = {
   ]
 };
 
+let latestUpdateSeq = 0;
+
 export function initResourceInteractions(getCurrentModeFn) {
   const mapBtn = document.querySelector('.map-view-btn');
   if (mapBtn) {
@@ -195,15 +197,19 @@ export function initResourceInteractions(getCurrentModeFn) {
  * @param {string} mode - 'flood' 或 'drought'
  */
 export async function updateResourcesForMode(mode) {
+  const updateSeq = ++latestUpdateSeq;
   try {
     const res = await axios.get(`/resource/${mode}`);
+    if (updateSeq !== latestUpdateSeq) return;
+    if (getCurrentMode() !== mode) return;
+
     if (res.data.code === 200) {
       const data = res.data.data;
       const cards = document.querySelectorAll('.resource-stats .stat-card');
       
-      if (cards.length !== data.length) return;
-
-      cards.forEach((card, index) => {
+      const len = Math.min(cards.length, Array.isArray(data) ? data.length : 0);
+      for (let index = 0; index < len; index++) {
+        const card = cards[index];
         const item = data[index];
         
         // 更新标签
@@ -215,7 +221,7 @@ export async function updateResourcesForMode(mode) {
         if (valueEl) {
           // 更新 data-target 属性，以便后续动画脚本使用
           valueEl.dataset.target = item.value;
-          animateNumber(valueEl, item.value, 800, { unit: item.unit });
+          animateNumber(valueEl, item.value, 800, { unit: '' });
         }
         
         // 更新趋势
@@ -246,10 +252,13 @@ export async function updateResourcesForMode(mode) {
         
         // 更新 ARIA 标签
         const trendText = item.trend ? item.trend.replace('↑', '上升').replace('↓', '下降').replace('→', '持平') : '';
-        card.setAttribute('aria-label', `${item.label}: ${item.value}${item.unit}, ${trendText}`);
-      });
+        const aria = trendText ? `${item.label}: ${item.value}${item.unit}, ${trendText}` : `${item.label}: ${item.value}${item.unit}`;
+        card.setAttribute('aria-label', aria);
+      }
     }
   } catch (error) {
+    if (updateSeq !== latestUpdateSeq) return;
+    if (getCurrentMode() !== mode) return;
     console.error('获取资源数据失败:', error);
     // 降级处理：使用本地数据
     fallbackToLocalData(mode);
@@ -261,9 +270,9 @@ function fallbackToLocalData(mode) {
   const data = RESOURCE_DATA[mode] || RESOURCE_DATA['flood'];
   const cards = document.querySelectorAll('.resource-stats .stat-card');
   
-  if (cards.length !== data.length) return;
-
-  cards.forEach((card, index) => {
+  const len = Math.min(cards.length, Array.isArray(data) ? data.length : 0);
+  for (let index = 0; index < len; index++) {
+    const card = cards[index];
     const item = data[index];
     
     // 更新标签
@@ -275,7 +284,7 @@ function fallbackToLocalData(mode) {
     if (valueEl) {
       // 更新 data-target 属性，以便后续动画脚本使用
       valueEl.dataset.target = item.value;
-      animateNumber(valueEl, item.value, 800, { unit: item.unit });
+      animateNumber(valueEl, item.value, 800, { unit: '' });
     }
     
     // 更新趋势
@@ -300,7 +309,9 @@ function fallbackToLocalData(mode) {
     }
     
     // 更新 ARIA 标签
-    card.setAttribute('aria-label', `${item.label}: ${item.value}${item.unit}, ${item.trend.replace('↑', '上升').replace('↓', '下降').replace('→', '持平')}`);
-  });
+    const trendText = item.trend ? item.trend.replace('↑', '上升').replace('↓', '下降').replace('→', '持平') : '';
+    const aria = trendText ? `${item.label}: ${item.value}${item.unit}, ${trendText}` : `${item.label}: ${item.value}${item.unit}`;
+    card.setAttribute('aria-label', aria);
+  }
 }
 
