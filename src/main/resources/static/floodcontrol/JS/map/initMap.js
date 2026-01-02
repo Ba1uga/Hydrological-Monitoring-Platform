@@ -3,6 +3,22 @@
 
 import { initStationHistoryChart } from '../charts/stationHistoryChart.js';
 
+/**
+ * @typedef {Object} Station
+ * @property {number} id
+ * @property {string} stationName
+ * @property {number} longitude
+ * @property {number} latitude
+ * @property {string} stationType
+ * @property {number} currentValue
+ * @property {string} valueUnit
+ * @property {string} floodRisk
+ * @property {string} droughtRisk
+ * @property {string} primaryMode
+ * @property {'up'|'down'|'stable'|'flat'} trendDirection
+ * @property {number} affectedArea
+ */
+
 // 引入监测点数据
 // import allMonitoringPoints from '../data/monitoringPoints.js';
 export let allMonitoringPoints = [];
@@ -247,14 +263,14 @@ function renderRiskLegend() {
 
 async function fetchStationData(mode) {
     try {
-        // 使用新的整点数据API
         const res = await axios.get('/currentOverview/currentHourStations', {
             params: {
                 mode: mode
             }
         });
         if (res.data.code === 200) {
-            allMonitoringPoints = res.data.data.map(s => ({
+            const stations = Array.isArray(res.data.data) ? res.data.data : [];
+            allMonitoringPoints = stations.map(s => ({
                 name: s.stationName,
                 value: [s.longitude, s.latitude, s.currentValue],
                 type: s.stationType,
@@ -262,10 +278,39 @@ async function fetchStationData(mode) {
                 floodRisk: s.floodRisk,
                 droughtRisk: s.droughtRisk
             }));
+            return stations;
         }
     } catch (e) {
         console.error("获取站点数据失败", e);
     }
+    return [];
+}
+
+function mapStationsToMonitoringPoints(stations) {
+  return stations.map(s => ({
+    name: s.stationName,
+    value: [s.longitude, s.latitude, s.currentValue],
+    type: s.stationType,
+    primaryMode: s.primaryMode,
+    floodRisk: s.floodRisk,
+    droughtRisk: s.droughtRisk
+  }));
+}
+
+export function applyCurrentHourStations(stations) {
+  const list = Array.isArray(stations) ? stations : [];
+  allMonitoringPoints = mapStationsToMonitoringPoints(list);
+  refreshMonitoringPointsOnMap();
+  const refresh3DEvent = new CustomEvent('refresh3DMap');
+  window.dispatchEvent(refresh3DEvent);
+}
+
+export async function refreshCurrentHourStationsByHttp(mode = currentMode) {
+  const stations = await fetchStationData(mode);
+  refreshMonitoringPointsOnMap();
+  const refresh3DEvent = new CustomEvent('refresh3DMap');
+  window.dispatchEvent(refresh3DEvent);
+  return stations;
 }
 
 // 自动刷新数据函数
@@ -307,9 +352,6 @@ async function initMap() {
   const loadingEl = document.getElementById('mapLoading');
   if (loadingEl) loadingEl.style.display = 'flex';
   mapReady = false;
-
-  // 启动自动刷新检测
-  startAutoRefresh();
 
   // Fetch data
   await fetchStationData(currentMode);

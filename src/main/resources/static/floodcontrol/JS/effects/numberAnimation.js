@@ -1,6 +1,15 @@
 /* =================== 数字翻牌动画 =================== */
 /* 数字翻牌动画函数 animateNumber */
 
+/**
+ * @typedef {Object} DashboardCard
+ * @property {number} alertStationCount
+ * @property {string} trend
+ * @property {'up'|'down'|'flat'} trendDirection
+ * @property {number} affectedArea
+ * @property {string} dataTime
+ */
+
 // 数字翻牌动画函数
 // 支持整数和小数，自动处理单位和格式
 function animateNumber(el, target, duration = 1200, options = {}) {

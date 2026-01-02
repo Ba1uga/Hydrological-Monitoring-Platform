@@ -4,6 +4,21 @@
 
 import { getCurrentMode, setCurrentView } from '../map/initMap.js';
 
+/**
+ * @typedef {Object} StationHistoryItem
+ * @property {number} id
+ * @property {number} stationId
+ * @property {string} stationName
+ * @property {string} stationType
+ * @property {string} primaryMode
+ * @property {string} valueUnit
+ * @property {number} currentValue
+ * @property {string} recordDate
+ * @property {boolean} isWarning
+ * @property {string} floodRisk
+ * @property {string} droughtRisk
+ */
+
 // 全局变量
 let historyChart = null;
 let currentStationName = null;

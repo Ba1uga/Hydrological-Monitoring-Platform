@@ -40,6 +40,24 @@ public class WebSocketHandler {
         return "服务器收到消息: " + message;
     }
 
+    @MessageMapping("/currentHourStations")
+    public void requestCurrentHourStations(String mode) {
+        String normalized = normalizeMode(mode);
+        pushCurrentHourStations(normalized);
+    }
+
+    @MessageMapping("/dashboardCard")
+    public void requestDashboardCard(String mode) {
+        String normalized = normalizeMode(mode);
+        pushDashboardCardData(normalized);
+    }
+
+    @MessageMapping("/realTimeCard")
+    public void requestRealTimeCard(String mode) {
+        String normalized = normalizeMode(mode);
+        pushRealTimeCardData(normalized);
+    }
+
     @GetMapping("/favicon.ico")
     public ResponseEntity<Void> favicon() {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -109,5 +127,13 @@ public class WebSocketHandler {
         pushRealTimeCardData("all");
         pushRealTimeCardData("flood");
         pushRealTimeCardData("drought");
+    }
+
+    private static String normalizeMode(String mode) {
+        if (mode == null) return "all";
+        String m = mode.trim().toLowerCase();
+        if (m.isEmpty()) return "all";
+        if ("flood".equals(m) || "drought".equals(m) || "all".equals(m)) return m;
+        return "all";
     }
 }

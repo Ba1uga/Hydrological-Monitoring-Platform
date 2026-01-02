@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,6 +13,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.baluga.module.floodcontrol.mapper.MonitoringStationHistoryMapper;
@@ -34,15 +37,55 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
     @Autowired
     private MonitoringStationHistoryMapper historyMapper;
 
+    @Value("${app.demoTime.fixed:}")
+    private String demoTimeFixed;
+
+    @Value("${app.demoTime.offsetSeconds:0}")
+    private long demoTimeOffsetSeconds;
+
+    public LocalDateTime now() {
+        LocalDateTime baseTime = parseFixedDemoTime(demoTimeFixed);
+        if (baseTime == null) {
+            baseTime = LocalDateTime.now();
+        }
+        if (demoTimeOffsetSeconds != 0) {
+            baseTime = baseTime.plusSeconds(demoTimeOffsetSeconds);
+        }
+        return baseTime;
+    }
+
+    public LocalDate currentCacheDate() {
+        return now().toLocalDate();
+    }
+
+    public LocalDateTime currentCacheHour() {
+        return now().truncatedTo(ChronoUnit.HOURS);
+    }
+
+    private static LocalDateTime parseFixedDemoTime(String fixed) {
+        if (fixed == null) return null;
+        String trimmed = fixed.trim();
+        if (trimmed.isEmpty()) return null;
+        try {
+            return LocalDateTime.parse(trimmed);
+        } catch (DateTimeParseException ignored) {
+        }
+        try {
+            return LocalDateTime.parse(trimmed, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        } catch (DateTimeParseException ignored) {
+        }
+        return null;
+    }
+
     @Override
     public List<MonitoringStationHistoryVO> getHistoryList(LocalDateTime startDate, LocalDateTime endDate, String stationName) {
         return historyMapper.searchHistory(startDate, endDate, stationName);
     }
 
     @Override
-    @Cacheable(value = "warningStations", key = "#mode", unless = "#result == null")
+    @Cacheable(value = "warningStations", key = "#mode + ':' + #root.target.currentCacheDate()", unless = "#result == null")
     public List<MonitoringStation> getWarningStations(String mode) {
-        LocalDate today = LocalDate.now();
+        LocalDate today = now().toLocalDate();
         QueryWrapper<MonitoringStation> query = new QueryWrapper<>();
         query.apply("DATE(value_record_time) = {0}", today);
         
@@ -83,7 +126,7 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
     @Override
     public TrendAnalysisVO getTrendAnalysis(String mode) {
         // 1. 获取今日日期 (LocalDateTime 转 LocalDate)
-        LocalDate today = LocalDate.now(); 
+        LocalDate today = now().toLocalDate(); 
         LocalDate yesterday = today.minusDays(1);
         
         // 构建查询条件
@@ -182,7 +225,7 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
 
     @Override
     public List<MonitoringStationVO> getAllStationVOs(String mode) {
-        LocalDate today = LocalDate.now();
+        LocalDate today = now().toLocalDate();
         LocalDate yesterday = today.minusDays(1);
         
         // 1. 查询今日的 monitoring_station 列表
@@ -249,9 +292,11 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
     }
 
     @Override
+    @Cacheable(value = "currentHourStations", key = "#mode + ':' + #root.target.currentCacheHour()", unless = "#result == null")
     public List<MonitoringStationVO> getCurrentHourStationVOs(String mode) {
         // 获取当前时间，并将分钟和秒设置为0，得到当前整点时间
-        LocalDateTime currentHour = LocalDateTime.now().with(LocalTime.of(LocalDateTime.now().getHour(), 0, 0));
+        LocalDateTime base = now();
+        LocalDateTime currentHour = base.with(LocalTime.of(base.getHour(), 0, 0));
         
         // 1. 首先尝试查询当前整点的站点数据
         QueryWrapper<MonitoringStation> query = new QueryWrapper<>();
@@ -267,7 +312,7 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
         
         // 2. 如果没有当前整点的数据，回退到查询今天的数据
         if (stations.isEmpty()) {
-            LocalDate today = LocalDate.now();
+            LocalDate today = now().toLocalDate();
             QueryWrapper<MonitoringStation> todayQuery = new QueryWrapper<>();
             todayQuery.apply("DATE(value_record_time) = {0}", today);
             
@@ -347,14 +392,16 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
     }
     
     @Override
+    @Cacheable(value = "dashboardCardData", key = "#mode + ':' + #root.target.currentCacheHour()", unless = "#result == null")
     public DashboardCardVO getDashboardCardData(String mode) {
         return getRealTimeCardData(mode);
     }
     
     @Override
+    @Cacheable(value = "realTimeCardData", key = "#mode + ':' + #root.target.currentCacheHour()", unless = "#result == null")
     public DashboardCardVO getRealTimeCardData(String mode) {
         // 1. 获取时间切片 (当前整点 & 上一整点)
-        LocalDateTime currentHour = LocalDateTime.now().truncatedTo(ChronoUnit.HOURS);
+        LocalDateTime currentHour = now().truncatedTo(ChronoUnit.HOURS);
         LocalDateTime prevHour = currentHour.minusHours(1);
         
         // 2. 根据模式确定值单位
@@ -410,7 +457,7 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
     @Override
     public List<MonitoringStationHistoryVO> getSevenDaysHistory(String stationName, String mode) {
         // 计算过去7天的时间范围
-        LocalDateTime endDate = LocalDateTime.now();
+        LocalDateTime endDate = now();
         LocalDateTime startDate = endDate.minusDays(7);
         
         // 查询指定站点过去7天的历史数据（从 monitoring_station 表查询）

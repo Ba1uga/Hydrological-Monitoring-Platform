@@ -22,7 +22,7 @@
 
 ### 2) 配置
 
-编辑 [application.yml](file:///d:/AAA_Mine/workSpace/%E9%A1%B9%E7%9B%AE/ChinaHydrologicalMonitoringPlatform/src/main/resources/application.yml)：
+编辑 [application.yml](/ChinaHydrologicalMonitoringPlatform/src/main/resources/application.yml)：
 
 - `server.port`：默认 `8083`
 - `spring.datasource.*`：填写你的 MySQL 连接信息
@@ -55,11 +55,6 @@ java -jar target/ChinaHydrologicalMonitoringPlatform-0.0.1-SNAPSHOT.jar
 - 水位监测：`/waterlevel/waterlevel.html`
 - 水利工程：`/waterproject/waterproject.html`
 - 预测预警：`/prediction/prediction.html`
-
-便捷入口（后端跳转）：
-
-- `/waterproject` → `/waterproject/waterproject.html`
-- `/prediction`、`/prediction/wyy` → `/prediction/prediction.html`
 
 ## 后端接口
 

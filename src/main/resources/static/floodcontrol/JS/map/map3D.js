@@ -536,8 +536,8 @@ function build3DMapOption() {
       regionHeight: 2.849,        // 保持原本的区域高度
       itemStyle: {
         color: theme.areaColor,       // 使用主题定义的区域颜色
-        borderColor: theme.borderColor || '#ff3c00', // 使用主题定义的边框颜色
-        borderWidth: theme.borderWidth || 1.2,       // 使用主题定义的边框宽度
+        borderColor: theme.borderColor ?? '#ff3c00', // 使用主题定义的边框颜色
+        borderWidth: theme.borderWidth ?? 1.2,       // 使用主题定义的边框宽度
         opacity: 1.0            // 完全不透明
       },
       label: {

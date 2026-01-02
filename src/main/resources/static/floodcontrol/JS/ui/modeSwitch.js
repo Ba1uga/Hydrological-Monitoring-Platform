@@ -71,6 +71,7 @@ async function switchMode(mode) {
   // 2. 记录当前模式
   // 使用setCurrentMode函数更新全局模式
   setCurrentMode(mode);
+  window.dispatchEvent(new CustomEvent('modeChanged', { detail: { mode } }));
 
   // 3. 切换 body 上的类，触发 CSS 变量变化（颜色、背景等）
   if (mode === 'drought') {

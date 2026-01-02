@@ -2,22 +2,41 @@ import { getCurrentMode, setHoverStation } from '../map/initMap.js';
 import { animateNumber } from '../effects/numberAnimation.js';
 import { initStationHistoryChart } from '../charts/stationHistoryChart.js';
 
+/**
+ * @typedef {Object} Station
+ * @property {number} id
+ * @property {string} stationName
+ * @property {number} longitude
+ * @property {number} latitude
+ * @property {string} stationType
+ * @property {number} currentValue
+ * @property {string} valueUnit
+ * @property {string} floodRisk
+ * @property {string} droughtRisk
+ * @property {string} primaryMode
+ * @property {'up'|'down'|'stable'|'flat'} trendDirection
+ * @property {number} affectedArea
+ */
+
 let allStations = [];
+let currentKeyword = '';
 
 // 初始化站点列表模块
-export async function initStationList() {
+export async function initStationList(options = {}) {
   const searchInput = document.getElementById('stationSearchInput');
   const listContainer = document.getElementById('stationListContainer');
 
   if (!searchInput || !listContainer) return;
 
   // 1. 获取站点数据
-  await fetchAndRenderStations(listContainer);
+  if (!options.skipInitialFetch) {
+    await fetchAndRenderStations(listContainer);
+  }
 
   // 2. 绑定搜索事件
   searchInput.addEventListener('input', (e) => {
-    const keyword = e.target.value.trim().toLowerCase();
-    filterStations(keyword, listContainer);
+    currentKeyword = e.target.value.trim().toLowerCase();
+    filterStations(currentKeyword, listContainer);
   });
 }
 
@@ -47,6 +66,13 @@ window.addEventListener('refreshStationList', async () => {
     await fetchAndRenderStations(listContainer);
   }
 });
+
+export function applyStations(stations) {
+  const listContainer = document.getElementById('stationListContainer');
+  if (!listContainer) return;
+  allStations = Array.isArray(stations) ? stations : [];
+  filterStations(currentKeyword, listContainer);
+}
 
 export async function refreshStationList() {
   const listContainer = document.getElementById('stationListContainer');
