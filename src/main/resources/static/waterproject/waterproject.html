@@ -2209,8 +2209,7 @@
             if (origin && origin !== 'null') {
                 candidates.push(origin);
             }
-            candidates.push('http://localhost:8080');
-            candidates.push('http://127.0.0.1:8080');
+            candidates.push('');
             return [...new Set(candidates)];
         }
 

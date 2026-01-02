@@ -60,7 +60,7 @@ export async function initStationHistoryChart(stationName, mode = getCurrentMode
  */
 async function fetchStationHistoryData(stationName, mode) {
   try {
-    const res = await axios.get('http://localhost:8080/currentOverview/sevenDaysHistory', {
+    const res = await axios.get('/currentOverview/sevenDaysHistory', {
       params: { stationName, mode }
     });
     

@@ -51,7 +51,7 @@ async function initNumberAnimations(mode = 'flood') {
   if (summaryValues.length > 0) {
     try {
         // 使用新的实时卡片接口获取数据
-        const cardRes = await axios.get(`http://localhost:8080/currentOverview/realtime-card?mode=${mode}`);
+        const cardRes = await axios.get(`/currentOverview/realtime-card?mode=${mode}`);
         if (cardRes.data.code === 200) {
             const cardData = cardRes.data.data;
             

@@ -74,7 +74,7 @@ export function initResourceInteractions(getCurrentModeFn) {
         
         try {
             // 尝试从后端获取详细数据
-            const res = await axios.get(`http://localhost:8080/resource/${currentMode}/details`, {
+            const res = await axios.get(`/resource/${currentMode}/details`, {
                 params: { category: label }
             });
 
@@ -196,7 +196,7 @@ export function initResourceInteractions(getCurrentModeFn) {
  */
 export async function updateResourcesForMode(mode) {
   try {
-    const res = await axios.get(`http://localhost:8080/resource/${mode}`);
+    const res = await axios.get(`/resource/${mode}`);
     if (res.data.code === 200) {
       const data = res.data.data;
       const cards = document.querySelectorAll('.resource-stats .stat-card');

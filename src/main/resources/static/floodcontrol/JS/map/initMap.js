@@ -245,7 +245,7 @@ function renderRiskLegend() {
 async function fetchStationData(mode) {
     try {
         // 使用新的整点数据API
-        const res = await axios.get('http://localhost:8080/currentOverview/currentHourStations', {
+        const res = await axios.get('/currentOverview/currentHourStations', {
             params: {
                 mode: mode
             }
