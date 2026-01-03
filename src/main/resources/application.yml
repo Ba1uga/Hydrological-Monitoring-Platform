@@ -4,14 +4,15 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/china_hydrology_monitor
-    username: root
-    password: Tvgai36183
+    url: jdbc:mysql://118.195.138.128:3306/china_hydrology_monitor
+    username: yfwang
+    password: Iflytek@2025.
   data:
     redis:
-      host: localhost
+      host: 118.195.138.128
       port: 6379
       database: 5
+      password: Iflytek@2025.
   cache:
     type: redis
     redis:

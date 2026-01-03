@@ -362,7 +362,7 @@ function getBar3DData() {
 function build3DMapOption() {
   const currentMode = getCurrentMode();
   const theme = getMapBaseTheme(currentMode);
-  const borderWidth3D = 2.8;
+  const borderWidth3D = 0;
   const borderColor3D = currentMode === 'flood' ? '#ffffff' : '#ff8800';
   const regionHeight = 2.849;
   const borderZ = regionHeight + 0.25;
@@ -655,7 +655,7 @@ function build3DMapOption() {
         blendMode: 'lighter',
         lineStyle: {
           color: borderColor3D,
-          width: 7.2,
+          width: 1.1,
           opacity: 0.22
         }
       },
@@ -669,7 +669,7 @@ function build3DMapOption() {
         blendMode: 'lighter',
         lineStyle: {
           color: borderColor3D,
-          width: 2.4,
+          width: 1.1,
           opacity: 1
         }
       },
