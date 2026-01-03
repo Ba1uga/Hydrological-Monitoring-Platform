@@ -30,6 +30,14 @@ let currentMode = 'flood';
 let currentView = '2d';
 export const RISK_LEVELS = ['extreme', 'high', 'medium', 'low', 'safe'];
 
+export function getMapReady() {
+  return mapReady;
+}
+
+export function setMapReady(ready) {
+  mapReady = !!ready;
+}
+
 // 导出chart的getter和setter函数
 export function getChart() {
   return chart;
@@ -286,6 +294,13 @@ async function fetchStationData(mode) {
     return [];
 }
 
+function dispatchRefresh3DIfNeeded() {
+  if (currentView !== '3d') return;
+  if (!mapReady) return;
+  const refresh3DEvent = new CustomEvent('refresh3DMap');
+  window.dispatchEvent(refresh3DEvent);
+}
+
 function mapStationsToMonitoringPoints(stations) {
   return stations.map(s => ({
     name: s.stationName,
@@ -301,15 +316,13 @@ export function applyCurrentHourStations(stations) {
   const list = Array.isArray(stations) ? stations : [];
   allMonitoringPoints = mapStationsToMonitoringPoints(list);
   refreshMonitoringPointsOnMap();
-  const refresh3DEvent = new CustomEvent('refresh3DMap');
-  window.dispatchEvent(refresh3DEvent);
+  dispatchRefresh3DIfNeeded();
 }
 
 export async function refreshCurrentHourStationsByHttp(mode = currentMode) {
   const stations = await fetchStationData(mode);
   refreshMonitoringPointsOnMap();
-  const refresh3DEvent = new CustomEvent('refresh3DMap');
-  window.dispatchEvent(refresh3DEvent);
+  dispatchRefresh3DIfNeeded();
   return stations;
 }
 
@@ -318,8 +331,7 @@ async function autoRefreshData() {
     console.log('自动刷新数据:', new Date().toLocaleString());
     await fetchStationData(currentMode);
     refreshMonitoringPointsOnMap();
-    const refresh3DEvent = new CustomEvent('refresh3DMap');
-    window.dispatchEvent(refresh3DEvent);
+    dispatchRefresh3DIfNeeded();
     
     // 更新站点列表
     // 由于initStationList是从其他模块导入的，我们需要使用事件来通知更新
@@ -351,7 +363,7 @@ async function initMap() {
   // 显示地图加载遮罩，阻止拖动与缩放
   const loadingEl = document.getElementById('mapLoading');
   if (loadingEl) loadingEl.style.display = 'flex';
-  mapReady = false;
+  setMapReady(false);
 
   // Fetch data
   await fetchStationData(currentMode);
@@ -484,6 +496,11 @@ async function initMap() {
     const mapEl = document.getElementById('map');
     if (!mapEl) {
       throw new Error('地图容器未找到');
+    }
+    const existingChart = getChart();
+    if (existingChart && existingChart.dispose && !(existingChart.isDisposed && existingChart.isDisposed())) {
+      existingChart.dispose();
+      setChart(null);
     }
     const newChart = echarts.init(mapEl);
     setChart(newChart);
@@ -845,15 +862,20 @@ async function initMap() {
     // 窗口大小变化时，自动调整地图尺寸
     window.onresize = () => {
       const chart = getChart();
-      if (chart) chart.resize();
+      if (!chart) return;
+      if (chart.isDisposed && chart.isDisposed()) return;
+      try {
+        chart.resize();
+      } catch (e) {
+      }
     };
 
     // 地图与数据全部加载完成，允许拖动缩放
-    mapReady = true;
+    setMapReady(true);
     if (loadingEl) loadingEl.style.display = 'none';
   } catch (err) {
     console.error(err);
-    mapReady = false;
+    setMapReady(false);
     if (loadingEl) {
       loadingEl.innerHTML = '<span>地图加载失败，请稍后重试</span>';
     } else {

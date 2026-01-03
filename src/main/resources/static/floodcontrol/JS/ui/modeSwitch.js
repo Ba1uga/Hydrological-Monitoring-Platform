@@ -172,17 +172,15 @@ async function toggle3DView() {
   // 根据新的视图状态执行相应操作
   if (newView === '3d') {
     // 切换到3D视图
-    switchTo3DMap();
+    const ok = switchTo3DMap();
+    if (!ok) {
+      setCurrentView('2d');
+      view3dBtn.classList.toggle('active', false);
+      view3dBtn.textContent = '3D视图';
+    }
   } else {
     // 切换回2D视图
-    switchTo2DMap();
-    
-    // 根据当前模式更新2D地图
-    if (getCurrentMode() === 'flood') {
-      await updateMapForFlood();
-    } else {
-      await updateMapForDrought();
-    }
+    await switchTo2DMap();
   }
 }
 

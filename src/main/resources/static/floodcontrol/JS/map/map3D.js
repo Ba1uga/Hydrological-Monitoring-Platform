@@ -2,7 +2,7 @@
 /* 3D 地图构建、柱状切换逻辑 */
 
 // 引入监测点数据
-import { allMonitoringPoints, getColorByRisk, getMapBaseTheme, mapReady, initMap, getCurrentMode, renderRiskLegend, getChart, setChart, updateMapForFlood, updateMapForDrought } from './initMap.js';
+import { allMonitoringPoints, getColorByRisk, getMapBaseTheme, initMap, getCurrentMode, renderRiskLegend, getChart, setChart, getMapReady } from './initMap.js';
 
 const AUTO_ROTATE_LOOP_SECONDS = 15;
 const AUTO_ROTATE_SPEED = 360 / AUTO_ROTATE_LOOP_SECONDS;
@@ -24,6 +24,15 @@ let refresh3DMapListener = null;
 
 let cachedProvinceBorderLines3D = null;
 let cachedProvinceBorderLines3DKey = null;
+
+function canCreateWebGLContext() {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+  } catch (e) {
+    return false;
+  }
+}
 
 function getProvinceBorderLines3D(mapName, z, cacheKeyExtra = '') {
   const zKey = Number.isFinite(z) ? z.toFixed(3) : String(z);
@@ -699,21 +708,28 @@ function build3DMapOption() {
 // 切换到3D视图
 function switchTo3DMap() {
   const chart = getChart();
-  if (!chart || !mapReady) return;
-  
-  const option3D = build3DMapOption();
-  chart.setOption(option3D, true);
-  removeRotateControlButton();
-  if (!refresh3DMapListener) {
-    refresh3DMapListener = () => {
-      update3DMapForCurrentMode();
-    };
-    window.addEventListener('refresh3DMap', refresh3DMapListener);
+  if (!chart || !getMapReady()) return false;
+  if (chart.isDisposed && chart.isDisposed()) return false;
+  if (!canCreateWebGLContext()) return false;
+
+  try {
+    const option3D = build3DMapOption();
+    chart.setOption(option3D, true);
+    removeRotateControlButton();
+    if (!refresh3DMapListener) {
+      refresh3DMapListener = () => {
+        update3DMapForCurrentMode();
+      };
+      window.addEventListener('refresh3DMap', refresh3DMapListener);
+    }
+    return true;
+  } catch (e) {
+    return false;
   }
 }
 
 // 切换回2D视图
-function switchTo2DMap() {
+async function switchTo2DMap() {
   const oldChart = getChart();
   if (oldChart) {
     removeRotateControlButton();
@@ -722,6 +738,7 @@ function switchTo2DMap() {
       autoRotateResumeTimer = null;
     }
     oldChart.dispose();
+    setChart(null);
   }
 
   if (refresh3DMapListener) {
@@ -729,38 +746,23 @@ function switchTo2DMap() {
     refresh3DMapListener = null;
   }
 
-  const dom = document.getElementById('map');
-  const newChart = echarts.init(dom, null, {
-    renderer: 'canvas'  // 强制 Canvas 渲染器
-  });
-  setChart(newChart);
-
-  // 恢复基础 2D 地图（会根据当前 currentMode 使用正确主题）
-  initMap();
-
-  // 根据当前模式应用额外更新（点颜色、河流图层等）
-  if (getCurrentMode() === 'flood') {
-    updateMapForFlood();
-  } else {
-    updateMapForDrought();
-  }
-
-  // 重绘图例
+  await initMap();
   renderRiskLegend();
-
-  // 可选：标记地图就绪
-  mapReady = true;
 }
 
 // 更新 3D 地图为当前模式的样式
 function update3DMapForCurrentMode() {
   const chart = getChart();
-  if (!chart || !mapReady) return;
+  if (!chart || !getMapReady()) return;
+  if (chart.isDisposed && chart.isDisposed()) return;
   
   // 构建并显示当前模式的完整3D地图
-  const option3D = build3DMapOption();
-  chart.setOption(option3D, true);
-  removeRotateControlButton();
+  try {
+    const option3D = build3DMapOption();
+    chart.setOption(option3D, true);
+    removeRotateControlButton();
+  } catch (e) {
+  }
 }
 
 // 导出函数
