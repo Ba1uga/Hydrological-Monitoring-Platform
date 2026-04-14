@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>中国水质水位预测可视化平台</title>
-    <!-- 本地ECharts库 -->
+    <title>涓浗姘磋川姘翠綅棰勬祴鍙鍖栧钩鍙?/title>
+    <!-- 閺堫剙婀碋Charts鎼?-->
     <script src="/index/js/echarts.min.js"></script>
-    <!-- 高德地图API -->
-    <script src="https://webapi.amap.com/maps?v=2.0&key=a6d9aeded24e4453798fb33a0a736050&plugin=AMap.ToolBar,AMap.Scale"></script>
-    <!-- Axios HTTP库 -->
+    <!-- 高德地图脚本运行时按后端配置动态加载，避免在静态文件中暴露 key -->
+    <!-- Axios HTTP鎼?-->
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.6.0/axios.min.js"></script>
     <style>
-        /* 所有样式保持不变 */
+        /* 闂佸湱顣介崑鎾绘煛閸繍妲归柣妤€宕锝堢疀鎼达絿顔旈梺褰掓櫜濡炴帞绮径鎰煑?*/
         * {
             margin: 0;
             padding: 0;
@@ -28,7 +27,7 @@
             overflow-x: hidden;
         }
 
-        /* 返回按钮样式 */
+        /* 闁哄鏅滈弻銊ッ洪弽顓炵濠㈣埖鍔栫亸锕傛煛瀹ュ懎妲荤紒?*/
         .back-button {
             position: fixed;
             top: 15px;
@@ -62,7 +61,7 @@
             min-height: calc(100vh - 20px);
         }
 
-        /* 顶部标题区域 */
+        /* 婵＄偑鍊曢悥濂稿磿閹绢喖鍐€闁搞儺鍓﹂弳顖炴煕閺嵮勬儓闁?*/
         .header {
             display: flex;
             justify-content: center;
@@ -125,7 +124,7 @@
             color: #b3e0ff;
         }
 
-        /* 主内容区域 - 关键修复 */
+        /* 婵炴垶鎹侀褔宕€电硶鍋撻崷顓熷殌閻忓浚鍨跺畷?- 闂佺绻戞繛濠囧极椤撶喓鈹嶆い鏃傗拡濡?*/
         .main-content {
             display: grid;
             grid-template-columns: 320px 1fr 320px;
@@ -136,7 +135,7 @@
             flex: 1;
         }
 
-        /* 左侧面板 */
+        /* 閻庡綊娼荤紓姘跺疾閸洘顥堥柕蹇婂墲缁?*/
         .left-panel {
             display: grid;
             grid-template-rows: 140px 140px 1fr 1fr;
@@ -144,7 +143,7 @@
             height: 100%;
         }
 
-        /* 左侧新增图表区域 */
+        /* 閻庡綊娼荤紓姘跺疾閸洖妫橀柡澶嬵儥閺夊鏌涢妷锕€绀冮柕鍡楀暣瀹曠娀宕崟顓炲箥 */
         .left-chart-1,
         .left-chart-2 {
             background: rgba(20, 30, 45, 0.95);
@@ -155,7 +154,7 @@
             height: 140px;
         }
 
-        /* 站点水质趋势对比图 - 变大 */
+        /* 缂備焦姊归悷褔宕戦敐鍜佹僵缁炬儳顑呯粣娑㈡偤閹烘埈鍎忓┑鐐茬Ф閳ь兛绲婚～澶愭儊椤曗偓瀹?- 闂佸憡鐟﹂敋闁?*/
         .left-chart-3 {
             background: rgba(20, 30, 45, 0.95);
             border-radius: 12px;
@@ -187,7 +186,7 @@
             background: rgba(10, 20, 35, 0.7);
         }
 
-        /* 主要图表区域 - 调整为自适应 */
+        /* 婵炴垶鎸诲Σ鎺椼€呴敃鍌氱倞闁硅鍔戦埀顒€鍟村畷鐘诲传閸曨厼骞?- 闁荤姴顑呴崯顖炲汲閿濆棛鈻斿Δ锕€鐏濆▓浼存⒑椤愩垹鈧摜鑺?*/
         .chart-panel {
             background: rgba(20, 30, 45, 0.95);
             border-radius: 12px;
@@ -225,7 +224,7 @@
             background: rgba(10, 20, 35, 0.7);
         }
 
-        /* 统计图表区域 */
+        /* 缂傚倷鑳堕崰鏇㈩敇閹间礁鐐婇柟瑙勫姂閳ь剙鍟村畷鐘诲传閸曨厼骞?*/
         .stats-panel {
             background: rgba(20, 30, 45, 0.95);
             border-radius: 12px;
@@ -257,7 +256,7 @@
             background: rgba(10, 20, 35, 0.7);
         }
 
-        /* 中间地图区域 */
+        /* 婵炴垶鎼╅崣鍐ㄎ涢崸妤€鎹堕柡澶嬪缁傚牓鏌涢弽褎鎯堥柣?*/
         .map-panel {
             background: rgba(20, 30, 45, 0.95);
             border-radius: 12px;
@@ -269,7 +268,7 @@
             min-height: 100%;
         }
 
-        /* 地图控件（保留缩放按钮） */
+        /* 闂侀潻闄勫妯好瑰鈧獮鎺曨槺婵炲棎鍨介弫宥夊醇濠婂懐顔旈梺浼欑稻閻熝呯磽婢舵劕缁╅柣鎰靛墮閻﹀姊虹粵瀣珯缂?*/
         .map-controls {
             position: absolute;
             top: 15px;
@@ -309,7 +308,7 @@
             height: 100%;
         }
 
-        /* 地图图例 */
+        /* 闂侀潻闄勫妯好瑰鈧畷鍫曞矗閵壯傜矗 */
         .map-legend {
             position: absolute;
             bottom: 10px;
@@ -341,7 +340,7 @@
             border: 1px solid white;
         }
 
-        /* 预测控制面板 */
+        /* 婵☆偅婢樼€氼厾绮婇幘顔肩鐟滃秹宕哄Δ鍛棃闁靛繆鍓濈欢?*/
         .prediction-controls {
             display: flex;
             justify-content: space-between;
@@ -396,7 +395,7 @@
             box-shadow: 0 4px 12px rgba(0, 168, 84, 0.3);
         }
 
-        /* 右侧面板 */
+        /* 闂佸憡鐟ラ崢鏍疾閸洘顥堥柕蹇婂墲缁?*/
         .right-panel {
             display: flex;
             flex-direction: column;
@@ -404,7 +403,7 @@
             height: 100%;
         }
 
-        /* 右侧新增图表区域 */
+        /* 闂佸憡鐟ラ崢鏍疾閸洖妫橀柡澶嬵儥閺夊鏌涢妷锕€绀冮柕鍡楀暣瀹曠娀宕崟顓炲箥 */
         .right-chart-1,
         .right-chart-2 {
             background: rgba(20, 30, 45, 0.95);
@@ -435,7 +434,7 @@
             background: rgba(10, 20, 35, 0.7);
         }
 
-        /* 雷达图面板 */
+        /* 闂傚倸妫涢弻澶愬箵椤忓牆鐐婂Δ锝呭暞濡椼劑鏌?*/
         .radar-panel {
             background: rgba(20, 30, 45, 0.95);
             border-radius: 12px;
@@ -475,7 +474,7 @@
             position: relative;
         }
 
-        /* 雷达图轮播控制 */
+        /* 闂傚倸妫涢弻澶愬箵椤忓牆鐐婇柟瑙勫姉閺嬪倿鏌熺紒銏犲箺閻㈩垰鐖煎畷?*/
         .radar-controls {
             display: flex;
             justify-content: center;
@@ -521,7 +520,7 @@
             transform: scale(1.2);
         }
 
-        /* 预警区域 */
+        /* 婵☆偅婢樼€氼垶顢楅悢鐓庣闁告繂瀚崢?*/
         .warning-panel {
             background: rgba(20, 30, 45, 0.95);
             border-radius: 12px;
@@ -635,7 +634,7 @@
             font-size: 0.8rem;
         }
 
-        /* 底部信息 */
+        /* 闁圭厧鐡ㄥú鐔煎磿鐎涙鈹嶉柍鈺佸暕缁?*/
         footer {
             text-align: center;
             padding: 12px;
@@ -648,7 +647,7 @@
             flex-shrink: 0;
         }
 
-        /* 自定义标记样式 */
+        /* 闂佺厧顨庢禍婊堟偩閻愵剛鈻曞璺侯儑閸ㄥジ鎮规担鍝勵暭闁绘宕?*/
         .custom-marker {
             width: 28px !important;
             height: 28px !important;
@@ -690,7 +689,7 @@
             50% { box-shadow: 0 0 15px currentColor; }
         }
 
-        /* 地图信息弹窗 - 小型版本 */
+        /* 闂侀潻闄勫妯好瑰Ο鑽も攳闁斥晛鍟╃槐鏍偓娈垮枛濠€閬嶆偘?- 闁诲繐绻愮换鎰版倵閻戣姤鍋嬮柛顐ゅ枑閹?*/
         .map-info-window {
             position: absolute;
             background: linear-gradient(135deg, rgba(20, 30, 45, 0.98), rgba(25, 40, 60, 0.98));
@@ -863,8 +862,8 @@
             left: 15px;
         }
 
-        /* ============= 响应式设计 ============= */
-        /* 首先：中等大屏幕（1400px以下） */
+        /* ============= 闂佸憡绻傜粔瀵歌姳閹绘帩鍤曢煫鍥ㄥ嚬閸熷酣鎮?============= */
+        /* 婵☆偓绲鹃悧鏇㈠储濞戙垺鏅慨姗嗗亯閸橆剛绱掑☉姗嗘Ц闁靛洤娲ㄦ禒锕佺疀閹鹃鍟傞梺?400px婵炲濮伴崕鎵箔閸涘瓨鏅?*/
         @media (max-width: 1400px) {
             .main-content {
                 grid-template-columns: 280px 1fr 280px;
@@ -892,7 +891,7 @@
             }
         }
 
-        /* 其次：中等屏幕（1200px以下） */
+        /* 闂佺绻楅崺鏍敃婵傚憡鏅慨姗嗗亯閸橆剛绱掑☉姗嗘Ц闁活偄妫濋悰顕€寮撮鍡欘槱1200px婵炲濮伴崕鎵箔閸涘瓨鏅?*/
         @media (max-width: 1200px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -962,7 +961,7 @@
             }
         }
 
-        /* 然后：小屏幕（768px以下） */
+        /* 闂佺粯甯熷▔娑㈠箖濡ゅ懏鏅慨姗嗗墰濮ｅ牓鎮橀悙鑼缂佺姷鍏橀弫?68px婵炲濮伴崕鎵箔閸涘瓨鏅?*/
         @media (max-width: 768px) {
             .header-left h1 {
                 font-size: 1.6rem;
@@ -1010,7 +1009,7 @@
             }
         }
 
-        /* 最后：超小屏幕（480px以下） */
+        /* 闂佸搫鐗冮崑鎾绘煕濮橆剙鍤辩紒杈ㄥ閹奸箖宕ㄩ鐘崇槗闁诲繒鍋涚换鎰不閻戣姤鏅?80px婵炲濮伴崕鎵箔閸涘瓨鏅?*/
         @media (max-width: 480px) {
             .radar-panel, .warning-panel {
                 height: 280px;
@@ -1043,8 +1042,8 @@
             }
         }
 
-        /* ============= 关键修复：全屏恢复样式 ============= */
-        /* 当屏幕恢复到1200px以上时，强制恢复全屏布局 */
+        /* ============= 闂佺绻戞繛濠囧极椤撶喓鈹嶆い鏃傗拡濡插鏌ㄥ☉娆掑闁告瑥绻掓禒锕佺疀閺傛儳鍨濇繝銏ｆ硾缁夌敻鎮ч崡鐑嗗殨?============= */
+        /* 閻熸粎澧楅幐鎼佹儓閸℃稓宓侀柡鍥╁枍閸掓帒顭跨捄铏剐㈤柛?200px婵炲濮伴崕鎵箔閸岀偛绫嶉悹浣告贡缁€澶屸偓娈垮枛閹碱偊宕哄Δ鍛畳闁靛繒濯Σ濠氭煕韫囧濡奸柣顐㈡閺侇噣宕橀妸褎鎷?*/
         @media (min-width: 1201px) {
             .main-content {
                 display: grid !important;
@@ -1126,7 +1125,7 @@
             }
         }
 
-        /* 额外的超大屏幕优化（1800px以上） */
+        /* 婵☆偆澧楃换鍌炈囨繝姘剭闁告洦鍠氬瓭婵犮垹鐖㈤崘顏呯秳濡ょ姷鍋炲ú鎴犳椤撱垹绀岄柡宥囨暩缁€?800px婵炲濮伴崕鎵箔閸岀偞鏅?*/
         @media (min-width: 1800px) {
             .container {
                 max-width: 95%;
@@ -1292,159 +1291,159 @@
     <span></span>
     <span></span>
     <ul>
-        <li><a href="../index/index.html" data-title="首页" title="首页"><span class="nav-icon">🏠</span><span class="nav-text">首页</span></a></li>
-        <li><a href="../waterproject/waterproject.html" data-title="水利工程"><span class="nav-icon">🏗️</span><span class="nav-text">水利工程</span></a></li>
-        <li><a href="../waterlevel/waterlevel.html" data-title="水位动态监测"><span class="nav-icon">🌊</span><span class="nav-text">水位动态监测</span></a></li>
-        <!-- <li><a href="../prediction/prediction.html" data-title="水位预测模型"><span class="nav-icon">🤖</span><span class="nav-text">水位预测模型</span></a></li> -->
-        <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="防汛抗旱"><span class="nav-icon">🛡️</span><span class="nav-text">防汛抗旱</span></a></li>
+        <li><a href="../index/index.html" data-title="婵☆偓绲鹃悧鐘诲Υ? title="婵☆偓绲鹃悧鐘诲Υ?><span class="nav-icon">濡絽鍟紞?/span><span class="nav-text">婵☆偓绲鹃悧鐘诲Υ?/span></a></li>
+        <li><a href="../waterproject/waterproject.html" data-title="濠殿喗蓱濞兼瑩宕洪崟顐晠闁靛／鈧弻?><span class="nav-icon">濡絽鍟紞鈧梺?/span><span class="nav-text">濠殿喗蓱濞兼瑩宕洪崟顐晠闁靛／鈧弻?/span></a></li>
+        <li><a href="../waterlevel/waterlevel.html" data-title="濠殿喗顭囩换婵堢礊閸涙潙绀夐柕濠忚吂閸嬫挻鎷呴悜妯硷紘濠?><span class="nav-icon">濡絽鍟惂?/span><span class="nav-text">濠殿喗顭囩换婵堢礊閸涙潙绀夐柕濠忚吂閸嬫挻鎷呴悜妯硷紘濠?/span></a></li>
+        <!-- <li><a href="../prediction/prediction.html" data-title="濠殿喗顭囩换婵堢礊閸涱噯绱ｉ柛鏇ㄥ墰閵堝瓨淇婇妞诲亾瀹曞洠鍋?><span class="nav-icon">濡絽鍠氬Ο?/span><span class="nav-text">濠殿喗顭囩换婵堢礊閸涱噯绱ｉ柛鏇ㄥ墰閵堝瓨淇婇妞诲亾瀹曞洠鍋?/span></a></li> -->
+        <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="闂傚倸鍟鍫曟儓閺囥垹绠俊銈勭劍閿?><span class="nav-icon">濡絽鍟粈澶愭煥?/span><span class="nav-text">闂傚倸鍟鍫曟儓閺囥垹绠俊銈勭劍閿?/span></a></li>
     </ul>
 </div>
-<!-- 返回按钮 (已隐藏，由导航栏替代) -->
+<!-- 闁哄鏅滈弻銊ッ洪弽顓炵濠㈣埖鍔栫亸?(閻庣懓鎲￠悡鈥斥枔閿濆瀵犻煫鍥ュ劤缁€澶愭煟閵忕姴鑸规い鏇憾閹虫粓顢旈崨顖氱効闂佸搫娲ら妵姗€宕? -->
 <!-- <button class="back-button" onclick="window.history.back()">
-    <span>←</span> 返回
+    <span>闂?/span> 闁哄鏅滈弻銊ッ?
 </button> -->
 
 <div class="container">
-    <!-- 顶部标题区域 -->
+    <!-- 婵＄偑鍊曢悥濂稿磿閹绢喖鍐€闁搞儺鍓﹂弳顖炴煕閺嵮勬儓闁?-->
     <div class="header">
         <div class="header-left">
-            <h1>中国水质水位预测可视化平台</h1>
+            <h1>涓浗姘磋川姘翠綅棰勬祴鍙鍖栧钩鍙?/h1>
         </div>
         <div class="header-right">
             <div class="time-info">
-                <div id="currentDate">2025年12月9日 星期二</div>
+                <div id="currentDate">2025濡?2闂?闂?闂佸搫瀚崰鎰耿閳╁啰顩?/div>
                 <div id="currentTime">10:30:15</div>
             </div>
         </div>
     </div>
 
-    <!-- 主内容区域 -->
+    <!-- 婵炴垶鎹侀褔宕€电硶鍋撻崷顓熷殌閻忓浚鍨跺畷?-->
     <div class="main-content">
-        <!-- 左侧面板 -->
+        <!-- 閻庡綊娼荤紓姘跺疾閸洘顥堥柕蹇婂墲缁?-->
         <div class="left-panel">
-            <!-- 左侧图表1：河流水位趋势图 -->
+            <!-- 閻庡綊娼荤紓姘跺疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掔喊宥呫€掗妶鍚よ鎷呯憴鍕樆婵炶揪绲界粔椋庣矓婵傜绀夐柛顭戝枟缁?-->
             <div class="left-chart-1">
                 <div class="left-chart-header">
-                    <div class="left-chart-title">📈 河流水位趋势</div>
+                    <div class="left-chart-title">宸︿竴 绔欑偣姘翠綅姒傝</div>
                 </div>
                 <div class="left-chart-container" id="leftChart1Container"></div>
             </div>
 
-            <!-- 左侧图表2：水质变化对比 -->
+            <!-- 閻庡綊娼荤紓姘跺疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掔喊宥夊箰婢跺本瀚婚柕濞垮劚缂嶄線鏌涢弽銊уⅹ妞ゆ洦鍠栬?-->
             <div class="left-chart-2">
                 <div class="left-chart-header">
-                    <div class="left-chart-title">📊 水质变化对比</div>
+                    <div class="left-chart-title">宸︿簩 姘磋川鎸囨爣鍒嗘瀽</div>
                 </div>
                 <div class="left-chart-container" id="leftChart2Container"></div>
             </div>
 
-            <!-- 左侧图表3：站点水质趋势对比图（新增） -->
+            <!-- 閻庡綊娼荤紓姘跺疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掑銊╂偟椤栫偞鍊烽悷娆忓鐎垫粓鎮归幇鈺佸缂佸銈稿畷婵嬪垂椤曞懎娈稿┑顕嗙稻閺屻劌霉濮椻偓閺佸秹宕奸悢鍝ュ帎婵犫拃鍛壋缂?-->
             <div class="left-chart-3">
                 <div class="left-chart-header">
-                    <div class="left-chart-title">📊 站点水质趋势对比</div>
-                    <div class="left-chart-subtitle" id="trendComparisonTitle" style="color: #4dabf7; font-size: 0.7rem;">数据加载中...</div>
+                    <div class="left-chart-title">宸︿笁 姘磋川姘翠綅瓒嬪娍瀵规瘮</div>
+                    <div class="left-chart-subtitle" id="trendComparisonTitle" style="color: #4dabf7; font-size: 0.7rem;">闂佽桨鑳舵晶妤€鐣垫笟鈧畷婵嬫偐閻戞銈版繛?..</div>
                 </div>
                 <div class="left-chart-container" id="leftChart3Container"></div>
             </div>
 
-            <!-- 主要图表区域 -->
+            <!-- 婵炴垶鎸诲Σ鎺椼€呴敃鍌氱倞闁硅鍔戦埀顒€鍟村畷鐘诲传閸曨厼骞?-->
             <div class="chart-panel">
                 <div class="chart-header">
-                    <div class="chart-title">📈 水质水位预测分析</div>
-                    <div class="chart-subtitle" id="selectedStationName">数据加载中...</div>
+                    <div class="chart-title">涓儴 姘磋川姘翠綅棰勬祴鍥?/div>
+                    <div class="chart-subtitle" id="selectedStationName">闂佽桨鑳舵晶妤€鐣垫笟鈧畷婵嬫偐閻戞銈版繛?..</div>
                 </div>
                 <div class="chart-container" id="chartContainer"></div>
             </div>
         </div>
 
-        <!-- 中间地图区域 -->
+        <!-- 婵炴垶鎼╅崣鍐ㄎ涢崸妤€鎹堕柡澶嬪缁傚牓鏌涢弽褎鎯堥柣?-->
         <div class="map-panel">
-            <!-- 地图控件（缩放按钮） -->
+            <!-- 闂侀潻闄勫妯好瑰鈧獮鎺曨槺婵炲棎鍨介弫宥夊醇閵忋垻绀嗛梺琛″亾闁绘劦鍓欓惁濠氭⒑缁涘娅欑紒?-->
 
             <div class="map-container">
                 <div id="map"></div>
 
-                <!-- 地图图例 -->
+                <!-- 闂侀潻闄勫妯好瑰鈧畷鍫曞矗閵壯傜矗 -->
                 <div class="map-legend">
                     <div class="legend-grid">
                         <div class="legend-item">
                             <div class="legend-color" style="background: #00a854;"></div>
-                            <span>优</span>
+                            <span>婵?/span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: #a3d930;"></div>
-                            <span>良</span>
+                            <span>闂?/span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: #f8e71c;"></div>
-                            <span>中</span>
+                            <span>婵?/span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: #ff9800;"></div>
-                            <span>差</span>
+                            <span>閻?/span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: #ff5722;"></div>
-                            <span>劣</span>
+                            <span>闂?/span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 预测控制面板 -->
+            <!-- 婵☆偅婢樼€氼厾绮婇幘顔肩鐟滃秹宕哄Δ鍛棃闁靛繆鍓濈欢?-->
             <div class="prediction-controls">
                 <div class="prediction-range">
-                    <span class="range-label">预测天数:</span>
+                    <span class="range-label">婵☆偅婢樼€氼厾绮婄€涙ê绶為柍鍝勫€瑰▓?</span>
                     <input type="number" id="predictionDays" class="range-input" min="1" max="30" value="7">
                 </div>
                 <button class="predict-btn" id="runPrediction">
-                    <span>🔮</span> 运行预测模型
+                    <span>濡絽鍟弳?/span> 闁哄鏅滈崝姗€銆侀幋鐑囩矗闁告洦鍓涢妶瀛樹繆椤栨せ鍋撳畷鍥ｅ亾?
                 </button>
             </div>
         </div>
 
-        <!-- 右侧面板 -->
+        <!-- 闂佸憡鐟ラ崢鏍疾閸洘顥堥柕蹇婂墲缁?-->
         <div class="right-panel">
-            <!-- 右侧图表1：污染指标排行 -->
+            <!-- 闂佸憡鐟ラ崢鏍疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掔喊宥夋寘閸曨垰钃熼柟鐐綑閻﹀綊鏌″鍛閻㈩垱鎸鹃幃?-->
             <div class="right-chart-1">
                 <div class="right-chart-header">
-                    <div class="right-chart-title">📋 污染指标排行</div>
+                    <div class="right-chart-title">鍙充竴 閲嶇偣鎸囨爣鍒嗗竷</div>
                 </div>
                 <div class="right-chart-container" id="rightChart1Container"></div>
             </div>
 
-            <!-- 右侧图表2：站点状态分布 -->
+            <!-- 闂佸憡鐟ラ崢鏍疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掑銊╂偟椤栫偞鍊烽柛锔诲幖绗戦梺璇″厸缁€渚€宕规惔锝嗘殰?-->
             <div class="right-chart-2">
                 <div class="right-chart-header">
-                    <div class="right-chart-title">📌 站点状态分布</div>
+                    <div class="right-chart-title">鍙充簩 姘磋川绛夌骇鍙樺寲</div>
                 </div>
                 <div class="right-chart-container" id="rightChart2Container"></div>
             </div>
 
-            <!-- 雷达图面板 -->
+            <!-- 闂傚倸妫涢弻澶愬箵椤忓牆鐐婂Δ锝呭暞濡椼劑鏌?-->
             <div class="radar-panel">
                 <div class="radar-header">
-                    <div class="radar-title">📡 站点水质雷达图</div>
-                    <div class="radar-station" id="radarStationName">数据加载中...</div>
+                    <div class="radar-title">鍙充笁 姘磋川鎸囨爣闆疯揪鍥?/div>
+                    <div class="radar-station" id="radarStationName">闂佽桨鑳舵晶妤€鐣垫笟鈧畷婵嬫偐閻戞銈版繛?..</div>
                 </div>
                 <div class="radar-container" id="radarContainer"></div>
-                <!-- 雷达图轮播控制 -->
+                <!-- 闂傚倸妫涢弻澶愬箵椤忓牆鐐婇柟瑙勫姉閺嬪倿鏌熺紒銏犲箺閻㈩垰鐖煎畷?-->
                 <div class="radar-controls">
                     <button class="radar-btn" id="prevStation">
-                        <span>◀</span> 上一站
+                        <span>闂佸啿鐨烽崑?/span> 婵炴垶鎸搁敃锝囩博鐎靛摜鍗?
                     </button>
                     <div class="radar-indicator" id="radarIndicator"></div>
                     <button class="radar-btn" id="nextStation">
-                        下一站 <span>▶</span>
+                        婵炴垶鎸搁鍕博鐎靛摜鍗?<span>闂?/span>
                     </button>
                 </div>
             </div>
 
-            <!-- 预警区域 -->
+            <!-- 婵☆偅婢樼€氼垶顢楅悢鐓庣闁告繂瀚崢?-->
             <div class="warning-panel">
                 <div class="warning-header">
-                    <div class="warning-title">⚠️ 实时预警提醒</div>
-                    <div class="warning-count" id="warningCount">0条</div>
+                    <div class="warning-title">閲嶇偣棰勮淇℃伅杞挱</div>
+                    <div class="warning-count" id="warningCount">0闂?/div>
                 </div>
                 <div class="warning-container" id="warningContainer">
                     <div class="warning-slider" id="warningSlider"></div>
@@ -1455,7 +1454,7 @@
 </div>
 
 <script>
-    // 全局变量
+    // 闂佺绻堥崝宀勬儑椤掑嫬鐭楁慨妞诲亾闁?
     let map = null;
     let markers = [];
     let currentChart = null;
@@ -1466,8 +1465,8 @@
     let rightChart1 = null;
     let rightChart2 = null;
 
-    let monitoringStations = []; // 从后端获取的数据
-    let warningData = []; // 从后端获取的预警数据
+    let monitoringStations = []; // 婵炲濮存鎼佸箖濡ゅ啰鍗氭い鏍ㄧ箓缁狀垶鏌涘▎鎰⒈婵炲牊鍨垮顐︽偋閸繄銈?
+    let warningData = []; // 婵炲濮存鎼佸箖濡ゅ啰鍗氭い鏍ㄧ箓缁狀垶鏌涘▎鎰⒈婵炲牊鍨堕敍鎰板礋椤曞懎濡抽梺杞拌兌婢ф鐣?
 
     let selectedStationId = null;
     let radarStationIndex = 0;
@@ -1478,17 +1477,56 @@
     let currentInfoWindow = null;
     let autoInfoWindowTimeout = null;
 
-    // API配置 - 修复版本
+    // API闂備焦婢樼粔鍫曟偪?- 婵烇絽娴傞崰鏍囬弻銉﹀亱闁割偆鍠愰幏?
     const API_BASE_URL = '/api/prediction/stations';
     const WARNING_API_BASE_URL = '/api/prediction/warnings';
+    const DATA_API_BASE_URL = '/api/prediction/data';
+    let amapLoadPromise = null;
 
-    // API接口 - 优化版本，包含后备方案
+    async function fetchAmapConfig() {
+        const response = await fetch('/api/config/amap');
+        if (!response.ok) {
+            throw new Error(`妤傛ê鐥夐柊宥囩枂鐠囬攱鐪版径杈Е: ${response.status}`);
+        }
+        return response.json();
+    }
+
+    function loadAmapScript(config) {
+        return new Promise((resolve, reject) => {
+            if (typeof AMap !== 'undefined') {
+                resolve();
+                return;
+            }
+
+            window._AMapSecurityConfig = {
+                securityJsCode: config.securityJsCode || ''
+            };
+
+            const script = document.createElement('script');
+            script.src = `https://webapi.amap.com/maps?v=2.0&key=${config.key}&plugin=AMap.ToolBar,AMap.Scale`;
+            script.onload = resolve;
+            script.onerror = () => reject(new Error('妤傛ê鐥夐崷鏉挎禈閼存碍婀伴崝鐘烘祰婢惰精瑙?));
+            document.head.appendChild(script);
+        });
+    }
+
+    async function ensureAmapLoaded() {
+        if (typeof AMap !== 'undefined') {
+            return;
+        }
+        if (!amapLoadPromise) {
+            amapLoadPromise = fetchAmapConfig().then(loadAmapScript);
+        }
+        return amapLoadPromise;
+    }
+
+    // API闂佽浜介崕杈亹?- 婵炴潙鍚嬮敋閻庡灚鐓￠幃褔宕奸悢鍛婂闂佹寧绋戦懟顖溾偓鍨耿瀹曘儵顢曢姀鈥斥偓闈涱熆鐠虹儤澶勯柡宀€鍠庨々?
     const API_ENDPOINTS = {
-        // 基础站点接口（确认存在）
+        // 闂佺硶鏅炲▍锝夈€侀崨顖滃崥婵炲棙鍨垫禒顖炴煙閹帒鍔氱憸鐗堢洴閺佸秹宕奸埗鈹惧亾濡吋濯奸柕鍫濇噽閹界娀鏌涢敂鑽ゅ帨缂?
         STATIONS: `${API_BASE_URL}/frontend/all`,
         STATION_DETAIL: (id) => `${API_BASE_URL}/${id}`,
 
-        // 尝试获取统计数据的多个可能路径
+        // 闁诲繐绻戠换鍡涙儊椤栫偞鍤旂€瑰嫭婢樼徊璺ㄧ磽娴ｅ搫鏋欐い鎾存倐瀵偊鎮ч崼婵堛偊闂佹眹鍔岀€氼剟藝閹稿海鈻旀い蹇撳鐠佹煡鏌ら崘娴嬪亾閻旇櫣鍞撮悗?
         STATS_CANDIDATES: [
             `${API_BASE_URL}/frontend/stats/map`,
             `${API_BASE_URL}/frontend/stats`,
@@ -1499,42 +1537,42 @@
         WARNINGS: `${WARNING_API_BASE_URL}/frontend/all`
     };
 
-    // HTTP请求工具函数 - 增强版本
+    // HTTP闁荤姴娲弨閬嶆儑閺夋鍟呴柕澶堝劚瀵版棃鏌涢幋锝呅撻柡?- 婵犫拃鍛粶鐎规悂浜堕幃褔宕奸悢鍛婂
     const api = {
         async get(url) {
             try {
-                console.log('API请求:', url);
+                console.log('API闁荤姴娲弨閬嶆儑?', url);
                 const response = await axios.get(url, {
-                    timeout: 8000, // 8秒超时
+                    timeout: 8000, // 8缂備礁顦扮敮鐔虹矓閹绢喖绫?
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     }
                 });
 
-                console.log('API响应状态:', response.status, response.statusText);
+                console.log('API闂佸憡绻傜粔瀵歌姳閺屻儲鍋愰柤鍝ヮ暯閸?', response.status, response.statusText);
 
-                // 处理后端的 Result 格式
+                // 婵犮垼娉涚€氼噣骞冩繝鍥цЕ閹艰揪缍嗘导鍌炴煟?Result 闂佸搫绉堕崢褏妲?
                 if (response.data && response.data.code !== undefined) {
                     if (response.data.code === 200) {
-                        return response.data.data; // 提取真正的数据
+                        return response.data.data; // 闂佸湱绮崝鏇°亹閸ヮ剚鍎戦柣鏂垮閸斺偓闂佹眹鍔岀€氼參寮抽悢鐓庣?
                     } else {
-                        console.warn('API返回错误码:', response.data.code, response.data.message);
+                        console.warn('API闁哄鏅滈弻銊ッ洪弽顓熺叆婵炲棙甯╅崵鏍煟?', response.data.code, response.data.message);
                         return null;
                     }
                 }
 
-                // 如果没有 code 字段，直接返回
+                // 婵犵鈧啿鈧綊鎮樻径濞炬煢闁斥晛鍟粻?code 闁诲孩绋掗〃鍡涱敊瀹€鍕櫖鐎光偓閳ь剙煤閸ф绠抽柕澶堝妿缁犳煡鏌?
                 return response.data;
             } catch (error) {
-                console.warn('API请求失败:', error.message, url);
+                console.warn('API闁荤姴娲弨閬嶆儑閻楀牆绶為弶鍫亯琚?', error.message, url);
 
-                // 特殊处理：如果请求的是单个站点详情，返回null
+                // 闂佺粯顨夐～澶愭偩閳哄倸绶為柛鏇ㄥ幗閸婄偤鏌ㄥ☉娆掑妞も敪鍥у嚑婵犲﹤妫崵鐐存叏閻熸澘鈧鈻撻幋锕€鍙婃い鏍ㄨ壘缁€瀣槈閹垮啩绨介柣婵愬灦閹瑧娑甸崪浣告疁闂佽鍨伴幏鎴犳濠靛洦浜ら柡鍌涘缁€鈧琻ull
                 if (url.includes('/api/prediction/stations/') && !url.includes('frontend')) {
                     return null;
                 }
 
-                // 其他情况返回空数组或对象
+                // 闂佺绻戝﹢鍦垝椤掑嫬绠氶柛娑卞幖閺嬪矂寮堕埡鍌涚叆婵炲弶鐗滅划姘舵倻濡粯顔嶇紓鍌欑鐎氼參宕归妸褉鍋撻悽娈挎敯闁?
                 if (url.includes('stations')) return [];
                 if (url.includes('stats') || url.includes('summary')) return null;
 
@@ -1542,17 +1580,17 @@
             }
         },
 
-        // 尝试多个URL直到成功
+        // 闁诲繐绻戠换鍡涙儊椤栨稑绶炴慨姗嗗亰閸ゅ┚RL闂佺儵鏅滃娆撳春瀹€鍕闁归偊鍓欓～?
         async tryMultiple(urls) {
             for (const url of urls) {
                 try {
                     const result = await this.get(url);
                     if (result !== null && result !== undefined) {
-                        console.log('成功从URL获取数据:', url);
+                        console.log('闂佺懓鐡ㄩ崝鏇熸叏濞戞瑧顩风€广儳螙L闂佸吋鍎抽崲鑼躲亹閸ヮ剙鏋侀柣妤€鐗嗙粊?', url);
                         return result;
                     }
                 } catch (error) {
-                    console.warn('URL尝试失败:', url, error.message);
+                    console.warn('URL闁诲繐绻戠换鍡涙儊椤栨稑绶為弶鍫亯琚?', url, error.message);
                     continue;
                 }
             }
@@ -1572,10 +1610,10 @@
         if (!raw || typeof raw !== 'object') return null;
         return {
             id: raw.id,
-            type: raw.type || raw.warningType || '预警',
+            type: raw.type || raw.warningType || '婵☆偅婢樼€氼垶顢?,
             level: normalizeWarningLevel(raw.level || raw.warningLevel),
             stationId: raw.stationId,
-            stationName: raw.stationName || '未知站点',
+            stationName: raw.stationName || '闂佸搫鐗滄禍鐐烘偂閿涘嫮鍗氭繛鍡樺灥娴?,
             parameter: raw.parameter,
             value: raw.value,
             threshold: raw.threshold,
@@ -1585,71 +1623,49 @@
         };
     }
 
-    // 从后端获取数据 - 修复版本
+    // 婵炲濮存鎼佸箖濡ゅ啰鍗氭い鏍ㄧ箓缁狀垶鏌涘▎鎰闁哄棛鍠栭獮?- 婵烇絽娴傞崰鏍囬弻銉﹀亱闁割偆鍠愰幏?
     async function fetchData() {
         try {
-            console.log('开始从后端获取数据...');
+            console.log('鐎殿喒鍋撳┑顔碱儎缁娀宕ユ惔锝庝紓闁兼儳鍢茶ぐ鍥极閻楀牆绁?..');
 
-            // 1. 获取站点数据（这是最关键的接口）
             const stationsResponse = await api.get(API_ENDPOINTS.STATIONS);
-
-            if (stationsResponse && Array.isArray(stationsResponse)) {
-                monitoringStations = stationsResponse;
-                console.log('成功获取站点数据:', monitoringStations.length, '个站点');
-
-                // 验证站点数据格式
-                if (monitoringStations.length > 0) {
-                    const sampleStation = monitoringStations[0];
-                    console.log('站点数据示例:', {
-                        id: sampleStation.id,
-                        name: sampleStation.name,
-                        coordinates: sampleStation.coordinates,
-                        hasWaterQuality: !!sampleStation.waterQuality,
-                        hasQualityClass: !!sampleStation.qualityClass
-                    });
-                }
-            } else {
-                console.warn('获取站点数据失败或数据格式错误，使用模拟数据');
-                monitoringStations = generateMockStations();
+            monitoringStations = Array.isArray(stationsResponse) ? stationsResponse : [];
+            if (!monitoringStations.length) {
+                console.warn('未加载到真实站点数据');
+                showNotification('鏈姞杞藉埌鐪熷疄绔欑偣鏁版嵁', 'warning');
             }
 
-            // 2. 尝试获取统计数据（多个候选URL）
             const statsResponse = await api.tryMultiple(API_ENDPOINTS.STATS_CANDIDATES);
-
             if (statsResponse) {
-                console.log('成功获取统计数据:', statsResponse);
                 updateMapStats(statsResponse);
             } else {
-                console.warn('获取统计数据失败，从站点数据计算统计');
                 updateMapStatsFromStations();
             }
 
             const warningsResponse = await api.get(API_ENDPOINTS.WARNINGS);
-            if (warningsResponse && Array.isArray(warningsResponse)) {
+            if (Array.isArray(warningsResponse)) {
                 warningData = warningsResponse.map(normalizeWarningForUI).filter(Boolean);
-                console.log('成功获取预警数据:', warningData.length, '条');
             } else {
-                warningData = generateMockWarnings(monitoringStations);
-                console.warn('获取预警数据失败或数据格式错误，使用模拟预警数据');
+                warningData = [];
+                showNotification('鏈姞杞藉埌鐪熷疄棰勮鏁版嵁', 'warning');
             }
 
-            // 4. 设置默认选中的站点
             if (monitoringStations.length > 0) {
                 selectedStationId = monitoringStations[0].id;
-                console.log('默认选中站点ID:', selectedStationId);
             }
 
-            return true;
-
+            return monitoringStations.length > 0;
         } catch (error) {
-            console.error('数据获取失败，使用模拟数据:', error);
-            useMockData();
+            console.error('闁活亞鍠庨悿鍕极閻楀牆绁﹂柛鏃傚Ь濞村洦寰勬潏顐バ曢柨娑樼焷椤曨剙螞閳ь剟寮婚妷銉﹀€电紒鏃戝灡鐢挳宕?, error);
+            monitoringStations = [];
+            warningData = [];
+            selectedStationId = null;
+            updateMapStatsFromStations();
+            console.error('鐪熷疄鏁版嵁鍔犺浇澶辫触锛岃妫€鏌ュ悗绔帴鍙?, error);
             return false;
         }
     }
-
-    // 从站点数据计算地图统计
-    function updateMapStatsFromStations() {
+            showNotification('鐪熷疄鏁版嵁鍔犺浇澶辫触锛岃妫€鏌ュ悗绔帴鍙?, 'error');
         if (!monitoringStations || monitoringStations.length === 0) {
             updateMapStats({
                 totalStations: 0,
@@ -1660,7 +1676,7 @@
             return;
         }
 
-        // 智能判断站点状态
+        // 闂佸搫鎳樼紓姘跺礂濮椻偓瀹曟岸濡堕崱妯煎姺缂備焦姊归悷褔宕戦敐澶嬪亹闁煎摜顣介崑?
         const stats = {
             totalStations: monitoringStations.length,
             normalStations: 0,
@@ -1669,37 +1685,37 @@
         };
 
         monitoringStations.forEach(station => {
-            // 判断逻辑：优先使用status字段，其次使用qualityClass
+            // 闂佸憡甯囬崐鏍蓟閸ヮ剚鐒婚柡鍕箳鐢棝鏌ㄥ☉娆戠叝缂侀硸鍙冨畷妤呭醇濠婂啠鏋忛梺鐑╂噰閺嗙€焌tus闁诲孩绋掗〃鍡涱敊瀹€鍕櫖閻忕偠妫勫鎾寸箾閸″繆鍋撻幓鎺嗘瀼闂佺儵鎳囬弳娉哸lityClass
             if (station.status) {
                 if (station.status === 'normal') stats.normalStations++;
                 else if (station.status === 'warning') stats.warningStations++;
                 else if (station.status === 'critical' || station.status === 'danger') stats.criticalStations++;
             } else if (station.qualityClass) {
-                if (station.qualityClass === 'I类' || station.qualityClass === 'II类') stats.normalStations++;
-                else if (station.qualityClass === 'III类') stats.warningStations++;
-                else if (station.qualityClass === 'IV类' || station.qualityClass === 'V类') stats.criticalStations++;
+                if (station.qualityClass === 'I缂? || station.qualityClass === 'II缂?) stats.normalStations++;
+                else if (station.qualityClass === 'III缂?) stats.warningStations++;
+                else if (station.qualityClass === 'IV缂? || station.qualityClass === 'V缂?) stats.criticalStations++;
             } else {
-                // 默认认为是正常
+                // 婵帗绋掗…鍫ヮ敇閼姐倖濯奸柕鍫濆缁€瀣煛閸曢潧鐏℃い鎺撶矌閺?
                 stats.normalStations++;
             }
         });
 
-        console.log('计算的地图统计:', stats);
+        console.log('闁荤姳绶ょ槐鏇㈡偩婵犳碍鍎嶉柛鏇ㄥ亝閸曢箖鏌涢妷銉モ挃缂侇喛娅ｉ幏?', stats);
         updateMapStats(stats);
     }
 
-    // // 生成模拟站点数据
+    // // 闂佹眹鍨婚崰鎰板垂濮橆儵鐔煎焺閸愩劎褰茬紓浣规⒐閻熝囧磻閿濆鏋侀柣妤€鐗嗙粊?
     // function generateMockStations() {
-    //     console.log('生成模拟站点数据');
+    //     console.log('闂佹眹鍨婚崰鎰板垂濮橆儵鐔煎焺閸愩劎褰茬紓浣规⒐閻熝囧磻閿濆鏋侀柣妤€鐗嗙粊?);
     //
     //     const stations = [
     //         {
     //             id: 1,
-    //             name: "长江武汉站",
-    //             type: "河流监测",
-    //             tags: ["长江", "国控断面"],
-    //             location: "湖北省武汉市",
-    //             river: "长江",
+    //             name: "闂傚倵鍋撻柟绋挎捣濞笺倖鎱ㄥ┑鎾绘闁活亞鏅划?,
+    //             type: "濠电偛鐭佸▍鏇犵矈閿曞倹鍎庨柟瀵稿仧閵?,
+    //             tags: ["闂傚倵鍋撻柟绋挎捣濞?, "闂佹悶鍎存慨銈囨暜閸洖妫樻い鎾卞灪濡?],
+    //             location: "濠电姭鍋撻柡宓喚鍤氶梺娲讳簷閻掞箓顢楅悢娌秆勫緞婵犲嫷浼?,
+    //             river: "闂傚倵鍋撻柟绋挎捣濞?,
     //             coordinates: [114.305, 30.593],
     //             waterQuality: {
     //                 pH: 7.2,
@@ -1708,19 +1724,19 @@
     //                 NH3N: 0.15,
     //                 level: 25.3
     //             },
-    //             qualityClass: "II类",
+    //             qualityClass: "II缂?,
     //             color: "#a3d930",
-    //             icon: "长",
-    //             trend: "稳定",
+    //             icon: "闂傚倵鍋?,
+    //             trend: "缂備礁顑呴崯鍧楁偩?,
     //             status: "normal"
     //         },
     //         {
     //             id: 2,
-    //             name: "黄河郑州站",
-    //             type: "河流监测",
-    //             tags: ["黄河", "省控断面"],
-    //             location: "河南省郑州市",
-    //             river: "黄河",
+    //             name: "婵帗绋戠€氼厼銆掗妶澶嬬劸闁瑰瓨绻勯悰顔剧磼?,
+    //             type: "濠电偛鐭佸▍鏇犵矈閿曞倹鍎庨柟瀵稿仧閵?,
+    //             tags: ["婵帗绋戠€氼厼銆?, "闂佹椿浜欓悞锔炬暜閸洖妫樻い鎾卞灪濡?],
+    //             location: "濠电偛鑻崯鍨暦閿熺姵鍎戝〒姘ｅ亾闁稿孩绮岄蹇涙倷閼碱剦浼?,
+    //             river: "婵帗绋戠€氼厼銆?,
     //             coordinates: [113.665, 34.758],
     //             waterQuality: {
     //                 pH: 7.8,
@@ -1729,19 +1745,19 @@
     //                 NH3N: 0.8,
     //                 level: 88.5
     //             },
-    //             qualityClass: "III类",
+    //             qualityClass: "III缂?,
     //             color: "#f8e71c",
-    //             icon: "黄",
-    //             trend: "稳定",
+    //             icon: "婵?,
+    //             trend: "缂備礁顑呴崯鍧楁偩?,
     //             status: "warning"
     //         },
     //         {
     //             id: 3,
-    //             name: "珠江广州站",
-    //             type: "河流监测",
-    //             tags: ["珠江", "国控断面"],
-    //             location: "广东省广州市",
-    //             river: "珠江",
+    //             name: "闂佺粯绻勬慨鐢告儓濞嗘挾宓侀柛顭戝枤閻涱喚绱?,
+    //             type: "濠电偛鐭佸▍鏇犵矈閿曞倹鍎庨柟瀵稿仧閵?,
+    //             tags: ["闂佺粯绻勬慨鐢告儓?, "闂佹悶鍎存慨銈囨暜閸洖妫樻い鎾卞灪濡?],
+    //             location: "濡ょ姷鍋涢妵妯肩箔閵忋倖鍎戝ù锝呮憸閻ｎ厾鈧懓鎽滈崑娑氱博?,
+    //             river: "闂佺粯绻勬慨鐢告儓?,
     //             coordinates: [113.264, 23.129],
     //             waterQuality: {
     //                 pH: 7.0,
@@ -1750,19 +1766,19 @@
     //                 NH3N: 0.12,
     //                 level: 12.3
     //             },
-    //             qualityClass: "II类",
+    //             qualityClass: "II缂?,
     //             color: "#a3d930",
-    //             icon: "珠",
-    //             trend: "改善",
+    //             icon: "闂?,
+    //             trend: "闂佽　鍋撻柣鐔哄濠?,
     //             status: "normal"
     //         },
     //         {
     //             id: 4,
-    //             name: "太湖监测站",
-    //             type: "湖泊监测",
-    //             tags: ["太湖", "重点湖泊"],
-    //             location: "江苏省无锡市",
-    //             river: "太湖",
+    //             name: "婵犮垽顤傛禍婵堢不瑜版帗鍎庨柟瀵稿仧閵堝绱?,
+    //             type: "濠电姭鍋撻柡宥冨妿钘濋梺鐑╂櫆閸ㄥ墎绮?,
+    //             tags: ["婵犮垽顤傛禍婵堢不?, "闂備焦褰冪粔鍫曞磻閿濆拑鑰块柡宥冨妿钘?],
+    //             location: "濠殿喖婀遍崰鏇犫偓姘暣閹洦鎷呯憴鍕堕獜闂備礁绨遍埀顒€纾?,
+    //             river: "婵犮垽顤傛禍婵堢不?,
     //             coordinates: [120.138, 31.231],
     //             waterQuality: {
     //                 pH: 8.2,
@@ -1771,19 +1787,19 @@
     //                 NH3N: 1.2,
     //                 level: 3.2
     //             },
-    //             qualityClass: "IV类",
+    //             qualityClass: "IV缂?,
     //             color: "#ff9800",
-    //             icon: "太",
-    //             trend: "下降",
+    //             icon: "婵?,
+    //             trend: "婵炴垶鎸搁澶婎瀶?,
     //             status: "critical"
     //         },
     //         {
     //             id: 5,
-    //             name: "松花江哈尔滨站",
-    //             type: "河流监测",
-    //             tags: ["松花江", "国控断面"],
-    //             location: "黑龙江省哈尔滨市",
-    //             river: "松花江",
+    //             name: "闂佸搫顦板畷妯绘叏閸愭畫褔鎮㈤柨瀣剾闁诲繐绻戝褰掓嚍鏉堚晝鍗?,
+    //             type: "濠电偛鐭佸▍鏇犵矈閿曞倹鍎庨柟瀵稿仧閵?,
+    //             tags: ["闂佸搫顦板畷妯绘叏閸愭畫?, "闂佹悶鍎存慨銈囨暜閸洖妫樻い鎾卞灪濡?],
+    //             location: "婵帗绋掗崹璺ㄦ閸愭畫褔鎮㈤悜姗€妲ｉ梺鍛婄箓閻楀棝鎯冮棃娑辩叆闁靛鍎抽?,
+    //             river: "闂佸搫顦板畷妯绘叏閸愭畫?,
     //             coordinates: [126.642, 45.757],
     //             waterQuality: {
     //                 pH: 7.5,
@@ -1792,10 +1808,10 @@
     //                 NH3N: 0.45,
     //                 level: 115.8
     //             },
-    //             qualityClass: "III类",
+    //             qualityClass: "III缂?,
     //             color: "#f8e71c",
-    //             icon: "松",
-    //             trend: "稳定",
+    //             icon: "闂?,
+    //             trend: "缂備礁顑呴崯鍧楁偩?,
     //             status: "warning"
     //         }
     //     ];
@@ -1803,77 +1819,37 @@
     //     return stations;
     // }
 
-    // 生成模拟预警数据
-    function generateMockWarnings(stations) {
-        if (!stations || stations.length === 0) return [];
+    // 闂佹眹鍨婚崰鎰板垂濮橆儵鐔煎焺閸愩劎褰叉俊顐ｆ緲鐎氼垶顢楅悢鐓庢瀬闁绘鐗嗙粊?
+    async function loadChartData(stationId, days) {
+        const historicalResponse = await api.get(`${DATA_API_BASE_URL}/historical/${stationId}?days=10`);
+        const predictionResponse = await api.get(`${DATA_API_BASE_URL}/prediction/${stationId}?days=${days}`);
 
-        const warnings = [];
-        const warningTypes = ['水质超标', '水位异常', '设备故障', '数据异常'];
-        const warningLevels = ['critical', 'high', 'medium'];
-        const times = ['09:15', '10:30', '11:45', '14:20', '16:05'];
+        const historical = historicalResponse && typeof historicalResponse === 'object'
+            ? {
+                dates: Array.isArray(historicalResponse.dates) ? historicalResponse.dates : [],
+                pH: Array.isArray(historicalResponse.pH) ? historicalResponse.pH : [],
+                DO: Array.isArray(historicalResponse.DO) ? historicalResponse.DO : [],
+                COD: Array.isArray(historicalResponse.COD) ? historicalResponse.COD : [],
+                level: Array.isArray(historicalResponse.level) ? historicalResponse.level : []
+            }
+            : { dates: [], pH: [], DO: [], COD: [], level: [] };
 
-        // 为部分站点生成预警
-        stations.slice(0, Math.min(5, stations.length)).forEach(station => {
-            const typeIndex = Math.floor(Math.random() * warningTypes.length);
-            const levelIndex = Math.floor(Math.random() * warningLevels.length);
-            const timeIndex = Math.floor(Math.random() * times.length);
-
-            const warning = {
-                id: warnings.length + 1,
-                type: warningTypes[typeIndex],
-                level: warningLevels[levelIndex],
-                stationId: station.id,
-                stationName: station.name,
-                parameter: typeIndex === 0 ? 'COD' : typeIndex === 1 ? '水位' : '设备',
-                value: typeIndex === 0 ? (station.waterQuality?.COD || 0).toFixed(1) + ' mg/L' :
-                    typeIndex === 1 ? (station.waterQuality?.level || 0).toFixed(1) + ' m' : '异常',
-                threshold: typeIndex === 0 ? '20 mg/L' : typeIndex === 1 ? '警戒水位' : '正常状态',
-                time: times[timeIndex],
-                description: `${station.name}发生${warningTypes[typeIndex]}，请及时处理`
-            };
-
-            warnings.push(warning);
-        });
-
-        return warnings;
+        return {
+            historical,
+            prediction: transformPredictionSeries(Array.isArray(predictionResponse) ? predictionResponse : [])
+        };
     }
 
-    // 生成历史数据函数（模拟）
-    function getHistoricalData(station) {
-        if (!station || !station.waterQuality) {
-            // 返回默认数据
-            return {
-                dates: ['1/1', '1/2', '1/3', '1/4', '1/5', '1/6', '1/7', '1/8', '1/9', '1/10'],
-                pH: [7.0, 7.1, 7.2, 7.1, 7.0, 6.9, 7.0, 7.1, 7.0, 7.2],
-                DO: [5.0, 5.2, 5.1, 5.3, 5.0, 4.9, 5.1, 5.2, 5.0, 5.1],
-                COD: [10.0, 10.5, 11.0, 10.8, 11.2, 11.5, 11.0, 10.7, 10.9, 11.1],
-                level: [20.0, 20.2, 20.5, 20.3, 20.1, 19.9, 20.0, 20.3, 20.2, 20.1]
-            };
-        }
-
-        return generateHistoricalData(station);
+    function transformPredictionSeries(predictionRows) {
+        const rows = Array.isArray(predictionRows) ? predictionRows : [];
+        return {
+            dates: rows.map(item => item.date || ''),
+            pH: rows.map(item => Number(item.pH ?? null)),
+            DO: rows.map(item => Number(item.dissolvedOxygen ?? null)),
+            COD: rows.map(item => Number(item.cod ?? null)),
+            level: rows.map(item => Number(item.waterLevel ?? null))
+        };
     }
-
-    // 后备模拟数据（当后端不可用时）
-    function useMockData() {
-        console.log('使用完整模拟数据');
-        monitoringStations = generateMockStations();
-
-        warningData = generateMockWarnings(monitoringStations);
-
-        selectedStationId = 1;
-
-        // 更新地图统计
-        updateMapStatsFromStations();
-
-        console.log('模拟数据加载完成:', {
-            stations: monitoringStations.length,
-            warnings: warningData.length,
-            selectedStationId: selectedStationId
-        });
-    }
-
-    // 更新时间和日期
     function updateDateTime() {
         const now = new Date();
         const dateStr = now.toLocaleDateString('zh-CN', {
@@ -1891,39 +1867,38 @@
         if (currentTime) currentTime.textContent = timeStr;
     }
 
-    // 初始化应用
+    // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宓懎鐣ㄩ梺?
     async function initApplication() {
         try {
-            // 检查必须的资源
-            if (typeof AMap === 'undefined') {
-                console.error('高德地图API未加载');
-                showNotification('地图API加载失败，部分功能受限', 'error');
-            }
+            try {
+                await ensureAmapLoaded();
+            } catch (mapError) {
+                console.error('妤傛ê鐥夐崷鏉挎禈閸旂姾娴囨径杈Е:', mapError);
+                console.error('楂樺痉鍦板浘鍔犺浇澶辫触:', mapError);
+                showNotification('楂樺痉鍦板浘鍔犺浇澶辫触锛屽湴鍥惧姛鑳藉彈闄?, 'error');
 
             if (typeof echarts === 'undefined') {
-                console.error('ECharts未加载');
-                showNotification('图表库加载失败，部分功能受限', 'error');
-                return;
+                console.error('ECharts閺堫亜濮炴潪?);
+                console.error('ECharts鏈姞杞?);
+                showNotification('鍥捐〃搴撳姞杞藉け璐ワ紝閮ㄥ垎鍔熻兘鍙楅檺', 'error');
             }
 
-            // 显示加载状态
-            showNotification('正在加载数据...', 'info');
-
-            // 从后端获取数据
+            showNotification('濮濓絽婀崝鐘烘祰閺佺増宓?..', 'info');
+            showNotification('姝ｅ湪鍔犺浇鏁版嵁...','info');
             const dataLoaded = await fetchData();
 
             if (!dataLoaded) {
-                showNotification('数据加载失败，使用模拟数据', 'warning');
+                showNotification('鐪熷疄鏁版嵁鍔犺浇澶辫触锛岃妫€鏌ュ悗绔帴鍙?, 'warning');
             } else {
-                showNotification('数据加载完成', 'success');
+                showNotification('鏁版嵁鍔犺浇瀹屾垚', 'success');
             }
 
-            // 初始化各个组件
+            // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宓嫬鈧鈽夐幙鍐х敖缂侇喖绉电粋?
             if (typeof AMap !== 'undefined') {
                 initializeMap();
             } else {
                 document.getElementById('map').innerHTML =
-                    '<div style="color: white; text-align: center; padding-top: 180px;">地图加载失败</div>';
+                    '<div style="color: white; text-align: center; padding-top: 180px;">闂侀潻闄勫妯好瑰鈧畷婵嬫偐閻戞銈版繝銏″劶缁墽鎲?/div>';
             }
 
             initializeRadarChart();
@@ -1936,21 +1911,21 @@
                 updateSelectedStation(selectedStationId);
             }
 
-            // 启动时间更新
+            // 闂佸憡鍑归崹鐗堟叏閳哄懎绫嶉柛顐ｆ礃閿涚喖鏌￠崶褏鎽犻柡?
             setInterval(updateDateTime, 1000);
             updateDateTime();
 
-            // 启动自动轮播
+            // 闂佸憡鍑归崹鐗堟叏閳哄懏鍤婃い蹇撳琚熼柡澶屽剱閸犳骞?
             startAutoScroll();
             startRadarAutoScroll();
 
         } catch (error) {
-            console.error('初始化错误:', error);
-            showNotification('初始化失败，请检查网络连接', 'error');
+            console.error('闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宥庡幗閺呪晠鎮?', error);
+            showNotification('鍒濆鍖栧け璐ワ紝璇峰埛鏂伴〉闈㈠悗閲嶈瘯', 'error');
         }
     }
 
-    // 启动预警自动轮播
+    // 闂佸憡鍑归崹鐗堟叏閳哄偊绱ｉ柛鏇ㄥ櫘閸斿懘鏌ゆ總澶夌盎濠殿喒鏅滃顏堫敊閼恒儱鍟?
     function startAutoScroll() {
         clearInterval(warningInterval);
         updateWarningSlider();
@@ -1965,7 +1940,7 @@
         }, 4000);
     }
 
-    // 启动雷达图自动轮播
+    // 闂佸憡鍑归崹鐗堟叏閳哄懏鈷栭柣銈庡灡瑜把囨煕閵夛箑绀冮柛銈嗙矒瀹曟繈濡搁妸褎鐎梺?
     function startRadarAutoScroll() {
         if (monitoringStations.length === 0) return;
 
@@ -1977,7 +1952,7 @@
         }
     }
 
-    // 停止雷达图自动轮播
+    // 闂佺顑嗙划宥夘敆濞戙垺鈷栭柣銈庡灡瑜把囨煕閵夛箑绀冮柛銈嗙矒瀹曟繈濡搁妸褎鐎梺?
     function stopRadarAutoScroll() {
         if (radarInterval) {
             clearInterval(radarInterval);
@@ -1985,7 +1960,7 @@
         }
     }
 
-    // 更新预警轮播
+    // 闂佸搫娲ら悺銊╁蓟婵犲喛绱ｉ柛鏇ㄥ櫘閸斿懘寮堕悜鍡楁灍闁?
     function updateWarningSlider() {
         const warningSlider = document.getElementById('warningSlider');
         if (!warningSlider) return;
@@ -1993,7 +1968,7 @@
         warningSlider.innerHTML = '';
 
         if (warningData.length === 0) {
-            warningSlider.innerHTML = '<div class="warning-item active">暂无预警信息</div>';
+            warningSlider.innerHTML = '<div class="warning-item active">闂佸搫妫楅崐鐟拔涢妶鍡矗闁告洦鍣崝鍛庨崶锝呭⒉濞?/div>';
             return;
         }
 
@@ -2014,7 +1989,7 @@
                         <span class="warning-time">${warning.time}</span>
                     </div>
                     <div class="warning-content">${warning.description}</div>
-                    <div class="warning-station">📍 ${warning.stationName}</div>
+                    <div class="warning-station">濡絽鍟幆?${warning.stationName}</div>
                 `;
 
             warningItem.addEventListener('click', () => {
@@ -2033,11 +2008,11 @@
 
         const warningCount = document.getElementById('warningCount');
         if (warningCount) {
-            warningCount.textContent = `${warningData.length}条`;
+            warningCount.textContent = `${warningData.length}闂佸搫顦介幗?
         }
     }
 
-    // 初始化左侧图表
+    // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宓倻顔嗘繛鎾寸殰閸愨晝顩柣?
     function initializeLeftCharts() {
         const leftChart1Container = document.getElementById('leftChart1Container');
         const leftChart2Container = document.getElementById('leftChart2Container');
@@ -2048,11 +2023,11 @@
         if (leftChart3Container) leftChart3 = echarts.init(leftChart3Container, 'dark');
     }
 
-    // 更新左侧图表
+    // 闂佸搫娲ら悺銊╁蓟婵犲偆鍟呴柨鏃€瀵у▍鐘绘煕閵夛箑绀冮柕?
     function updateLeftCharts(station) {
         if (!leftChart1 || !leftChart2 || !leftChart3) return;
 
-        // 左侧图表1：河流水位趋势图
+        // 閻庡綊娼荤紓姘跺疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掔喊宥呫€掗妶鍚よ鎷呯憴鍕樆婵炶揪绲界粔椋庣矓婵傜绀夐柛顭戝枟缁?
         const leftChart1Option = {
             backgroundColor: 'transparent',
             tooltip: {
@@ -2070,7 +2045,7 @@
             },
             xAxis: {
                 type: 'category',
-                data: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                data: ['1闂?, '2闂?, '3闂?, '4闂?, '5闂?, '6闂?],
                 axisLine: {
                     lineStyle: { color: '#80d4ff' }
                 },
@@ -2081,7 +2056,7 @@
             },
             yAxis: {
                 type: 'value',
-                name: '水位(m)',
+                name: '濠殿喗顭囩换婵堢礊?m)',
                 axisLine: {
                     lineStyle: { color: '#80d4ff' }
                 },
@@ -2096,7 +2071,7 @@
                 }
             },
             series: [{
-                name: '水位',
+                name: '濠殿喗顭囩换婵堢礊?,
                 type: 'line',
                 smooth: true,
                 data: generateMonthlyData(station.waterQuality.level),
@@ -2120,7 +2095,7 @@
         };
         leftChart1.setOption(leftChart1Option);
 
-        // 左侧图表2：水质变化对比
+        // 閻庡綊娼荤紓姘跺疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掔喊宥夊箰婢跺本瀚婚柕濞垮劚缂嶄線鏌涢弽銊уⅹ妞ゆ洦鍠栬?
         const leftChart2Option = {
             backgroundColor: 'transparent',
             tooltip: {
@@ -2137,7 +2112,7 @@
             },
             xAxis: {
                 type: 'category',
-                data: ['去年同期', '当前'],
+                data: ['闂佸憡顭堥褔宕熸ィ鍐ㄨЕ閻忕偟鍋撻崺?, '閻熸粎澧楅幐鍛婃櫠?],
                 axisLine: {
                     lineStyle: { color: '#80d4ff' }
                 },
@@ -2148,7 +2123,7 @@
             },
             yAxis: {
                 type: 'value',
-                name: '浓度(mg/L)',
+                name: '濠电偛鐡ㄩ幐鍝モ偓?mg/L)',
                 axisLine: {
                     lineStyle: { color: '#80d4ff' }
                 },
@@ -2174,7 +2149,7 @@
                     barWidth: '30%'
                 },
                 {
-                    name: '氨氮',
+                    name: '濠殿喗菧閸斿秹鎮?,
                     type: 'bar',
                     data: [
                         station.waterQuality.NH3N * 0.9,
@@ -2190,7 +2165,7 @@
         updateTrendComparisonChart(station);
     }
 
-    // 更新站点水质趋势对比图
+    // 闂佸搫娲ら悺銊╁蓟婵犲嫮鍗氭繛鍡樺灥娴狀垱鎱ㄥΟ纰辨鐎瑰憡绻勯幖鍓р偓锝庝簻閳笺垽鎮楁担鍐炬綈闁伙富鍣ｅ畷?
     function updateTrendComparisonChart(currentStation) {
         if (!leftChart3) return;
 
@@ -2198,7 +2173,7 @@
             const leftChart3Option = {
                 backgroundColor: 'transparent',
                 title: {
-                    text: '需要至少两个站点进行对比',
+                    text: '闂傚倸娲犻崑鎾绘偡閺囨碍绁伴柛銈忓娴滄悂骞嬪鍡忔嫛婵炴垶鎼╂禍鐐烘偟椤栫偞鍊风痪顓炴噽缁犲鎮跺☉妯垮妞ゆ洦鍠栬?,
                     left: 'center',
                     top: 'middle',
                     textStyle: {
@@ -2224,7 +2199,7 @@
             trendComparisonTitle.textContent = `${current.name} vs ${compare.name}`;
         }
 
-        const months = ['1月', '2月', '3月', '4月', '5月', '6月'];
+        const months = ['1闂?, '2闂?, '3闂?, '4闂?, '5闂?, '6闂?];
         const currentCODData = generateMonthlyData(current.waterQuality.COD);
         const compareCODData = generateMonthlyData(compare.waterQuality.COD);
 
@@ -2337,14 +2312,14 @@
         leftChart3.setOption(leftChart3Option);
     }
 
-    // 获取站点颜色（支持透明度）
+    // 闂佸吋鍎抽崲鑼躲亹閸モ晝鍗氭繛鍡樺灥娴狀垰螞閻楀牏鐭庡鐟帮躬閺佸秹宕奸悢鍛婃闂佸綊鏅茬欢姘跺焵椤掆偓缁绘垵危閹寸偞鍎熼柨鏃囧亹缁€?
     function getStationColor(station, alpha = 1) {
         const colorMap = {
-            'I类': '#00a854',
-            'II类': '#a3d930',
-            'III类': '#f8e71c',
-            'IV类': '#ff9800',
-            'V类': '#ff5722'
+            'I缂?: '#00a854',
+            'II缂?: '#a3d930',
+            'III缂?: '#f8e71c',
+            'IV缂?: '#ff9800',
+            'V缂?: '#ff5722'
         };
 
         const baseColor = colorMap[station.qualityClass] || '#4dabf7';
@@ -2359,7 +2334,7 @@
         }
     }
 
-    // 初始化右侧图表
+    // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宓啰顦︽繛鎾寸殰閸愨晝顩柣?
     function initializeRightCharts() {
         const rightChart1Container = document.getElementById('rightChart1Container');
         const rightChart2Container = document.getElementById('rightChart2Container');
@@ -2368,11 +2343,11 @@
         if (rightChart2Container) rightChart2 = echarts.init(rightChart2Container, 'dark');
     }
 
-    // 更新右侧图表
+    // 闂佸搫娲ら悺銊╁蓟婵犲洤鐭楅柛蹇撴噺濞呯娀鏌涢妷锕€绀冮柕?
     function updateRightCharts(station) {
         if (!rightChart1 || !rightChart2) return;
 
-        // 右侧图表1：污染指标排行
+        // 闂佸憡鐟ラ崢鏍疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掔喊宥夋寘閸曨垰钃熼柟鐐綑閻﹀綊鏌″鍛閻㈩垱鎸鹃幃?
         const rightChart1Option = {
             backgroundColor: 'transparent',
             tooltip: {
@@ -2405,7 +2380,7 @@
             },
             yAxis: {
                 type: 'category',
-                data: ['COD', '氨氮', '总磷', '总氮'],
+                data: ['COD', '濠殿喗菧閸斿秹鎮?, '闂佽鍓濆畷鐢告晬?, '闂佽鍓涚划顖炴偉?],
                 axisLine: {
                     lineStyle: { color: '#80d4ff' }
                 },
@@ -2415,7 +2390,7 @@
                 }
             },
             series: [{
-                name: '污染指标',
+                name: '濠殿喖鍘滈崜婵嬫偂鐎ｎ喖绠伴柛銉ｅ妿閸?,
                 type: 'bar',
                 data: [
                     station.waterQuality.COD,
@@ -2441,11 +2416,11 @@
         };
         rightChart1.setOption(rightChart1Option);
 
-        // 右侧图表2：站点状态分布
+        // 闂佸憡鐟ラ崢鏍疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掑銊╂偟椤栫偞鍊烽柛锔诲幖绗戦梺璇″厸缁€渚€宕规惔锝嗘殰?
         const statusCounts = monitoringStations.reduce((acc, station) => {
             const status = station.status ||
-                (station.qualityClass === 'I类' || station.qualityClass === 'II类' ? 'normal' :
-                    station.qualityClass === 'III类' ? 'warning' : 'critical');
+                (station.qualityClass === 'I缂? || station.qualityClass === 'II缂? ? 'normal' :
+                    station.qualityClass === 'III缂? ? 'warning' : 'critical');
             acc[status] = (acc[status] || 0) + 1;
             return acc;
         }, {});
@@ -2460,7 +2435,7 @@
                 formatter: '{b}: {c} ({d}%)'
             },
             series: [{
-                name: '站点状态',
+                name: '缂備焦姊归悷褔宕戦敐澶嬪亹闁煎摜顣介崑?,
                 type: 'pie',
                 radius: ['40%', '60%'],
                 center: ['50%', '50%'],
@@ -2486,17 +2461,17 @@
                 data: [
                     {
                         value: statusCounts.normal || 0,
-                        name: '正常',
+                        name: '濠殿喗绻愮徊浠嬫偉?,
                         itemStyle: { color: '#00a854' }
                     },
                     {
                         value: statusCounts.warning || 0,
-                        name: '预警',
+                        name: '婵☆偅婢樼€氼垶顢?,
                         itemStyle: { color: '#ff9800' }
                     },
                     {
                         value: statusCounts.critical || 0,
-                        name: '超标',
+                        name: '闁烩剝甯掗幊蹇涙偉?,
                         itemStyle: { color: '#ff5722' }
                     }
                 ]
@@ -2505,7 +2480,7 @@
         rightChart2.setOption(rightChart2Option);
     }
 
-    // 生成月度数据
+    // 闂佹眹鍨婚崰鎰板垂濮樿泛瀚夐柛顐ｇ箓椤斿﹪鏌℃担鍝勵暭鐎?
     function generateMonthlyData(baseValue) {
         const data = [];
         for (let i = 0; i < 6; i++) {
@@ -2515,14 +2490,14 @@
         return data;
     }
 
-    // 更新地图统计
+    // 闂佸搫娲ら悺銊╁蓟婵犲洤鎹堕柡澶嬪缁傚牏绱撴担鍝勬灆妞?
     function updateMapStats(stats) {
         const mapTotalStations = document.getElementById('mapTotalStations');
         const mapNormalStations = document.getElementById('mapNormalStations');
         const mapWarningStations = document.getElementById('mapWarningStations');
         const mapCriticalStations = document.getElementById('mapCriticalStations');
 
-        // 处理不同的stats格式
+        // 婵犮垼娉涚€氼噣骞冩繝鍐枖鐎广儱鎳忛崐閬嶆煟閵娿儱顣簍ats闂佸搫绉堕崢褏妲?
         let totalStations = 0, normalStations = 0, warningStations = 0, criticalStations = 0;
 
         if (stats) {
@@ -2542,7 +2517,7 @@
         if (mapCriticalStations) mapCriticalStations.textContent = criticalStations;
     }
 
-    // 初始化雷达图
+    // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宥庡幗缁侇偊寮堕崼鐔峰姢婵?
     function initializeRadarChart() {
         const radarContainer = document.getElementById('radarContainer');
         if (!radarContainer) return;
@@ -2575,7 +2550,7 @@
         }
     }
 
-    // 生成雷达图指示器
+    // 闂佹眹鍨婚崰鎰板垂濮樿埖鈷栭柣銈庡灡瑜把囨煕閵壯冧壕閻庡灚姘ㄧ划鍫ュ传閸曨剛褰?
     function generateRadarIndicator() {
         const indicator = document.getElementById('radarIndicator');
         if (!indicator) return;
@@ -2601,7 +2576,7 @@
         });
     }
 
-    // 更新雷达图指示器
+    // 闂佸搫娲ら悺銊╁蓟婵犲洦鈷栭柣銈庡灡瑜把囨煕閵壯冧壕閻庡灚姘ㄧ划鍫ュ传閸曨剛褰?
     function updateRadarIndicator() {
         const dots = document.querySelectorAll('.radar-dot');
         dots.forEach((dot, index) => {
@@ -2613,21 +2588,21 @@
         });
     }
 
-    // 上一个站点
+    // 婵炴垶鎸搁敃锝囩博鐎涙鈻旀い蹇撴瑜版煡鏌?
     function prevRadarStation() {
         if (monitoringStations.length === 0) return;
         radarStationIndex = (radarStationIndex - 1 + monitoringStations.length) % monitoringStations.length;
         updateRadarStation(radarStationIndex);
     }
 
-    // 下一个站点
+    // 婵炴垶鎸搁鍕博鐎涙鈻旀い蹇撴瑜版煡鏌?
     function nextRadarStation() {
         if (monitoringStations.length === 0) return;
         radarStationIndex = (radarStationIndex + 1) % monitoringStations.length;
         updateRadarStation(radarStationIndex);
     }
 
-    // 更新雷达图显示的站点
+    // 闂佸搫娲ら悺銊╁蓟婵犲洦鈷栭柣銈庡灡瑜把囨煕閵壯冧壕婵☆垰顦辩划鍫ユ惞鐟欏嫮鏆犵紓浣规⒐閻熝囧磻?
     function updateRadarStation(stationIndex) {
         radarStationIndex = stationIndex;
         const station = monitoringStations[radarStationIndex];
@@ -2650,7 +2625,7 @@
         showAutoInfoWindow(station);
     }
 
-    // 更新雷达图数据
+    // 闂佸搫娲ら悺銊╁蓟婵犲洦鈷栭柣銈庡灡瑜把囨煕閵壯冧壕闁哄棛鍠栭獮?
     function updateRadarChart() {
         if (!radarChart) return;
 
@@ -2666,11 +2641,11 @@
         };
 
         const indicators = [
-            { name: 'pH值', max: 10, min: 0 },
-            { name: '溶解氧', max: 15, min: 0 },
+            { name: 'pH闂?, max: 10, min: 0 },
+            { name: '濠电姍鍕姸鐞氭瑦鎱?, max: 15, min: 0 },
             { name: 'COD', max: 40, min: 0 },
-            { name: '氨氮', max: 2, min: 0 },
-            { name: '水位', max: Math.max(2000, Math.ceil(waterQuality.level * 1.5)), min: 0 }
+            { name: '濠殿喗菧閸斿秹鎮?, max: 2, min: 0 },
+            { name: '濠殿喗顭囩换婵堢礊?, max: Math.max(2000, Math.ceil(waterQuality.level * 1.5)), min: 0 }
         ];
 
         const stationValues = [
@@ -2683,11 +2658,11 @@
 
         let radarColor;
         switch(station.qualityClass) {
-            case 'I类': radarColor = '#00a854'; break;
-            case 'II类': radarColor = '#a3d930'; break;
-            case 'III类': radarColor = '#f8e71c'; break;
-            case 'IV类': radarColor = '#ff9800'; break;
-            case 'V类': radarColor = '#ff5722'; break;
+            case 'I缂?: radarColor = '#00a854'; break;
+            case 'II缂?: radarColor = '#a3d930'; break;
+            case 'III缂?: radarColor = '#f8e71c'; break;
+            case 'IV缂?: radarColor = '#ff9800'; break;
+            case 'V缂?: radarColor = '#ff5722'; break;
             default: radarColor = '#4dabf7';
         }
 
@@ -2729,7 +2704,7 @@
                 }
             },
             series: [{
-                name: '水质指标',
+                name: '濠殿喗顭囬ˉ鎰啅濠靛绠伴柛銉ｅ妿閸?,
                 type: 'radar',
                 symbol: 'circle',
                 symbolSize: 6,
@@ -2765,7 +2740,7 @@
         radarChart.setOption(option);
     }
 
-    // 自动显示站点信息弹窗
+    // 闂佺厧顨庢禍婊勬叏閳哄懎鍙婇柛鎾椾椒绮电紓浣规⒐閻熝囧磻閿濆棛鈹嶉柍鈺佸暕缁辨牜鈧鍠栧﹢閬嶆偘?
     function showAutoInfoWindow(station) {
         closeInfoWindow();
 
@@ -2786,38 +2761,38 @@
             let trendClass = '';
 
             switch(station.qualityClass) {
-                case 'I类': qualityClass = 'quality-i'; break;
-                case 'II类': qualityClass = 'quality-ii'; break;
-                case 'III类': qualityClass = 'quality-iii'; break;
-                case 'IV类': qualityClass = 'quality-iv'; break;
-                case 'V类': qualityClass = 'quality-v'; break;
+                case 'I缂?: qualityClass = 'quality-i'; break;
+                case 'II缂?: qualityClass = 'quality-ii'; break;
+                case 'III缂?: qualityClass = 'quality-iii'; break;
+                case 'IV缂?: qualityClass = 'quality-iv'; break;
+                case 'V缂?: qualityClass = 'quality-v'; break;
                 default: qualityClass = 'quality-iii';
             }
 
             switch(station.trend) {
-                case '改善': trendIcon = '↗'; trendClass = 'trend-improve'; break;
-                case '下降': trendIcon = '↘'; trendClass = 'trend-decline'; break;
-                case '稳定': trendIcon = '→'; trendClass = 'trend-stable'; break;
-                default: trendIcon = '→'; trendClass = 'trend-stable';
+                case '闂佽　鍋撻柣鐔哄濠?: trendIcon = '闂?; trendClass = 'trend-improve'; break;
+                case '婵炴垶鎸搁澶婎瀶?: trendIcon = '闂?; trendClass = 'trend-decline'; break;
+                case '缂備礁顑呴崯鍧楁偩?: trendIcon = '闂?; trendClass = 'trend-stable'; break;
+                default: trendIcon = '闂?; trendClass = 'trend-stable';
             }
 
             let statusText = '';
             let statusColor = '';
             if (station.status) {
                 switch(station.status) {
-                    case 'normal': statusText = '正常'; statusColor = '#00a854'; break;
-                    case 'warning': statusText = '预警'; statusColor = '#ff9800'; break;
-                    case 'critical': statusText = '超标'; statusColor = '#ff5722'; break;
-                    default: statusText = '正常'; statusColor = '#00a854';
+                    case 'normal': statusText = '濠殿喗绻愮徊浠嬫偉?; statusColor = '#00a854'; break;
+                    case 'warning': statusText = '婵☆偅婢樼€氼垶顢?; statusColor = '#ff9800'; break;
+                    case 'critical': statusText = '闁烩剝甯掗幊蹇涙偉?; statusColor = '#ff5722'; break;
+                    default: statusText = '濠殿喗绻愮徊浠嬫偉?; statusColor = '#00a854';
                 }
             } else {
-                // 根据水质类别判断状态
-                if (station.qualityClass === 'I类' || station.qualityClass === 'II类') {
-                    statusText = '正常'; statusColor = '#00a854';
-                } else if (station.qualityClass === 'III类') {
-                    statusText = '预警'; statusColor = '#ff9800';
+                // 闂佸搫绉烽～澶婄暤娴ｅ壊娼╃痪鎯ь儏缁愭稓绱掗銉殭闁糕晛妫濆畷姘跺Χ閸℃鍔烽梺缁橆焾閸╂牠鍩€?
+                if (station.qualityClass === 'I缂? || station.qualityClass === 'II缂?) {
+                    statusText = '濠殿喗绻愮徊浠嬫偉?; statusColor = '#00a854';
+                } else if (station.qualityClass === 'III缂?) {
+                    statusText = '婵☆偅婢樼€氼垶顢?; statusColor = '#ff9800';
                 } else {
-                    statusText = '超标'; statusColor = '#ff5722';
+                    statusText = '闁烩剝甯掗幊蹇涙偉?; statusColor = '#ff5722';
                 }
             }
 
@@ -2832,18 +2807,18 @@
             infoWindow.innerHTML = `
                     <div class="info-header">
                         <div class="info-title">${station.name}</div>
-                        <button class="info-close" id="closeInfoWindow">×</button>
+                        <button class="info-close" id="closeInfoWindow">闁?/button>
                     </div>
                     <div class="info-location">
-                        <span>📍 ${station.location || '未知位置'}</span>
-                        <span style="color: ${statusColor}; font-weight: bold;">• ${statusText}</span>
+                        <span>濡絽鍟幆?${station.location || '闂佸搫鐗滄禍鐐烘偂閳╁啯濯寸€广儱娲ㄩ弸?}</span>
+                        <span style="color: ${statusColor}; font-weight: bold;">闂?${statusText}</span>
                     </div>
                     <div class="info-quality">
                         <div>
-                            <span class="quality-class ${qualityClass}">${station.qualityClass || 'III类'}</span>
+                            <span class="quality-class ${qualityClass}">${station.qualityClass || 'III缂?}</span>
                         </div>
                         <div class="info-trend ${trendClass}">
-                            <span>${trendIcon} ${station.trend || '稳定'}</span>
+                            <span>${trendIcon} ${station.trend || '缂備礁顑呴崯鍧楁偩?}</span>
                         </div>
                     </div>
                     <div class="info-metrics">
@@ -2851,13 +2826,13 @@
                             <div class="metric-value" style="color: ${waterQuality.pH < 6.5 || waterQuality.pH > 8.5 ? '#ff5722' : waterQuality.pH < 7.0 || waterQuality.pH > 8.0 ? '#ff9800' : '#4dabf7'}">
                                 ${waterQuality.pH.toFixed(1)}
                             </div>
-                            <div class="metric-label">pH值</div>
+                            <div class="metric-label">pH闂?/div>
                         </div>
                         <div class="info-metric">
                             <div class="metric-value" style="color: ${waterQuality.DO < 2 ? '#ff5722' : waterQuality.DO < 5 ? '#ff9800' : '#4dabf7'}">
                                 ${waterQuality.DO.toFixed(1)}
                             </div>
-                            <div class="metric-label">溶解氧</div>
+                            <div class="metric-label">濠电姍鍕姸鐞氭瑦鎱?/div>
                         </div>
                         <div class="info-metric">
                             <div class="metric-value" style="color: ${waterQuality.COD > 20 ? '#ff5722' : waterQuality.COD > 15 ? '#ff9800' : '#4dabf7'}">
@@ -2869,12 +2844,12 @@
                             <div class="metric-value" style="color: ${waterQuality.NH3N > 1.0 ? '#ff5722' : waterQuality.NH3N > 0.5 ? '#ff9800' : '#4dabf7'}">
                                 ${waterQuality.NH3N.toFixed(2)}
                             </div>
-                            <div class="metric-label">氨氮</div>
+                            <div class="metric-label">濠殿喗菧閸斿秹鎮?/div>
                         </div>
                     </div>
                     <div class="info-tags">
                         ${(station.tags || []).slice(0, 2).map(tag => `<span class="info-tag">${tag}</span>`).join('')}
-                        <span class="info-tag">${station.type || '监测站'}</span>
+                        <span class="info-tag">${station.type || '闂佺儵鏅滈崹鍓佺矈鐎靛摜鍗?}</span>
                     </div>
                     <div class="info-arrow"></div>
                 `;
@@ -2922,7 +2897,7 @@
         }, 300);
     }
 
-    // 关闭信息弹窗（带动画）
+    // 闂佺绻戞繛濠偽涚€涙鈹嶉柍鈺佸暕缁辨牜鈧鍠栧﹢閬嶆偘閵夆晜鏅柛顐ｇ箘閺併劑鏌涢弬璇插闁轰線绠栭弫?
     function closeInfoWindowWithAnimation() {
         if (currentInfoWindow) {
             currentInfoWindow.style.animation = 'slideOut 0.3s ease-out forwards';
@@ -2939,7 +2914,7 @@
         }
     }
 
-    // 关闭信息弹窗（立即关闭）
+    // 闂佺绻戞繛濠偽涚€涙鈹嶉柍鈺佸暕缁辨牜鈧鍠栧﹢閬嶆偘閵夆晜鏅柛顐犲灮瑜板矂鏌涘Δ鈧崯鍧楀矗瑜斿濠氼敇閵娧咁槴
     function closeInfoWindow() {
         if (currentInfoWindow) {
             currentInfoWindow.remove();
@@ -2951,7 +2926,7 @@
         }
     }
 
-    // 更新地图标记动画
+    // 闂佸搫娲ら悺銊╁蓟婵犲洤鎹堕柡澶嬪缁傚牓鏌″鍛┛妞ゆ柨娲畷婵嬪Ω瑜庨弳?
     function updateMapMarkerAnimation() {
         if (!markers || markers.length === 0) return;
 
@@ -2972,10 +2947,10 @@
         }
     }
 
-    // 初始化高德地图
+    // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宥庡幘瑜邦垳鈧灚婢橀崲鎻掞耿閹绢喖鐐?
     function initializeMap() {
         if (typeof AMap === 'undefined') {
-            console.error('高德地图API未加载');
+            console.error('婵°倕鍊归敋闁汇儱顦靛畷鐑藉级閹稿海顩瑼PI闂佸搫鐗滄禍婊勬叏閻愬瓨濮?);
             return;
         }
 
@@ -3024,25 +2999,25 @@
         }
     }
 
-    // 添加监测站点标记
+    // 濠电儑缍€椤曆勬叏閻愮儤鍎庨柟瀵稿仧閵堝绱掗弮鈧悷褔宕戦敐澶婂唨闁搞儺浜堕崬?
     function addStationMarkers() {
         monitoringStations.forEach((station, index) => {
-            // 确保坐标存在
+            // 缂佺虎鍙庨崰鏇犳崲濮樿泛閿ら柟閭﹀幘閸ㄥジ鎮楀☉娅亜锕?
             if (!station.coordinates || !Array.isArray(station.coordinates) || station.coordinates.length !== 2) {
-                console.warn('站点坐标无效:', station.name, station.coordinates);
+                console.warn('缂備焦姊归悷褔宕戦敐澶婇敜闁归偊鍘鹃崹濂告煛閸愵亜校闁?', station.name, station.coordinates);
                 return;
             }
 
             const markerContent = document.createElement('div');
             markerContent.className = 'custom-marker';
             markerContent.style.backgroundColor = station.color || getStationColor(station);
-            markerContent.innerHTML = station.icon || station.name.charAt(0) || '站';
+            markerContent.innerHTML = station.icon || station.name.charAt(0) || '缂?;
             markerContent.title = station.name;
 
-            // 根据状态添加警告动画
+            // 闂佸搫绉烽～澶婄暤娓氣偓閹晠鎳滅喊妯轰壕濞达絿鎳撳鎴︽煕閺冨倸鞋妞ゆ帞鍠栧畷銊︾節閸屾妤呮煟?
             const status = station.status ||
-                (station.qualityClass === 'I类' || station.qualityClass === 'II类' ? 'normal' :
-                    station.qualityClass === 'III类' ? 'warning' : 'critical');
+                (station.qualityClass === 'I缂? || station.qualityClass === 'II缂? ? 'normal' :
+                    station.qualityClass === 'III缂? ? 'warning' : 'critical');
 
             if (status === 'warning' || status === 'critical') {
                 markerContent.classList.add('warning-marker');
@@ -3073,7 +3048,7 @@
         });
     }
 
-    // 更新选中的站点
+    // 闂佸搫娲ら悺銊╁蓟婵犲洦鐒诲璺侯槼閸橆剟鏌ｉ妸銉ヮ伀闁绘繍鍨堕幃?
     function updateSelectedStation(stationId) {
         selectedStationId = stationId;
 
@@ -3086,7 +3061,7 @@
         updateChartData();
     }
 
-    // 初始化图表
+    // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宓嫮顩柣?
     function initializeChart() {
         const chartContainer = document.getElementById('chartContainer');
         if (!chartContainer) return;
@@ -3099,44 +3074,49 @@
         }
     }
 
-    // 更新图表数据
+    // 闂佸搫娲ら悺銊╁蓟婵犲洤鐐婇柟瑙勫姂閳ь剙鍟村顐︽偋閸繄銈?
     async function updateChartData() {
         const station = monitoringStations.find(s => s.id === selectedStationId);
         if (!station || !currentChart) return;
 
+        const predictionDaysInput = document.getElementById('predictionDays');
+        const days = predictionDaysInput ? parseInt(predictionDaysInput.value, 10) || 7 : 7;
+
         try {
-            // 使用模拟历史数据
-            const historicalData = getHistoricalData(station);
-
-            // 获取预测天数
-            const predictionDaysInput = document.getElementById('predictionDays');
-            const days = predictionDaysInput ? parseInt(predictionDaysInput.value) || 7 : 7;
-
-            // 生成预测数据
-            const predictedData = generatePredictionData(station, days);
-
-            // 渲染图表
-            renderChart(station, historicalData, predictedData);
-
+            const chartData = await loadChartData(selectedStationId, days);
+            renderChart(station, chartData.historical, chartData.prediction);
         } catch (error) {
-            console.error('获取图表数据失败:', error);
-            // 使用模拟数据
-            const historicalData = getHistoricalData(station);
-            const predictedData = generatePredictionData(station, 7);
-            renderChart(station, historicalData, predictedData);
+            console.error('闁兼儳鍢茶ぐ鍥炊閹规劑鈧啴寮悧鍫濈ウ濠㈡儼绮剧憴?', error);
+            renderChart(station, { dates: [], pH: [], DO: [], COD: [], level: [] }, { dates: [], pH: [], DO: [], COD: [], level: [] });
+            showNotification('鏈姞杞藉埌鐪熷疄鍘嗗彶/棰勬祴鏁版嵁', 'warning');
         }
     }
-
-    // 渲染图表
     function renderChart(station, historicalData, predictedData) {
         if (!currentChart) return;
 
-        // 计算水位数据的范围，用于设置y轴刻度
+        if (!historicalData || !Array.isArray(historicalData.dates) || historicalData.dates.length === 0) {
+            currentChart.setOption({
+                title: {
+                    text: '暂无真实历史/预测数据',
+                    left: 'center',
+                    top: 'center',
+                    textStyle: {
+                        color: '#80d4ff',
+                        fontSize: 14
+                    }
+                },
+                xAxis: { data: [] },
+                series: []
+            });
+            return;
+        }
+
+        // 闁荤姳绶ょ槐鏇㈡偩鐠囧樊娼╃紓鍫㈠Х缁夋挳鏌℃担鍝勵暭鐎规挷绶氶幆鍐礋椤旇偐妲洪梺鎼炲劥閹活亞妲愬┑瀣仺闁靛鍊楅懝楣冩偣娴ｇ鈷旈柣銈呮晲闁哄鍋炲娆撳春閵忊剝鍎?
         const levelData = historicalData.level;
         let minLevel = Math.min(...levelData);
         let maxLevel = Math.max(...levelData);
 
-        // 确保水位y轴有合理的范围
+        // 缂佺虎鍙庨崰鏇犳崲濮橆剦娼╃紓鍫㈠Х缁夌闁哄鍋涢悺銊ワ耿娓氣偓瀹曘儵宕奸姀鈥斥偓鐐烘煟閵娿儱顏悗鍨墵瀹?
         if (minLevel === maxLevel) {
             minLevel = minLevel * 0.9;
             maxLevel = maxLevel * 1.1;
@@ -3145,7 +3125,7 @@
             maxLevel = maxLevel * 1.05;
         }
 
-        // 计算水质指标的范围
+        // 闁荤姳绶ょ槐鏇㈡偩鐠囧樊娼╃痪鎯ь儏缁愭盯鏌熺粙鎸庡闁绘牭缍侀幆鍐礋椤旇偐妲洪梺?
         const phData = historicalData.pH;
         const doData = historicalData.DO;
         const codData = historicalData.COD;
@@ -3165,10 +3145,10 @@
                     let result = params[0].name + '<br/>';
                     params.forEach(item => {
                         let unit = '';
-                        if (item.seriesName === 'pH值') unit = '';
-                        else if (item.seriesName === '溶解氧') unit = ' mg/L';
+                        if (item.seriesName === 'pH闂?) unit = '';
+                        else if (item.seriesName === '濠电姍鍕姸鐞氭瑦鎱?) unit = ' mg/L';
                         else if (item.seriesName === 'COD') unit = ' mg/L';
-                        else if (item.seriesName === '水位') unit = ' m';
+                        else if (item.seriesName === '濠殿喗顭囩换婵堢礊?) unit = ' m';
 
                         result += `${item.seriesName}: ${item.value}${unit}<br/>`;
                     });
@@ -3176,7 +3156,7 @@
                 }
             },
             legend: {
-                data: ['pH值', '溶解氧', 'COD', '水位'],
+                data: ['pH闂?, '濠电姍鍕姸鐞氭瑦鎱?, 'COD', '濠殿喗顭囩换婵堢礊?],
                 top: 5,
                 textStyle: {
                     color: '#b3e0ff',
@@ -3207,7 +3187,7 @@
             yAxis: [
                 {
                     type: 'value',
-                    name: '水质指标',
+                    name: '濠殿喗顭囬ˉ鎰啅濠靛绠伴柛銉ｅ妿閸?,
                     position: 'left',
                     axisLine: {
                         lineStyle: { color: '#80d4ff' }
@@ -3229,7 +3209,7 @@
                 },
                 {
                     type: 'value',
-                    name: '水位(m)',
+                    name: '濠殿喗顭囩换婵堢礊?m)',
                     position: 'right',
                     axisLine: {
                         lineStyle: { color: '#f8e71c' }
@@ -3250,7 +3230,7 @@
             ],
             series: [
                 {
-                    name: 'pH值',
+                    name: 'pH闂?,
                     type: 'line',
                     smooth: true,
                     data: historicalData.pH,
@@ -3262,7 +3242,7 @@
                     symbolSize: 3
                 },
                 {
-                    name: '溶解氧',
+                    name: '濠电姍鍕姸鐞氭瑦鎱?,
                     type: 'line',
                     smooth: true,
                     data: historicalData.DO,
@@ -3286,7 +3266,7 @@
                     symbolSize: 3
                 },
                 {
-                    name: '水位',
+                    name: '濠殿喗顭囩换婵堢礊?,
                     type: 'line',
                     smooth: true,
                     yAxisIndex: 1,
@@ -3299,7 +3279,7 @@
                     symbolSize: 3
                 },
                 {
-                    name: '预测',
+                    name: '婵☆偅婢樼€氼厾绮?,
                     type: 'line',
                     smooth: true,
                     yAxisIndex: 0,
@@ -3318,7 +3298,7 @@
         currentChart.setOption(option);
     }
 
-    // 生成历史数据（模拟）
+    // 闂佹眹鍨婚崰鎰板垂濮樿泛鍌ㄩ柛鈩冾殔閽戝鏌℃担鍝勵暭鐎规挷绶氶弫宥夊醇閻斿奔绶氶獮蹇涙偆閸屾粎顦?
     function generateHistoricalData(station) {
         const dates = [];
         const pH = [];
@@ -3353,82 +3333,37 @@
         return { dates, pH, DO, COD, level };
     }
 
-    // 生成预测数据（模拟）
-    function generatePredictionData(station, days) {
-        const pH = [];
-        const DO = [];
-        const COD = [];
-        const level = [];
-
-        const waterQuality = station.waterQuality || {
-            pH: 7.0,
-            DO: 5.0,
-            COD: 10.0,
-            level: 20.0
-        };
-
-        const lastPH = waterQuality.pH;
-        const lastDO = waterQuality.DO;
-        const lastCOD = waterQuality.COD;
-        const lastLevel = waterQuality.level;
-
-        const trend = station.trend || '稳定';
-        const pHTrend = trend === '改善' ? 0.01 : trend === '下降' ? -0.01 : 0;
-        const DOTrend = trend === '改善' ? 0.03 : trend === '下降' ? -0.03 : 0;
-        const CODTrend = trend === '改善' ? -0.08 : trend === '下降' ? 0.08 : 0;
-
-        for (let i = 1; i <= days; i++) {
-            pH.push(+(lastPH + pHTrend * i + (Math.random() - 0.5) * 0.2).toFixed(2));
-            DO.push(+(lastDO + DOTrend * i + (Math.random() - 0.5) * 0.3).toFixed(2));
-            COD.push(+(lastCOD + CODTrend * i + (Math.random() - 0.5) * 1.0).toFixed(2));
-            const seasonalFactor = 0.05 * Math.sin((i / 30) * Math.PI);
-            level.push(+(lastLevel + seasonalFactor + (Math.random() - 0.5) * 0.2).toFixed(2));
-        }
-
-        return { pH, DO, COD, level };
-    }
-
-    // 运行预测
+    // 闂佹眹鍨婚崰鎰板垂濮橆叏绱ｉ柛鏇ㄥ墰閵堟挳鏌℃担鍝勵暭鐎规挷绶氶弫宥夊醇閻斿奔绶氶獮蹇涙偆閸屾粎顦?
     async function runPrediction() {
         const station = monitoringStations.find(s => s.id === selectedStationId);
         if (!station) return;
 
         const predictionDaysInput = document.getElementById('predictionDays');
-        const days = predictionDaysInput ? parseInt(predictionDaysInput.value) || 7 : 7;
+        const days = predictionDaysInput ? parseInt(predictionDaysInput.value, 10) || 7 : 7;
 
         const btn = document.getElementById('runPrediction');
         if (!btn) return;
 
         const originalText = btn.innerHTML;
-        btn.innerHTML = '<span>⏳</span> 预测中...';
+        btn.innerHTML = '<span>...</span> 预测中';
         btn.disabled = true;
 
         try {
-            // 使用模拟历史数据
-            const historicalData = getHistoricalData(station);
+            const response = await axios.post(`${DATA_API_BASE_URL}/prediction/run`, { stationId: selectedStationId, days });
+            if (!response.data || response.data.code !== 200) {
+                throw new Error((response.data && (response.data.message || response.data.msg)) || '预测接口执行失败');
+            }
 
-            // 生成预测数据
-            const predictedData = generatePredictionData(station, days);
-
-            // 渲染图表
-            renderChart(station, historicalData, predictedData);
-
-            showNotification(`预测模型运行完成，生成未来${days}天预测数据`, 'success');
-
+            await updateChartData();
+            showNotification(`宸插埛鏂版湭鏉?${days} 澶╃殑鐪熷疄棰勬祴鏁版嵁`, 'success');
         } catch (error) {
             console.error('预测失败:', error);
-            // 使用模拟数据
-            const historicalData = getHistoricalData(station);
-            const predictedData = generatePredictionData(station, days);
-            renderChart(station, historicalData, predictedData);
-            showNotification('使用模拟预测数据', 'info');
-        } finally {
+            console.error('棰勬祴澶辫触:', error);
+            showNotification('棰勬祴鎺ュ彛鎵ц澶辫触', 'error');
             btn.innerHTML = originalText;
             btn.disabled = false;
         }
     }
-
-    // 显示通知
     function showNotification(message, type = 'info') {
         const notification = document.createElement('div');
         notification.style.position = 'fixed';
@@ -3461,10 +3396,10 @@
         notification.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <span style="font-size: 1rem;">${
-            type === 'success' ? '✅' :
-                type === 'error' ? '❌' :
-                    type === 'warning' ? '⚠️' :
-                        'ℹ️'
+            type === 'success' ? '闂? :
+                type === 'error' ? '闂? :
+                    type === 'warning' ? '闂佸疇娉曟刊瀵哥箔? :
+                        '闂佹枼鏅濆▍銏㈢箔?
         }</span>
                     <span>${message}</span>
                 </div>
@@ -3488,12 +3423,12 @@
         }, 3000);
     }
 
-    // 窗口大小变化时调整图表
+    // 缂備焦鍔栭〃鍛般亹濞戞瑥绶炵憸宥夋儍椤掑嫬鐭楁俊顖氭惈椤曆囨煛閸愨晛鍔堕柣銊у枛瀵偊寮堕幋鐐殿洯闁?
     let resizeTimer;
     window.addEventListener('resize', function() {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function() {
-            // 调整所有图表大小
+            // 闁荤姴顑呴崯顖炲汲閿濆绠ラ柍褜鍓熷鍨緞婵犲啰顩柣鐐寸◤閸斿矂濡甸崶鈺€鐒?
             if (currentChart) currentChart.resize();
             if (radarChart) radarChart.resize();
             if (leftChart1) leftChart1.resize();
@@ -3502,7 +3437,7 @@
             if (rightChart1) rightChart1.resize();
             if (rightChart2) rightChart2.resize();
 
-            // 强制重新应用全屏样式
+            // 閻庢鍠栭幖顐﹀春濡ゅ懏鐓傜€广儱妫欓悡鈧柟鐓庣摠濮婂寮妶澶婄闁靛鍎冲宀勬煛瀹ュ懎妲荤紒?
             if (window.innerWidth > 1200) {
                 const mainContent = document.querySelector('.main-content');
                 const leftPanel = document.querySelector('.left-panel');
@@ -3533,20 +3468,20 @@
         }, 150);
     });
 
-    // 页面加载后开始初始化
+    // 婵＄偑鍊楅弫璇差焽娴兼潙绀夐柣妯煎劋缁佷即鏌涘顒勵€楃紒杈ㄥ灦閹便劎鈧綆浜滈悘銉モ攽椤旂⒈鍎忛悗?
     window.addEventListener('DOMContentLoaded', function() {
-        // 检查必要资源，但即使缺少也尝试初始化
+        // 濠碘槅鍋€閸嬫捇鏌＄仦璇插姎缂佺儵鍋撻柣鐔告磻濞村洨绮婇鈶╂敠闁规澘澧庣粈澶娒归敐鍛棞鐎规挸妫欓幏鍛崉閵娿儳绠掗柣蹇撶箲閸ㄥ磭寮ч崘顏冪剨婵犻潧锕﹀Σ鎼佹煕閹烘挾绠撴い顐ｅ姍瀹?
         const missingResources = [];
-        if (typeof AMap === 'undefined') missingResources.push('高德地图');
-        if (typeof echarts === 'undefined') missingResources.push('ECharts图表库');
-        if (typeof axios === 'undefined') missingResources.push('Axios HTTP库');
+        if (typeof AMap === 'undefined') missingResources.push('婵°倕鍊归敋闁汇儱顦靛畷鐑藉级閹稿海顩?);
+        if (typeof echarts === 'undefined') missingResources.push('ECharts闂佹悶鍎插畷姗€濡撮崘鈺傚劅?);
+        if (typeof axios === 'undefined') missingResources.push('Axios HTTP闁?);
 
         if (missingResources.length > 0) {
-            console.warn('以下资源未加载:', missingResources.join(', '));
-            showNotification(`部分资源加载失败: ${missingResources.join(', ')}`, 'warning');
+            console.warn('婵炲濮伴崕鎵箔閸涱垱灏庨柛鏇ㄥ墰閻栭亶鏌￠崼顐＄盎濠殿喚鍋炲?', missingResources.join(', '));
+            showNotification(`閮ㄥ垎璧勬簮鍔犺浇澶辫触: ${missingResources.join(', ')}`, 'warning');
         }
 
-        // 延迟初始化，确保所有资源都有机会加载
+        // 閻庣偣鍊栭崕鑲╂崲濠婂牆绀嗘繝闈涙－濞兼鏌涢弽銊у缂佽鲸绻勫☉鐢割敊閼姐倗顔旈梺鍦暯閸嬫捇鏌￠崼婵愭Ъ缂佷緡鍋勯埞鍐箛閺夊灝骞嬮梺鍝勭墕椤︽澘鈹冮埀顒€霉閸忚壈澹樺┑顔惧仦濞?
         setTimeout(() => {
             initApplication();
         }, 500);
