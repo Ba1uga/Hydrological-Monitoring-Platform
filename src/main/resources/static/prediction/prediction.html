@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>涓浗姘磋川姘翠綅棰勬祴鍙鍖栧钩鍙?/title>
-    <!-- 閺堫剙婀碋Charts鎼?-->
+    <title>中国水质水位预测可视化平台</title>
+    <!-- 闂佸搫鐗滈崜娆忥耿绾板━harts闁?-->
     <script src="/index/js/echarts.min.js"></script>
-    <!-- 高德地图脚本运行时按后端配置动态加载，避免在静态文件中暴露 key -->
-    <!-- Axios HTTP鎼?-->
+    <!-- 妤傛ê鐥夐崷鏉挎禈閼存碍婀版潻鎰攽閺冭埖瀵滈崥搴ｎ伂闁板秶鐤嗛崝銊︹偓浣稿鏉炴枻绱濋柆鍨帳閸︺劑娼ら幀浣规瀮娴犳湹鑵戦弳鎾苟 key -->
+    <!-- Axios HTTP闁?-->
     <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.6.0/axios.min.js"></script>
     <style>
-        /* 闂佸湱顣介崑鎾绘煛閸繍妲归柣妤€宕锝堢疀鎼达絿顔旈梺褰掓櫜濡炴帞绮径鎰煑?*/
+        /* 闂傚倷绀佸﹢閬嶃€傛禒瀣；闁瑰墽绮悡娑㈡煕椤愶絿绠ユ俊鎻掔秺閺岋絽螖閳ь剙鐣烽鍕垫晪闁挎繂鐗忛悿鈧柟鑹版彧缁插潡顢欓弮鍫熲拺鐟滅増甯楀▍婊勪繆閻愭潙绗х紒顕呭幗瀵板嫰骞囬鍌滃幀?*/
         * {
             margin: 0;
             padding: 0;
@@ -27,7 +27,7 @@
             overflow-x: hidden;
         }
 
-        /* 闁哄鏅滈弻銊ッ洪弽顓炵濠㈣埖鍔栫亸锕傛煛瀹ュ懎妲荤紒?*/
+        /* 闂備礁鎼ˇ顐﹀疾濠婂牆钃熼柕濞垮剭濞差亜鍐€妞ゆ挾鍋熼鍥ㄧ節閵忥絽鐓愰柛鏃€鐗滄禍鎼佹晝閸屾稓鍘搁悗骞垮劚閹冲骸危閼姐倗纾?*/
         .back-button {
             position: fixed;
             top: 15px;
@@ -61,7 +61,7 @@
             min-height: calc(100vh - 20px);
         }
 
-        /* 婵＄偑鍊曢悥濂稿磿閹绢喖鍐€闁搞儺鍓﹂弳顖炴煕閺嵮勬儓闁?*/
+        /* 婵犵绱曢崑鎴﹀磹閺囥垺鍋夊┑鍌滎焾绾惧潡鏌熺紒銏犳灈闁告劏鍋撻梻浣规偠閸庢椽宕滈敃鍌氭辈妞ゆ牜鍋為悡鏇㈡煛瀹擃喖瀚崕鎾绘⒑?*/
         .header {
             display: flex;
             justify-content: center;
@@ -124,7 +124,7 @@
             color: #b3e0ff;
         }
 
-        /* 婵炴垶鎹侀褔宕€电硶鍋撻崷顓熷殌閻忓浚鍨跺畷?- 闂佺绻戞繛濠囧极椤撶喓鈹嶆い鏃傗拡濡?*/
+        /* 婵犵數鍋為崹鍫曞箲娓氣偓椤㈡俺顦圭€规洦鍓涢埀顒傛暩绾爼宕戦幘璇叉嵍妞ゆ挾鍠庡▓宀勬煟韫囨挻绂嬮柛銊ㄦ硾閻?- 闂傚倷鑳堕…鍫㈡崲閹寸偟绠惧┑鐘叉搐閺嬩焦銇勯幘璺烘灁闁崇懓绉甸妵鍕籍閸屾瀚涘┑?*/
         .main-content {
             display: grid;
             grid-template-columns: 320px 1fr 320px;
@@ -135,7 +135,7 @@
             flex: 1;
         }
 
-        /* 閻庡綊娼荤紓姘跺疾閸洘顥堥柕蹇婂墲缁?*/
+        /* 闂佽楠哥紞濠傤焽閼姐倗纾芥慨妯挎硾閻ら箖鏌涢锝嗙妞ゃ儱鐗撻弻鏇＄疀婵犲倸鈷夌紓?*/
         .left-panel {
             display: grid;
             grid-template-rows: 140px 140px 1fr 1fr;
@@ -143,7 +143,7 @@
             height: 100%;
         }
 
-        /* 閻庡綊娼荤紓姘跺疾閸洖妫橀柡澶嬵儥閺夊鏌涢妷锕€绀冮柕鍡楀暣瀹曠娀宕崟顓炲箥 */
+        /* 闂佽楠哥紞濠傤焽閼姐倗纾芥慨妯挎硾閻ら箖鏌涢锝嗙婵☆偅锕㈤弻鈩冨緞鐎ｉ潧鍔岄梺鍝勵槸椤兘寮诲☉銏犖ㄩ柨鏇楀亾缂佲偓閸愵喗鐓忛柛鈩冾殔閺嗭絿鈧娲滄繛鈧€规洦鍋婂畷鐔碱敇閻愯尙顓?*/
         .left-chart-1,
         .left-chart-2 {
             background: rgba(20, 30, 45, 0.95);
@@ -154,7 +154,7 @@
             height: 140px;
         }
 
-        /* 缂備焦姊归悷褔宕戦敐鍜佹僵缁炬儳顑呯粣娑㈡偤閹烘埈鍎忓┑鐐茬Ф閳ь兛绲婚～澶愭儊椤曗偓瀹?- 闂佸憡鐟﹂敋闁?*/
+        /* 缂傚倸鍊烽悞锕€顫忚ぐ鎺撳仭鐟滄柨鐣烽幋锔芥櫜闁告粈鐒﹂崓鐢电磼閻愵剙鍔ゆい鎴濇噽缁絽鈽夐姀鈥充槐闂佸湱鍎ら崺鍫ュ磿韫囨挴鏀介柣鎰皺鑲栭梺閫炲苯鍘哥紒鎻掝煼閿濈偞寰勯幇顓炲墾濡炪倖娲嶉崑鎾垛偓?- 闂傚倷绀侀幉锟犳偡閿曞倹鏅梻?*/
         .left-chart-3 {
             background: rgba(20, 30, 45, 0.95);
             border-radius: 12px;
@@ -186,7 +186,7 @@
             background: rgba(10, 20, 35, 0.7);
         }
 
-        /* 婵炴垶鎸诲Σ鎺椼€呴敃鍌氱倞闁硅鍔戦埀顒€鍟村畷鐘诲传閸曨厼骞?- 闁荤姴顑呴崯顖炲汲閿濆棛鈻斿Δ锕€鐏濆▓浼存⒑椤愩垹鈧摜鑺?*/
+        /* 婵犵數鍋為崹鍫曞箰鐠囧弬锝夊箳濡炲皷鍋撻崨瀛樻櫇闁稿本姘ㄩ崐鐐烘⒑绾拋娼愰柛鏃€鍨块崺鈧い鎺嗗亾闁哥喐娼欓悾鐑芥偐鐠囪弓绱堕梺鍛婃处閸樺ジ鐛?- 闂備浇宕垫慨鎾敄閸涙潙鐤い鏍仜濮规煡鏌ㄥ┑鍡橆棤闁崇粯鏌ㄨ灃闁挎洍鍋撻柣蹇旂箓閳绘挻瀵肩€涙ǚ鎷哄銈嗗姂閸ㄥ綊鍩€椤掆偓閹芥粓鎳?*/
         .chart-panel {
             background: rgba(20, 30, 45, 0.95);
             border-radius: 12px;
@@ -224,7 +224,7 @@
             background: rgba(10, 20, 35, 0.7);
         }
 
-        /* 缂傚倷鑳堕崰鏇㈩敇閹间礁鐐婇柟瑙勫姂閳ь剙鍟村畷鐘诲传閸曨厼骞?*/
+        /* 缂傚倸鍊搁崐鐑芥嚄閸洖绐楅柡鍥ュ焺閺佸洭鏌熼梻瀵割槮闁绘劕锕弻鐔烘喆閸曨偄顫囬梺閫炲苯澧柛鐔告綑閻ｇ兘鎮╃拠韫炊闂佸憡娲﹂崢濂哥嵁?*/
         .stats-panel {
             background: rgba(20, 30, 45, 0.95);
             border-radius: 12px;
@@ -256,7 +256,7 @@
             background: rgba(10, 20, 35, 0.7);
         }
 
-        /* 婵炴垶鎼╅崣鍐ㄎ涢崸妤€鎹堕柡澶嬪缁傚牓鏌涢弽褎鎯堥柣?*/
+        /* 婵犵數鍋為崹鍫曞箹閳哄懎鐭楅柛鎰╁壆濞戙垹閿ゆ俊銈傚亾闁圭懓鐖奸弻鈩冨緞鐎ｎ亶鍤嬬紓浣稿€搁悧鎾诲蓟濞戙垹鍐€鐟滃酣骞嗛崼銉︾厽?*/
         .map-panel {
             background: rgba(20, 30, 45, 0.95);
             border-radius: 12px;
@@ -268,7 +268,7 @@
             min-height: 100%;
         }
 
-        /* 闂侀潻闄勫妯好瑰鈧獮鎺曨槺婵炲棎鍨介弫宥夊醇濠婂懐顔旈梺浼欑稻閻熝呯磽婢舵劕缁╅柣鎰靛墮閻﹀姊虹粵瀣珯缂?*/
+        /* 闂傚倷绶氬濠氭⒔閸曨偒鐔嗘俊顖氥偨閻熼偊娼ㄩ柍褜鍓熼悰顕€骞掗弴銊πㄦ繝鐢靛仜濡酣宕规禒瀣瀬鐎广儱顦柋鍥ㄧ節婵犲倹鍣芥い鏃€妫冨鐑樺濞嗘垹蓱闂佽崵鍟欓崨顖滐紳婵犮垼鍩栭崝鏇犵磼閳哄懏鐓熼柟浼存涧婢ь噣鏌ｉ敃鈧…宄邦潖閾忓湱椹抽悗锝庝簼閻濐垳绱?*/
         .map-controls {
             position: absolute;
             top: 15px;
@@ -308,7 +308,7 @@
             height: 100%;
         }
 
-        /* 闂侀潻闄勫妯好瑰鈧畷鍫曞矗閵壯傜矗 */
+        /* 闂傚倷绶氬濠氭⒔閸曨偒鐔嗘俊顖氥偨閻熼偊娼ㄩ柍褜鍓欓悾鐑藉醇閺囩偟鐓戦梺闈涳紡閸屾粎鐓?*/
         .map-legend {
             position: absolute;
             bottom: 10px;
@@ -340,7 +340,7 @@
             border: 1px solid white;
         }
 
-        /* 婵☆偅婢樼€氼厾绮婇幘顔肩鐟滃秹宕哄Δ鍛棃闁靛繆鍓濈欢?*/
+        /* 婵犵妲呴崑鍛熆濡皷鍋撳鐓庡箻缂侇喖锕獮姗€顢欓懖鈺婂敽闁荤喐绮岀粔鐟扮暦閸濆嫀鏃堝川椤曞懏顥堥梻渚€娼х换鍡涘礈濠靛牊顐?*/
         .prediction-controls {
             display: flex;
             justify-content: space-between;
@@ -395,7 +395,7 @@
             box-shadow: 0 4px 12px rgba(0, 168, 84, 0.3);
         }
 
-        /* 闂佸憡鐟ラ崢鏍疾閸洘顥堥柕蹇婂墲缁?*/
+        /* 闂傚倷绀侀幉锟犳偡閵夆晛鍌ㄩ柡宥庡幖閻ら箖鏌涢锝嗙妞ゃ儱鐗撻弻鏇＄疀婵犲倸鈷夌紓?*/
         .right-panel {
             display: flex;
             flex-direction: column;
@@ -403,7 +403,7 @@
             height: 100%;
         }
 
-        /* 闂佸憡鐟ラ崢鏍疾閸洖妫橀柡澶嬵儥閺夊鏌涢妷锕€绀冮柕鍡楀暣瀹曠娀宕崟顓炲箥 */
+        /* 闂傚倷绀侀幉锟犳偡閵夆晛鍌ㄩ柡宥庡幖閻ら箖鏌涢锝嗙婵☆偅锕㈤弻鈩冨緞鐎ｉ潧鍔岄梺鍝勵槸椤兘寮诲☉銏犖ㄩ柨鏇楀亾缂佲偓閸愵喗鐓忛柛鈩冾殔閺嗭絿鈧娲滄繛鈧€规洦鍋婂畷鐔碱敇閻愯尙顓?*/
         .right-chart-1,
         .right-chart-2 {
             background: rgba(20, 30, 45, 0.95);
@@ -434,7 +434,7 @@
             background: rgba(10, 20, 35, 0.7);
         }
 
-        /* 闂傚倸妫涢弻澶愬箵椤忓牆鐐婂Δ锝呭暞濡椼劑鏌?*/
+        /* 闂傚倸鍊搁崐绋课涘☉銏犺摕濠㈣埖鍔曠粻鍨亜韫囨挾澧曢柣鎰工铻栭柨婵嗘噹閺嗙偞淇婂鐓庡闁?*/
         .radar-panel {
             background: rgba(20, 30, 45, 0.95);
             border-radius: 12px;
@@ -474,7 +474,7 @@
             position: relative;
         }
 
-        /* 闂傚倸妫涢弻澶愬箵椤忓牆鐐婇柟瑙勫姉閺嬪倿鏌熺紒銏犲箺閻㈩垰鐖煎畷?*/
+        /* 闂傚倸鍊搁崐绋课涘☉銏犺摕濠㈣埖鍔曠粻鍨亜韫囨挾澧曢柣鎰躬閺岀喓鎲撮崟顐㈩潕闂佸搫顑呴崐鍧楀蓟閻旇櫣纾奸柕蹇曞Т缁犳椽鏌ｉ姀鈺佺仩闁绘牜鍘ч悾?*/
         .radar-controls {
             display: flex;
             justify-content: center;
@@ -520,7 +520,7 @@
             transform: scale(1.2);
         }
 
-        /* 婵☆偅婢樼€氼垶顢楅悢鐓庣闁告繂瀚崢?*/
+        /* 婵犵妲呴崑鍛熆濡皷鍋撳鐓庣仸妞ゃ垺顨婇幃銏ゆ偂鎼达綆妲洪梻浣告啞缁诲倻鈧凹鍣ｅ畷?*/
         .warning-panel {
             background: rgba(20, 30, 45, 0.95);
             border-radius: 12px;
@@ -634,7 +634,7 @@
             font-size: 0.8rem;
         }
 
-        /* 闁圭厧鐡ㄥú鐔煎磿鐎涙鈹嶉柍鈺佸暕缁?*/
+        /* 闂備礁婀遍崢褔鎮洪妸銉冩椽鎮㈤悡搴ｏ紵闁诲孩绋掗…鍥煘瀹ュ鐓冮柍杞扮閺嗘洜绱?*/
         footer {
             text-align: center;
             padding: 12px;
@@ -647,7 +647,7 @@
             flex-shrink: 0;
         }
 
-        /* 闂佺厧顨庢禍婊堟偩閻愵剛鈻曞璺侯儑閸ㄥジ鎮规担鍝勵暭闁绘宕?*/
+        /* 闂傚倷鑳堕崢褔銆冩惔銏㈩洸婵犲﹤鐗婇崑鈺呮煟閹伴潧澧伴柍缁樻礀椤法鎹勬笟顖氬壋闂佹悶鍔岄妶鎼佸箖鐟欏嫭濯撮柛婵嗗閺嗩參姊虹紒姗嗘當鐎规洦鍓熼、?*/
         .custom-marker {
             width: 28px !important;
             height: 28px !important;
@@ -689,7 +689,7 @@
             50% { box-shadow: 0 0 15px currentColor; }
         }
 
-        /* 闂侀潻闄勫妯好瑰Ο鑽も攳闁斥晛鍟╃槐鏍偓娈垮枛濠€閬嶆偘?- 闁诲繐绻愮换鎰版倵閻戣姤鍋嬮柛顐ゅ枑閹?*/
+        /* 闂傚倷绶氬濠氭⒔閸曨偒鐔嗘俊顖氥偨閻熸嫈鐔兼嚒閵堝倹鏁甸梻浣规灱閺呮盯宕埡鍐╊潟闁哄稁鍋€閸嬫挸鈻撻崹顔界亪濠电姭鍋撻梺顒€绉甸崑?- 闂備浇顕х换鎰崲閹邦喗宕查柟鎵閸婄敻鏌ｉ幋锝呅撻柛瀣儔閺屾盯顢曢妶鍛€鹃梺?*/
         .map-info-window {
             position: absolute;
             background: linear-gradient(135deg, rgba(20, 30, 45, 0.98), rgba(25, 40, 60, 0.98));
@@ -862,8 +862,8 @@
             left: 15px;
         }
 
-        /* ============= 闂佸憡绻傜粔瀵歌姳閹绘帩鍤曢煫鍥ㄥ嚬閸熷酣鎮?============= */
-        /* 婵☆偓绲鹃悧鏇㈠储濞戙垺鏅慨姗嗗亯閸橆剛绱掑☉姗嗘Ц闁靛洤娲ㄦ禒锕佺疀閹鹃鍟傞梺?400px婵炲濮伴崕鎵箔閸涘瓨鏅?*/
+        /* ============= 闂傚倷绀侀幉锛勬崲閸屾粎鐭撻悗鍨摃婵娊鏌熺紒妯轰刊闁搞倖娲熼悡顐﹀炊閵娿儱姣堥梺鍝ュ枎闁帮綁骞?============= */
+        /* 婵犵妲呴崑鎾跺緤妤ｅ啯鍋嬮柡鍥ュ灩閸屻劍绻涢幋娆忕仾闁哄拋鍓氶幈銊ヮ潨閸℃ぞ鍑介梺鍛婏供閸撴稓妲愰幒鎴旀婵妫欑瑧闂備線娼уú銈吤洪妸锔绢浄闁挎洑鑳堕悿鈧梺褰掔畺椤ゅ倿宕崒鐐粹拺?400px婵犵數鍋涢顓熸叏娴兼潙纾块柟娈垮枤缁犳棃鏌涘☉妯兼憼闁?*/
         @media (max-width: 1400px) {
             .main-content {
                 grid-template-columns: 280px 1fr 280px;
@@ -891,7 +891,7 @@
             }
         }
 
-        /* 闂佺绻楅崺鏍敃婵傚憡鏅慨姗嗗亯閸橆剛绱掑☉姗嗘Ц闁活偄妫濋悰顕€寮撮鍡欘槱1200px婵炲濮伴崕鎵箔閸涘瓨鏅?*/
+        /* 闂傚倷鑳堕…鍫㈡崲濡ゅ懎鏄ラ柡宥庡弾閺佸啫鈹戦崒姘暈闁哄拋鍓氶幈銊ヮ潨閸℃ぞ鍑介梺鍛婏供閸撴稓妲愰幒鎴旀婵妫欑瑧闂備焦妞块崑鍕涘┑瀣仒妞ゆ洍鍋撶€殿喗鎸抽、鏃堝幢濞嗘ɑ袩1200px婵犵數鍋涢顓熸叏娴兼潙纾块柟娈垮枤缁犳棃鏌涘☉妯兼憼闁?*/
         @media (max-width: 1200px) {
             .main-content {
                 grid-template-columns: 1fr;
@@ -961,7 +961,7 @@
             }
         }
 
-        /* 闂佺粯甯熷▔娑㈠箖濡ゅ懏鏅慨姗嗗墰濮ｅ牓鎮橀悙鑼缂佺姷鍏橀弫?68px婵炲濮伴崕鎵箔閸涘瓨鏅?*/
+        /* 闂傚倷鑳剁划顖滄暜閻斿皝鏋栨繛鎴欏灩缁犳牗淇婇妶鍛櫤闁哄拋鍓氶幈銊ヮ潨閸℃顫┑顕嗙到閻楁捇骞冨鈧幃娆撴嚑椤掑偆鍞剁紓鍌欒兌婵兘宕楀鈧?68px婵犵數鍋涢顓熸叏娴兼潙纾块柟娈垮枤缁犳棃鏌涘☉妯兼憼闁?*/
         @media (max-width: 768px) {
             .header-left h1 {
                 font-size: 1.6rem;
@@ -1009,7 +1009,7 @@
             }
         }
 
-        /* 闂佸搫鐗冮崑鎾绘煕濮橆剙鍤辩紒杈ㄥ閹奸箖宕ㄩ鐘崇槗闁诲繒鍋涚换鎰不閻戣姤鏅?80px婵炲濮伴崕鎵箔閸涘瓨鏅?*/
+        /* 闂傚倷绀侀幖顐︽偋閸愵喖纾婚柟鍓х帛閻撴洘鎱ㄥ鍡楀闁搞倛浜槐鎺撴綇閵娿儺妫嗛梺鐟般偢缁犳牕鐣烽妸鈺婃晣闁绘ê纾Σ妤呮⒑鐠囪尙绠抽柛瀣〒閹广垽骞囬鍙ョ瑝闂佺粯鍨兼慨銈夊疾?80px婵犵數鍋涢顓熸叏娴兼潙纾块柟娈垮枤缁犳棃鏌涘☉妯兼憼闁?*/
         @media (max-width: 480px) {
             .radar-panel, .warning-panel {
                 height: 280px;
@@ -1042,8 +1042,8 @@
             }
         }
 
-        /* ============= 闂佺绻戞繛濠囧极椤撶喓鈹嶆い鏃傗拡濡插鏌ㄥ☉娆掑闁告瑥绻掓禒锕佺疀閺傛儳鍨濇繝銏ｆ硾缁夌敻鎮ч崡鐑嗗殨?============= */
-        /* 閻熸粎澧楅幐鎼佹儓閸℃稓宓侀柡鍥╁枍閸掓帒顭跨捄铏剐㈤柛?200px婵炲濮伴崕鎵箔閸岀偛绫嶉悹浣告贡缁€澶屸偓娈垮枛閹碱偊宕哄Δ鍛畳闁靛繒濯Σ濠氭煕韫囧濡奸柣顐㈡閺侇噣宕橀妸褎鎷?*/
+        /* ============= 闂傚倷鑳堕…鍫㈡崲閹寸偟绠惧┑鐘叉搐閺嬩焦銇勯幘璺烘灁闁崇懓绉甸妵鍕籍閸屾瀚涘┑鈩冨絻椤兘寮婚妸銉㈡婵炲棙甯掗ˉ婵嬫⒑閸涘﹦鎳冪紒缁樺笚缁傛帡鏁冩担铏规澑闂佸搫鍊归崕鎶藉垂濠靛洨绡€闁靛骏绲剧涵鍓х磼婢跺本鏆柟顔ㄥ洤纭€闁绘垵妫楀▓?============= */
+        /* 闂佽崵鍠愮划搴㈡櫠濡ゅ懎绠伴柟闂寸劍閸庢捇鏌涢埄鍐€掔€规挷绶氶弻锟犲炊閳轰焦鐎洪梺鍛婂笚鐢帡鈥︾捄銊﹀磯闁惧繐澧ｉ姀銈嗙厱?200px婵犵數鍋涢顓熸叏娴兼潙纾块柟娈垮枤缁犳棃鏌涘畝鈧崑娑氱尵瀹ュ鍋ｅù锝呮啞鐠愶紕绱掗埀顒佸緞鐏炵浜炬繛鍫濈仢閺嬫盯鏌熺喊鍗炰喊鐎规洖鎼灃闁告侗鍘鹃悾鎶芥⒑闂堟稓绠冲┑顖ｅ幖鍗卞┑鐘崇閻撴洟鐓崶褜鍎忓┑鈥炽偢閺岋綁顢曢姀鈽嗘￥闂佽桨绶￠崳锝呯暦濮椻偓婵℃瓕顦抽柟?*/
         @media (min-width: 1201px) {
             .main-content {
                 display: grid !important;
@@ -1125,7 +1125,7 @@
             }
         }
 
-        /* 婵☆偆澧楃换鍌炈囨繝姘剭闁告洦鍠氬瓭婵犮垹鐖㈤崘顏呯秳濡ょ姷鍋炲ú鎴犳椤撱垹绀岄柡宥囨暩缁€?800px婵炲濮伴崕鎵箔閸岀偞鏅?*/
+        /* 婵犵妲呴崑鍡樻櫠濡ゅ啯宕查柛宀€鍊涢崶銊х瘈婵﹩鍘奸崜顓㈡⒑閸涘﹥澶勯柛鐘宠壘閻☆厼鈹戦悩顔肩仼闁绘牓鍨藉畷姗€顢旈崨顖溞″┑掳鍊楁慨鐑藉磻閻愯娲箣閻樻剚娼熷銈嗘尪閸ㄥ湱绮堝畝鍕厸鐎广儱娲﹂弳鈺冪磼閳?800px婵犵數鍋涢顓熸叏娴兼潙纾块柟娈垮枤缁犳棃鏌涘畝鈧崑鐐哄疾?*/
         @media (min-width: 1800px) {
             .container {
                 max-width: 95%;
@@ -1291,37 +1291,37 @@
     <span></span>
     <span></span>
     <ul>
-        <li><a href="../index/index.html" data-title="婵☆偓绲鹃悧鐘诲Υ? title="婵☆偓绲鹃悧鐘诲Υ?><span class="nav-icon">濡絽鍟紞?/span><span class="nav-text">婵☆偓绲鹃悧鐘诲Υ?/span></a></li>
-        <li><a href="../waterproject/waterproject.html" data-title="濠殿喗蓱濞兼瑩宕洪崟顐晠闁靛／鈧弻?><span class="nav-icon">濡絽鍟紞鈧梺?/span><span class="nav-text">濠殿喗蓱濞兼瑩宕洪崟顐晠闁靛／鈧弻?/span></a></li>
-        <li><a href="../waterlevel/waterlevel.html" data-title="濠殿喗顭囩换婵堢礊閸涙潙绀夐柕濠忚吂閸嬫挻鎷呴悜妯硷紘濠?><span class="nav-icon">濡絽鍟惂?/span><span class="nav-text">濠殿喗顭囩换婵堢礊閸涙潙绀夐柕濠忚吂閸嬫挻鎷呴悜妯硷紘濠?/span></a></li>
-        <!-- <li><a href="../prediction/prediction.html" data-title="濠殿喗顭囩换婵堢礊閸涱噯绱ｉ柛鏇ㄥ墰閵堝瓨淇婇妞诲亾瀹曞洠鍋?><span class="nav-icon">濡絽鍠氬Ο?/span><span class="nav-text">濠殿喗顭囩换婵堢礊閸涱噯绱ｉ柛鏇ㄥ墰閵堝瓨淇婇妞诲亾瀹曞洠鍋?/span></a></li> -->
-        <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="闂傚倸鍟鍫曟儓閺囥垹绠俊銈勭劍閿?><span class="nav-icon">濡絽鍟粈澶愭煥?/span><span class="nav-text">闂傚倸鍟鍫曟儓閺囥垹绠俊銈勭劍閿?/span></a></li>
+        <li><a href="../index/index.html" data-title="婵犵妲呴崑鎾跺緤妤ｅ啯鍋嬮柣妯款嚙杩? title="婵犵妲呴崑鎾跺緤妤ｅ啯鍋嬮柣妯款嚙杩?><span class="nav-icon">濠碘槅鍋撶徊浠嬪疮椤愩倗绀?/span><span class="nav-text">婵犵妲呴崑鎾跺緤妤ｅ啯鍋嬮柣妯款嚙杩?/span></a></li>
+        <li><a href="../waterproject/waterproject.html" data-title="濠电姵顔栭崰妤勬懌濠电偛鍚嬮悷鈺佺暦濞差亜绀嬫い鎰靛亜閺呯娀姊洪棃娑崇础闁逞屽墴瀵?><span class="nav-icon">濠碘槅鍋撶徊浠嬪疮椤愩倗绀婇柍褜鍓熷?/span><span class="nav-text">濠电姵顔栭崰妤勬懌濠电偛鍚嬮悷鈺佺暦濞差亜绀嬫い鎰靛亜閺呯娀姊洪棃娑崇础闁逞屽墴瀵?/span></a></li>
+        <li><a href="../waterlevel/waterlevel.html" data-title="濠电姵顔栭崰妤呪€﹂崶鈺傚床婵犻潧鐗忕粈濠囨煕濞戞瑦缍戠紒鈧径鎰厪濠电姴绻楅崥鍌炴煕鐎ｎ偅灏伴柟宄版嚇閹粌螣绾绀冨┑?><span class="nav-icon">濠碘槅鍋撶徊浠嬪疮椤愶附鍎?/span><span class="nav-text">濠电姵顔栭崰妤呪€﹂崶鈺傚床婵犻潧鐗忕粈濠囨煕濞戞瑦缍戠紒鈧径鎰厪濠电姴绻楅崥鍌炴煕鐎ｎ偅灏伴柟宄版嚇閹粌螣绾绀冨┑?/span></a></li>
+        <!-- <li><a href="../prediction/prediction.html" data-title="濠电姵顔栭崰妤呪€﹂崶鈺傚床婵犻潧鐗忕粈濠囨煕濞戝崬娅欑紒鎲嬬秮閺屾盯寮撮妸銉ヮ潾闂侀潧鐗嗛悺銊︾┍婵犲浂鏁嶆俊鐐额嚙娴滃墽鈧娲栧ú鐘诲磻?><span class="nav-icon">濠碘槅鍋撶徊浠嬪窗濮橆儵?/span><span class="nav-text">濠电姵顔栭崰妤呪€﹂崶鈺傚床婵犻潧鐗忕粈濠囨煕濞戝崬娅欑紒鎲嬬秮閺屾盯寮撮妸銉ヮ潾闂侀潧鐗嗛悺銊︾┍婵犲浂鏁嶆俊鐐额嚙娴滃墽鈧娲栧ú鐘诲磻?/span></a></li> -->
+        <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="闂傚倸鍊搁崐鎼佸疮椤愩埄鍤曢柛顐ｆ礃閸庢捇鏌￠崶銉ョ仼缂佺媭鍠楁穱濠囧Χ閸曨厼濡介梺?><span class="nav-icon">濠碘槅鍋撶徊浠嬪疮椤栨粎鐭嗗鑸靛姈閻?/span><span class="nav-text">闂傚倸鍊搁崐鎼佸疮椤愩埄鍤曢柛顐ｆ礃閸庢捇鏌￠崶銉ョ仼缂佺媭鍠楁穱濠囧Χ閸曨厼濡介梺?/span></a></li>
     </ul>
 </div>
-<!-- 闁哄鏅滈弻銊ッ洪弽顓炵濠㈣埖鍔栫亸?(閻庣懓鎲￠悡鈥斥枔閿濆瀵犻煫鍥ュ劤缁€澶愭煟閵忕姴鑸规い鏇憾閹虫粓顢旈崨顖氱効闂佸搫娲ら妵姗€宕? -->
+<!-- 闂備礁鎼ˇ顐﹀疾濠婂牆钃熼柕濞垮剭濞差亜鍐€妞ゆ挾鍋熼鍥ㄧ節閵忥絽鐓愰柛鏃€鐗滄禍?(闂佽娴烽幊鎾诲箟閿熺姵鍋傞柍銉︽灱閺嬫棃鏌ㄥ┑鍡╂Ч閻庣數濞€閻擃偊宕堕妷銉ュБ缂備讲鍋撳鑸靛姈閻撶喖鏌曡箛鏇炐㈤柤姝岊潐閵囧嫰寮撮～顓熷枤闂佺娅曠划鎾汇€侀弮鍫濆窛妞ゆ牗姘ㄩ崝褰掓⒒娴ｅ憡鎯堟繛灞傚€濇俊闈涱潨閳ь剙鐣? -->
 <!-- <button class="back-button" onclick="window.history.back()">
-    <span>闂?/span> 闁哄鏅滈弻銊ッ?
+    <span>闂?/span> 闂備礁鎼ˇ顐﹀疾濠婂牆钃熼柕濞垮剭?
 </button> -->
 
 <div class="container">
-    <!-- 婵＄偑鍊曢悥濂稿磿閹绢喖鍐€闁搞儺鍓﹂弳顖炴煕閺嵮勬儓闁?-->
+    <!-- 婵犵绱曢崑鎴﹀磹閺囥垺鍋夊┑鍌滎焾绾惧潡鏌熺紒銏犳灈闁告劏鍋撻梻浣规偠閸庢椽宕滈敃鍌氭辈妞ゆ牜鍋為悡鏇㈡煛瀹擃喖瀚崕鎾绘⒑?-->
     <div class="header">
         <div class="header-left">
             <h1>涓浗姘磋川姘翠綅棰勬祴鍙鍖栧钩鍙?/h1>
         </div>
         <div class="header-right">
             <div class="time-info">
-                <div id="currentDate">2025濡?2闂?闂?闂佸搫瀚崰鎰耿閳╁啰顩?/div>
+                <div id="currentDate">2025濠?2闂?闂?闂傚倷绀侀幖顐も偓姘煎櫍瀹曚即骞囬濠呪偓鍧楁煃閳轰礁鏆熸い?/div>
                 <div id="currentTime">10:30:15</div>
             </div>
         </div>
     </div>
 
-    <!-- 婵炴垶鎹侀褔宕€电硶鍋撻崷顓熷殌閻忓浚鍨跺畷?-->
+    <!-- 婵犵數鍋為崹鍫曞箲娓氣偓椤㈡俺顦圭€规洦鍓涢埀顒傛暩绾爼宕戦幘璇叉嵍妞ゆ挾鍠庡▓宀勬煟韫囨挻绂嬮柛銊ㄦ硾閻?-->
     <div class="main-content">
-        <!-- 閻庡綊娼荤紓姘跺疾閸洘顥堥柕蹇婂墲缁?-->
+        <!-- 闂佽楠哥紞濠傤焽閼姐倗纾芥慨妯挎硾閻ら箖鏌涢锝嗙妞ゃ儱鐗撻弻鏇＄疀婵犲倸鈷夌紓?-->
         <div class="left-panel">
-            <!-- 閻庡綊娼荤紓姘跺疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掔喊宥呫€掗妶鍚よ鎷呯憴鍕樆婵炶揪绲界粔椋庣矓婵傜绀夐柛顭戝枟缁?-->
+            <!-- 闂佽楠哥紞濠傤焽閼姐倗纾芥慨妯挎硾閻ら箖鏌涢锝嗙闁绘劕锕弻鐔烘喆閸曨偄顫囬梺?闂傚倷鐒︾€笛呯矙閹烘柨鏋堢€广儱鎳岄埀顒佸浮婵″爼宕ラ妶鍫綈闁瑰嘲鎳愰幉鎾礋椤愩倖鈻庢繝鐢靛仩閹活亞寰婇悾宀€鐭撳瀣捣閻挸鈹戦崒婊庣劸缂佲偓婢舵劖鐓曟い顓熷灥閺嬬喓绱?-->
             <div class="left-chart-1">
                 <div class="left-chart-header">
                     <div class="left-chart-title">宸︿竴 绔欑偣姘翠綅姒傝</div>
@@ -1329,7 +1329,7 @@
                 <div class="left-chart-container" id="leftChart1Container"></div>
             </div>
 
-            <!-- 閻庡綊娼荤紓姘跺疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掔喊宥夊箰婢跺本瀚婚柕濞垮劚缂嶄線鏌涢弽銊уⅹ妞ゆ洦鍠栬?-->
+            <!-- 闂佽楠哥紞濠傤焽閼姐倗纾芥慨妯挎硾閻ら箖鏌涢锝嗙闁绘劕锕弻鐔烘喆閸曨偄顫囬梺?闂傚倷鐒︾€笛呯矙閹烘柨鏋堢€广儱顦粻鏉款熆鐠虹儤婀伴悗姘煼閺屾洘绻涢崹顔煎缂傚倸绉崇欢姘跺蓟濞戙垹鍐€闁靛ě鍐ｅ悅婵＄偑鍊栧ú锕傚窗閺嶎剦鏆?-->
             <div class="left-chart-2">
                 <div class="left-chart-header">
                     <div class="left-chart-title">宸︿簩 姘磋川鎸囨爣鍒嗘瀽</div>
@@ -1337,33 +1337,33 @@
                 <div class="left-chart-container" id="leftChart2Container"></div>
             </div>
 
-            <!-- 閻庡綊娼荤紓姘跺疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掑銊╂偟椤栫偞鍊烽悷娆忓鐎垫粓鎮归幇鈺佸缂佸銈稿畷婵嬪垂椤曞懎娈稿┑顕嗙稻閺屻劌霉濮椻偓閺佸秹宕奸悢鍝ュ帎婵犫拃鍛壋缂?-->
+            <!-- 闂佽楠哥紞濠傤焽閼姐倗纾芥慨妯挎硾閻ら箖鏌涢锝嗙闁绘劕锕弻鐔烘喆閸曨偄顫囬梺?闂傚倷鐒︾€笛呯矙閹烘埈娼╅柕濞炬櫆閸嬬喐銇勯弽顐沪闁稿﹦鍏橀幃宄扳枎韫囨搩浠鹃柣搴＄仛缁捇骞冭ぐ鎺戠疀闁宠桨绀侀～鍛磽娴ｅ壊妲搁柕鍫㈩焾閻ｅ嘲鈹戠€ｎ亜鐎銈嗘礀閹冲骸鈻撶粙搴撴斀妞ゆ洖妫涚粙濠氭煛鐏炶濡奸棁澶嬫叏濡炶浜鹃梺杞扮缁夌懓鐣锋總鍛婂亜闁告縿鍎辩敮搴♀攽閻橆偅濯伴柛娑卞幖婢瑰绱?-->
             <div class="left-chart-3">
                 <div class="left-chart-header">
                     <div class="left-chart-title">宸︿笁 姘磋川姘翠綅瓒嬪娍瀵规瘮</div>
-                    <div class="left-chart-subtitle" id="trendComparisonTitle" style="color: #4dabf7; font-size: 0.7rem;">闂佽桨鑳舵晶妤€鐣垫笟鈧畷婵嬫偐閻戞銈版繛?..</div>
+                    <div class="left-chart-subtitle" id="trendComparisonTitle" style="color: #4dabf7; font-size: 0.7rem;">杩?10 澶╄秼鍔?/div>
                 </div>
                 <div class="left-chart-container" id="leftChart3Container"></div>
             </div>
 
-            <!-- 婵炴垶鎸诲Σ鎺椼€呴敃鍌氱倞闁硅鍔戦埀顒€鍟村畷鐘诲传閸曨厼骞?-->
+            <!-- 婵犵數鍋為崹鍫曞箰鐠囧弬锝夊箳濡炲皷鍋撻崨瀛樻櫇闁稿本姘ㄩ崐鐐烘⒑绾拋娼愰柛鏃€鍨块崺鈧い鎺嗗亾闁哥喐娼欓悾鐑芥偐鐠囪弓绱堕梺鍛婃处閸樺ジ鐛?-->
             <div class="chart-panel">
                 <div class="chart-header">
                     <div class="chart-title">涓儴 姘磋川姘翠綅棰勬祴鍥?/div>
-                    <div class="chart-subtitle" id="selectedStationName">闂佽桨鑳舵晶妤€鐣垫笟鈧畷婵嬫偐閻戞銈版繛?..</div>
+                    <div class="chart-subtitle" id="selectedStationName">鏆傛棤閫変腑绔欑偣</div>
                 </div>
                 <div class="chart-container" id="chartContainer"></div>
             </div>
         </div>
 
-        <!-- 婵炴垶鎼╅崣鍐ㄎ涢崸妤€鎹堕柡澶嬪缁傚牓鏌涢弽褎鎯堥柣?-->
+        <!-- 婵犵數鍋為崹鍫曞箹閳哄懎鐭楅柛鎰╁壆濞戙垹閿ゆ俊銈傚亾闁圭懓鐖奸弻鈩冨緞鐎ｎ亶鍤嬬紓浣稿€搁悧鎾诲蓟濞戙垹鍐€鐟滃酣骞嗛崼銉︾厽?-->
         <div class="map-panel">
-            <!-- 闂侀潻闄勫妯好瑰鈧獮鎺曨槺婵炲棎鍨介弫宥夊醇閵忋垻绀嗛梺琛″亾闁绘劦鍓欓惁濠氭⒑缁涘娅欑紒?-->
+            <!-- 闂傚倷绶氬濠氭⒔閸曨偒鐔嗘俊顖氥偨閻熼偊娼ㄩ柍褜鍓熼悰顕€骞掗弴銊πㄦ繝鐢靛仜濡酣宕规禒瀣瀬鐎广儱顦柋鍥煏韫囧鐏紒鈧崱娑欌拺閻炴稈鈧厖澹曢梻浣虹帛閸旓箓宕滃▎鎾村剨濠电姵纰嶉埛鎴犵磼濞戞﹩鍎忔繛鍛懅缁?-->
 
             <div class="map-container">
                 <div id="map"></div>
 
-                <!-- 闂侀潻闄勫妯好瑰鈧畷鍫曞矗閵壯傜矗 -->
+                <!-- 闂傚倷绶氬濠氭⒔閸曨偒鐔嗘俊顖氥偨閻熼偊娼ㄩ柍褜鍓欓悾鐑藉醇閺囩偟鐓戦梺闈涳紡閸屾粎鐓?-->
                 <div class="map-legend">
                     <div class="legend-grid">
                         <div class="legend-item">
@@ -1380,7 +1380,7 @@
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: #ff9800;"></div>
-                            <span>閻?/span>
+                            <span>闂?/span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: #ff5722;"></div>
@@ -1390,21 +1390,21 @@
                 </div>
             </div>
 
-            <!-- 婵☆偅婢樼€氼厾绮婇幘顔肩鐟滃秹宕哄Δ鍛棃闁靛繆鍓濈欢?-->
+            <!-- 婵犵妲呴崑鍛熆濡皷鍋撳鐓庡箻缂侇喖锕獮姗€顢欓懖鈺婂敽闁荤喐绮岀粔鐟扮暦閸濆嫀鏃堝川椤曞懏顥堥梻渚€娼х换鍡涘礈濠靛牊顐?-->
             <div class="prediction-controls">
                 <div class="prediction-range">
-                    <span class="range-label">婵☆偅婢樼€氼厾绮婄€涙ê绶為柍鍝勫€瑰▓?</span>
+                    <span class="range-label">棰勬祴澶╂暟</span>
                     <input type="number" id="predictionDays" class="range-input" min="1" max="30" value="7">
                 </div>
                 <button class="predict-btn" id="runPrediction">
-                    <span>濡絽鍟弳?/span> 闁哄鏅滈崝姗€銆侀幋鐑囩矗闁告洦鍓涢妶瀛樹繆椤栨せ鍋撳畷鍥ｅ亾?
+                    <span>杩愯</span> 棰勬祴
                 </button>
             </div>
         </div>
 
-        <!-- 闂佸憡鐟ラ崢鏍疾閸洘顥堥柕蹇婂墲缁?-->
+        <!-- 闂傚倷绀侀幉锟犳偡閵夆晛鍌ㄩ柡宥庡幖閻ら箖鏌涢锝嗙妞ゃ儱鐗撻弻鏇＄疀婵犲倸鈷夌紓?-->
         <div class="right-panel">
-            <!-- 闂佸憡鐟ラ崢鏍疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掔喊宥夋寘閸曨垰钃熼柟鐐綑閻﹀綊鏌″鍛閻㈩垱鎸鹃幃?-->
+            <!-- 闂傚倷绀侀幉锟犳偡閵夆晛鍌ㄩ柡宥庡幖閻ら箖鏌涢锝嗙闁绘劕锕弻鐔烘喆閸曨偄顫囬梺?闂傚倷鐒︾€笛呯矙閹烘柨鏋堢€广儱顦扮€垫﹢鏌涢弴銊ョ仩闁藉啰鍠栭弻鐔兼倷椤掍胶绋囬梺浼欑畱缂嶅﹪寮婚垾鎰佸悑闁告侗鍠栭ˇ鈺呮煟閵忊晛鐏￠柟鎼佺畺楠?-->
             <div class="right-chart-1">
                 <div class="right-chart-header">
                     <div class="right-chart-title">鍙充竴 閲嶇偣鎸囨爣鍒嗗竷</div>
@@ -1412,7 +1412,7 @@
                 <div class="right-chart-container" id="rightChart1Container"></div>
             </div>
 
-            <!-- 闂佸憡鐟ラ崢鏍疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掑銊╂偟椤栫偞鍊烽柛锔诲幖绗戦梺璇″厸缁€渚€宕规惔锝嗘殰?-->
+            <!-- 闂傚倷绀侀幉锟犳偡閵夆晛鍌ㄩ柡宥庡幖閻ら箖鏌涢锝嗙闁绘劕锕弻鐔烘喆閸曨偄顫囬梺?闂傚倷鐒︾€笛呯矙閹烘埈娼╅柕濞炬櫆閸嬬喐銇勯弽顐沪闁稿﹦鍏橀弻娑㈡晜鐠囨彃绠圭紒妤佸灴濮婅櫣鎷犻垾鍐插箰缂備讲鍋撳〒姘ｅ亾鐎规洝顫夐幆鏃堟晲閸℃ɑ顔?-->
             <div class="right-chart-2">
                 <div class="right-chart-header">
                     <div class="right-chart-title">鍙充簩 姘磋川绛夌骇鍙樺寲</div>
@@ -1420,30 +1420,30 @@
                 <div class="right-chart-container" id="rightChart2Container"></div>
             </div>
 
-            <!-- 闂傚倸妫涢弻澶愬箵椤忓牆鐐婂Δ锝呭暞濡椼劑鏌?-->
+            <!-- 闂傚倸鍊搁崐绋课涘☉銏犺摕濠㈣埖鍔曠粻鍨亜韫囨挾澧曢柣鎰工铻栭柨婵嗘噹閺嗙偞淇婂鐓庡闁?-->
             <div class="radar-panel">
                 <div class="radar-header">
                     <div class="radar-title">鍙充笁 姘磋川鎸囨爣闆疯揪鍥?/div>
-                    <div class="radar-station" id="radarStationName">闂佽桨鑳舵晶妤€鐣垫笟鈧畷婵嬫偐閻戞銈版繛?..</div>
+                    <div class="radar-station" id="radarStationName">鏆傛棤閫変腑绔欑偣</div>
                 </div>
                 <div class="radar-container" id="radarContainer"></div>
-                <!-- 闂傚倸妫涢弻澶愬箵椤忓牆鐐婇柟瑙勫姉閺嬪倿鏌熺紒銏犲箺閻㈩垰鐖煎畷?-->
+                <!-- 闂傚倸鍊搁崐绋课涘☉銏犺摕濠㈣埖鍔曠粻鍨亜韫囨挾澧曢柣鎰躬閺岀喓鎲撮崟顐㈩潕闂佸搫顑呴崐鍧楀蓟閻旇櫣纾奸柕蹇曞Т缁犳椽鏌ｉ姀鈺佺仩闁绘牜鍘ч悾?-->
                 <div class="radar-controls">
                     <button class="radar-btn" id="prevStation">
-                        <span>闂佸啿鐨烽崑?/span> 婵炴垶鎸搁敃锝囩博鐎靛摜鍗?
+                        <span>涓婁竴绔?/span>
                     </button>
                     <div class="radar-indicator" id="radarIndicator"></div>
                     <button class="radar-btn" id="nextStation">
-                        婵炴垶鎸搁鍕博鐎靛摜鍗?<span>闂?/span>
+                        涓嬩竴绔?span> ></span>
                     </button>
                 </div>
             </div>
 
-            <!-- 婵☆偅婢樼€氼垶顢楅悢鐓庣闁告繂瀚崢?-->
+            <!-- 婵犵妲呴崑鍛熆濡皷鍋撳鐓庣仸妞ゃ垺顨婇幃銏ゆ偂鎼达綆妲洪梻浣告啞缁诲倻鈧凹鍣ｅ畷?-->
             <div class="warning-panel">
                 <div class="warning-header">
                     <div class="warning-title">閲嶇偣棰勮淇℃伅杞挱</div>
-                    <div class="warning-count" id="warningCount">0闂?/div>
+                    <div class="warning-count" id="warningCount">0 鏉?/div>
                 </div>
                 <div class="warning-container" id="warningContainer">
                     <div class="warning-slider" id="warningSlider"></div>
@@ -1454,7 +1454,7 @@
 </div>
 
 <script>
-    // 闂佺绻堥崝宀勬儑椤掑嫬鐭楁慨妞诲亾闁?
+    // 闂傚倷鑳堕…鍫㈡崲閸儱绀夌€光偓閸曨剙鍓冲銈嗗笒鐎氼剟鎯屽Δ浣瑰弿婵＄偠顕ф禍楣冩⒑?
     let map = null;
     let markers = [];
     let currentChart = null;
@@ -1465,8 +1465,8 @@
     let rightChart1 = null;
     let rightChart2 = null;
 
-    let monitoringStations = []; // 婵炲濮存鎼佸箖濡ゅ啰鍗氭い鏍ㄧ箓缁狀垶鏌涘▎鎰⒈婵炲牊鍨垮顐︽偋閸繄銈?
-    let warningData = []; // 婵炲濮存鎼佸箖濡ゅ啰鍗氭い鏍ㄧ箓缁狀垶鏌涘▎鎰⒈婵炲牊鍨堕敍鎰板礋椤曞懎濡抽梺杞拌兌婢ф鐣?
+    let monitoringStations = []; // 婵犵數鍋涢顓熸叏鐎涙﹩娈介柟闂寸缁犳牗淇婇妶鍛殶闁告纰嶉妵鍕冀閵娧呯暤缂備胶濯崹鍫曞蓟濞戞ǚ鏋庨柟閭﹀枛閳峰牆鈹戦悙鑼闁搞劌鐏濋锝夘敃閿旇棄浜遍梺鍓插亝缁诲嫰濡?
+    let warningData = []; // 婵犵數鍋涢顓熸叏鐎涙﹩娈介柟闂寸缁犳牗淇婇妶鍛殶闁告纰嶉妵鍕冀閵娧呯暤缂備胶濯崹鍫曞蓟濞戞ǚ鏋庨柟閭﹀枛閳峰牆鈹戦悙鑼闁搞劌鐖奸弫宥夊箛閺夎法顦板銈嗘礀閹冲孩淇婇幎鑺モ拺閺夌偞濯介崗灞筋熆瑜庨〃鍛存偩?
 
     let selectedStationId = null;
     let radarStationIndex = 0;
@@ -1477,7 +1477,7 @@
     let currentInfoWindow = null;
     let autoInfoWindowTimeout = null;
 
-    // API闂備焦婢樼粔鍫曟偪?- 婵烇絽娴傞崰鏍囬弻銉﹀亱闁割偆鍠愰幏?
+    // API闂傚倸鍊烽悞锕€顭垮Ο鑲╃煋闁割偅娲橀崑?- 婵犵數鍎戠徊钘壝归崒鐐茬獥闁哄稁鍘旈崶顒€钃熼柕澶涚畱娴滈亶姊洪崜鎻掍簽闁哥姵鍔欓獮?
     const API_BASE_URL = '/api/prediction/stations';
     const WARNING_API_BASE_URL = '/api/prediction/warnings';
     const DATA_API_BASE_URL = '/api/prediction/data';
@@ -1486,7 +1486,7 @@
     async function fetchAmapConfig() {
         const response = await fetch('/api/config/amap');
         if (!response.ok) {
-            throw new Error(`妤傛ê鐥夐柊宥囩枂鐠囬攱鐪版径杈Е: ${response.status}`);
+            throw new Error(`婵°倕鍊归敋闁汇儱顦甸弻濠傤吋閸モ晜鐎柣鐘叉喘閺€閬嶆儑閻楀牆绶為弶鍫亯琚? ${response.status}`);
         }
         return response.json();
     }
@@ -1505,7 +1505,7 @@
             const script = document.createElement('script');
             script.src = `https://webapi.amap.com/maps?v=2.0&key=${config.key}&plugin=AMap.ToolBar,AMap.Scale`;
             script.onload = resolve;
-            script.onerror = () => reject(new Error('妤傛ê鐥夐崷鏉挎禈閼存碍婀伴崝鐘烘祰婢惰精瑙?));
+            script.onerror = () => reject(new Error('婵°倕鍊归敋闁汇儱顦靛畷鐑藉级閹稿海顩梺鐓庣摠绾板秴锕㈡导鏉戠闁绘鍎ょ粊鏉款熆閹壆绨块悷?));
             document.head.appendChild(script);
         });
     }
@@ -1520,13 +1520,13 @@
         return amapLoadPromise;
     }
 
-    // API闂佽浜介崕杈亹?- 婵炴潙鍚嬮敋閻庡灚鐓￠幃褔宕奸悢鍛婂闂佹寧绋戦懟顖溾偓鍨耿瀹曘儵顢曢姀鈥斥偓闈涱熆鐠虹儤澶勯柡宀€鍠庨々?
+    // API闂傚倷娴囬～澶嬬娴犲纾块弶鍫亖娴?- 婵犵數鍋炲娆撳触鐎ｎ喗鏅梺璇查閻忔岸鎮￠敓鐘茬畺鐟滄柨鐣锋總鍛婂亜闁告稑锕ら浼存⒒娴ｇ懓顕滅紒瀣灴閹崇喖顢涘┃鎯т壕闁割煈鍋撻懓璺ㄢ偓瑙勬磸閸庣敻銆侀弴銏狀潊闁炽儲鏋奸崑鎾绘濞戣京鍞甸柣鐘烘閸庛倖寰勯崟顖涚厸鐎光偓閳ь剟宕版惔銊ｂ偓?
     const API_ENDPOINTS = {
-        // 闂佺硶鏅炲▍锝夈€侀崨顖滃崥婵炲棙鍨垫禒顖炴煙閹帒鍔氱憸鐗堢洴閺佸秹宕奸埗鈹惧亾濡吋濯奸柕鍫濇噽閹界娀鏌涢敂鑽ゅ帨缂?
+        // 闂傚倷鑳剁涵鍫曞疾閻愭祴鏋嶉柨婵嗩槶閳ь兛绶氬畷銊╊敍濠婂啫瑙︽繝鐢靛仜濡瑩宕归崹顐ゎ浄妞ゆ牜鍋為悡娆撴煙椤撶喎绗掗柛鏃€姘ㄩ幉鎼佹偋閸垺鍒涢梺杞扮缁夌懓鐣锋總绋跨厬闁宠鍎虫禍鐐繆椤栨艾鎮戝┑顖氥偢閺屾洟宕煎┑鍥ф闂佸湱鏅繛鈧柡灞剧洴閺佸倿鎳￠妶鍛緟缂?
         STATIONS: `${API_BASE_URL}/frontend/all`,
         STATION_DETAIL: (id) => `${API_BASE_URL}/${id}`,
 
-        // 闁诲繐绻戠换鍡涙儊椤栫偞鍤旂€瑰嫭婢樼徊璺ㄧ磽娴ｅ搫鏋欐い鎾存倐瀵偊鎮ч崼婵堛偊闂佹眹鍔岀€氼剟藝閹稿海鈻旀い蹇撳鐠佹煡鏌ら崘娴嬪亾閻旇櫣鍞撮悗?
+        // 闂備浇顕х换鎰崲閹寸姵宕查柛鈩冪⊕閸庡﹥銇勯弽顐沪闁搞倖姊婚埀顒傛嚀鐎氼厼顭垮Ο鐓庣筏閻犳亽鍔庣壕钘壝归敐鍛儓闁哄鐟﹂妵鍕箻鐎涙ê鈧劗鈧鍣崑濠囧箖瑜斿畷鐓庘攽閸稑浜伴梻鍌欑劍閻綊宕濆畝鈧埀顒佸嚬閸撶喕妫熼梺鍦焾濞寸兘鍩㈤弮鈧妵鍕疀閹炬剚浠奸柣鐘辩劍閻擄繝寮婚妶澶婄婵炴潙顑呮禍楣冩煟閺冨洦顏犻柛鐐存尦閹?
         STATS_CANDIDATES: [
             `${API_BASE_URL}/frontend/stats/map`,
             `${API_BASE_URL}/frontend/stats`,
@@ -1537,42 +1537,42 @@
         WARNINGS: `${WARNING_API_BASE_URL}/frontend/all`
     };
 
-    // HTTP闁荤姴娲弨閬嶆儑閺夋鍟呴柕澶堝劚瀵版棃鏌涢幋锝呅撻柡?- 婵犫拃鍛粶鐎规悂浜堕幃褔宕奸悢鍛婂
+    // HTTP闂備浇宕垫慨鏉懨洪銏犵哗闂侇剙绉甸崕鎴︽煛婢跺鍎ラ柛鐔锋嚇閺屾洘寰勯崼婵嗗閻庣數澧楀Λ鍐蓟濞戙垹绠ｉ柨婵嗘啗閹剧粯鐓?- 婵犵數濮幏鍐川椤撴繄鎹曢柣搴ゎ潐閹倹绂嶉崼鏇炵畺鐟滄柨鐣锋總鍛婂亜闁告稑锕ら?
     const api = {
         async get(url) {
             try {
-                console.log('API闁荤姴娲弨閬嶆儑?', url);
+                console.log('API闂備浇宕垫慨鏉懨洪銏犵哗闂侇剙绉甸崕?', url);
                 const response = await axios.get(url, {
-                    timeout: 8000, // 8缂備礁顦扮敮鐔虹矓閹绢喖绫?
+                    timeout: 8000, // 8缂傚倸鍊风粈渚€藝閹殿喗鏆滈柣鏃囨閻捇鏌熺紒銏犳灈缂?
                     headers: {
                         'Accept': 'application/json',
                         'Content-Type': 'application/json'
                     }
                 });
 
-                console.log('API闂佸憡绻傜粔瀵歌姳閺屻儲鍋愰柤鍝ヮ暯閸?', response.status, response.statusText);
+                console.log('API闂傚倷绀侀幉锛勬崲閸屾粎鐭撻悗鍨摃婵娊鏌＄仦璇插姕闁稿鍔欓弻銈夊传閵夘喗姣岄梺?', response.status, response.statusText);
 
-                // 婵犮垼娉涚€氼噣骞冩繝鍥цЕ閹艰揪缍嗘导鍌炴煟?Result 闂佸搫绉堕崢褏妲?
+                // 婵犵數濮伴崹鐓庘枖濞戞埃鍋撳鐓庢珝妤犵偛鍟换婵嬪炊瑜戣闂佺澹堥幓顏嗙礊閸℃ê顕遍柛宀€鍋為悡?Result 闂傚倷绀侀幖顐ょ矓閸洖鍌ㄧ憸蹇撐?
                 if (response.data && response.data.code !== undefined) {
                     if (response.data.code === 200) {
-                        return response.data.data; // 闂佸湱绮崝鏇°亹閸ヮ剚鍎戦柣鏂垮閸斺偓闂佹眹鍔岀€氼參寮抽悢鐓庣?
+                        return response.data.data; // 闂傚倷绀佸﹢杈╁垝椤栫偛绀夐柡鍤堕姹楅梺鎼炲労閸撴岸宕曢幋锔界厽闁哄倸鐏濋ˉ蹇涙煕閺傚搫浜鹃梻鍌欑劍閻綊宕濆畝鈧埀顒佸嚬閸欏啫顕ｉ幎鑺ュ亜闁绘挸娴烽?
                     } else {
-                        console.warn('API闁哄鏅滈弻銊ッ洪弽顓熺叆婵炲棙甯╅崵鏍煟?', response.data.code, response.data.message);
+                        console.warn('API闂備礁鎼ˇ顐﹀疾濠婂牆钃熼柕濞垮剭濞差亜鍐€妞ゆ挾鍠撻崣鍡椻攽閻愬弶顥為悽顖楁櫊瀹曠敻寮介鐔哄幗?', response.data.code, response.data.message);
                         return null;
                     }
                 }
 
-                // 婵犵鈧啿鈧綊鎮樻径濞炬煢闁斥晛鍟粻?code 闁诲孩绋掗〃鍡涱敊瀹€鍕櫖鐎光偓閳ь剙煤閸ф绠抽柕澶堝妿缁犳煡鏌?
+                // 婵犵數濮烽。浠嬪焵椤掆偓閸熷潡鍩€椤掆偓缂嶅﹪骞冨Ο璇茬窞濠电偟鍋撻悡銏ゆ⒑閺傘儲娅呴柛鐕佸灣缁?code 闂備浇顕х€涒晝绮欓幒妞尖偓鍐幢濞戣鲸鏅╅悗鍏夊亾闁告洦鍓氬▍鏍倵閸忓浜鹃梺閫炲苯澧悡銈夋煕瑜庨〃鍛不閹惰姤鐓忓璺虹墕婵¤法绱掗悩宕囧弨闁?
                 return response.data;
             } catch (error) {
-                console.warn('API闁荤姴娲弨閬嶆儑閻楀牆绶為弶鍫亯琚?', error.message, url);
+                console.warn('API闂備浇宕垫慨鏉懨洪銏犵哗闂侇剙绉甸崕鎴︽煟濡も偓閻楀棛娆㈤悙鍝勭骇闁割偒鍋勬禍顖滄偖?', error.message, url);
 
-                // 闂佺粯顨夐～澶愭偩閳哄倸绶為柛鏇ㄥ幗閸婄偤鏌ㄥ☉娆掑妞も敪鍥у嚑婵犲﹤妫崵鐐存叏閻熸澘鈧鈻撻幋锕€鍙婃い鏍ㄨ壘缁€瀣槈閹垮啩绨介柣婵愬灦閹瑧娑甸崪浣告疁闂佽鍨伴幏鎴犳濠靛洦浜ら柡鍌涘缁€鈧琻ull
+                // 闂傚倷鑳剁划顖炪€冩径鎰剁稏濠㈣埖鍔栭崑鈺呮煃閸濆嫬鈧摜娆㈤悙鐑樼厱闁哄洢鍔岄獮妤呮煕婵犲嫬浠遍柡灞诲妼閳藉鈻庨幒鎴婵＄偑鍊愰弫顏堝炊瑜嶉崵鎴濃攽閻樿宸ユ俊顐弮瀹曠敻鎮欑€涙ê寮块梺鑽ゅ枑濠㈡﹢鍩€椤掑喚鍤欓柍缁樻崌楠炲鏁冮埀顒勫矗婵犲啨浜滈柡宥冨姀婢规绱掗埀顒傗偓锝庝簴濡插牓鏌熼崹顔兼殨缂併劋绮欓弻锝呪攽閹邦剛浠搁梺璇″枟閻熝冣槈閻㈢妞藉ù锝呮啞閻や線姊绘担绛嬪殐闁搞劋鍗抽獮蹇涘箣閻樻剚娼熷┑鐘绘涧濞诧附绂嶉妶澶嬬厸闁稿本绋戦婊呯磼閳ь剟鍩€閻炵本ll
                 if (url.includes('/api/prediction/stations/') && !url.includes('frontend')) {
                     return null;
                 }
 
-                // 闂佺绻戝﹢鍦垝椤掑嫬绠氶柛娑卞幖閺嬪矂寮堕埡鍌涚叆婵炲弶鐗滅划姘舵倻濡粯顔嶇紓鍌欑鐎氼參宕归妸褉鍋撻悽娈挎敯闁?
+                // 闂傚倷鑳堕…鍫㈡崲閹存繐鑰块柛锔诲幖閸ㄦ繃銇勯幒鎴濐仼缂佺姵宀搁弻娑樷槈閸楃偛绠归梺鍝勵儏閻倸顕ｉ崼鏇炵厸闁稿本绋撻崣鍡椻攽閻愭彃绾ч柣妤佺矌閸掓帒顫濋懜闈涒偓缁樹繆椤栨粎甯涙い鏂跨Ф缁辨捇宕掑▎鎴М闁诲孩鍑归崣鍐ㄧ暦瑜版帒惟鐟滃宕戦幘缁樺仺婵炲牊瀵ч弫顖炴⒑?
                 if (url.includes('stations')) return [];
                 if (url.includes('stats') || url.includes('summary')) return null;
 
@@ -1580,17 +1580,17 @@
             }
         },
 
-        // 闁诲繐绻戠换鍡涙儊椤栨稑绶炴慨姗嗗亰閸ゅ┚RL闂佺儵鏅滃娆撳春瀹€鍕闁归偊鍓欓～?
+        // 闂備浇顕х换鎰崲閹寸姵宕查柛鈩冪⊕閸庡﹥銇勯弽銊р槈缂佸墎鍋為幈銊ヮ潨閸℃ぞ鍠婇梺鎼炲€曢埞姝奓闂傚倷鑳堕崕鐢稿疾濠婂喚鐒芥繛鍡樻尭閺勩儳鈧厜鍋撻柛鏇ㄥ亞椤撴椽姊鸿ぐ鎺戜喊闁告挻鐟╅敐?
         async tryMultiple(urls) {
             for (const url of urls) {
                 try {
                     const result = await this.get(url);
                     if (result !== null && result !== undefined) {
-                        console.log('闂佺懓鐡ㄩ崝鏇熸叏濞戞瑧顩风€广儳螙L闂佸吋鍎抽崲鑼躲亹閸ヮ剙鏋侀柣妤€鐗嗙粊?', url);
+                        console.log('闂傚倷鑳堕幊鎾绘偤閵娾晛绀夐柡鍥╁枑閸欏繑绻涢幋鐐垫噮妞も晠顥撻埀顒€绠嶉崕瀹犵亞L闂傚倷绀侀崥瀣磿閹惰棄搴婇柤鑹扮堪娴滃綊鏌涢妷顔煎闁哄绶氶弻锝呂旈埀顒勬偋閸℃瑧鐭?', url);
                         return result;
                     }
                 } catch (error) {
-                    console.warn('URL闁诲繐绻戠换鍡涙儊椤栨稑绶為弶鍫亯琚?', url, error.message);
+                    console.warn('URL闂備浇顕х换鎰崲閹寸姵宕查柛鈩冪⊕閸庡﹥銇勯弽銊р槈缂佸墎鍋ゅ鍫曞醇椤愵澀鍑介悶?', url, error.message);
                     continue;
                 }
             }
@@ -1610,10 +1610,10 @@
         if (!raw || typeof raw !== 'object') return null;
         return {
             id: raw.id,
-            type: raw.type || raw.warningType || '婵☆偅婢樼€氼垶顢?,
+            type: raw.type || raw.warningType || '婵犵妲呴崑鍛熆濡皷鍋撳鐓庣仸妞?,
             level: normalizeWarningLevel(raw.level || raw.warningLevel),
             stationId: raw.stationId,
-            stationName: raw.stationName || '闂佸搫鐗滄禍鐐烘偂閿涘嫮鍗氭繛鍡樺灥娴?,
+            stationName: raw.stationName || '闂傚倷绀侀幖顐︽偋濠婂嫮顩查柣鎰劋閸嬪倿鏌ㄥ☉妯侯伀闁告纰嶇换娑㈠幢濡櫣浠存繛?,
             parameter: raw.parameter,
             value: raw.value,
             threshold: raw.threshold,
@@ -1623,15 +1623,16 @@
         };
     }
 
-    // 婵炲濮存鎼佸箖濡ゅ啰鍗氭い鏍ㄧ箓缁狀垶鏌涘▎鎰闁哄棛鍠栭獮?- 婵烇絽娴傞崰鏍囬弻銉﹀亱闁割偆鍠愰幏?
+    // 婵犵數鍋涢顓熸叏鐎涙﹩娈介柟闂寸缁犳牗淇婇妶鍛殶闁告纰嶉妵鍕冀閵娧呯暤缂備胶濯崹鍫曞蓟濞戞ǚ鏋庨柟閭﹀枛椤囨⒑閸濆嫭顥犻柛鐘崇墵閻?- 婵犵數鍎戠徊钘壝归崒鐐茬獥闁哄稁鍘旈崶顒€钃熼柕澶涚畱娴滈亶姊洪崜鎻掍簽闁哥姵鍔欓獮?
+    // 浠庡悗绔幏鍙栨暟鎹?
     async function fetchData() {
         try {
-            console.log('鐎殿喒鍋撳┑顔碱儎缁娀宕ユ惔锝庝紓闁兼儳鍢茶ぐ鍥极閻楀牆绁?..');
+            console.log('寮€濮嬩粠鍚庣鑾峰彇鏁版嵁...');
 
             const stationsResponse = await api.get(API_ENDPOINTS.STATIONS);
             monitoringStations = Array.isArray(stationsResponse) ? stationsResponse : [];
             if (!monitoringStations.length) {
-                console.warn('未加载到真实站点数据');
+                console.warn('鏈姞杞藉埌鐪熷疄绔欑偣鏁版嵁');
                 showNotification('鏈姞杞藉埌鐪熷疄绔欑偣鏁版嵁', 'warning');
             }
 
@@ -1656,17 +1657,15 @@
 
             return monitoringStations.length > 0;
         } catch (error) {
-            console.error('闁活亞鍠庨悿鍕极閻楀牆绁﹂柛鏃傚Ь濞村洦寰勬潏顐バ曢柨娑樼焷椤曨剙螞閳ь剟寮婚妷銉﹀€电紒鏃戝灡鐢挳宕?, error);
+            console.error('鐪熷疄鏁版嵁鍔犺浇澶辫触锛岃妫€鏌ュ悗绔帴鍙?, error);
             monitoringStations = [];
             warningData = [];
             selectedStationId = null;
             updateMapStatsFromStations();
-            console.error('鐪熷疄鏁版嵁鍔犺浇澶辫触锛岃妫€鏌ュ悗绔帴鍙?, error);
+            showNotification('鐪熷疄鏁版嵁鍔犺浇澶辫触锛岃妫€鏌ュ悗绔帴鍙?, 'error');
             return false;
         }
     }
-            showNotification('鐪熷疄鏁版嵁鍔犺浇澶辫触锛岃妫€鏌ュ悗绔帴鍙?, 'error');
-        if (!monitoringStations || monitoringStations.length === 0) {
             updateMapStats({
                 totalStations: 0,
                 normalStations: 0,
@@ -1676,7 +1675,7 @@
             return;
         }
 
-        // 闂佸搫鎳樼紓姘跺礂濮椻偓瀹曟岸濡堕崱妯煎姺缂備焦姊归悷褔宕戦敐澶嬪亹闁煎摜顣介崑?
+        // 闂傚倷绀侀幖顐﹀箠濡偐纾芥慨妯挎硾缁€鍌涙叏濡炶浜鹃悗瑙勬礃瀹€鍛婁繆閸洖骞㈡俊顖滃帶婵櫣绱撻崒娆戝妽婵﹤缍婇幃鐤樄鐎规洘鍨块弫鎰緞鐎ｎ亙姹楅梻浣哄帶閹芥粓銆傛禒瀣；?
         const stats = {
             totalStations: monitoringStations.length,
             normalStations: 0,
@@ -1685,7 +1684,7 @@
         };
 
         monitoringStations.forEach(station => {
-            // 闂佸憡甯囬崐鏍蓟閸ヮ剚鐒婚柡鍕箳鐢棝鏌ㄥ☉娆戠叝缂侀硸鍙冨畷妤呭醇濠婂啠鏋忛梺鐑╂噰閺嗙€焌tus闁诲孩绋掗〃鍡涱敊瀹€鍕櫖閻忕偠妫勫鎾寸箾閸″繆鍋撻幓鎺嗘瀼闂佺儵鎳囬弳娉哸lityClass
+            // 闂傚倷绀侀幉锛勬暜閸ヮ剙纾归柡宥庡幖閽冪喖鏌涢妷顔煎闁绘帒顭烽弻锟犲礋椤愩倗顔婇柣銏╁灠濡繈寮婚妸銉㈡婵炲棙鍨归崣婵堢磽娓氣偓绾悂宕ｉ崘銊ф殾婵°倕鎳庨柋鍥ㄧ節婵犲倸鏆婇柡瀣箻濮婃椽鎮滈埡鍌氭珰闂佸搫妫涢埀顒傚壃tus闂備浇顕х€涒晝绮欓幒妞尖偓鍐幢濞戣鲸鏅╅悗鍏夊亾闁告洦鍓氬▍鏍煟韫囨洖浠╂俊顐㈠椤曘儵骞樼€靛摜顔曢梺绯曗偓宕囩畾闁稿鎹囬獮鎾诲箳閸℃鈧ジ姊绘担鍝勫姦闁瑰啿娲鍐测枖閸濈珮ityClass
             if (station.status) {
                 if (station.status === 'normal') stats.normalStations++;
                 else if (station.status === 'warning') stats.warningStations++;
@@ -1695,27 +1694,27 @@
                 else if (station.qualityClass === 'III缂?) stats.warningStations++;
                 else if (station.qualityClass === 'IV缂? || station.qualityClass === 'V缂?) stats.criticalStations++;
             } else {
-                // 婵帗绋掗…鍫ヮ敇閼姐倖濯奸柕鍫濆缁€瀣煛閸曢潧鐏℃い鎺撶矌閺?
+                // 婵犳鍠楃敮妤冪矙閹烘せ鈧箓宕奸妷顔芥櫍闂佺厧顫曢崐鏍ㄥ垔婵傚憡鐓忛柛顐ｇ箓椤忣剛绱掗埀顒傗偓锝庡枟閻撴盯鏌涢弴銏℃锭闁诲繆鍓濋妵鍕箳閹惧墎鐓傞梺?
                 stats.normalStations++;
             }
         });
 
-        console.log('闁荤姳绶ょ槐鏇㈡偩婵犳碍鍎嶉柛鏇ㄥ亝閸曢箖鏌涢妷銉モ挃缂侇喛娅ｉ幏?', stats);
+        console.log('闂備浇宕垫慨宕囨閵堝洦顫曢柡鍥ュ灪閸嬧晛鈹戦悩宕囶暡闁稿骸绉归弻娑㈠即閵娿儰绨奸梺鍛婃礋缁犳牠寮诲☉銏犖ㄩ柕澶堝劗閹稿啰绱撴笟鍥ф灕婵炲拑缍侀獮?', stats);
         updateMapStats(stats);
     }
 
-    // // 闂佹眹鍨婚崰鎰板垂濮橆儵鐔煎焺閸愩劎褰茬紓浣规⒐閻熝囧磻閿濆鏋侀柣妤€鐗嗙粊?
+    // // 闂傚倷鐒﹂惇褰掑垂婵犳艾绐楅柟鐗堟緲閸ㄥ倹鎱ㄥ鍡楀姦闁绘梻鍘ч悞娲煕閹扳晛濡跨憸鎷屽皺缁辨挻鎷呯憴鍕ㄦ嫻闂佽崵鍟欓崶褏锛涢梺鎸庣箓椤︻垶寮告笟鈧弻锝呂旈埀顒勬偋閸℃瑧鐭?
     // function generateMockStations() {
-    //     console.log('闂佹眹鍨婚崰鎰板垂濮橆儵鐔煎焺閸愩劎褰茬紓浣规⒐閻熝囧磻閿濆鏋侀柣妤€鐗嗙粊?);
+    //     console.log('闂傚倷鐒﹂惇褰掑垂婵犳艾绐楅柟鐗堟緲閸ㄥ倹鎱ㄥ鍡楀姦闁绘梻鍘ч悞娲煕閹扳晛濡跨憸鎷屽皺缁辨挻鎷呯憴鍕ㄦ嫻闂佽崵鍟欓崶褏锛涢梺鎸庣箓椤︻垶寮告笟鈧弻锝呂旈埀顒勬偋閸℃瑧鐭?);
     //
     //     const stations = [
     //         {
     //             id: 1,
-    //             name: "闂傚倵鍋撻柟绋挎捣濞笺倖鎱ㄥ┑鎾绘闁活亞鏅划?,
-    //             type: "濠电偛鐭佸▍鏇犵矈閿曞倹鍎庨柟瀵稿仧閵?,
-    //             tags: ["闂傚倵鍋撻柟绋挎捣濞?, "闂佹悶鍎存慨銈囨暜閸洖妫樻い鎾卞灪濡?],
-    //             location: "濠电姭鍋撻柡宓喚鍤氶梺娲讳簷閻掞箓顢楅悢娌秆勫緞婵犲嫷浼?,
-    //             river: "闂傚倵鍋撻柟绋挎捣濞?,
+    //             name: "闂傚倸鍊搁崐鐢稿磻閹剧粯鐓欑紒瀣閹癸絾绻涚粭鍝勨偓鏍箞閵娿儮鏀介柟鍓х帛椤庡秹姊哄ú璁崇敖闁哄拋鍋嗛崚?,
+    //             type: "濠电姷鏁搁崑娑㈡儗娴ｇ硶鏋嶉柡鍥╁Х閻牓鏌ㄩ弴鐐测偓褰掑磿鎼淬劍鐓欓悗鐢殿焾娴犙囨煏?,
+    //             tags: ["闂傚倸鍊搁崐鐢稿磻閹剧粯鐓欑紒瀣閹癸絾绻?, "闂傚倷鐒﹂幃鍫曞磿鐎涙ɑ鍙忛柕鍫濇处閺嗘粓鏌涢锝嗙婵☆偅蓱閵囧嫰骞橀崡鐐典痪濠?],
+    //             location: "濠电姷鏁告慨顓㈠磻閹剧粯鐓涚€规搩鍠栭崰姘跺吹濮樿埖鈷戞繛鑼额唺缁ㄧ兘鏌ｉ幒鐐电暤妞ゃ垺顨婇幃銏犫柦缁夊棗瀚欢鐐测攽閻樻彃顏村ù?,
+    //             river: "闂傚倸鍊搁崐鐢稿磻閹剧粯鐓欑紒瀣閹癸絾绻?,
     //             coordinates: [114.305, 30.593],
     //             waterQuality: {
     //                 pH: 7.2,
@@ -1726,17 +1725,17 @@
     //             },
     //             qualityClass: "II缂?,
     //             color: "#a3d930",
-    //             icon: "闂傚倵鍋?,
-    //             trend: "缂備礁顑呴崯鍧楁偩?,
+    //             icon: "闂傚倸鍊搁崐鐢稿磻?,
+    //             trend: "缂傚倸鍊风粈渚€顢栭崨鏉戠柈闁秆勵殕閸?,
     //             status: "normal"
     //         },
     //         {
     //             id: 2,
-    //             name: "婵帗绋戠€氼厼銆掗妶澶嬬劸闁瑰瓨绻勯悰顔剧磼?,
-    //             type: "濠电偛鐭佸▍鏇犵矈閿曞倹鍎庨柟瀵稿仧閵?,
-    //             tags: ["婵帗绋戠€氼厼銆?, "闂佹椿浜欓悞锔炬暜閸洖妫樻い鎾卞灪濡?],
-    //             location: "濠电偛鑻崯鍨暦閿熺姵鍎戝〒姘ｅ亾闁稿孩绮岄蹇涙倷閼碱剦浼?,
-    //             river: "婵帗绋戠€氼厼銆?,
+    //             name: "婵犳鍠楃敮妤冪矙閹寸姭鍋撳鐓庡箹闁靛棙甯℃俊鑸靛緞鐎ｎ剙濮奸梻浣烘嚀閻°劎鎹㈤崟顖涘仒妞ゆ柨澧界壕?,
+    //             type: "濠电姷鏁搁崑娑㈡儗娴ｇ硶鏋嶉柡鍥╁Х閻牓鏌ㄩ弴鐐测偓褰掑磿鎼淬劍鐓欓悗鐢殿焾娴犙囨煏?,
+    //             tags: ["婵犳鍠楃敮妤冪矙閹寸姭鍋撳鐓庡箹闁?, "闂傚倷鐒﹀鎸庣濞嗘挻鍊块柨鏃傚亾閺嗘粓鏌涢锝嗙婵☆偅蓱閵囧嫰骞橀崡鐐典痪濠?],
+    //             location: "濠电姷鏁搁崑娑㈡嚐椤栫偛鐤柛顭戝枤閺嗭箓鏌ㄩ悢鍝勑ｉ柛搴㈠灥閵嗘帒顫濋敐鍛闂備胶顭堢€涒晝鍒掑畝鍕垫晩闊洦绋掗崐鐑芥煠绾板崬澧诲ù?,
+    //             river: "婵犳鍠楃敮妤冪矙閹寸姭鍋撳鐓庡箹闁?,
     //             coordinates: [113.665, 34.758],
     //             waterQuality: {
     //                 pH: 7.8,
@@ -1748,16 +1747,16 @@
     //             qualityClass: "III缂?,
     //             color: "#f8e71c",
     //             icon: "婵?,
-    //             trend: "缂備礁顑呴崯鍧楁偩?,
+    //             trend: "缂傚倸鍊风粈渚€顢栭崨鏉戠柈闁秆勵殕閸?,
     //             status: "warning"
     //         },
     //         {
     //             id: 3,
-    //             name: "闂佺粯绻勬慨鐢告儓濞嗘挾宓侀柛顭戝枤閻涱喚绱?,
-    //             type: "濠电偛鐭佸▍鏇犵矈閿曞倹鍎庨柟瀵稿仧閵?,
-    //             tags: ["闂佺粯绻勬慨鐢告儓?, "闂佹悶鍎存慨銈囨暜閸洖妫樻い鎾卞灪濡?],
-    //             location: "濡ょ姷鍋涢妵妯肩箔閵忋倖鍎戝ù锝呮憸閻ｎ厾鈧懓鎽滈崑娑氱博?,
-    //             river: "闂佺粯绻勬慨鐢告儓?,
+    //             name: "闂傚倷鑳剁划顖滄崲閸曨剚鍙忛柣銏犳啞閸庢挻绻涢崱妯诲暗鐎规挷绶氶弻娑⑩€﹂幋婵囩亾闂佺粯渚楅崰姘辨?,
+    //             type: "濠电姷鏁搁崑娑㈡儗娴ｇ硶鏋嶉柡鍥╁Х閻牓鏌ㄩ弴鐐测偓褰掑磿鎼淬劍鐓欓悗鐢殿焾娴犙囨煏?,
+    //             tags: ["闂傚倷鑳剁划顖滄崲閸曨剚鍙忛柣銏犳啞閸?, "闂傚倷鐒﹂幃鍫曞磿鐎涙ɑ鍙忛柕鍫濇处閺嗘粓鏌涢锝嗙婵☆偅蓱閵囧嫰骞橀崡鐐典痪濠?],
+    //             location: "濠德板€楁慨鐑藉磻濞戙垹桅婵☆垵鍋愮粻鏃堟煏韫囧鈧牠宕曢幋婢濆綊鏁愰崨顔藉枑闂佷紮缍嗛崢楣冨焵椤掑倹鍤€闁硅姤绮撳畷鎴濃槈濮樺崬宕?,
+    //             river: "闂傚倷鑳剁划顖滄崲閸曨剚鍙忛柣銏犳啞閸?,
     //             coordinates: [113.264, 23.129],
     //             waterQuality: {
     //                 pH: 7.0,
@@ -1769,16 +1768,16 @@
     //             qualityClass: "II缂?,
     //             color: "#a3d930",
     //             icon: "闂?,
-    //             trend: "闂佽　鍋撻柣鐔哄濠?,
+    //             trend: "闂傚倷娴囬妴鈧柛瀣崌閺岋綁鎮㈤崫鍕垫毉濠?,
     //             status: "normal"
     //         },
     //         {
     //             id: 4,
-    //             name: "婵犮垽顤傛禍婵堢不瑜版帗鍎庨柟瀵稿仧閵堝绱?,
-    //             type: "濠电姭鍋撻柡宥冨妿钘濋梺鐑╂櫆閸ㄥ墎绮?,
-    //             tags: ["婵犮垽顤傛禍婵堢不?, "闂備焦褰冪粔鍫曞磻閿濆拑鑰块柡宥冨妿钘?],
-    //             location: "濠殿喖婀遍崰鏇犫偓姘暣閹洦鎷呯憴鍕堕獜闂備礁绨遍埀顒€纾?,
-    //             river: "婵犮垽顤傛禍婵堢不?,
+    //             name: "婵犵數濮伴崹浠嬄烽崒娑氼洸婵犻潧鐗忔稉宥囨喐閻楀牆绗氶柛搴￠叄閺岀喓鈧數顭堟禒褔鏌曢崼婵愬殶缂?,
+    //             type: "濠电姷鏁告慨顓㈠磻閹剧粯鐓涚€广儱鍟俊鍧楁寠濠靛鈷戦柣鎴旀櫆濞呭棝鏌涢妸銉ヮ暢缂?,
+    //             tags: ["婵犵數濮伴崹浠嬄烽崒娑氼洸婵犻潧鐗忔稉?, "闂傚倸鍊烽悞锕併亹閸愵亞鐭撻柛顐ｆ礀绾惧鏌ㄥ┑鍡樺珔闁兼澘娼￠弻鈥愁吋閸愩劌顬嬮柦?],
+    //             location: "濠电姵顔栭崰鏍э耿闁秴绐楅柡鍥╁Л閸嬫挸顫濋鈧弳锝夋煙椤栨碍澶勯柟宄版噽閹叉挳宕熼崼鏇犲椽闂傚倸鍊风粈浣鸿姳闁秴鐒垫い鎺嗗亾缁剧虎鍙冮、?,
+    //             river: "婵犵數濮伴崹浠嬄烽崒娑氼洸婵犻潧鐗忔稉?,
     //             coordinates: [120.138, 31.231],
     //             waterQuality: {
     //                 pH: 8.2,
@@ -1790,16 +1789,16 @@
     //             qualityClass: "IV缂?,
     //             color: "#ff9800",
     //             icon: "婵?,
-    //             trend: "婵炴垶鎸搁澶婎瀶?,
+    //             trend: "婵犵數鍋為崹鍫曞箰閹间緡鏁勫璺侯煬閻?,
     //             status: "critical"
     //         },
     //         {
     //             id: 5,
-    //             name: "闂佸搫顦板畷妯绘叏閸愭畫褔鎮㈤柨瀣剾闁诲繐绻戝褰掓嚍鏉堚晝鍗?,
-    //             type: "濠电偛鐭佸▍鏇犵矈閿曞倹鍎庨柟瀵稿仧閵?,
-    //             tags: ["闂佸搫顦板畷妯绘叏閸愭畫?, "闂佹悶鍎存慨銈囨暜閸洖妫樻い鎾卞灪濡?],
-    //             location: "婵帗绋掗崹璺ㄦ閸愭畫褔鎮㈤悜姗€妲ｉ梺鍛婄箓閻楀棝鎯冮棃娑辩叆闁靛鍎抽?,
-    //             river: "闂佸搫顦板畷妯绘叏閸愭畫?,
+    //             name: "闂傚倷绀侀幖顐λ囬弶璺ㄦ殾婵☆垳绮崣蹇涙煕閹邦厾鏆欑憸鏃堝箖閵忋倖鐓ラ悗锝庡亜閸撻箖姊虹拠鑼缂佺粯鍨甸～蹇氥亹閹烘挸娈熼柡澶婄墐閺呮繈宕?,
+    //             type: "濠电姷鏁搁崑娑㈡儗娴ｇ硶鏋嶉柡鍥╁Х閻牓鏌ㄩ弴鐐测偓褰掑磿鎼淬劍鐓欓悗鐢殿焾娴犙囨煏?,
+    //             tags: ["闂傚倷绀侀幖顐λ囬弶璺ㄦ殾婵☆垳绮崣蹇涙煕閹邦厾鏆?, "闂傚倷鐒﹂幃鍫曞磿鐎涙ɑ鍙忛柕鍫濇处閺嗘粓鏌涢锝嗙婵☆偅蓱閵囧嫰骞橀崡鐐典痪濠?],
+    //             location: "婵犳鍠楃敮妤冪矙閹烘鍨傞悹鎭掑妽椤愪粙鏌涢幇顓犳殭鐟滄棃骞冮姀銈嗗€绘慨妞诲亾婵¤缍佸娲川婵犲嫮鐣甸梺缁橆殔濡繈骞嗛崘顔筋棃婵炴垼浜崣鍡涙⒑闂堟侗鐒鹃柛搴㈠▕椤?,
+    //             river: "闂傚倷绀侀幖顐λ囬弶璺ㄦ殾婵☆垳绮崣蹇涙煕閹邦厾鏆?,
     //             coordinates: [126.642, 45.757],
     //             waterQuality: {
     //                 pH: 7.5,
@@ -1811,7 +1810,7 @@
     //             qualityClass: "III缂?,
     //             color: "#f8e71c",
     //             icon: "闂?,
-    //             trend: "缂備礁顑呴崯鍧楁偩?,
+    //             trend: "缂傚倸鍊风粈渚€顢栭崨鏉戠柈闁秆勵殕閸?,
     //             status: "warning"
     //         }
     //     ];
@@ -1819,7 +1818,7 @@
     //     return stations;
     // }
 
-    // 闂佹眹鍨婚崰鎰板垂濮橆儵鐔煎焺閸愩劎褰叉俊顐ｆ緲鐎氼垶顢楅悢鐓庢瀬闁绘鐗嗙粊?
+    // 闂傚倷鐒﹂惇褰掑垂婵犳艾绐楅柟鐗堟緲閸ㄥ倹鎱ㄥ鍡楀姦闁绘梻鍘ч悞娲煕閹扳晛濡跨憸鏉垮级娣囧﹪顢曢敐鍡欏嚒闁诲孩鍑归崹鍫曘€佸Δ鍛亜闁绘挸瀛╅悗顒勬⒑缂佹﹩娈旈柣妤€妫涚划?
     async function loadChartData(stationId, days) {
         const historicalResponse = await api.get(`${DATA_API_BASE_URL}/historical/${stationId}?days=10`);
         const predictionResponse = await api.get(`${DATA_API_BASE_URL}/prediction/${stationId}?days=${days}`);
@@ -1867,23 +1866,23 @@
         if (currentTime) currentTime.textContent = timeStr;
     }
 
-    // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宓懎鐣ㄩ梺?
+    // 闂傚倷绀侀幉锛勬暜濡ゅ啯宕查柛宀€鍎戠紞鏍煙閻楀牊绶茬紒鈧畝鍕厸鐎规搩鍠栭幊搴ㄦ偩閵娾晜鈷?
+    // 鍒濆鍖栧簲鐢?
     async function initApplication() {
         try {
             try {
                 await ensureAmapLoaded();
             } catch (mapError) {
-                console.error('妤傛ê鐥夐崷鏉挎禈閸旂姾娴囨径杈Е:', mapError);
                 console.error('楂樺痉鍦板浘鍔犺浇澶辫触:', mapError);
                 showNotification('楂樺痉鍦板浘鍔犺浇澶辫触锛屽湴鍥惧姛鑳藉彈闄?, 'error');
-
-            if (typeof echarts === 'undefined') {
-                console.error('ECharts閺堫亜濮炴潪?);
-                console.error('ECharts鏈姞杞?);
-                showNotification('鍥捐〃搴撳姞杞藉け璐ワ紝閮ㄥ垎鍔熻兘鍙楅檺', 'error');
             }
 
-            showNotification('濮濓絽婀崝鐘烘祰閺佺増宓?..', 'info');
+            if (typeof echarts === 'undefined') {
+                console.error('ECharts鏈姞杞?);
+                showNotification('鍥捐〃搴撳姞杞藉け璐ワ紝閮ㄥ垎鍔熻兘鍙楅檺', 'error');
+                return;
+            }
+
             showNotification('姝ｅ湪鍔犺浇鏁版嵁...','info');
             const dataLoaded = await fetchData();
 
@@ -1893,12 +1892,11 @@
                 showNotification('鏁版嵁鍔犺浇瀹屾垚', 'success');
             }
 
-            // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宓嫬鈧鈽夐幙鍐х敖缂侇喖绉电粋?
             if (typeof AMap !== 'undefined') {
                 initializeMap();
             } else {
                 document.getElementById('map').innerHTML =
-                    '<div style="color: white; text-align: center; padding-top: 180px;">闂侀潻闄勫妯好瑰鈧畷婵嬫偐閻戞銈版繝銏″劶缁墽鎲?/div>';
+                    '<div style="color: white; text-align: center; padding-top: 180px;">鍦板浘鍔犺浇澶辫触锛岃妫€鏌ラ珮寰烽厤缃?/div>';
             }
 
             initializeRadarChart();
@@ -1911,21 +1909,19 @@
                 updateSelectedStation(selectedStationId);
             }
 
-            // 闂佸憡鍑归崹鐗堟叏閳哄懎绫嶉柛顐ｆ礃閿涚喖鏌￠崶褏鎽犻柡?
             setInterval(updateDateTime, 1000);
             updateDateTime();
 
-            // 闂佸憡鍑归崹鐗堟叏閳哄懏鍤婃い蹇撳琚熼柡澶屽剱閸犳骞?
             startAutoScroll();
             startRadarAutoScroll();
 
         } catch (error) {
-            console.error('闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宥庡幗閺呪晠鎮?', error);
+            console.error('鍒濆鍖栧け璐?', error);
             showNotification('鍒濆鍖栧け璐ワ紝璇峰埛鏂伴〉闈㈠悗閲嶈瘯', 'error');
         }
     }
 
-    // 闂佸憡鍑归崹鐗堟叏閳哄偊绱ｉ柛鏇ㄥ櫘閸斿懘鏌ゆ總澶夌盎濠殿喒鏅滃顏堫敊閼恒儱鍟?
+    // 闂傚倷绀侀幉锟犲礄瑜版帒鍨傞柣妤€鐗婇崣蹇涙煃閸濆嫬浜扮紒鎲嬬秮閺屾盯寮撮妸銉︾彯闂佸憡鏌ㄩ幊姗€寮婚妶鍡欓檮濠㈣泛顦遍惄搴㈢節濞堝灝鏋撻柡鍛矊椤洭顢旈崼顐ｆ櫓闂佸吋浜介崕閬嶅疮?
     function startAutoScroll() {
         clearInterval(warningInterval);
         updateWarningSlider();
@@ -1940,7 +1936,7 @@
         }, 4000);
     }
 
-    // 闂佸憡鍑归崹鐗堟叏閳哄懏鈷栭柣銈庡灡瑜把囨煕閵夛箑绀冮柛銈嗙矒瀹曟繈濡搁妸褎鐎梺?
+    // 闂傚倷绀侀幉锟犲礄瑜版帒鍨傞柣妤€鐗婇崣蹇涙煃閸濆嫭鍣洪柍閿嬬墵閺岋綁濡舵惔锛勪画閻熸粍濡搁崶銊у幈闂侀潧顧€缁犳垹绮堥崘顔界厱闁靛牆妫涢惌鎺斺偓瑙勬礃缁诲牊淇婇幖浣肝╃憸搴ㄦ倵椤撱垺鈷?
     function startRadarAutoScroll() {
         if (monitoringStations.length === 0) return;
 
@@ -1952,7 +1948,7 @@
         }
     }
 
-    // 闂佺顑嗙划宥夘敆濞戙垺鈷栭柣銈庡灡瑜把囨煕閵夛箑绀冮柛銈嗙矒瀹曟繈濡搁妸褎鐎梺?
+    // 闂傚倷鑳堕…鍫ヮ敄閸℃瑥鍨濈€广儱顦介弫鍡樼箾閹存瑥鐏柍閿嬬墵閺岋綁濡舵惔锛勪画閻熸粍濡搁崶銊у幈闂侀潧顧€缁犳垹绮堥崘顔界厱闁靛牆妫涢惌鎺斺偓瑙勬礃缁诲牊淇婇幖浣肝╃憸搴ㄦ倵椤撱垺鈷?
     function stopRadarAutoScroll() {
         if (radarInterval) {
             clearInterval(radarInterval);
@@ -1960,7 +1956,7 @@
         }
     }
 
-    // 闂佸搫娲ら悺銊╁蓟婵犲喛绱ｉ柛鏇ㄥ櫘閸斿懘寮堕悜鍡楁灍闁?
+    // 闂傚倷绀侀幖顐⒚洪妶澶嬪仱闁靛ň鏅涢拑鐔封攽閻樻彃鏋︾紒鎲嬬秮閺屾盯寮撮妸銉︾彯闂佸憡鏌ㄩ幊妯侯嚕閸洘鍊婚柛鈩冾殕閻忓秹姊?
     function updateWarningSlider() {
         const warningSlider = document.getElementById('warningSlider');
         if (!warningSlider) return;
@@ -1968,7 +1964,7 @@
         warningSlider.innerHTML = '';
 
         if (warningData.length === 0) {
-            warningSlider.innerHTML = '<div class="warning-item active">闂佸搫妫楅崐鐟拔涢妶鍡矗闁告洦鍣崝鍛庨崶锝呭⒉濞?/div>';
+            warningSlider.innerHTML = '<div class="warning-item active">闂傚倷绀侀幖顐⑽涘Δ鍛９闁荤喐瀚堝☉銏犖ч柛鈽嗗幘閻姊洪崨濠冨闁革綆鍣ｅ畷婵嬪川椤撯偓鎼淬劌鐐婇柨婵嗘噹閳峰绻?/div>';
             return;
         }
 
@@ -1989,7 +1985,7 @@
                         <span class="warning-time">${warning.time}</span>
                     </div>
                     <div class="warning-content">${warning.description}</div>
-                    <div class="warning-station">濡絽鍟幆?${warning.stationName}</div>
+                    <div class="warning-station">濠碘槅鍋撶徊浠嬪疮椤栫偛绠?${warning.stationName}</div>
                 `;
 
             warningItem.addEventListener('click', () => {
@@ -2008,11 +2004,11 @@
 
         const warningCount = document.getElementById('warningCount');
         if (warningCount) {
-            warningCount.textContent = `${warningData.length}闂佸搫顦介幗?
+            warningCount.textContent = `${warningData.length}闂傚倷绀侀幖顐λ囨禒瀣?
         }
     }
 
-    // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宓倻顔嗘繛鎾寸殰閸愨晝顩柣?
+    // 闂傚倷绀侀幉锛勬暜濡ゅ啯宕查柛宀€鍎戠紞鏍煙閻楀牊绶茬紒鈧畝鍕厸鐎规搩鍠栭崐濠氼敊閸℃绠鹃柟鎯ь嚟濞堜即鏌涢幇銊︽珖妞も晩鍙冮弻?
     function initializeLeftCharts() {
         const leftChart1Container = document.getElementById('leftChart1Container');
         const leftChart2Container = document.getElementById('leftChart2Container');
@@ -2023,11 +2019,11 @@
         if (leftChart3Container) leftChart3 = echarts.init(leftChart3Container, 'dark');
     }
 
-    // 闂佸搫娲ら悺銊╁蓟婵犲偆鍟呴柨鏃€瀵у▍鐘绘煕閵夛箑绀冮柕?
+    // 闂傚倷绀侀幖顐⒚洪妶澶嬪仱闁靛ň鏅涢拑鐔封攽閻樻彃浜為柛鐔锋嚇閺屻劑寮埀顒傗偓绗涘啠鏋嶉柣妯肩帛閻撴洟鏌曟径娑氱暠缂佲偓閸愵喗鐓?
     function updateLeftCharts(station) {
         if (!leftChart1 || !leftChart2 || !leftChart3) return;
 
-        // 閻庡綊娼荤紓姘跺疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掔喊宥呫€掗妶鍚よ鎷呯憴鍕樆婵炶揪绲界粔椋庣矓婵傜绀夐柛顭戝枟缁?
+        // 闂佽楠哥紞濠傤焽閼姐倗纾芥慨妯挎硾閻ら箖鏌涢锝嗙闁绘劕锕弻鐔烘喆閸曨偄顫囬梺?闂傚倷鐒︾€笛呯矙閹烘柨鏋堢€广儱鎳岄埀顒佸浮婵″爼宕ラ妶鍫綈闁瑰嘲鎳愰幉鎾礋椤愩倖鈻庢繝鐢靛仩閹活亞寰婇悾宀€鐭撳瀣捣閻挸鈹戦崒婊庣劸缂佲偓婢舵劖鐓曟い顓熷灥閺嬬喓绱?
         const leftChart1Option = {
             backgroundColor: 'transparent',
             tooltip: {
@@ -2056,7 +2052,7 @@
             },
             yAxis: {
                 type: 'value',
-                name: '濠殿喗顭囩换婵堢礊?m)',
+                name: '濠电姵顔栭崰妤呪€﹂崶鈺傚床婵犻潧鐗忕粈?m)',
                 axisLine: {
                     lineStyle: { color: '#80d4ff' }
                 },
@@ -2071,7 +2067,7 @@
                 }
             },
             series: [{
-                name: '濠殿喗顭囩换婵堢礊?,
+                name: '濠电姵顔栭崰妤呪€﹂崶鈺傚床婵犻潧鐗忕粈?,
                 type: 'line',
                 smooth: true,
                 data: generateMonthlyData(station.waterQuality.level),
@@ -2095,7 +2091,7 @@
         };
         leftChart1.setOption(leftChart1Option);
 
-        // 閻庡綊娼荤紓姘跺疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掔喊宥夊箰婢跺本瀚婚柕濞垮劚缂嶄線鏌涢弽銊уⅹ妞ゆ洦鍠栬?
+        // 闂佽楠哥紞濠傤焽閼姐倗纾芥慨妯挎硾閻ら箖鏌涢锝嗙闁绘劕锕弻鐔烘喆閸曨偄顫囬梺?闂傚倷鐒︾€笛呯矙閹烘柨鏋堢€广儱顦粻鏉款熆鐠虹儤婀伴悗姘煼閺屾洘绻涢崹顔煎缂傚倸绉崇欢姘跺蓟濞戙垹鍐€闁靛ě鍐ｅ悅婵＄偑鍊栧ú锕傚窗閺嶎剦鏆?
         const leftChart2Option = {
             backgroundColor: 'transparent',
             tooltip: {
@@ -2112,7 +2108,7 @@
             },
             xAxis: {
                 type: 'category',
-                data: ['闂佸憡顭堥褔宕熸ィ鍐ㄨЕ閻忕偟鍋撻崺?, '閻熸粎澧楅幐鍛婃櫠?],
+                data: ['闂傚倷绀侀幉锟犫€﹂崼銉晪鐟滄柨鐣烽悢鎼炲亝闁告劑鍔忚闂佽绻掗崑鐔煎磻閹捐鏄?, '闂佽崵鍠愮划搴㈡櫠濡ゅ懎绠伴柛娑橈攻濞?],
                 axisLine: {
                     lineStyle: { color: '#80d4ff' }
                 },
@@ -2123,7 +2119,7 @@
             },
             yAxis: {
                 type: 'value',
-                name: '濠电偛鐡ㄩ幐鍝モ偓?mg/L)',
+                name: '濠电姷鏁搁崑娑㈡偤閵娾晛绠伴柛婵勫劗閸?mg/L)',
                 axisLine: {
                     lineStyle: { color: '#80d4ff' }
                 },
@@ -2149,7 +2145,7 @@
                     barWidth: '30%'
                 },
                 {
-                    name: '濠殿喗菧閸斿秹鎮?,
+                    name: '濠电姵顔栭崰妤勫綘闂佸憡鏌ㄧ粔褰掑箖?,
                     type: 'bar',
                     data: [
                         station.waterQuality.NH3N * 0.9,
@@ -2165,7 +2161,7 @@
         updateTrendComparisonChart(station);
     }
 
-    // 闂佸搫娲ら悺銊╁蓟婵犲嫮鍗氭繛鍡樺灥娴狀垱鎱ㄥΟ纰辨鐎瑰憡绻勯幖鍓р偓锝庝簻閳笺垽鎮楁担鍐炬綈闁伙富鍣ｅ畷?
+    // 闂傚倷绀侀幖顐⒚洪妶澶嬪仱闁靛ň鏅涢拑鐔封攽閻樻彃顏柛妤佺缁绘盯宕卞Ο铏逛淮婵炲濯崹閬嶅箞閵娿儙鐔哄枈鏉堫煈妫戦柣搴ｆ嚀閹诧紕鎹㈤崟顖氱闁告挆鈧崑鎾绘晲鎼存繄鐩庨梺宕囶儠閸ㄤ粙骞冨Δ浣瑰闁告劗鍋撶紞鍫ユ⒑娴兼瑥鐦滈柛锝忕到閻?
     function updateTrendComparisonChart(currentStation) {
         if (!leftChart3) return;
 
@@ -2173,7 +2169,7 @@
             const leftChart3Option = {
                 backgroundColor: 'transparent',
                 title: {
-                    text: '闂傚倸娲犻崑鎾绘偡閺囨碍绁伴柛銈忓娴滄悂骞嬪鍡忔嫛婵炴垶鎼╂禍鐐烘偟椤栫偞鍊风痪顓炴噽缁犲鎮跺☉妯垮妞ゆ洦鍠栬?,
+                    text: '闂傚倸鍊搁崐绋棵洪悩璇茬；闁瑰墽绮崑锟犳煛閸ャ劎顣茬紒浣峰嵆閺屾盯濡惰箛鎿冩喘婵炲瓨绮嶉幃鍌炵嵁鐎ｎ亶鐓ラ柛鈥崇箲鐎氭稑鈹戦悙鏉戠仸闁瑰皷鏅滅粋宥夋倷閻戞ê浠у銈嗙墱閸嬬偤宕愭搴ｆ／妞ゆ挾鍋為崳鐣岀磼閻樺樊鐓奸柟顔挎硾閳藉螣閸噮浼冩俊鐐€栧ú锕傚窗閺嶎剦鏆?,
                     left: 'center',
                     top: 'middle',
                     textStyle: {
@@ -2312,7 +2308,7 @@
         leftChart3.setOption(leftChart3Option);
     }
 
-    // 闂佸吋鍎抽崲鑼躲亹閸モ晝鍗氭繛鍡樺灥娴狀垰螞閻楀牏鐭庡鐟帮躬閺佸秹宕奸悢鍛婃闂佸綊鏅茬欢姘跺焵椤掆偓缁绘垵危閹寸偞鍎熼柨鏃囧亹缁€?
+    // 闂傚倷绀侀崥瀣磿閹惰棄搴婇柤鑹扮堪娴滃綊鏌涢妷銏℃珖闁告纰嶇换娑㈠幢濡櫣浠存繛瀵稿閸ㄦ媽鐏嬮梺缁橆殔閻楀繘鎯屾惔鈽嗙唵闁荤喎搴滈煬顒勬煛娴ｅ摜效鐎规洖銈搁幃銏ゅ川婵犲喚鍞堕梻鍌欑缂嶅﹪寮查懠顒侇偨婵娉涢悞鍨亜閹哄棗浜剧紓浣虹帛閸ㄩ潧宓勯梺鐟邦嚟閸嬬偤宕曢悢鍏肩叆闁哄啫娲ゆ禍鍦磼閳?
     function getStationColor(station, alpha = 1) {
         const colorMap = {
             'I缂?: '#00a854',
@@ -2334,7 +2330,7 @@
         }
     }
 
-    // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宓啰顦︽繛鎾寸殰閸愨晝顩柣?
+    // 闂傚倷绀侀幉锛勬暜濡ゅ啯宕查柛宀€鍎戠紞鏍煙閻楀牊绶茬紒鈧畝鍕厸鐎规搩鍠栭崯浼此囬敂鐣岀闁规儳顕▓浼存煕閹般劍娅囨い鈺婂弮閺?
     function initializeRightCharts() {
         const rightChart1Container = document.getElementById('rightChart1Container');
         const rightChart2Container = document.getElementById('rightChart2Container');
@@ -2343,11 +2339,11 @@
         if (rightChart2Container) rightChart2 = echarts.init(rightChart2Container, 'dark');
     }
 
-    // 闂佸搫娲ら悺銊╁蓟婵犲洤鐭楅柛蹇撴噺濞呯娀鏌涢妷锕€绀冮柕?
+    // 闂傚倷绀侀幖顐⒚洪妶澶嬪仱闁靛ň鏅涢拑鐔封攽閻樺弶鎼愰柣顓燁殜閺屾稖绠涢幘鏉戞濠电偛鎳愭繛鈧柡灞剧洴婵＄兘鏁冮埀顒傜矆閸愵喗鐓?
     function updateRightCharts(station) {
         if (!rightChart1 || !rightChart2) return;
 
-        // 闂佸憡鐟ラ崢鏍疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掔喊宥夋寘閸曨垰钃熼柟鐐綑閻﹀綊鏌″鍛閻㈩垱鎸鹃幃?
+        // 闂傚倷绀侀幉锟犳偡閵夆晛鍌ㄩ柡宥庡幖閻ら箖鏌涢锝嗙闁绘劕锕弻鐔烘喆閸曨偄顫囬梺?闂傚倷鐒︾€笛呯矙閹烘柨鏋堢€广儱顦扮€垫﹢鏌涢弴銊ョ仩闁藉啰鍠栭弻鐔兼倷椤掍胶绋囬梺浼欑畱缂嶅﹪寮婚垾鎰佸悑闁告侗鍠栭ˇ鈺呮煟閵忊晛鐏￠柟鎼佺畺楠?
         const rightChart1Option = {
             backgroundColor: 'transparent',
             tooltip: {
@@ -2380,7 +2376,7 @@
             },
             yAxis: {
                 type: 'category',
-                data: ['COD', '濠殿喗菧閸斿秹鎮?, '闂佽鍓濆畷鐢告晬?, '闂佽鍓涚划顖炴偉?],
+                data: ['COD', '濠电姵顔栭崰妤勫綘闂佸憡鏌ㄧ粔褰掑箖?, '闂傚倷娴囬鏍礈濠靛棛鏆﹂柣銏犳啞閺?, '闂傚倷娴囬鏍礈濞戞艾鍨濇い鏍仦閸?],
                 axisLine: {
                     lineStyle: { color: '#80d4ff' }
                 },
@@ -2390,7 +2386,7 @@
                 }
             },
             series: [{
-                name: '濠殿喖鍘滈崜婵嬫偂鐎ｎ喖绠伴柛銉ｅ妿閸?,
+                name: '濠电姵顔栭崰鏍储濠婂牆绀堟繝闈涱儐閸嬪倿鎮楅敐搴℃灈缂佺姳鍗抽弻娑㈠Ψ閿濆懎顬嬮梺?,
                 type: 'bar',
                 data: [
                     station.waterQuality.COD,
@@ -2416,7 +2412,7 @@
         };
         rightChart1.setOption(rightChart1Option);
 
-        // 闂佸憡鐟ラ崢鏍疾閸洖鐐婇柟瑙勫姂閳?闂佹寧绋掑銊╂偟椤栫偞鍊烽柛锔诲幖绗戦梺璇″厸缁€渚€宕规惔锝嗘殰?
+        // 闂傚倷绀侀幉锟犳偡閵夆晛鍌ㄩ柡宥庡幖閻ら箖鏌涢锝嗙闁绘劕锕弻鐔烘喆閸曨偄顫囬梺?闂傚倷鐒︾€笛呯矙閹烘埈娼╅柕濞炬櫆閸嬬喐銇勯弽顐沪闁稿﹦鍏橀弻娑㈡晜鐠囨彃绠圭紒妤佸灴濮婅櫣鎷犻垾鍐插箰缂備讲鍋撳〒姘ｅ亾鐎规洝顫夐幆鏃堟晲閸℃ɑ顔?
         const statusCounts = monitoringStations.reduce((acc, station) => {
             const status = station.status ||
                 (station.qualityClass === 'I缂? || station.qualityClass === 'II缂? ? 'normal' :
@@ -2435,7 +2431,7 @@
                 formatter: '{b}: {c} ({d}%)'
             },
             series: [{
-                name: '缂備焦姊归悷褔宕戦敐澶嬪亹闁煎摜顣介崑?,
+                name: '缂傚倸鍊烽悞锕€顫忚ぐ鎺撳仭鐟滄柨鐣烽幋锔芥櫜濠㈣泛顑呮禍褰掓⒑閻撳孩鎲告い锝勭矙瀹?,
                 type: 'pie',
                 radius: ['40%', '60%'],
                 center: ['50%', '50%'],
@@ -2461,17 +2457,17 @@
                 data: [
                     {
                         value: statusCounts.normal || 0,
-                        name: '濠殿喗绻愮徊浠嬫偉?,
+                        name: '濠电姵顔栭崰妤冩崲閹邦喖绶ゅù鐘差儐閸?,
                         itemStyle: { color: '#00a854' }
                     },
                     {
                         value: statusCounts.warning || 0,
-                        name: '婵☆偅婢樼€氼垶顢?,
+                        name: '婵犵妲呴崑鍛熆濡皷鍋撳鐓庣仸妞?,
                         itemStyle: { color: '#ff9800' }
                     },
                     {
                         value: statusCounts.critical || 0,
-                        name: '闁烩剝甯掗幊蹇涙偉?,
+                        name: '闂備胶鍎甸崜婵堟暜閹烘绠犻煫鍥ㄧ⊕閸?,
                         itemStyle: { color: '#ff5722' }
                     }
                 ]
@@ -2480,7 +2476,7 @@
         rightChart2.setOption(rightChart2Option);
     }
 
-    // 闂佹眹鍨婚崰鎰板垂濮樿泛瀚夐柛顐ｇ箓椤斿﹪鏌℃担鍝勵暭鐎?
+    // 闂傚倷鐒﹂惇褰掑垂婵犳艾绐楅柟鐗堟緲閸ㄥ倹鎱ㄥΟ鎸庣【閻庢艾顦甸弻娑㈩敃閿濆洨鐣靛銈嗘煥閿曨亪寮婚埄鍐╁闁告繂瀚烽弳顓㈡倵?
     function generateMonthlyData(baseValue) {
         const data = [];
         for (let i = 0; i < 6; i++) {
@@ -2490,14 +2486,14 @@
         return data;
     }
 
-    // 闂佸搫娲ら悺銊╁蓟婵犲洤鎹堕柡澶嬪缁傚牏绱撴担鍝勬灆妞?
+    // 闂傚倷绀侀幖顐⒚洪妶澶嬪仱闁靛ň鏅涢拑鐔封攽閻樺弶鎼愰柟鐟扮埣閺屸剝寰勭€ｎ亶鍤嬬紓浣稿€搁悧蹇曟閹惧瓨濯撮柛婵嗗閻忓棗顪?
     function updateMapStats(stats) {
         const mapTotalStations = document.getElementById('mapTotalStations');
         const mapNormalStations = document.getElementById('mapNormalStations');
         const mapWarningStations = document.getElementById('mapWarningStations');
         const mapCriticalStations = document.getElementById('mapCriticalStations');
 
-        // 婵犮垼娉涚€氼噣骞冩繝鍐枖鐎广儱鎳忛崐閬嶆煟閵娿儱顣簍ats闂佸搫绉堕崢褏妲?
+        // 婵犵數濮伴崹鐓庘枖濞戞埃鍋撳鐓庢珝妤犵偛鍟换婵嬪礃椤忎焦鐏冮柣搴＄畭閸庨亶骞婅箛娑樼９闂侇剙绉甸悡鐔兼煏婵炲灝鍔氭い锝囩毆ats闂傚倷绀侀幖顐ょ矓閸洖鍌ㄧ憸蹇撐?
         let totalStations = 0, normalStations = 0, warningStations = 0, criticalStations = 0;
 
         if (stats) {
@@ -2517,7 +2513,7 @@
         if (mapCriticalStations) mapCriticalStations.textContent = criticalStations;
     }
 
-    // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宥庡幗缁侇偊寮堕崼鐔峰姢婵?
+    // 闂傚倷绀侀幉锛勬暜濡ゅ啯宕查柛宀€鍎戠紞鏍煙閻楀牊绶茬紒鈧畝鍕厸鐎广儱楠搁獮妤冪磼娓氬洤浜扮€殿喖鐖煎畷濂告偄瀹勬澘袘婵?
     function initializeRadarChart() {
         const radarContainer = document.getElementById('radarContainer');
         if (!radarContainer) return;
@@ -2550,7 +2546,7 @@
         }
     }
 
-    // 闂佹眹鍨婚崰鎰板垂濮樿埖鈷栭柣銈庡灡瑜把囨煕閵壯冧壕閻庡灚姘ㄧ划鍫ュ传閸曨剛褰?
+    // 闂傚倷鐒﹂惇褰掑垂婵犳艾绐楅柟鐗堟緲閸ㄥ倹鎱ㄥΟ鍨厫闁抽攱鐗犻弻锝夊Χ鎼达紕浠悷婊勫Ω閸ャ劎鍘遍梺闈涳紡閸愌冾棜闂佽楠搁悘姘潩閵娧冨灊闁割偁鍎辨导鐘绘煕閺囥劌澧扮憸?
     function generateRadarIndicator() {
         const indicator = document.getElementById('radarIndicator');
         if (!indicator) return;
@@ -2576,7 +2572,7 @@
         });
     }
 
-    // 闂佸搫娲ら悺銊╁蓟婵犲洦鈷栭柣銈庡灡瑜把囨煕閵壯冧壕閻庡灚姘ㄧ划鍫ュ传閸曨剛褰?
+    // 闂傚倷绀侀幖顐⒚洪妶澶嬪仱闁靛ň鏅涢拑鐔封攽閻樺弶澶勯柍閿嬬墵閺岋綁濡舵惔锛勪画閻熸粍濡搁崶銊у幈闂侀潧锛忛崘褍顥氶梺璇查閻忔艾顫濋妸褍鍨濋柛顐犲劚娴肩娀鏌涢弴銊ュ鐟?
     function updateRadarIndicator() {
         const dots = document.querySelectorAll('.radar-dot');
         dots.forEach((dot, index) => {
@@ -2588,21 +2584,21 @@
         });
     }
 
-    // 婵炴垶鎸搁敃锝囩博鐎涙鈻旀い蹇撴瑜版煡鏌?
+    // 婵犵數鍋為崹鍫曞箰閹间焦鏅濋柨婵嗘川閸楁岸鎮楀☉娆樼劷闁崇粯姊归妵鍕疀閹炬惌妫ら悷婊呭閻擄繝寮?
     function prevRadarStation() {
         if (monitoringStations.length === 0) return;
         radarStationIndex = (radarStationIndex - 1 + monitoringStations.length) % monitoringStations.length;
         updateRadarStation(radarStationIndex);
     }
 
-    // 婵炴垶鎸搁鍕博鐎涙鈻旀い蹇撴瑜版煡鏌?
+    // 婵犵數鍋為崹鍫曞箰閹间緡鏁勯柛鏇ㄥ幘閸楁岸鎮楀☉娆樼劷闁崇粯姊归妵鍕疀閹炬惌妫ら悷婊呭閻擄繝寮?
     function nextRadarStation() {
         if (monitoringStations.length === 0) return;
         radarStationIndex = (radarStationIndex + 1) % monitoringStations.length;
         updateRadarStation(radarStationIndex);
     }
 
-    // 闂佸搫娲ら悺銊╁蓟婵犲洦鈷栭柣銈庡灡瑜把囨煕閵壯冧壕婵☆垰顦辩划鍫ユ惞鐟欏嫮鏆犵紓浣规⒐閻熝囧磻?
+    // 闂傚倷绀侀幖顐⒚洪妶澶嬪仱闁靛ň鏅涢拑鐔封攽閻樺弶澶勯柍閿嬬墵閺岋綁濡舵惔锛勪画閻熸粍濡搁崶銊у幈闂侀潧锛忛崘褍顥氭繝纰樻閸ㄤ即藝鏉堚晛鍨濋柛顐犲劜閹偤鎮峰▎蹇擃伀闁哄棛濮风槐鎾存媴鐟欏嫧鎷归梺鑽ゅ暀閸パ咃紱?
     function updateRadarStation(stationIndex) {
         radarStationIndex = stationIndex;
         const station = monitoringStations[radarStationIndex];
@@ -2625,7 +2621,7 @@
         showAutoInfoWindow(station);
     }
 
-    // 闂佸搫娲ら悺銊╁蓟婵犲洦鈷栭柣銈庡灡瑜把囨煕閵壯冧壕闁哄棛鍠栭獮?
+    // 闂傚倷绀侀幖顐⒚洪妶澶嬪仱闁靛ň鏅涢拑鐔封攽閻樺弶澶勯柍閿嬬墵閺岋綁濡舵惔锛勪画閻熸粍濡搁崶銊у幈闂侀潧锛忛崘褍顥氶梻浣告惈濡盯宕伴弽顓犲祦?
     function updateRadarChart() {
         if (!radarChart) return;
 
@@ -2642,10 +2638,10 @@
 
         const indicators = [
             { name: 'pH闂?, max: 10, min: 0 },
-            { name: '濠电姍鍕姸鐞氭瑦鎱?, max: 15, min: 0 },
+            { name: '濠电姷鏁告慨宥夊礋椤愩垹笑闁荤偞纰嶉悷锕傚箞?, max: 15, min: 0 },
             { name: 'COD', max: 40, min: 0 },
-            { name: '濠殿喗菧閸斿秹鎮?, max: 2, min: 0 },
-            { name: '濠殿喗顭囩换婵堢礊?, max: Math.max(2000, Math.ceil(waterQuality.level * 1.5)), min: 0 }
+            { name: '濠电姵顔栭崰妤勫綘闂佸憡鏌ㄧ粔褰掑箖?, max: 2, min: 0 },
+            { name: '濠电姵顔栭崰妤呪€﹂崶鈺傚床婵犻潧鐗忕粈?, max: Math.max(2000, Math.ceil(waterQuality.level * 1.5)), min: 0 }
         ];
 
         const stationValues = [
@@ -2704,7 +2700,7 @@
                 }
             },
             series: [{
-                name: '濠殿喗顭囬ˉ鎰啅濠靛绠伴柛銉ｅ妿閸?,
+                name: '濠电姵顔栭崰妤呪€﹂崶顑﹀骞囬澶婃櫊濠电娀娼ч鍛不娴煎瓨鐓曢柕澶涚到婵″潡鏌?,
                 type: 'radar',
                 symbol: 'circle',
                 symbolSize: 6,
@@ -2740,7 +2736,7 @@
         radarChart.setOption(option);
     }
 
-    // 闂佺厧顨庢禍婊勬叏閳哄懎鍙婇柛鎾椾椒绮电紓浣规⒐閻熝囧磻閿濆棛鈹嶉柍鈺佸暕缁辨牜鈧鍠栧﹢閬嶆偘?
+    // 闂傚倷鑳堕崢褔銆冩惔銏㈩洸婵犲﹤瀚崣蹇涙煃閸濆嫭鍣归柛娆忥躬閺屾盯骞樺鐐樂缂侇喚鏁哥槐鎾存媴鐟欏嫧鎷归梺鑽ゅ暀閸パ咃紱闂佹寧绻傚Λ娑㈠煘瀹ュ鐓冮柍杞扮閺嗘洜绱掓潏銊у⒈闁逞屽墯椤旀牠宕伴弽褝鑰块梺顒€绉甸崑?
     function showAutoInfoWindow(station) {
         closeInfoWindow();
 
@@ -2770,9 +2766,9 @@
             }
 
             switch(station.trend) {
-                case '闂佽　鍋撻柣鐔哄濠?: trendIcon = '闂?; trendClass = 'trend-improve'; break;
-                case '婵炴垶鎸搁澶婎瀶?: trendIcon = '闂?; trendClass = 'trend-decline'; break;
-                case '缂備礁顑呴崯鍧楁偩?: trendIcon = '闂?; trendClass = 'trend-stable'; break;
+                case '闂傚倷娴囬妴鈧柛瀣崌閺岋綁鎮㈤崫鍕垫毉濠?: trendIcon = '闂?; trendClass = 'trend-improve'; break;
+                case '婵犵數鍋為崹鍫曞箰閹间緡鏁勫璺侯煬閻?: trendIcon = '闂?; trendClass = 'trend-decline'; break;
+                case '缂傚倸鍊风粈渚€顢栭崨鏉戠柈闁秆勵殕閸?: trendIcon = '闂?; trendClass = 'trend-stable'; break;
                 default: trendIcon = '闂?; trendClass = 'trend-stable';
             }
 
@@ -2780,19 +2776,19 @@
             let statusColor = '';
             if (station.status) {
                 switch(station.status) {
-                    case 'normal': statusText = '濠殿喗绻愮徊浠嬫偉?; statusColor = '#00a854'; break;
-                    case 'warning': statusText = '婵☆偅婢樼€氼垶顢?; statusColor = '#ff9800'; break;
-                    case 'critical': statusText = '闁烩剝甯掗幊蹇涙偉?; statusColor = '#ff5722'; break;
-                    default: statusText = '濠殿喗绻愮徊浠嬫偉?; statusColor = '#00a854';
+                    case 'normal': statusText = '濠电姵顔栭崰妤冩崲閹邦喖绶ゅù鐘差儐閸?; statusColor = '#00a854'; break;
+                    case 'warning': statusText = '婵犵妲呴崑鍛熆濡皷鍋撳鐓庣仸妞?; statusColor = '#ff9800'; break;
+                    case 'critical': statusText = '闂備胶鍎甸崜婵堟暜閹烘绠犻煫鍥ㄧ⊕閸?; statusColor = '#ff5722'; break;
+                    default: statusText = '濠电姵顔栭崰妤冩崲閹邦喖绶ゅù鐘差儐閸?; statusColor = '#00a854';
                 }
             } else {
-                // 闂佸搫绉烽～澶婄暤娴ｅ壊娼╃痪鎯ь儏缁愭稓绱掗銉殭闁糕晛妫濆畷姘跺Χ閸℃鍔烽梺缁橆焾閸╂牠鍩€?
+                // 闂傚倷绀侀幖顐ょ矓閻戞枻缍栧璺猴功閺嗐倕霉閿濆懎顥忔繛灏栨櫇閻ヮ亪骞嗚閸庡繒绱掗幇顓犮€掔紒杈ㄥ浮椤㈡洟濡烽鍏碱唲闂備胶纭堕弲娑樜涘┑鍡欐殾婵娉涘洿闂佺硶鍓濋…鍥礉閻戣姤鈷戠紓浣癸供閻掗箖鏌涢埡鍌滃⒌闁糕斁鍋?
                 if (station.qualityClass === 'I缂? || station.qualityClass === 'II缂?) {
-                    statusText = '濠殿喗绻愮徊浠嬫偉?; statusColor = '#00a854';
+                    statusText = '濠电姵顔栭崰妤冩崲閹邦喖绶ゅù鐘差儐閸?; statusColor = '#00a854';
                 } else if (station.qualityClass === 'III缂?) {
-                    statusText = '婵☆偅婢樼€氼垶顢?; statusColor = '#ff9800';
+                    statusText = '婵犵妲呴崑鍛熆濡皷鍋撳鐓庣仸妞?; statusColor = '#ff9800';
                 } else {
-                    statusText = '闁烩剝甯掗幊蹇涙偉?; statusColor = '#ff5722';
+                    statusText = '闂備胶鍎甸崜婵堟暜閹烘绠犻煫鍥ㄧ⊕閸?; statusColor = '#ff5722';
                 }
             }
 
@@ -2807,10 +2803,10 @@
             infoWindow.innerHTML = `
                     <div class="info-header">
                         <div class="info-title">${station.name}</div>
-                        <button class="info-close" id="closeInfoWindow">闁?/button>
+                        <button class="info-close" id="closeInfoWindow">闂?/button>
                     </div>
                     <div class="info-location">
-                        <span>濡絽鍟幆?${station.location || '闂佸搫鐗滄禍鐐烘偂閳╁啯濯寸€广儱娲ㄩ弸?}</span>
+                        <span>濠碘槅鍋撶徊浠嬪疮椤栫偛绠?${station.location || '闂傚倷绀侀幖顐︽偋濠婂嫮顩查柣鎰劋閸嬪倿鏌嶉埡浣告殲濠殿垰顕埀顒€绠嶉崕鍗灻洪妸鈺佸嚑?}</span>
                         <span style="color: ${statusColor}; font-weight: bold;">闂?${statusText}</span>
                     </div>
                     <div class="info-quality">
@@ -2818,7 +2814,7 @@
                             <span class="quality-class ${qualityClass}">${station.qualityClass || 'III缂?}</span>
                         </div>
                         <div class="info-trend ${trendClass}">
-                            <span>${trendIcon} ${station.trend || '缂備礁顑呴崯鍧楁偩?}</span>
+                            <span>${trendIcon} ${station.trend || '缂傚倸鍊风粈渚€顢栭崨鏉戠柈闁秆勵殕閸?}</span>
                         </div>
                     </div>
                     <div class="info-metrics">
@@ -2832,7 +2828,7 @@
                             <div class="metric-value" style="color: ${waterQuality.DO < 2 ? '#ff5722' : waterQuality.DO < 5 ? '#ff9800' : '#4dabf7'}">
                                 ${waterQuality.DO.toFixed(1)}
                             </div>
-                            <div class="metric-label">濠电姍鍕姸鐞氭瑦鎱?/div>
+                            <div class="metric-label">濠电姷鏁告慨宥夊礋椤愩垹笑闁荤偞纰嶉悷锕傚箞?/div>
                         </div>
                         <div class="info-metric">
                             <div class="metric-value" style="color: ${waterQuality.COD > 20 ? '#ff5722' : waterQuality.COD > 15 ? '#ff9800' : '#4dabf7'}">
@@ -2844,12 +2840,12 @@
                             <div class="metric-value" style="color: ${waterQuality.NH3N > 1.0 ? '#ff5722' : waterQuality.NH3N > 0.5 ? '#ff9800' : '#4dabf7'}">
                                 ${waterQuality.NH3N.toFixed(2)}
                             </div>
-                            <div class="metric-label">濠殿喗菧閸斿秹鎮?/div>
+                            <div class="metric-label">濠电姵顔栭崰妤勫綘闂佸憡鏌ㄧ粔褰掑箖?/div>
                         </div>
                     </div>
                     <div class="info-tags">
                         ${(station.tags || []).slice(0, 2).map(tag => `<span class="info-tag">${tag}</span>`).join('')}
-                        <span class="info-tag">${station.type || '闂佺儵鏅滈崹鍓佺矈鐎靛摜鍗?}</span>
+                        <span class="info-tag">${station.type || '闂傚倷鑳堕崕鐢稿疾濠婂牆鍨傞柛鎾茶兌閻牓鎮楅棃娑欐喐闁?}</span>
                     </div>
                     <div class="info-arrow"></div>
                 `;
@@ -2897,7 +2893,7 @@
         }, 300);
     }
 
-    // 闂佺绻戞繛濠偽涚€涙鈹嶉柍鈺佸暕缁辨牜鈧鍠栧﹢閬嶆偘閵夆晜鏅柛顐ｇ箘閺併劑鏌涢弬璇插闁轰線绠栭弫?
+    // 闂傚倷鑳堕…鍫㈡崲閹寸偟绠惧┑鐘蹭迹濞戞埃鍋撳☉娆樼劷闁崇懓绉归弻宥夊煛娴ｅ憡娈ㄧ紓浣介哺閻楁粓鍩€椤掍緡鍟忛柛鐘崇墪閿曘垽鏌嗗鍡椾粧闂侀潧顦弲婊堝疾椤掑嫭鐓曟い鎰剁悼缁犳﹢鏌℃担闈涘闁哄本鐩顒傛嫚閹绘帩鐎烽梻浣芥〃缁舵氨绮婚弽顓炴瀬?
     function closeInfoWindowWithAnimation() {
         if (currentInfoWindow) {
             currentInfoWindow.style.animation = 'slideOut 0.3s ease-out forwards';
@@ -2914,7 +2910,7 @@
         }
     }
 
-    // 闂佺绻戞繛濠偽涚€涙鈹嶉柍鈺佸暕缁辨牜鈧鍠栧﹢閬嶆偘閵夆晜鏅柛顐犲灮瑜板矂鏌涘Δ鈧崯鍧楀矗瑜斿濠氼敇閵娧咁槴
+    // 闂傚倷鑳堕…鍫㈡崲閹寸偟绠惧┑鐘蹭迹濞戞埃鍋撳☉娆樼劷闁崇懓绉归弻宥夊煛娴ｅ憡娈ㄧ紓浣介哺閻楁粓鍩€椤掍緡鍟忛柛鐘崇墪閿曘垽鏌嗗鍡椾粧闂侀潧顦弲婊堝疾椤掑嫭鐓曟い鎰Т閻忣喚鎲搁弶璺ㄧ劯闁哄本绋戣灃闁逞屽墴瀹曨垶宕稿Δ鈧惌妤冩喐閺傛娼栧┑鐘冲嚬閺佸洭鏌曟繛褍鎷嬪Σ?
     function closeInfoWindow() {
         if (currentInfoWindow) {
             currentInfoWindow.remove();
@@ -2926,7 +2922,7 @@
         }
     }
 
-    // 闂佸搫娲ら悺銊╁蓟婵犲洤鎹堕柡澶嬪缁傚牓鏌″鍛┛妞ゆ柨娲畷婵嬪Ω瑜庨弳?
+    // 闂傚倷绀侀幖顐⒚洪妶澶嬪仱闁靛ň鏅涢拑鐔封攽閻樺弶鎼愰柟鐟扮埣閺屸剝寰勭€ｎ亶鍤嬬紓浣稿€搁悧鎾诲蓟閳ユ剚鍚嬮柛娑卞枤閳规稑顪冮妶鍡樼叆婵炲樊鍘奸悾宄扳攽鐎ｎ€晝鎲告惔銊ユ辈?
     function updateMapMarkerAnimation() {
         if (!markers || markers.length === 0) return;
 
@@ -2947,10 +2943,10 @@
         }
     }
 
-    // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宥庡幘瑜邦垳鈧灚婢橀崲鎻掞耿閹绢喖鐐?
+    // 闂傚倷绀侀幉锛勬暜濡ゅ啯宕查柛宀€鍎戠紞鏍煙閻楀牊绶茬紒鈧畝鍕厸鐎广儱楠搁獮妯兼喐闁箑鐏ｉ柍褜鍓欓悘姘熆濮椻偓瀹曟煡骞撻幒鐐垛偓鍧楁煙缂併垹鏋涢柣?
     function initializeMap() {
         if (typeof AMap === 'undefined') {
-            console.error('婵°倕鍊归敋闁汇儱顦靛畷鐑藉级閹稿海顩瑼PI闂佸搫鐗滄禍婊勬叏閻愬瓨濮?);
+            console.error('婵犲痉鏉库偓鏇㈠磹瑜版帗鏅梻浣圭湽閸庨亶藝闂堟稓鏆﹂柣鎴ｆ缁狙囨煙缁嬫寧鎹ｆい鈺冩嚑PI闂傚倷绀侀幖顐︽偋濠婂嫮顩叉繝濠傚閸欏繘鏌ｉ幇顒傛憼濠?);
             return;
         }
 
@@ -2999,12 +2995,12 @@
         }
     }
 
-    // 濠电儑缍€椤曆勬叏閻愮儤鍎庨柟瀵稿仧閵堝绱掗弮鈧悷褔宕戦敐澶婂唨闁搞儺浜堕崬?
+    // 濠电姷鏁搁崕鎴犵礊閳ь剚銇勯弴鍡楀閸欏繘鏌ｉ幇顔煎妺闁稿骸閰ｉ弻鐔衡偓鐢殿焾娴犙囨煏閸繍鍤熺紒杈ㄥ浮瀵噣鍩€椤掑嫭鍋＄憸鏂跨暦閹达附鏅插璺猴工閸炪劑姊洪幖鐐插姶濞存粌鐖煎畷?
     function addStationMarkers() {
         monitoringStations.forEach((station, index) => {
-            // 缂佺虎鍙庨崰鏇犳崲濮樿泛閿ら柟閭﹀幘閸ㄥジ鎮楀☉娅亜锕?
+            // 缂傚倷鑳堕搹搴ㄥ矗鎼淬劌绐楅柡鍥╁У瀹曞弶鎱ㄥΟ鎸庣【闂佽￥鍊濋弻鐔兼焽閿曗偓楠炴﹢鏌涢妸銉ｅ仮闁诡喗顨呴埥澶娾枍椤撗傜盎闁?
             if (!station.coordinates || !Array.isArray(station.coordinates) || station.coordinates.length !== 2) {
-                console.warn('缂備焦姊归悷褔宕戦敐澶婇敜闁归偊鍘鹃崹濂告煛閸愵亜校闁?', station.name, station.coordinates);
+                console.warn('缂傚倸鍊烽悞锕€顫忚ぐ鎺撳仭鐟滄柨鐣烽幋锔芥櫜濠㈣泛锕弫婊堟⒑瑜版帒浜伴柛姗€绠栧畷瑙勭附閸涘﹦鍘搁梺鍛婂姦娴滄粍鐗庨梻?', station.name, station.coordinates);
                 return;
             }
 
@@ -3014,7 +3010,7 @@
             markerContent.innerHTML = station.icon || station.name.charAt(0) || '缂?;
             markerContent.title = station.name;
 
-            // 闂佸搫绉烽～澶婄暤娓氣偓閹晠鎳滅喊妯轰壕濞达絿鎳撳鎴︽煕閺冨倸鞋妞ゆ帞鍠栧畷銊︾節閸屾妤呮煟?
+            // 闂傚倷绀侀幖顐ょ矓閻戞枻缍栧璺猴功閺嗐倕銆掑锝呬壕闂佽鍠掗弲鐘诲箠濠婂懎鏋堟俊顖濇〃婢规洘绻涙潏鍓ф偧闁硅櫕鎸搁…鍥箣閿旂晫鍘遍梺鍝勫暙閸婃悂鐎锋俊鐐€栫敮鐐哄窗閺嵮呮殾闁靛濡囩弧鈧梺绋挎湰椤曟潙螖閸涱喚鍘?
             const status = station.status ||
                 (station.qualityClass === 'I缂? || station.qualityClass === 'II缂? ? 'normal' :
                     station.qualityClass === 'III缂? ? 'warning' : 'critical');
@@ -3048,7 +3044,7 @@
         });
     }
 
-    // 闂佸搫娲ら悺銊╁蓟婵犲洦鐒诲璺侯槼閸橆剟鏌ｉ妸銉ヮ伀闁绘繍鍨堕幃?
+    // 闂傚倷绀侀幖顐⒚洪妶澶嬪仱闁靛ň鏅涢拑鐔封攽閻樺弶澶勯柣鎺曨嚙椤法鎹勬笟顖浶梺鍛婏供閸撶喖寮婚敐澶娢╅柕澶堝労娴尖偓闂備胶绮换宥夊垂閸洖绠?
     function updateSelectedStation(stationId) {
         selectedStationId = stationId;
 
@@ -3061,7 +3057,7 @@
         updateChartData();
     }
 
-    // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宓嫮顩柣?
+    // 闂傚倷绀侀幉锛勬暜濡ゅ啯宕查柛宀€鍎戠紞鏍煙閻楀牊绶茬紒鈧畝鍕厸鐎规搩鍠栫€氼噣銆呴銏＄厽?
     function initializeChart() {
         const chartContainer = document.getElementById('chartContainer');
         if (!chartContainer) return;
@@ -3074,7 +3070,7 @@
         }
     }
 
-    // 闂佸搫娲ら悺銊╁蓟婵犲洤鐐婇柟瑙勫姂閳ь剙鍟村顐︽偋閸繄銈?
+    // 闂傚倷绀侀幖顐⒚洪妶澶嬪仱闁靛ň鏅涢拑鐔封攽閻樺弶鎼愰柣鎰躬閺岀喓鎲撮崟顐㈩潎闂侀€炲苯澧柛鐔告綑椤曪綁顢曢敂钘変罕闂佸壊鍋呯换鍕Χ?
     async function updateChartData() {
         const station = monitoringStations.find(s => s.id === selectedStationId);
         if (!station || !currentChart) return;
@@ -3086,9 +3082,9 @@
             const chartData = await loadChartData(selectedStationId, days);
             renderChart(station, chartData.historical, chartData.prediction);
         } catch (error) {
-            console.error('闁兼儳鍢茶ぐ鍥炊閹规劑鈧啴寮悧鍫濈ウ濠㈡儼绮剧憴?', error);
+            console.error('闂備礁鍚嬮崕鎶藉床閼艰翰浜归柛銉墮閻愬﹪鏌熺憴鍕闁逞屽墮閸熸潙顕ｉ锔藉亱闁割偅绻勯妶锔界節閵忊€冲姸缂侇喖澧介幉?', error);
             renderChart(station, { dates: [], pH: [], DO: [], COD: [], level: [] }, { dates: [], pH: [], DO: [], COD: [], level: [] });
-            showNotification('鏈姞杞藉埌鐪熷疄鍘嗗彶/棰勬祴鏁版嵁', 'warning');
+            showNotification('闁哄牜浜滄慨鐐存姜閽樺鐓傞柣顏嗗枎閻ゅ嫰宕㈤崱妤€钑?濡澘瀚粊鎾极閻楀牆绁?, 'warning');
         }
     }
     function renderChart(station, historicalData, predictedData) {
@@ -3097,7 +3093,7 @@
         if (!historicalData || !Array.isArray(historicalData.dates) || historicalData.dates.length === 0) {
             currentChart.setOption({
                 title: {
-                    text: '暂无真实历史/预测数据',
+                    text: '鏆傛棤鐪熷疄鍘嗗彶/棰勬祴鏁版嵁', 
                     left: 'center',
                     top: 'center',
                     textStyle: {
@@ -3111,12 +3107,12 @@
             return;
         }
 
-        // 闁荤姳绶ょ槐鏇㈡偩鐠囧樊娼╃紓鍫㈠Х缁夋挳鏌℃担鍝勵暭鐎规挷绶氶幆鍐礋椤旇偐妲洪梺鎼炲劥閹活亞妲愬┑瀣仺闁靛鍊楅懝楣冩偣娴ｇ鈷旈柣銈呮晲闁哄鍋炲娆撳春閵忊剝鍎?
+        // 闂備浇宕垫慨宕囨閵堝洦顫曢柡鍥ュ灪閸嬧晠鎮归崶褎鈻曟繛灏栨櫇缁辨捇宕奸姀鐘樸儳绱掓径瀣唉闁哄备鍓濋幏鍛村传閸曞灚姣夐柣搴ゎ潐閹搁娆㈠璺虹畾闁告劦鍠栫粈瀣亜閺冨洤浜规俊鍙夋そ濮婃椽骞栭悙鎻掑Г闂佽妞挎禍鐐参ｉ幇顑芥斀閻庯綆鍋勬禒娲⒑闂堟侗鐒鹃柛濠冾殜閹虫繃銈ｉ崘鈺佷化婵炶揪绲块…鍫ュ煕閺冨牊鐓熼柕鍫濇噺閺呮煡姊洪崫鍕垫Ш闁稿鍋涢…鍥р枎閹捐櫕妲梺闈涚箚閸撴繈宕?
         const levelData = historicalData.level;
         let minLevel = Math.min(...levelData);
         let maxLevel = Math.max(...levelData);
 
-        // 缂佺虎鍙庨崰鏇犳崲濮橆剦娼╃紓鍫㈠Х缁夌闁哄鍋涢悺銊ワ耿娓氣偓瀹曘儵宕奸姀鈥斥偓鐐烘煟閵娿儱顏悗鍨墵瀹?
+        // 缂傚倷鑳堕搹搴ㄥ矗鎼淬劌绐楅柡鍥╁У瀹曞弶鎱ㄥ鍡楀⒒婵炲皷鏅濈槐鎾诲醇閵忕姌銉х磼婢跺矈妫ч梻浣告惈椤﹂亶宕戝☉銏″仱闁靛鍎婚懓鍨€掑锝呬壕閻庤娲忛崕闈涚暦婵傜顫呴柍銉︽灱閸嬫捇鎮欓悜妯煎幗闂侀潧顭堥崕閬嶎敂椤掑嫭鍊甸柛顭戝亞婢х數鈧?
         if (minLevel === maxLevel) {
             minLevel = minLevel * 0.9;
             maxLevel = maxLevel * 1.1;
@@ -3125,7 +3121,7 @@
             maxLevel = maxLevel * 1.05;
         }
 
-        // 闁荤姳绶ょ槐鏇㈡偩鐠囧樊娼╃痪鎯ь儏缁愭盯鏌熺粙鎸庡闁绘牭缍侀幆鍐礋椤旇偐妲洪梺?
+        // 闂備浇宕垫慨宕囨閵堝洦顫曢柡鍥ュ灪閸嬧晠鎮归崶褎鈻曟繛灏栨櫇閻ヮ亪骞嗚閸庡繒绱掗幇顓犳创闁哄瞼鍠撶划娆撳箰鎼粹槅妲遍梻浣虹帛閻楊厾绱炴笟鈧獮鍡涘礃椤旇偐顦板銈嗘閸嬫劕危濞差亝鈷?
         const phData = historicalData.pH;
         const doData = historicalData.DO;
         const codData = historicalData.COD;
@@ -3146,9 +3142,9 @@
                     params.forEach(item => {
                         let unit = '';
                         if (item.seriesName === 'pH闂?) unit = '';
-                        else if (item.seriesName === '濠电姍鍕姸鐞氭瑦鎱?) unit = ' mg/L';
+                        else if (item.seriesName === '濠电姷鏁告慨宥夊礋椤愩垹笑闁荤偞纰嶉悷锕傚箞?) unit = ' mg/L';
                         else if (item.seriesName === 'COD') unit = ' mg/L';
-                        else if (item.seriesName === '濠殿喗顭囩换婵堢礊?) unit = ' m';
+                        else if (item.seriesName === '濠电姵顔栭崰妤呪€﹂崶鈺傚床婵犻潧鐗忕粈?) unit = ' m';
 
                         result += `${item.seriesName}: ${item.value}${unit}<br/>`;
                     });
@@ -3156,7 +3152,7 @@
                 }
             },
             legend: {
-                data: ['pH闂?, '濠电姍鍕姸鐞氭瑦鎱?, 'COD', '濠殿喗顭囩换婵堢礊?],
+                data: ['pH闂?, '濠电姷鏁告慨宥夊礋椤愩垹笑闁荤偞纰嶉悷锕傚箞?, 'COD', '濠电姵顔栭崰妤呪€﹂崶鈺傚床婵犻潧鐗忕粈?],
                 top: 5,
                 textStyle: {
                     color: '#b3e0ff',
@@ -3187,7 +3183,7 @@
             yAxis: [
                 {
                     type: 'value',
-                    name: '濠殿喗顭囬ˉ鎰啅濠靛绠伴柛銉ｅ妿閸?,
+                    name: '濠电姵顔栭崰妤呪€﹂崶顑﹀骞囬澶婃櫊濠电娀娼ч鍛不娴煎瓨鐓曢柕澶涚到婵″潡鏌?,
                     position: 'left',
                     axisLine: {
                         lineStyle: { color: '#80d4ff' }
@@ -3209,7 +3205,7 @@
                 },
                 {
                     type: 'value',
-                    name: '濠殿喗顭囩换婵堢礊?m)',
+                    name: '濠电姵顔栭崰妤呪€﹂崶鈺傚床婵犻潧鐗忕粈?m)',
                     position: 'right',
                     axisLine: {
                         lineStyle: { color: '#f8e71c' }
@@ -3242,7 +3238,7 @@
                     symbolSize: 3
                 },
                 {
-                    name: '濠电姍鍕姸鐞氭瑦鎱?,
+                    name: '濠电姷鏁告慨宥夊礋椤愩垹笑闁荤偞纰嶉悷锕傚箞?,
                     type: 'line',
                     smooth: true,
                     data: historicalData.DO,
@@ -3266,7 +3262,7 @@
                     symbolSize: 3
                 },
                 {
-                    name: '濠殿喗顭囩换婵堢礊?,
+                    name: '濠电姵顔栭崰妤呪€﹂崶鈺傚床婵犻潧鐗忕粈?,
                     type: 'line',
                     smooth: true,
                     yAxisIndex: 1,
@@ -3279,7 +3275,7 @@
                     symbolSize: 3
                 },
                 {
-                    name: '婵☆偅婢樼€氼厾绮?,
+                    name: '婵犵妲呴崑鍛熆濡皷鍋撳鐓庡箻缂?,
                     type: 'line',
                     smooth: true,
                     yAxisIndex: 0,
@@ -3298,7 +3294,7 @@
         currentChart.setOption(option);
     }
 
-    // 闂佹眹鍨婚崰鎰板垂濮樿泛鍌ㄩ柛鈩冾殔閽戝鏌℃担鍝勵暭鐎规挷绶氶弫宥夊醇閻斿奔绶氶獮蹇涙偆閸屾粎顦?
+    // 闂傚倷鐒﹂惇褰掑垂婵犳艾绐楅柟鐗堟緲閸ㄥ倹鎱ㄥΟ鎸庣【闁稿被鍔戦弻娑㈠焺閸愮偓鐣堕梺鑺ュ灥椤︾敻寮婚埄鍐╁闁告繂瀚烽弳顓㈡倵鐟欏嫭灏紒鑸靛哺瀵偄顓兼径濠囧敹闂佺粯鏌ㄦ總鏃傛濮樺墎宓侀煫鍥ㄧ⊕閸嬪棝鏌涚仦鍓х煂妞?
     function generateHistoricalData(station) {
         const dates = [];
         const pH = [];
@@ -3333,7 +3329,7 @@
         return { dates, pH, DO, COD, level };
     }
 
-    // 闂佹眹鍨婚崰鎰板垂濮橆叏绱ｉ柛鏇ㄥ墰閵堟挳鏌℃担鍝勵暭鐎规挷绶氶弫宥夊醇閻斿奔绶氶獮蹇涙偆閸屾粎顦?
+    // 闂傚倷鐒﹂惇褰掑垂婵犳艾绐楅柟鐗堟緲閸ㄥ倹鎱ㄥ鍡楀伎缂佹唻缍侀弻娑㈠即閵娿儱顫梺闈涚墛閹告娊寮婚埄鍐╁闁告繂瀚烽弳顓㈡倵鐟欏嫭灏紒鑸靛哺瀵偄顓兼径濠囧敹闂佺粯鏌ㄦ總鏃傛濮樺墎宓侀煫鍥ㄧ⊕閸嬪棝鏌涚仦鍓х煂妞?
     async function runPrediction() {
         const station = monitoringStations.find(s => s.id === selectedStationId);
         if (!station) return;
@@ -3345,21 +3341,21 @@
         if (!btn) return;
 
         const originalText = btn.innerHTML;
-        btn.innerHTML = '<span>...</span> 预测中';
+        btn.innerHTML = '<span>...</span> 棰勬祴涓?;
         btn.disabled = true;
 
         try {
             const response = await axios.post(`${DATA_API_BASE_URL}/prediction/run`, { stationId: selectedStationId, days });
             if (!response.data || response.data.code !== 200) {
-                throw new Error((response.data && (response.data.message || response.data.msg)) || '预测接口执行失败');
+                throw new Error((response.data && (response.data.message || response.data.msg)) || '棰勬祴鎺ュ彛鎵ц澶辫触');
             }
 
             await updateChartData();
-            showNotification(`宸插埛鏂版湭鏉?${days} 澶╃殑鐪熷疄棰勬祴鏁版嵁`, 'success');
+            showNotification(`鐎瑰憡褰冮崺娑㈠棘閻楀牊寮撻柡?${days} 濠㈠灈鏅濆▓鎴︽儑閻旈鏉藉Λ鏉垮缁佹挳寮悧鍫濈ウ`, 'success');
         } catch (error) {
-            console.error('预测失败:', error);
             console.error('棰勬祴澶辫触:', error);
-            showNotification('棰勬祴鎺ュ彛鎵ц澶辫触', 'error');
+            console.error('濡澘瀚粊瀛樺緞鏉堫偉袝:', error);
+            showNotification('濡澘瀚粊鎾箳閵夈儱缍撻柟绗涘棭鏀藉鎯扮簿鐟?, 'error');
             btn.innerHTML = originalText;
             btn.disabled = false;
         }
@@ -3398,8 +3394,8 @@
                     <span style="font-size: 1rem;">${
             type === 'success' ? '闂? :
                 type === 'error' ? '闂? :
-                    type === 'warning' ? '闂佸疇娉曟刊瀵哥箔? :
-                        '闂佹枼鏅濆▍銏㈢箔?
+                    type === 'warning' ? '闂傚倷绀侀悿鍥р枖閺囩喎鍨旈悗闈涙憸缁? :
+                        '闂傚倷鐒﹂弸濂稿疾濠靛棌鏋嶉柕蹇嬪灮缁?
         }</span>
                     <span>${message}</span>
                 </div>
@@ -3423,12 +3419,12 @@
         }, 3000);
     }
 
-    // 缂備焦鍔栭〃鍛般亹濞戞瑥绶炵憸宥夋儍椤掑嫬鐭楁俊顖氭惈椤曆囨煛閸愨晛鍔堕柣銊у枛瀵偊寮堕幋鐐殿洯闁?
+    // 缂傚倸鍊烽悞锕傚礉閺嶎厹鈧啴宕ㄩ懜顑挎睏濠电偞鍨堕悷銉ф閻愬灚鍠愮€广儱顦伴崕宥嗐亜閹烘垵顏╅柣顓燁殕娣囧﹪顢涘顓熷創濡炪倖娉﹂崶銊у幐闂佸憡鍔忛弲娑㈠礉閸洘鐓熼柕濞у啯鐏堥悗娈垮櫘閸嬪﹤顕ｉ崼鏇炵闁绘劖顔栧ú顖炴⒑?
     let resizeTimer;
     window.addEventListener('resize', function() {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function() {
-            // 闁荤姴顑呴崯顖炲汲閿濆绠ラ柍褜鍓熷鍨緞婵犲啰顩柣鐐寸◤閸斿矂濡甸崶鈺€鐒?
+            // 闂備浇宕垫慨鎾敄閸涙潙鐤い鏍仜濮规煡鏌ㄥ┑鍡╂Ц缂佺姰鍎甸弻宥堫檨闁告挾鍠庨锝夊垂椤愩垻绐炴繝鐢靛Т閸熶即銆呴銏＄厽闁绘劕顕埣銈夋煕閺傝法鐒稿┑锛勬暬瀹曞爼鍩￠埀顒勬倿?
             if (currentChart) currentChart.resize();
             if (radarChart) radarChart.resize();
             if (leftChart1) leftChart1.resize();
@@ -3437,7 +3433,7 @@
             if (rightChart1) rightChart1.resize();
             if (rightChart2) rightChart2.resize();
 
-            // 閻庢鍠栭幖顐﹀春濡ゅ懏鐓傜€广儱妫欓悡鈧柟鐓庣摠濮婂寮妶澶婄闁靛鍎冲宀勬煛瀹ュ懎妲荤紒?
+            // 闂佽瀛╅鏍窗閺嶎厼绠规い鎰剁畱閺勩儲淇婇妶鍛櫤闁绘挸鍊婚埀顒€绠嶉崕鍗炍涘▎鎾村亗闁逞屽墴閺岀喖鎮℃惔锝嗘喖濠殿喖锕ら…宄邦嚕椤愶箑围濠㈣泛锕﹂ˇ褔姊洪棃娑辩劸闁稿骸鍟块…鍥х暆閸曨剛鍘搁悗骞垮劚閹冲骸危閼姐倗纾?
             if (window.innerWidth > 1200) {
                 const mainContent = document.querySelector('.main-content');
                 const leftPanel = document.querySelector('.left-panel');
@@ -3468,20 +3464,20 @@
         }, 150);
     });
 
-    // 婵＄偑鍊楅弫璇差焽娴兼潙绀夐柣妯煎劋缁佷即鏌涘顒勵€楃紒杈ㄥ灦閹便劎鈧綆浜滈悘銉モ攽椤旂⒈鍎忛悗?
+    // 婵犵绱曢崑鎴﹀磹濡ゅ懎鏋侀悹鍥ф▕閻掕棄霉閸忓吋缍戠紒鈧径鎰厽婵☆垳鍘ч崝瀣磼娴ｅ嘲宓嗛柡灞剧☉椤繈顢楅崟纰樺亾濡ゅ啰纾奸弶鍫涘妼閻忥箓鏌熸笟鍨闁逞屽墾缂嶅棙绂嶅鍫熷€堕柕澶堝劗閺€鑺ャ亜閺冨倵鎷￠柛搴＄箻閹?
     window.addEventListener('DOMContentLoaded', function() {
-        // 濠碘槅鍋€閸嬫捇鏌＄仦璇插姎缂佺儵鍋撻柣鐔告磻濞村洨绮婇鈶╂敠闁规澘澧庣粈澶娒归敐鍛棞鐎规挸妫欓幏鍛崉閵娿儳绠掗柣蹇撶箲閸ㄥ磭寮ч崘顏冪剨婵犻潧锕﹀Σ鎼佹煕閹烘挾绠撴い顐ｅ姍瀹?
+        // 濠电姷顣藉Σ鍛村磻閳ь剟鏌涚€ｎ偅宕岄柡宀嬬磿娴狅妇鎷犻幓鎺戭潛缂傚倷鑳堕崕鐢稿磻閹剧粯鐓熼柣鏂挎啞绾剧粯绻涢弶鎴炲窛缂侇喖锕、鏇㈠煑閳哄倹鏆婇梻浣筋潐濠㈡ɑ鏅舵惔锝囩焼濠㈣泛鈯曡ぐ鎺撴櫜闁告侗鍣Λ鐐烘倵鐟欏嫭灏俊顐ｇ懇楠炲繘宕ㄩ娑樼／闂侀潧顭堥崕宕囩不閹烘鐓熼煫鍥ㄦ尵缁犳煡鏌涢妸銉э紞鐎殿啫鍥х妞ゅ繐鍟伴崜銊モ攽閻樼粯娑ч柨鏇畱鍗遍柟闂寸劍閻撴洟鏌熼悜妯诲暗缂佺姵鎸婚妵鍕敃閿濆懎顫掗悗?
         const missingResources = [];
-        if (typeof AMap === 'undefined') missingResources.push('婵°倕鍊归敋闁汇儱顦靛畷鐑藉级閹稿海顩?);
-        if (typeof echarts === 'undefined') missingResources.push('ECharts闂佹悶鍎插畷姗€濡撮崘鈺傚劅?);
-        if (typeof axios === 'undefined') missingResources.push('Axios HTTP闁?);
+        if (typeof AMap === 'undefined') missingResources.push('婵犲痉鏉库偓鏇㈠磹瑜版帗鏅梻浣圭湽閸庨亶藝闂堟稓鏆﹂柣鎴ｆ缁狙囨煙缁嬫寧鎹ｆい?);
+        if (typeof echarts === 'undefined') missingResources.push('ECharts闂傚倷鐒﹂幃鍫曞磿閹绘帞鏆︽慨妞诲亾濠碘剝鎸冲畷姗€鍩￠崒姘Τ?);
+        if (typeof axios === 'undefined') missingResources.push('Axios HTTP闂?);
 
         if (missingResources.length > 0) {
-            console.warn('婵炲濮伴崕鎵箔閸涱垱灏庨柛鏇ㄥ墰閻栭亶鏌￠崼顐＄盎濠殿喚鍋炲?', missingResources.join(', '));
+            console.warn('婵犵數鍋涢顓熸叏娴兼潙纾块柟娈垮枤缁犳棃鏌涘☉鍗炵仭閻忓繐閰ｉ弻娑㈠即閵娿儱顫梺缁樼墵娴滃爼寮婚敓鐘查唶妞ゆ劧绱曢惄搴㈢節濞堝灝鏋ら柛瀣仜椤?', missingResources.join(', '));
             showNotification(`閮ㄥ垎璧勬簮鍔犺浇澶辫触: ${missingResources.join(', ')}`, 'warning');
         }
 
-        // 閻庣偣鍊栭崕鑲╂崲濠婂牆绀嗘繝闈涙－濞兼鏌涢弽銊у缂佽鲸绻勫☉鐢割敊閼姐倗顔旈梺鍦暯閸嬫捇鏌￠崼婵愭Ъ缂佷緡鍋勯埞鍐箛閺夊灝骞嬮梺鍝勭墕椤︽澘鈹冮埀顒€霉閸忚壈澹樺┑顔惧仦濞?
+        // 闂佽娴烽崑锝夊磹閺嶎厼纾块柤娴嬫櫆瀹曞弶绻濇繝鍌滃缂佲偓閸℃绡€闂傚牊绋掗敍宥嗙箾閸忕⒈娈滈柡灞剧洴瀵粙濡歌椤ュ绱撴担浠嬪摵缂佽瀚埥澶愭偨閸撳弶鏅╅梺鐓庮潟閸婃顢欓弮鍫熲拺闁革富鍙庨弳顖炴煕鐎ｎ偅宕岄柡宀嬬節瀹曠厧鈹戦幇顓夘亞绱撴担椋庤窗闁稿瀚伴崺鐐哄礃椤旇偐鐤€闂佸搫顦悘婵嬬嵁鐎ｎ喗鈷戦柛婵嗗婢ф洘銇勯敂鑺ョ凡闁崇懓鍟撮崺鈧い鎺嗗亾闂囧鏌涜箛姘棈濠㈣锚閳规垿顢欓幆褌娌┑?
         setTimeout(() => {
             initApplication();
         }, 500);
