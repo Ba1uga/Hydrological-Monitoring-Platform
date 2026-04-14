@@ -1,18 +1,18 @@
 server:
-  port: 8083
+  port: ${SERVER_PORT:8080}
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://118.195.138.128:3306/china_hydrology_monitor
-    username: yfwang
-    password: Iflytek@2025.
+    url: ${DB_URL:jdbc:mysql://localhost:3306/china_hydrology_monitor}
+    username: ${DB_USERNAME:change_me}
+    password: ${DB_PASSWORD:change_me}
   data:
     redis:
-      host: 118.195.138.128
-      port: 6379
-      database: 5
-      password: Iflytek@2025.
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      database: ${REDIS_DATABASE:0}
+
   cache:
     type: redis
     redis:
@@ -32,8 +32,8 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
 
 amap:
-  key: a6d9aeded24e4453798fb33a0a736050
-  security-js-code: a6d9aeded24e4453798fb33a0a736050
+  key: ${AMAP_KEY:change_me}
+  security-js-code: ${AMAP_SECURITY_JS_CODE:change_me}
 
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml

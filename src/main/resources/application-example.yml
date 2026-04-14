@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/china_hydrology_monitor
+    username: your_mysql_user
+    password: your_mysql_password
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+
+amap:
+  key: your_amap_key
+  security-js-code: your_amap_security_js_code
