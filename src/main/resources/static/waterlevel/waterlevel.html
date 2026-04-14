@@ -1042,15 +1042,15 @@
                     <div class="water-level-info">
                         <div class="level-indicator">
                             <i class="fas fa-water"></i>
-                            <span>闁荤喐绮庢晶妤呭箰閸涘﹥娅? <span id="currentLevel">2.34</span>m</span>
+                            <span>当前水位: <span id="currentLevel">2.34</span>m</span>
                         </div>
                         <div class="level-indicator warning-level">
                             <i class="fas fa-exclamation"></i>
-                            <span>闂佽崵濮崑鎾绘煥閺冨洦顥夐柣? 3.50m</span>
+                            <span>警戒: 3.50m</span>
                         </div>
                         <div class="level-indicator danger-level">
                             <i class="fas fa-skull-crossbones"></i>
-                            <span>闂備礁鎲￠〃濠冪鐠鸿　鏋? 4.00m</span>
+                            <span>危险: 4.00m</span>
                         </div>
                     </div>
                 </div>
@@ -1061,7 +1061,7 @@
 
             <div class="card weather-card">
                 <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-cloud-sun-rain"></i> 婢垛晜鐨佃ぐ鍗炴惙娑撳孩鎸夋担宥呭瀻閺?/h2>
+                    <h2 class="card-title"><i class="fas fa-cloud-sun-rain"></i> 天气影响与水位分析</h2>
                 </div>
                 <div class="card-body">
                     <div class="chart-container" id="weatherImpactChart"></div>
@@ -1071,8 +1071,8 @@
 
         <div class="middle-column">
             <div class="station-search">
-                <input type="text" class="search-input" id="stationSearch" placeholder="闂佸搫顦悧濠囧箰閹间礁鐭楅柛鈩冪懅閸楁碍绻涢崱妯虹仴濞寸媭鍨堕弻娑橆潩椤掑倐銈囨偖閵娾晜鐓欓柛蹇氬亹閻矂鏌?..">
-                <button class="search-btn" id="searchBtn"><i class="fas fa-search"></i> 閹兼粎鍌?/button>
+                <input type="text" class="search-input" id="stationSearch" placeholder="搜索监测站点关键字...">
+                <button class="search-btn" id="searchBtn"><i class="fas fa-search"></i> 搜索</button>
             </div>
             <div id="mapContainer"></div>
         </div>
@@ -1080,11 +1080,11 @@
         <div class="right-column">
             <div class="card ratio-card">
                 <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-chart-pie"></i> 濮樼繝缍呴崡鐘崇槷閸掑棗绔?/h2>
+                    <h2 class="card-title"><i class="fas fa-chart-pie"></i> 水位占比分布</h2>
                     <div class="water-level-info">
                         <div class="level-indicator">
                             <i class="fas fa-water"></i>
-                            <span>闂備浇顕栭崜姘ｉ幒妤婃晣? <span id="totalStations">24</span>缂?/span>
+                            <span>监测站点: <span id="totalStations">24</span>个</span>
                         </div>
                     </div>
                 </div>
@@ -1097,24 +1097,24 @@
                 <div class="card param-alert-card">
                     <div class="prediction-controls">
                         <div class="card-header" style="margin-bottom: 0; padding-bottom: 1px; height: 22px;">
-                            <h2 class="card-title"><i class="fas fa-sliders-h"></i> 妫板嫭绁撮崣鍌涙殶鐠佸墽鐤?/h2>
+                            <h2 class="card-title"><i class="fas fa-sliders-h"></i> 预测参数设置</h2>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">濠碘槅鍋呭妯尖偓姘煎幘缁﹪骞橀鑲╃潉闂佸壊鍋呭ú妯盒?(闂佽绻愮换鎰崲閹存繍娓?</label>
+                            <label class="control-label">预测时长设置(单位: 小时)</label>
                             <div class="slider-container">
                                 <input type="range" min="1" max="72" value="24" class="slider" id="predictionHours">
                                 <span class="slider-value" id="hoursValue">24</span>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">闂傚倷鐒﹁ぐ鍐洪敃鍌涘亱閺夊牜鐓夌槐锝夋煙鐎电孝闁?(闂備礁鎲＄敮鎺懳涘┑瀣?</label>
+                            <label class="control-label">采样频率(单位: 分钟)</label>
                             <div class="slider-container">
                                 <input type="range" min="5" max="60" step="5" value="15" class="slider" id="sampleRate">
                                 <span class="slider-value" id="rateValue">15</span>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">濠碘槅鍋呭妯尖偓姘煎幘缁﹪寮堕幊宕囧枛閸ㄦ儳鐣烽崶锝呬壕?/label>
+                            <label class="control-label">预测模型选择</label>
                             <div class="model-selector">
                                 <label class="model-option">
                                     <input type="radio" name="model" value="lstm" checked style="margin-bottom: 0.5px;">
@@ -1137,28 +1137,28 @@
 
                     <div class="alert-container">
                         <div class="card-header" style="margin-bottom: 0; padding-bottom: 1px; height: 22px;">
-                            <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> 妫板嫯顒熸穱鈩冧紖</h2>
-                            <span class="alert-count" id="alertCount">3 闂?/span>
+                            <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> 预警信息</h2>
+                            <span class="alert-count" id="alertCount">3 条</span>
                         </div>
                         <div class="alert-list" id="alertList">
                             <div class="alert-item">
                                 <div class="alert-details">
-                                    <div class="alert-title">閸栨ぞ鍚柅姘劕濞岃櫕鎸夋担宥呯磽鐢晲绗傞崡?/div>
-                                    <div class="alert-desc">30 閸掑棝鎸撻崘鍛扮箾缂侇厺绗傚☉?0.5 缁绱濈拠宄板彠濞夈劌褰夐崠鏍Ъ閸?/div>
+                                    <div class="alert-title">北京通惠河水位异常上升</div>
+                                    <div class="alert-desc">30 分钟内连续上涨 0.5 米，请关注变化趋势</div>
                                 </div>
                                 <div class="alert-time">10:23</div>
                             </div>
                             <div class="alert-item warning">
                                 <div class="alert-details">
-                                    <div class="alert-title">娑撳﹥鎹ｆ鍕兏濮圭喐绁﹂柅鐔奉杻閸?/div>
-                                    <div class="alert-desc">濞翠線鈧喕鎻崚?2.3m/s閿涘本甯存潻鎴︻暕鐠€锕傛閸?/div>
+                                    <div class="alert-title">上海黄浦江流速增加</div>
+                                    <div class="alert-desc">流速达到 2.3m/s，接近预警阈值</div>
                                 </div>
                                 <div class="alert-time">09:45</div>
                             </div>
                             <div class="alert-item info">
                                 <div class="alert-details">
-                                    <div class="alert-title">楠炲灝绐為悵鐘崇潤濮樼繝缍呭▔銏犲З瀵倸鐖?/div>
-                                    <div class="alert-desc">閻厽妞傚▔銏犲З閺勫孩妯夐敍宀冾嚞閺嶅憡鐓℃稉濠冪埗閺夈儲鎸夐崪宀勬闂嗐劌濂栭崫?/div>
+                                    <div class="alert-title">广州珠江水位波动异常</div>
+                                    <div class="alert-desc">短时波动明显，请核查上游来水和降雨影响</div>
                                 </div>
                                 <div class="alert-time">08:15</div>
                             </div>
@@ -1171,7 +1171,7 @@
                         <div class="result-card">
                             <div class="result-icon"><i class="fas fa-arrow-up"></i></div>
                             <div class="result-content">
-                                <div class="result-label">妫板嫭绁村畡鏉库偓鍏兼寜娴?/div>
+                                <div class="result-label">预测峰值水位</div>
                                 <div class="result-value">2.87</div>
                                 <div class="result-trend trend-up">
                                     <i class="fas fa-chevron-up"></i>
@@ -1182,22 +1182,22 @@
                         <div class="result-card">
                             <div class="result-icon"><i class="fas fa-clock"></i></div>
                             <div class="result-content">
-                                <div class="result-label">妫板嫯顓搁崚鎷屾彧閺冨爼妫?/div>
+                                <div class="result-label">预计到达时间</div>
                                 <div class="result-value">16:45</div>
                                 <div class="result-trend">
                                     <i class="fas fa-info-circle"></i>
-                                    <span>5闂佽绻愮换鎰崲閹存繍娓婚柛宀€鍋涚憴?/span>
+                                    <span>5 小时后</span>
                                 </div>
                             </div>
                         </div>
                         <div class="result-card">
                             <div class="result-icon"><i class="fas fa-exclamation-circle"></i></div>
                             <div class="result-content">
-                                <div class="result-label">鐡掑濞嶉崣妯哄楠炲懎瀹?/div>
-                                <div class="result-value">濠?/div>
+                                <div class="result-label">趋势变化幅度</div>
+                                <div class="result-value">警告</div>
                                 <div class="result-trend trend-up">
                                     <i class="fas fa-chevron-up"></i>
-                                    <span>+1缂?/span>
+                                    <span>+1 级</span>
                                 </div>
                             </div>
                         </div>
@@ -1205,7 +1205,7 @@
 
                     <div class="history-chart-item">
                         <div class="card-header" style="margin-bottom: 0; padding-bottom: 0.5px; height: 18px;">
-                            <h2 class="card-title" style="font-size: 10px;"><i class="fas fa-chart-line"></i> 閸樺棗褰跺缈犵秴鐎佃鐦?/h2>
+                            <h2 class="card-title" style="font-size: 10px;"><i class="fas fa-chart-line"></i> 历史水位对比</h2>
                         </div>
                         <div class="chart-container" id="historyLevelChart"></div>
                     </div>
@@ -1218,7 +1218,7 @@
 <div class="overlay" id="overlay"></div>
 <div class="water-level-3d-modal" id="water3DModal">
     <div class="modal-header">
-        <h3 class="modal-title"><i class="fas fa-map"></i> <span id="modalAreaName">閻╂垶绁撮崠鍝勭厵</span> 濮樼繝缍呯憴鍡楁禈</h3>
+        <h3 class="modal-title"><i class="fas fa-map"></i> <span id="modalAreaName">监测区域</span> 水位视图</h3>
         <div class="close-modal" id="closeModalBtn">
             <i class="fas fa-times"></i>
         </div>
@@ -1372,7 +1372,7 @@
                     <div class="alert-item">
                         <div class="alert-details">
                             <div class="alert-title" style="color:${color};">${message}</div>
-                            <div class="alert-desc">瑜版挸澧犳い鐢告桨閺堫亙濞囬悽銊δ侀幏鐔告殶閹诡喛藟娴?/div>
+                            <div class="alert-desc">当前页面未使用模拟数据补位</div>
                         </div>
                         <div class="alert-time">--:--</div>
                     </div>`;
@@ -1867,8 +1867,8 @@
 
                 alertItem.innerHTML = `
                 <div class="alert-details">
-                    <div class="alert-title">${warning.title || '濮樼繝缍呮０鍕劅'}</div>
-                    <div class="alert-desc">${warning.content || '濮樼繝缍呭鍌氱埗'}</div>
+                    <div class="alert-title">${warning.title || '水位预警'}</div>
+                    <div class="alert-desc">${warning.content || '水位异常'}</div>
                 </div>
                 <div class="alert-time">${timeStr}</div>
             `;
