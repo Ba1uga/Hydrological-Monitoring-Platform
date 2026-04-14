@@ -3,18 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>动态水位检测平台</title>
-    <script type="text/javascript">
-        window._AMapSecurityConfig = {
-            securityJsCode: '59c1f3efe6133790694b6495b4972cc4',
-        }
-    </script>
-    <!-- 仅加载2D核心插件，移除3D相关依赖 -->
-    <script src="https://webapi.amap.com/maps?v=2.0&key=2861fc871d947277400a946b999d5734&plugin=AMap.Scale,AMap.Geocoder"></script>
+    <title>鍔ㄦ€佹按浣嶇洃娴嬪钩鍙?/title>
+    <!-- 高德地图脚本运行时按后端配置动态加载，避免在静态文件中暴露 key -->
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-    /* 基础重置 */
+    /* 闂佺硶鏅炲▍锝夈€侀崨瀛樼厒鐎广儱娲ㄩ弸?*/
     * {
         margin: 0;
         padding: 0;
@@ -27,11 +21,11 @@
         color: #e6f7ff;
         line-height: 1.6;
         min-height: 100vh;
-        padding: 8px; /* 减小内边距 */
+        padding: 8px; /* 闂佸憡鍨电换鎰版儍椤掑嫬绀冮柛娑欏閻濆爼鎮?*/
         overflow-x: hidden;
         position: relative;
-        height: 100vh; /* 固定高度 */
-        overflow: hidden; /* 禁止滚动 */
+        height: 100vh; /* 闂佹悶鍎遍幖顐︽偩閻愵剦娈楁俊顖氭惈椤?*/
+        overflow: hidden; /* 缂備礁鍊烽悞锕傤敆濞戞﹩鐓ユ慨姗嗗墮琚?*/
     }
 
     .container {
@@ -39,11 +33,11 @@
         margin: 0 auto;
         position: relative;
         z-index: 10;
-        height: 100%; /* 使用100%高度 */
+        height: 100%; /* 婵炶揪缍€濞夋洟寮?00%婵°倕鍊归敋閻?*/
         padding: 0;
     }
 
-    /* ===== 从shuiwen.html复制的背景效果 ===== */
+    /* ===== 婵炲濮寸粣寤籾iwen.html婵犮垼娉涚粔鎾春濡ゅ懏鍎嶉柛鏇ㄥ枛閸撳綊鏌￠崪浣哥仭闁哄懌鍎靛?===== */
     .grid-bg {
         position: fixed;
         top: 0;
@@ -64,7 +58,7 @@
         100% { transform: translate(40px, 40px); }
     }
 
-    /* 科技粒子 */
+    /* 缂備礁顦伴崹鑸典繆瑜忛崚鎺楀箳閹寸姵鎲?*/
     .tech-particles {
         position: fixed;
         width: 100%;
@@ -98,7 +92,7 @@
         }
     }
 
-    /* 能量脉冲点 */
+    /* 闂佺厧鍘栫划娆撳闯濞差亝鍤囧璺猴工閺嗛亶鏌?*/
     .energy-dots {
         position: fixed;
         top: 0;
@@ -126,22 +120,22 @@
 
     .header-decoration {
         text-align: center;
-        margin-bottom: 8px; /* 减小间距 */
-        padding: 6px 0; /* 减小内边距 */
+        margin-bottom: 8px; /* 闂佸憡鍨电换鎰版儍椤掑嫭鈷掔痪鎯ь儑閻?*/
+        padding: 6px 0; /* 闂佸憡鍨电换鎰版儍椤掑嫬绀冮柛娑欏閻濆爼鎮?*/
         position: relative;
-        height: 60px; /* 固定标题区域高度 */
+        height: 60px; /* 闂佹悶鍎遍幖顐︽偩妤ｅ啫鍐€闁搞儺鍓﹂弳顖炴煕閺嵮勬儓闁绘挻鐟﹂〃鍥熼崫鍕靛敽 */
     }
 
     .title-side-decoration {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 20px; /* 减小间隙 */
+        gap: 20px; /* 闂佸憡鍨电换鎰版儍椤掑嫭鈷掗柟缁㈠枟椤?*/
         margin: 0 auto;
         max-width: 100%;
     }
 
-    /* 中心装饰容器 */
+    /* 婵炴垶鎼╅崢鑲╃紦閸撗勫晳闁告稒鐣崑姗€鎮楅崷顓熷殌婵?*/
     .center-decoration {
         flex-shrink: 0;
         position: relative;
@@ -150,14 +144,14 @@
 
     .decoration-main {
         display: inline-block;
-        padding: 6px 15px; /* 减小内边距 */
+        padding: 6px 15px; /* 闂佸憡鍨电换鎰版儍椤掑嫬绀冮柛娑欏閻濆爼鎮?*/
         background: linear-gradient(135deg, rgba(20, 30, 45, 0.9), rgba(30, 40, 60, 0.9));
-        border-radius: 6px; /* 减小圆角 */
+        border-radius: 6px; /* 闂佸憡鍨电换鎰版儍椤掑嫬鎹堕柛鈩冨嚬濞?*/
         border: 1px solid rgba(0, 150, 255, 0.3);
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5); /* 减小阴影 */
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5); /* 闂佸憡鍨电换鎰版儍椤掑嫭鈷撻柡澶嬪灥椤?*/
         position: relative;
         overflow: hidden;
-        min-width: 320px; /* 减小最小宽度 */
+        min-width: 320px; /* 闂佸憡鍨电换鎰版儍椤掑嫬瀚夐柍褜鍓涙禍姝岀疀閹垮啫鏅柟?*/
     }
 
     .decoration-main::before {
@@ -177,24 +171,24 @@
     }
 
     .decoration-title {
-        font-size: 1.2rem; /* 显著缩小标题字体 */
+        font-size: 1.2rem; /* 闂佸搫瀚畷姗€骞夐懠顒傜＝闁宠桨鑳跺В鍫ユ煛瀹ュ懏鍠樻い锝囨櫕閳ь剚绋掗妵鐐电礊?*/
         font-weight: 700;
         background: linear-gradient(to right, #e6f7ff, #80d4ff, #4dabf7);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: 0 2px 4px rgba(0, 150, 255, 0.3); /* 减小阴影 */
-        letter-spacing: 0.3px; /* 减小字间距 */
+        text-shadow: 0 2px 4px rgba(0, 150, 255, 0.3); /* 闂佸憡鍨电换鎰版儍椤掑嫭鈷撻柡澶嬪灥椤?*/
+        letter-spacing: 0.3px; /* 闂佸憡鍨电换鎰版儍椤掑倵鍋撳☉娆樻疁婵☆偉娉曢幑?*/
         line-height: 1.2;
     }
 
     .decoration-line {
         height: 1px;
         background: linear-gradient(90deg, transparent, #4dabf7, transparent);
-        margin: 3px auto; /* 减小间距 */
-        width: 25%; /* 减小宽度 */
+        margin: 3px auto; /* 闂佸憡鍨电换鎰版儍椤掑嫭鈷掔痪鎯ь儑閻?*/
+        width: 25%; /* 闂佸憡鍨电换鎰版儍椤掑倵鍋撶涵鍛棄閻?*/
     }
 
-    /* 返回按钮 */
+    /* 闁哄鏅滈弻銊ッ洪弽顓炵濠㈣埖鍔栫亸?*/
     .back-button {
         position: fixed;
         top: 6px;
@@ -215,7 +209,7 @@
         transition: all 0.3s ease;
     }
 
-    /* 用户信息 */
+    /* 闂佹椿娼块崝宥夊春濞戞瑧鈹嶉柍鈺佸暕缁?*/
     .user-info {
         position: absolute;
         top: 6px;
@@ -261,22 +255,22 @@
         font-size: 7px;
     }
 
-    /* 主布局 - 更加紧凑 */
+    /* 婵炴垶鎹侀褏绮╂搴濇勃闁?- 闂佸搫娲﹀娆愭叏閻愬灚顫曠憸宥夊闯?*/
     .main-wrapper {
         display: grid;
         grid-template-columns: 1fr 2fr 1fr;
         gap: 3px;
-        height: calc(100vh - 76px); /* 精确计算高度 */
+        height: calc(100vh - 76px); /* 缂備緡鍠栨晶浠嬪灳濡吋濯奸柨娑樺閺嗩剙螖閸屾耽顏嗏偓?*/
         background: rgba(20, 30, 45, 0.9);
         border-radius: 6px;
-        padding: 4px; /* 减小内边距 */
+        padding: 4px; /* 闂佸憡鍨电换鎰版儍椤掑嫬绀冮柛娑欏閻濆爼鎮?*/
         border: 1px solid rgba(0, 150, 255, 0.2);
-        overflow: hidden; /* 防止内部溢出 */
+        overflow: hidden; /* 闂傚倸鍟鍫曨敆濞戙垹绀冮柛娑欐綑閸斻儲绻濊閸ㄥ綊宕?*/
     }
 
     .left-column {
         display: grid;
-        grid-template-rows: 1fr 0.8fr; /* 调整比例 */
+        grid-template-rows: 1fr 0.8fr; /* 闁荤姴顑呴崯顖炲汲閿濆憛鎺楀棘閸撗傜矗 */
         gap: 3px;
         height: 100%;
     }
@@ -288,7 +282,7 @@
 
     .right-column {
         display: grid;
-        grid-template-rows: 0.8fr 1.2fr; /* 调整比例 */
+        grid-template-rows: 0.8fr 1.2fr; /* 闁荤姴顑呴崯顖炲汲閿濆憛鎺楀棘閸撗傜矗 */
         gap: 3px;
         height: 100%;
     }
@@ -300,7 +294,7 @@
         height: 100%;
     }
 
-    /* 地图容器 */
+    /* 闂侀潻闄勫妯好瑰Ο灏栧亾閸︻厽鍤€婵?*/
     #mapContainer {
         width: 100%;
         height: 100%;
@@ -308,7 +302,7 @@
         border: 1px solid rgba(64, 224, 208, 0.2);
     }
 
-    /* 搜索框 */
+    /* 闂佺懓鍚嬬划搴ㄥ磼閵娿儺娴?*/
     .station-search {
         position: absolute;
         top: 3px;
@@ -343,7 +337,7 @@
         gap: 1px;
     }
 
-    /* 卡片基础样式 */
+    /* 闂佸憡顨愮槐鏇熸櫠閺嶎厼鏄ラ柧蹇氼嚃閺€銊╂煛瀹ュ懎妲荤紒?*/
     .card {
         background: rgba(16, 22, 58, 0.7);
         border-radius: 3px;
@@ -394,7 +388,7 @@
         position: relative;
     }
 
-    /* 水位实时监测卡片 */
+    /* 濠殿喗顭囩换婵堢礊閸涱垪鍋撻崷顓炰沪婵＄偛鍊块幆鍕箣閻愮偣鍋為梺鍛婎殣缁辨洘鏅?*/
     .water-level-info {
         display: flex;
         gap: 1px;
@@ -409,7 +403,7 @@
         gap: 0.5px;
     }
 
-    /* 水位占比卡片特殊调整 */
+    /* 濠殿喗顭囩换婵堢礊閸涙潙纭€闁绘ê纾Σ鐑芥煕濡ゅ纾垮褎鐗犻幃褏鎲撮崟顓熸闁荤姴顑呴崯顖炲汲?*/
     .ratio-card .card-body {
         padding: 0.5px;
         height: calc(100% - 20px);
@@ -420,7 +414,7 @@
         min-height: 60px;
     }
 
-    /* 预测参数和预警信息卡片 - 字体显著放大 */
+    /* 婵☆偅婢樼€氼厾绮婇幘顔肩煑闁稿本绋掑▓鍫曟煕濠婂啰鐒告い锝傛櫇閹峰啴鏁傛径鍝ョ畾闂佽鍙庨崹鏉跨暦闁秵鍋?- 闁诲孩绋掗妵鐐电礊鐎ｎ喖鍙婇柟瑙勫姈閸熷潡鏌￠埀顒勫箚瑜嬫禍?*/
     .param-alert-card {
         display: grid;
         grid-template-rows: 1fr 0.9fr;
@@ -446,7 +440,7 @@
         margin-bottom: 0.5px;
         color: #a0a0ff;
         font-weight: 500;
-        font-size: 11px; /* 显著增大字体 */
+        font-size: 11px; /* 闂佸搫瀚畷姗€骞夐崣澶嬫珷闁绘劕鐪版禍锝夋倵濞戞瑣浠︾紓?*/
         line-height: 1.2;
     }
 
@@ -479,10 +473,10 @@
         text-align: center;
         color: #40e0d0;
         font-weight: bold;
-        font-size: 11px; /* 显著增大字体 */
+        font-size: 11px; /* 闂佸搫瀚畷姗€骞夐崣澶嬫珷闁绘劕鐪版禍锝夋倵濞戞瑣浠︾紓?*/
     }
 
-    /* 模型选择器 */
+    /* 濠碘槅鍨埀顒€纾埀顒傚厴閺屽懏寰勭€ｎ亶浠撮梺?*/
     .model-selector {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -499,7 +493,7 @@
         border-radius: 1px;
         border: 1px solid rgba(64, 224, 208, 0.2);
         cursor: pointer;
-        font-size: 10px; /* 显著增大字体 */
+        font-size: 10px; /* 闂佸搫瀚畷姗€骞夐崣澶嬫珷闁绘劕鐪版禍锝夋倵濞戞瑣浠︾紓?*/
         line-height: 1.1;
     }
 
@@ -509,13 +503,13 @@
         margin-bottom: 0.5px;
     }
 
-    /* 预警信息 - 字体显著放大 */
+    /* 婵☆偅婢樼€氼垶顢楅悢鍝モ攳闁斥晛鍟╃槐?- 闁诲孩绋掗妵鐐电礊鐎ｎ喖鍙婇柟瑙勫姈閸熷潡鏌￠埀顒勫箚瑜嬫禍?*/
     .alert-count {
         background: rgba(255, 50, 50, 0.2);
         color: #ff3232;
         padding: 0.5px 1px;
         border-radius: 1px;
-        font-size: 11px; /* 显著增大字体 */
+        font-size: 11px; /* 闂佸搫瀚畷姗€骞夐崣澶嬫珷闁绘劕鐪版禍锝夋倵濞戞瑣浠︾紓?*/
         font-weight: bold;
     }
 
@@ -534,11 +528,11 @@
         margin-bottom: 0.5px;
         display: flex;
         justify-content: space-between;
-        font-size: 10px; /* 显著增大字体 */
+        font-size: 10px; /* 闂佸搫瀚畷姗€骞夐崣澶嬫珷闁绘劕鐪版禍锝夋倵濞戞瑣浠︾紓?*/
         line-height: 1.1;
     }
 
-    /* 结果卡片 */
+    /* 缂傚倷鐒﹂幐濠氭倶婢舵劕纭€闁挎稑瀚。?*/
     .result-chart-card {
         display: grid;
         grid-template-rows: 0.9fr 1.1fr;
@@ -597,7 +591,7 @@
         font-size: 6px;
     }
 
-    /* 历史图表 */
+    /* 闂佸憡锚濡銇愰崼鏇炵倞闁硅鍔戦埀?*/
     .history-chart-item {
         padding: 1px;
         border-radius: 2px;
@@ -617,7 +611,7 @@
         font-size: 8px;
     }
 
-    /* 模态框样式 */
+    /* 濠碘槅鍨崜婵嬪焵椤戣法鍔嶆い銏狀儔瀵棄鐣￠幍顔绢攨 */
     .overlay {
         position: fixed;
         top: 0;
@@ -732,7 +726,7 @@
         line-height: 1.2;
     }
 
-    /* 响应式设计 */
+    /* 闂佸憡绻傜粔瀵歌姳閹绘帩鍤曢煫鍥ㄥ嚬閸熷酣鎮?*/
     @media (max-width: 1024px) {
         .main-wrapper {
             grid-template-columns: 1fr 1.5fr 1fr;
@@ -998,32 +992,32 @@
         <span></span>
         <span></span>
         <ul>
-            <li><a href="../index/index.html" data-title="首页" title="首页"><span class="nav-icon">🏠</span><span class="nav-text">首页</span></a></li>
-            <li><a href="../waterproject/waterproject.html" data-title="水利工程"><span class="nav-icon">🏗️</span><span class="nav-text">水利工程</span></a></li>
-            <!-- <li><a href="../waterlevel/waterlevel.html" data-title="水位动态监测"><span class="nav-icon">🌊</span><span class="nav-text">水位动态监测</span></a></li> -->
-            <li><a href="../prediction/prediction.html" data-title="水位预测"><span class="nav-icon">🤖</span><span class="nav-text">水位预测</span></a></li>
-            <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="防汛抗旱"><span class="nav-icon">🛡️</span><span class="nav-text">防汛抗旱</span></a></li>
+            <li><a href="../index/index.html" data-title="婵☆偓绲鹃悧鐘诲Υ? title="婵☆偓绲鹃悧鐘诲Υ?><span class="nav-icon">濡絽鍟紞?/span><span class="nav-text">婵☆偓绲鹃悧鐘诲Υ?/span></a></li>
+            <li><a href="../waterproject/waterproject.html" data-title="濠殿喗蓱濞兼瑩宕洪崟顐晠闁靛／鈧弻?><span class="nav-icon">濡絽鍟紞鈧梺?/span><span class="nav-text">濠殿喗蓱濞兼瑩宕洪崟顐晠闁靛／鈧弻?/span></a></li>
+            <!-- <li><a href="../waterlevel/waterlevel.html" data-title="濠殿喗顭囩换婵堢礊閸涙潙绀夐柕濠忚吂閸嬫挻鎷呴悜妯硷紘濠?><span class="nav-icon">濡絽鍟惂?/span><span class="nav-text">濠殿喗顭囩换婵堢礊閸涙潙绀夐柕濠忚吂閸嬫挻鎷呴悜妯硷紘濠?/span></a></li> -->
+            <li><a href="../prediction/prediction.html" data-title="濠殿喗顭囩换婵堢礊閸涱噯绱ｉ柛鏇ㄥ墰閵?><span class="nav-icon">濡絽鍠氬Ο?/span><span class="nav-text">濠殿喗顭囩换婵堢礊閸涱噯绱ｉ柛鏇ㄥ墰閵?/span></a></li>
+            <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="闂傚倸鍟鍫曟儓閺囥垹绠俊銈勭劍閿?><span class="nav-icon">濡絽鍟粈澶愭煥?/span><span class="nav-text">闂傚倸鍟鍫曟儓閺囥垹绠俊銈勭劍閿?/span></a></li>
         </ul>
     </div>
-    <!-- 从shuiwen.html复制的背景效果 -->
+    <!-- 婵炲濮寸粣寤籾iwen.html婵犮垼娉涚粔鎾春濡ゅ懏鍎嶉柛鏇ㄥ枛閸撳綊鏌￠崪浣哥仭闁哄懌鍎靛?-->
     <div class="grid-bg"></div>
     <div class="tech-particles" id="techParticles"></div>
     <div class="energy-dots" id="energyDots"></div>
 
     <div class="container">
-        <!-- 新增的返回按钮 (已隐藏，由导航栏替代) -->
+        <!-- 闂佸搫鍊瑰姗€路閸愵喗鍎嶉柛鏇ㄥ枤缁犳煡鏌涢妷褍浠﹂悗鍨矒閺?(閻庣懓鎲￠悡鈥斥枔閿濆瀵犻煫鍥ュ劤缁€澶愭煟閵忕姴鑸规い鏇憾閹虫粓顢旈崨顖氱効闂佸搫娲ら妵姗€宕? -->
         <!-- <button class="back-button" id="backButton">
-            <span class="back-icon">←</span>
-            <span>返回主页</span>
+            <span class="back-icon">闂?/span>
+            <span>闁哄鏅滈弻銊ッ洪弽銊р枖濠电姵鍝庨埀?/span>
         </button> -->
 
-        <!-- 修改后的标题装饰 -->
+        <!-- 婵烇絽娴傞崰妤呭极婵傜瑙﹂幖杈剧稻閻ｉ亶鏌″鍛枠妞わ絿鏅幉妤呭川濞ｎ剙浠?-->
         <div class="header-decoration">
             <div class="title-side-decoration">
-                <!-- 中心标题 -->
+                <!-- 婵炴垶鎼╅崢鑲╃紦妤ｅ啫鍐€闁搞儺鍓﹂弳?-->
                 <div class="center-decoration">
                     <div class="decoration-main">
-                        <div class="decoration-title">动态水位检测平台</div>
+                        <div class="decoration-title">闂佸憡鏌ｉ崝宥夊焵椤戣法鍔嶉柟绋款槹閹峰懎顓奸崱鈺傗挄濠电偞娼欓鍛存煢閳哄懎鐭?/div>
                         <div class="decoration-line"></div>
                     </div>
                 </div>
@@ -1035,7 +1029,7 @@
                 </div>
                 <div class="real-time-clock" id="realTimeClock">
                     <div class="time-date" id="currentDate">2024-01-01 00:00:00</div>
-                    <div class="time-week" id="currentWeek">星期一</div>
+                    <div class="time-week" id="currentWeek">闂佸搫瀚崰鎰耿閳╁啰鈻旈柍?/div>
             </div>
         </div>
     </div>
@@ -1044,19 +1038,19 @@
         <div class="left-column">
             <div class="card level-card">
                 <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-chart-area"></i> 水位实时监测趋势</h2>
+                    <h2 class="card-title"><i class="fas fa-chart-area"></i> 姘翠綅鍔ㄦ€佺洃娴?/h2>
                     <div class="water-level-info">
                         <div class="level-indicator">
                             <i class="fas fa-water"></i>
-                            <span>当前: <span id="currentLevel">2.34</span>m</span>
+                            <span>閻熸粎澧楅幐鍛婃櫠? <span id="currentLevel">2.34</span>m</span>
                         </div>
                         <div class="level-indicator warning-level">
                             <i class="fas fa-exclamation"></i>
-                            <span>警戒: 3.50m</span>
+                            <span>闁荤姭鍋撻柨鏃囨閻? 3.50m</span>
                         </div>
                         <div class="level-indicator danger-level">
                             <i class="fas fa-skull-crossbones"></i>
-                            <span>危险: 4.00m</span>
+                            <span>闂佸憡顨婃禍璺衡枍? 4.00m</span>
                         </div>
                     </div>
                 </div>
@@ -1067,7 +1061,7 @@
 
             <div class="card weather-card">
                 <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-cloud-sun-rain"></i> 天气影响水位预测</h2>
+                    <h2 class="card-title"><i class="fas fa-cloud-sun-rain"></i> 澶╂皵褰卞搷涓庢按浣嶅垎鏋?/h2>
                 </div>
                 <div class="card-body">
                     <div class="chart-container" id="weatherImpactChart"></div>
@@ -1077,8 +1071,8 @@
 
         <div class="middle-column">
             <div class="station-search">
-                <input type="text" class="search-input" id="stationSearch" placeholder="输入站点名称搜索...">
-                <button class="search-btn" id="searchBtn"><i class="fas fa-search"></i> 搜索</button>
+                <input type="text" class="search-input" id="stationSearch" placeholder="闁哄鐗婇幐鎼佸矗閸℃瑧鍗氭繛鍡樺灥娴狀垶鏌涘顒傂ょ悮銊╂煙閸忚偐鐭岄柛?..">
+                <button class="search-btn" id="searchBtn"><i class="fas fa-search"></i> 鎼滅储</button>
             </div>
             <div id="mapContainer"></div>
         </div>
@@ -1086,11 +1080,11 @@
         <div class="right-column">
             <div class="card ratio-card">
                 <div class="card-header">
-                    <h2 class="card-title"><i class="fas fa-chart-pie"></i> 全水位占比分析</h2>
+                    <h2 class="card-title"><i class="fas fa-chart-pie"></i> 姘翠綅鍗犳瘮鍒嗗竷</h2>
                     <div class="water-level-info">
                         <div class="level-indicator">
                             <i class="fas fa-water"></i>
-                            <span>总计: <span id="totalStations">24</span>站</span>
+                            <span>闂佽鍓氬Σ鎺楊敇? <span id="totalStations">24</span>缂?/span>
                         </div>
                     </div>
                 </div>
@@ -1103,24 +1097,24 @@
                 <div class="card param-alert-card">
                     <div class="prediction-controls">
                         <div class="card-header" style="margin-bottom: 0; padding-bottom: 1px; height: 22px;">
-                            <h2 class="card-title"><i class="fas fa-sliders-h"></i> 预测参数</h2>
+                            <h2 class="card-title"><i class="fas fa-sliders-h"></i> 棰勬祴鍙傛暟璁剧疆</h2>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">预测时长 (小时)</label>
+                            <label class="control-label">婵☆偅婢樼€氼厾绮婇幘顔肩睄闁割偅娲樺В?(闁诲繐绻愮换鎴濐渻?</label>
                             <div class="slider-container">
                                 <input type="range" min="1" max="72" value="24" class="slider" id="predictionHours">
                                 <span class="slider-value" id="hoursValue">24</span>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">采样频率 (分钟)</label>
+                            <label class="control-label">闂備焦褰冨ú锕傛偋鏉堫煉绱ｉ柟瀵稿Т閼?(闂佸憡甯掑Λ婵嬪箰?</label>
                             <div class="slider-container">
                                 <input type="range" min="5" max="60" step="5" value="15" class="slider" id="sampleRate">
                                 <span class="slider-value" id="rateValue">15</span>
                             </div>
                         </div>
                         <div class="control-group">
-                            <label class="control-label">预测模型</label>
+                            <label class="control-label">婵☆偅婢樼€氼厾绮婇弶鎳崇喖鍨惧畷鍥ｅ亾?/label>
                             <div class="model-selector">
                                 <label class="model-option">
                                     <input type="radio" name="model" value="lstm" checked style="margin-bottom: 0.5px;">
@@ -1143,28 +1137,28 @@
 
                     <div class="alert-container">
                         <div class="card-header" style="margin-bottom: 0; padding-bottom: 1px; height: 22px;">
-                            <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> 预警信息</h2>
-                            <span class="alert-count" id="alertCount">3 条</span>
+                            <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> 棰勮淇℃伅</h2>
+                            <span class="alert-count" id="alertCount">3 闂?/span>
                         </div>
                         <div class="alert-list" id="alertList">
                             <div class="alert-item">
                                 <div class="alert-details">
-                                    <div class="alert-title">北京通惠河水位异常上升</div>
-                                    <div class="alert-desc">30分钟上升0.5米，超警戒阈值</div>
+                                    <div class="alert-title">鍖椾含閫氭儬娌虫按浣嶅紓甯镐笂鍗?/div>
+                                    <div class="alert-desc">30 鍒嗛挓鍐呰繛缁笂娑?0.5 绫筹紝璇峰叧娉ㄥ彉鍖栬秼鍔?/div>
                                 </div>
                                 <div class="alert-time">10:23</div>
                             </div>
                             <div class="alert-item warning">
                                 <div class="alert-details">
-                                    <div class="alert-title">上海黄浦江流速增加</div>
-                                    <div class="alert-desc">流速2.3m/s，接近警戒值</div>
+                                    <div class="alert-title">涓婃捣榛勬郸姹熸祦閫熷鍔?/div>
+                                    <div class="alert-desc">娴侀€熻揪鍒?2.3m/s锛屾帴杩戦璀﹂槇鍊?/div>
                                 </div>
                                 <div class="alert-time">09:45</div>
                             </div>
                             <div class="alert-item info">
                                 <div class="alert-details">
-                                    <div class="alert-title">深圳监测站离线</div>
-                                    <div class="alert-desc">设备通讯中断，请检查</div>
+                                    <div class="alert-title">骞垮窞鐝犳睙姘翠綅娉㈠姩寮傚父</div>
+                                    <div class="alert-desc">鐭椂娉㈠姩鏄庢樉锛岃鏍告煡涓婃父鏉ユ按鍜岄檷闆ㄥ奖鍝?/div>
                                 </div>
                                 <div class="alert-time">08:15</div>
                             </div>
@@ -1177,7 +1171,7 @@
                         <div class="result-card">
                             <div class="result-icon"><i class="fas fa-arrow-up"></i></div>
                             <div class="result-content">
-                                <div class="result-label">预测最高水位</div>
+                                <div class="result-label">棰勬祴宄板€兼按浣?/div>
                                 <div class="result-value">2.87</div>
                                 <div class="result-trend trend-up">
                                     <i class="fas fa-chevron-up"></i>
@@ -1188,22 +1182,22 @@
                         <div class="result-card">
                             <div class="result-icon"><i class="fas fa-clock"></i></div>
                             <div class="result-content">
-                                <div class="result-label">预计到达时间</div>
+                                <div class="result-label">棰勮鍒拌揪鏃堕棿</div>
                                 <div class="result-value">16:45</div>
                                 <div class="result-trend">
                                     <i class="fas fa-info-circle"></i>
-                                    <span>5小时后</span>
+                                    <span>5闁诲繐绻愮换鎴濐渻閸岀偛瑙?/span>
                                 </div>
                             </div>
                         </div>
                         <div class="result-card">
                             <div class="result-icon"><i class="fas fa-exclamation-circle"></i></div>
                             <div class="result-content">
-                                <div class="result-label">风险等级</div>
-                                <div class="result-value">中</div>
+                                <div class="result-label">瓒嬪娍鍙樺寲骞呭害</div>
+                                <div class="result-value">婵?/div>
                                 <div class="result-trend trend-up">
                                     <i class="fas fa-chevron-up"></i>
-                                    <span>+1级</span>
+                                    <span>+1缂?/span>
                                 </div>
                             </div>
                         </div>
@@ -1211,7 +1205,7 @@
 
                     <div class="history-chart-item">
                         <div class="card-header" style="margin-bottom: 0; padding-bottom: 0.5px; height: 18px;">
-                            <h2 class="card-title" style="font-size: 10px;"><i class="fas fa-chart-line"></i> 历史水位对比</h2>
+                            <h2 class="card-title" style="font-size: 10px;"><i class="fas fa-chart-line"></i> 鍘嗗彶姘翠綅瀵规瘮</h2>
                         </div>
                         <div class="chart-container" id="historyLevelChart"></div>
                     </div>
@@ -1224,7 +1218,7 @@
 <div class="overlay" id="overlay"></div>
 <div class="water-level-3d-modal" id="water3DModal">
     <div class="modal-header">
-        <h3 class="modal-title"><i class="fas fa-map"></i> <span id="modalAreaName">北京市通惠河</span> 水位视图</h3>
+        <h3 class="modal-title"><i class="fas fa-map"></i> <span id="modalAreaName">鐩戞祴鍖哄煙</span> 姘翠綅瑙嗗浘</h3>
         <div class="close-modal" id="closeModalBtn">
             <i class="fas fa-times"></i>
         </div>
@@ -1233,36 +1227,36 @@
         <div id="water3DMapContainer"></div>
         <div class="water-3d-info">
             <div class="info-item">
-                <div class="info-label">当前水位高度</div>
+                <div class="info-label">閻熸粎澧楅幐鍛婃櫠閻樺樊娼╃紓鍫㈠Х缁夋潙螖閸屾耽顏嗏偓?/div>
                 <div class="info-value" id="modalWaterLevel">2.34 m</div>
-                <div class="info-desc">较昨日同期上升 0.19m</div>
+                <div class="info-desc">闁哄鐗嗛崯顖毼ｆ导鏉戠睄闁靛鍎查崐閬嶆煛閸垹鏋嶇紒妤€鍊垮畷?0.19m</div>
             </div>
             <div class="info-item">
-                <div class="info-label">水体流速</div>
+                <div class="info-label">濠殿喗顭囩换婵堢礊鐎ｎ€㈣绗熼埀顒勫焵?/div>
                 <div class="info-value" id="modalWaterSpeed">1.8 m/s</div>
-                <div class="info-desc">流速稳定，无异常波动</div>
+                <div class="info-desc">濠电偟绻濈欢姘跺焵椤掑倸鏋旈懣娆撴倵鐟欏嫮鍟茬紒杈ㄧ箞瀵噣鎮╅懠顒傦紳闁汇埄鍨伴幉锛勪焊濠靛绀?/div>
             </div>
             <div class="info-item">
-                <div class="info-label">水质状况</div>
-                <div class="info-value" id="modalWaterQuality">良好</div>
-                <div class="info-desc">pH值: 7.2，溶解氧: 8.5 mg/L，浊度: 5 NTU</div>
+                <div class="info-label">濠殿喗顭囬ˉ鎰啅濠靛鍋愰悹鍝勬惈閺?/div>
+                <div class="info-value" id="modalWaterQuality">闂佽壈顕栭崹浼村Χ?/div>
+                <div class="info-desc">pH闂? 7.2闂佹寧绋戦張顒勫箟閸撗勫枂闁挎繂妫楅幖? 8.5 mg/L闂佹寧绋戦張顒傜矈閾忣偅鍎? 5 NTU</div>
             </div>
             <div class="info-item">
-                <div class="info-label">预警等级</div>
-                <div class="info-value" style="color: #ffa500;">黄色预警</div>
-                <div class="info-desc">未来12小时水位可能达到警戒值3.50m，建议加强监测频次</div>
+                <div class="info-label">婵☆偅婢樼€氼垶顢楅悢铏归┏濠㈣泛鐭傞悰?/div>
+                <div class="info-value" style="color: #ffa500;">婵帗绋戠€氼垱绔熸繝鍐跨矗闁告洦鍣崝?/div>
+                <div class="info-desc">闂佸搫鐗滄禍婵嗩焽?2闁诲繐绻愮换鎴濐渻閸屾凹娼╃紓鍫㈠Х缁夋挳鏌涘▎妯虹仴闁稿繑蓱濞煎繘骞嗚閻撳倿鎮归埀顒勬晜閽樺浜伴梺?.50m闂佹寧绋戦懟顖滅磽閹捐埖濯兼い鏃傚帶椤絿鈧鍠涘▍锝吤洪崘顭嬪湱鈧綆鍣弳銉︾箾?/div>
             </div>
             <div class="info-item">
-                <div class="info-label">水文参数</div>
+                <div class="info-label">濠殿喗锚閻°劑寮搁崘顔肩煑闁稿本绋掑▓?/div>
                 <div class="info-value">-</div>
-                <div class="info-desc">水温: 18.5℃，含沙量: 0.2 kg/m³，流量: 125 m³/s</div>
+                <div class="info-desc">濠殿喗锚閻°劍绌? 18.5闂佹枼鏅涢崰娑氭濠靛瑙︽い鎰剁悼閻撴捇姊? 0.2 kg/m濡炵繝绶氶弫宥囦沪閸撗佸亰闂? 125 m濡?s</div>
             </div>
         </div>
     </div>
 </div>
 
     <script>
-        // 全局变量
+        // 闂佺绻堥崝宀勬儑椤掑嫬鐭楁慨妞诲亾闁?
         let map = null;
         let markers = [];
         let markerByStationId = {};
@@ -1275,13 +1269,13 @@
         let waterPolygon = null;
         let waterAnimationInterval = null;
         let selectedAreaData = {
-            name: '北京市通惠河',
+            name: '闂佸憡鐗楅妵鐐哄触椤愩倖鏆滈柛宀€鍋愰崑鎾愁潩椤撶偛濮囧┑?,
             level: 2.34,
             speed: 1.8,
-            quality: '良好'
+            quality: '闂佽壈顕栭崹浼村Χ?
         };
 
-        // 实时更新相关变量
+        // 闁诲骸婀遍崑鐐差渻閸岀偛鍗抽悗娑櫳戦悡鈧梺鐑╂櫇椤牓宕ｈ瀹曪絽顫滈埀顒勫闯?
         let realTimeUpdateInterval = null;
         let stationDataCache = {};
         let lastUpdateTime = Date.now();
@@ -1309,22 +1303,95 @@
             if (stationOffline) return '#ff4d4f';
 
             const levelNumber = Number(level || 0);
-            if (waterStatus === '危险' || levelNumber >= (station?.dangerLevel || 4.0)) return '#ff4d4f';
-            if (waterStatus === '预警' || levelNumber >= (station?.warningLevel || 3.5)) return '#faad14';
+            if (waterStatus === '闂佸憡顨婃禍璺衡枍? || levelNumber >= (station?.dangerLevel || 4.0)) return '#ff4d4f';
+            if (waterStatus === '婵☆偅婢樼€氼垶顢? || levelNumber >= (station?.warningLevel || 3.5)) return '#faad14';
             return '#4facfe';
         }
 
-        // API基础URL
+        // API闂佺硶鏅炲▍锝夈€侀崠鐫稬
         const API_BASE_URL = '/api';
+        let amapLoadPromise = null;
 
-        // 星期映射
-        const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        async function fetchAmapConfig() {
+            const response = await fetch(`${API_BASE_URL}/config/amap`);
+            if (!response.ok) {
+                throw new Error(`妤傛ê鐥夐柊宥囩枂鐠囬攱鐪版径杈Е: ${response.status}`);
+            }
+            return response.json();
+        }
 
-        // 更新实时时间
+        function loadAmapScript(config) {
+            return new Promise((resolve, reject) => {
+                if (typeof AMap !== 'undefined') {
+                    resolve();
+                    return;
+                }
+
+                window._AMapSecurityConfig = {
+                    securityJsCode: config.securityJsCode || ''
+                };
+
+                const script = document.createElement('script');
+                script.src = `https://webapi.amap.com/maps?v=2.0&key=${config.key}&plugin=AMap.Scale,AMap.Geocoder`;
+                script.onload = resolve;
+                script.onerror = () => reject(new Error('妤傛ê鐥夐崷鏉挎禈閼存碍婀伴崝鐘烘祰婢惰精瑙?));
+                document.head.appendChild(script);
+            });
+        }
+
+        async function ensureAmapLoaded() {
+            if (typeof AMap !== 'undefined') {
+                return;
+            }
+            if (!amapLoadPromise) {
+                amapLoadPromise = fetchAmapConfig().then(loadAmapScript);
+            }
+            return amapLoadPromise;
+        }
+        async function fetchJson(url) {
+            const response = await fetch(url);
+            const payload = await response.json();
+            if (!response.ok || !payload || payload.code !== 200) {
+                throw new Error((payload && (payload.msg || payload.message)) || `閻犲洭鏀遍惇鐗堝緞鏉堫偉袝: ${response.status}`);
+            }
+            return payload.data;
+        }
+
+        function showPageStatus(message, type = 'warning') {
+            const color = type === 'error' ? '#ff4d4f' : '#faad14';
+            console.warn(message);
+
+            const alertCount = document.getElementById('alertCount');
+            if (alertCount) {
+                alertCount.textContent = '0 闁?;
+            }
+
+            const alertList = document.getElementById('alertList');
+            if (alertList) {
+                alertList.innerHTML = `
+                    <div class="alert-item">
+                        <div class="alert-details">
+                            <div class="alert-title" style="color:${color};">${message}</div>
+                            <div class="alert-desc">褰撳墠椤甸潰鏈娇鐢ㄦā鎷熸暟鎹ˉ浣?/div>
+                        </div>
+                        <div class="alert-time">--:--</div>
+                    </div>`;
+            }
+        }
+
+        function renderNoDataState(message) {
+            showPageStatus(message, 'warning');
+            updateWaterLevelData([]);
+        }
+
+        // 闂佸搫瀚崰鎰耿閿熺姴鍙婇柣妯垮皺濞?
+        const weekDays = ['闂佸搫瀚崰鎰耿閿熺姴绫?, '闂佸搫瀚崰鎰耿閳╁啰鈻旈柍?, '闂佸搫瀚崰鎰耿閳╁啰顩?, '闂佸搫瀚崰鎰耿閳╁啰鈻?, '闂佸搫瀚崰鎰耿閿熺姴鐐?, '闂佸搫瀚崰鎰耿閳╁啰顩?, '闂佸搫瀚崰鎰耿閿熺姴绀?];
+
+        // 闂佸搫娲ら悺銊╁蓟婵犲嫧鍋撻崷顓炰沪婵＄偛鍊垮顕€宕奸弴鐕傜吹
         function updateRealTime() {
             const now = new Date();
 
-            // 格式化年月日时分秒
+            // 闂佸搫绉堕崢褏妲愰敓鐘茬闁哄诞鍐ㄧ憥闂佸搫鐗嗛悧濠偽涢埡鍛睄閻犲搫鎼悗鑽ょ磼?
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
@@ -1332,16 +1399,16 @@
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
 
-            // 获取星期
+            // 闂佸吋鍎抽崲鑼躲亹閸ヮ剙鍙婇柣鏂挎啞閸?
             const weekDay = weekDays[now.getDay()];
 
-            // 更新显示
+            // 闂佸搫娲ら悺銊╁蓟婵犲洤鍙婇柛鎾椾椒绮?
             document.getElementById('currentDate').textContent =
                 `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
             document.getElementById('currentWeek').textContent = weekDay;
         }
 
-        // 从shuiwen.html复制的粒子效果函数
+        // 婵炲濮寸粣寤籾iwen.html婵犮垼娉涚粔鎾春濡ゅ懏鍎嶉柛鏇ㄥ幘閻撳牓鎮楀☉娆忓闁哄懌鍎靛绋款煥閸愩劍鐦ｉ梺?
         function createTechParticles() {
             const container = document.getElementById('techParticles');
             for (let i = 0; i < 30; i++) {
@@ -1356,7 +1423,7 @@
             }
         }
 
-        // 从shuiwen.html复制的能量点函数
+        // 婵炲濮寸粣寤籾iwen.html婵犮垼娉涚粔鎾春濡ゅ懏鍎嶉柛鏇ㄥ枛閸樻挳姊洪幓鎺旂闁稿缍佸畷娆撴嚍閵夛附顔?
         function createEnergyDots() {
             const container = document.getElementById('energyDots');
             for (let i = 0; i < 20; i++) {
@@ -1369,15 +1436,14 @@
             }
         }
 
-        // 初始化入口
-        function initAll() {
+        // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宓啫姹查梺?
+        async function initAll() {
             try {
-                // 立即更新时间
+                await ensureAmapLoaded();
+
                 updateRealTime();
-                // 每秒更新一次时间
                 setInterval(updateRealTime, 1000);
 
-                // 创建粒子效果
                 createTechParticles();
                 createEnergyDots();
 
@@ -1385,117 +1451,64 @@
                 initCharts();
                 bindEvents();
                 bindBackHomeEvent();
-
-                // 启动实时数据更新
                 startRealTimeUpdates();
             } catch (e) {
-                console.error('初始化错误:', e);
-                alert('初始化失败: ' + e.message);
+                console.error('閸掓繂顫愰崠鏍晩鐠?', e);
+                alert('閸掓繂顫愰崠鏍с亼鐠? ' + e.message);
             }
         }
-
-        // 启动实时数据更新
         function startRealTimeUpdates() {
-            // 立即获取一次数据
             fetchRealTimeData();
-
-            // 每10秒更新一次数据
             realTimeUpdateInterval = setInterval(fetchRealTimeData, 10000);
-
-            // 每3秒更新一次模拟数据（如果API不可用）
-            simulateRealTimeData();
         }
 
 
         async function fetchRealTimeData() {
-            console.log('获取实时数据...');
+            console.log('闁兼儳鍢茶ぐ鍥┾偓鍦仦濡炲倿寮悧鍫濈ウ...');
 
             try {
-                // 1. 尝试获取所有站点的最新水位
-                let waterLevels = [];
-                try {
-                    // 修改这里：加上 /api 前缀
-                    const waterRes = await fetch(`${API_BASE_URL}/waterlevel/data/current/all`);
-                    console.log('水位API响应状态:', waterRes.status);
+                const [waterResult, warningResult, stationResult] = await Promise.allSettled([
+                    fetchJson(`${API_BASE_URL}/waterlevel/data/current/all`),
+                    fetchJson(`${API_BASE_URL}/waterlevel/warning/unprocessed`),
+                    fetchJson(`${API_BASE_URL}/waterlevel/station/all`)
+                ]);
 
-                    if (waterRes.ok) {
-                        const waterResult = await waterRes.json();
-                        console.log('水位API响应数据:', waterResult);
+                const waterLevels = waterResult.status === 'fulfilled' ? waterResult.value : [];
+                const warnings = warningResult.status === 'fulfilled' ? warningResult.value : [];
+                const stations = stationResult.status === 'fulfilled' ? stationResult.value : [];
 
-                        if (waterResult.code === 200 && waterResult.data) {
-                            waterLevels = waterResult.data;
-                            console.log('成功获取水位数据:', waterLevels.length, '条记录');
-
-                            // 如果水位数据中有站点信息，直接使用
-                            if (waterLevels.length > 0) {
-                                updateWaterLevelData(waterLevels);
-                            } else {
-                                console.log('水位数据为空，使用模拟数据');
-                                updateWaterLevelDataWithSimulation();
-                            }
-                        } else {
-                            console.log('水位API返回非200状态:', waterResult);
-                            updateWaterLevelDataWithSimulation();
-                        }
-                    } else {
-                        console.warn('水位API请求失败，状态码:', waterRes.status);
-                        updateWaterLevelDataWithSimulation();
-                    }
-                } catch (waterError) {
-                    console.warn('水位API调用异常:', waterError);
-                    updateWaterLevelDataWithSimulation();
+                if (waterResult.status === 'rejected' && warningResult.status === 'rejected' && stationResult.status === 'rejected') {
+                    renderNoDataState('未加载到真实水位、站点和预警数据');
+                    return;
                 }
 
-                // 2. 获取预警数据
-                let warnings = [];
-                try {
-                    // 修改这里：加上 /api 前缀
-                    const warningRes = await fetch(`${API_BASE_URL}/waterlevel/warning/unprocessed`);
-                    console.log('预警API响应状态:', warningRes.status);
-
-                    if (warningRes.ok) {
-                        const warningResult = await warningRes.json();
-                        console.log('预警API响应数据:', warningResult);
-
-                        if (warningResult.code === 200 && warningResult.data) {
-                            warnings = warningResult.data;
-                            console.log('成功获取预警数据:', warnings.length, '条预警');
-                            updateWarningData(warnings);
-                        }
-                    }
-                } catch (warningError) {
-                    console.warn('预警API调用失败:', warningError);
+                if (waterResult.status === 'rejected') {
+                    showPageStatus('未加载到真实水位数据');
+                }
+                if (warningResult.status === 'rejected') {
+                    showPageStatus('未加载到真实预警数据');
+                }
+                if (stationResult.status === 'rejected') {
+                    showPageStatus('未加载到真实站点数据');
                 }
 
-                // 3. 获取站点数据
-                try {
-                    // 修改这里：加上 /api 前缀
-                    const stationRes = await fetch(`${API_BASE_URL}/waterlevel/station/all`);
-                    console.log('站点API响应状态:', stationRes.status);
+                updateWaterLevelData(Array.isArray(waterLevels) ? waterLevels : []);
 
-                    if (stationRes.ok) {
-                        const stationResult = await stationRes.json();
-                        console.log('站点API响应数据:', stationResult);
+                if (warningResult.status === 'fulfilled') {
+                    updateWarningData(Array.isArray(warnings) ? warnings : []);
+                }
 
-                        if (stationResult.code === 200 && stationResult.data) {
-                            const stations = stationResult.data;
-                            console.log('成功获取站点数据:', stations.length, '个站点');
-                            updateStationData(stations);
-                            updateMapMarkersWithStations(stations, waterLevels);
-                        }
-                    }
-                } catch (stationError) {
-                    console.warn('站点API调用失败:', stationError);
+                if (Array.isArray(stations) && stations.length > 0) {
+                    updateStationData(stations);
+                    updateMapMarkersWithStations(stations, Array.isArray(waterLevels) ? waterLevels : []);
                 }
 
                 lastUpdateTime = Date.now();
             } catch (error) {
-                console.error('获取实时数据失败:', error);
-                updateWaterLevelDataWithSimulation();
+                console.error('闁兼儳鍢茶ぐ鍥┾偓鍦仦濡炲倿寮悧鍫濈ウ濠㈡儼绮剧憴?', error);
+                renderNoDataState('未加载到真实水位、站点和预警数据');
             }
         }
-
-        // 添加更新地图标记的函数
         function updateMapMarkersWithStations(stations, waterLevels) {
             if (!map) return;
 
@@ -1507,7 +1520,7 @@
 
             const duplicatePositionCounts = new Map();
 
-            // 添加新标记
+            // 濠电儑缍€椤曆勬叏閻愬搫妫橀柣妤€鐗忛崹濂告偣?
             stations.forEach(station => {
                 const rawLng = station?.longitude ?? station?.lng ?? station?.lon;
                 const rawLat = station?.latitude ?? station?.lat;
@@ -1532,13 +1545,13 @@
                 const waterData = waterLevels.find(item => item.stationId === stationId);
                 const level = waterData ? waterData.level : 0;
                 const levelNumber = Number(level || 0);
-                const status = waterData ? waterData.status : '离线';
+                const status = waterData ? waterData.status : '缂備礁鍊藉畷鐢稿吹?;
 
                 const position = new AMap.LngLat(lng, lat);
                 const positionKey = `${lng.toFixed(6)},${lat.toFixed(6)}`;
                 const duplicateCount = duplicatePositionCounts.get(positionKey) || 0;
                 duplicatePositionCounts.set(positionKey, duplicateCount + 1);
-                const stationName = String(station?.name || '监测站');
+                const stationName = String(station?.name || '闂佺儵鏅滈崹鍓佺矈鐎靛摜鍗?);
                 const safeStationName = stationName.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 
                 const markerColor = getMarkerColorByStationStatus(status, levelNumber, station);
@@ -1557,13 +1570,13 @@
                 const infoWindow = new AMap.InfoWindow({
                     content: `<div style="color:#333;padding:5px;font-size:10px;">
                 <h3 style="margin:0 0 2px 0;color:#0088ff;font-size:11px;">${stationName}</h3>
-                <p style="margin:0;">位置: ${station?.location || station?.address || '-'}</p>
-                <p style="margin:0;">状态: ${station.status === 1 ? '在线' : '离线'}</p>
-                <p style="margin:0;">水位: ${levelNumber.toFixed(2)}m</p>
-                <p style="margin:0;">警戒: ${station.warningLevel || 3.5}m</p>
+                <p style="margin:0;">婵炶揪绲界粔鍫曟偪? ${station?.location || station?.address || '-'}</p>
+                <p style="margin:0;">闂佺粯顭堥崺鏍焵? ${station.status === 1 ? '闂侀潻璐熼崝搴ㄥ吹? : '缂備礁鍊藉畷鐢稿吹?}</p>
+                <p style="margin:0;">濠殿喗顭囩换婵堢礊? ${levelNumber.toFixed(2)}m</p>
+                <p style="margin:0;">闁荤姭鍋撻柨鏃囨閻? ${station.warningLevel || 3.5}m</p>
                 <button style="margin-top:3px;padding:1px 4px;background:#0088ff;color:white;border:none;border-radius:2px;font-size:9px;cursor:pointer;"
                         onclick="window.showWater2DView('${safeStationName}', '${levelNumber.toFixed(2)}m', ${lng}, ${lat})">
-                    查看水位视图
+                    闂佸搫琚崕鍐诧耿閸涱収娼╃紓鍫㈠Х缁夋挳鎮峰▎蹇旑棞婵?
                 </button>
             </div>`
                 });
@@ -1575,7 +1588,7 @@
                         name: stationName,
                         level: levelNumber,
                         speed: waterData ? waterData.flowRate || 1.5 : 1.5,
-                        quality: '良好'
+                        quality: '闂佽壈顕栭崹浼村Χ?
                     };
                 });
 
@@ -1593,104 +1606,93 @@
             }
         }
 
-        // 更新水位数据
+        // 闂佸搫娲ら悺銊╁蓟婵犲偆娼╃紓鍫㈠Х缁夋挳鏌℃担鍝勵暭鐎?
         function updateWaterLevelData(waterLevels) {
-            if (!waterLevels || !Array.isArray(waterLevels) || waterLevels.length === 0) {
-                updateWaterLevelDataWithSimulation();
+            if (!Array.isArray(waterLevels) || waterLevels.length === 0) {
+                if (levelChart) {
+                    levelChart.setOption({
+                        title: {
+                            text: '暂无真实水位数据',
+                            left: 'center',
+                            top: 'center',
+                            textStyle: { color: '#80d4ff', fontSize: 12 }
+                        },
+                        xAxis: [{ data: [] }],
+                        series: []
+                    });
+                }
+
+                if (levelRatioChart) {
+                    levelRatioChart.setOption({
+                        title: {
+                            text: '暂无真实水位数据',
+                            left: 'center',
+                            top: 'center',
+                            textStyle: { color: '#80d4ff', fontSize: 12 }
+                        },
+                        series: []
+                    });
+                }
+
+                const totalStationsEl = document.getElementById('totalStations');
+                if (totalStationsEl) {
+                    totalStationsEl.textContent = '0';
+                }
+
+                const currentLevelEl = document.getElementById('currentLevel');
+                if (currentLevelEl) {
+                    currentLevelEl.textContent = '--';
+                }
                 return;
             }
 
-            // 更新水位图表
+            if (levelChart) {
+                levelChart.setOption({ title: { text: '' } });
+            }
+            if (levelRatioChart) {
+                levelRatioChart.setOption({ title: { text: '' } });
+            }
+
             updateLevelChart(waterLevels);
-
-            // 更新水位占比图表
             updateLevelRatioChart(waterLevels);
-
-            // 更新地图标记
             updateMapMarkers(waterLevels);
-
-            // 更新当前水位显示
             updateCurrentLevelDisplay(waterLevels);
         }
-
-        // 使用模拟数据更新水位
-        function updateWaterLevelDataWithSimulation() {
-            // 生成模拟水位数据
-            const simulatedData = generateSimulatedWaterData();
-            updateLevelChart(simulatedData);
-            updateLevelRatioChart(simulatedData);
-            updateCurrentLevelDisplay(simulatedData);
-        }
-
-        // 生成模拟水位数据
-        function generateSimulatedWaterData() {
-            const now = new Date();
-            const baseLevel = 2.0 + Math.sin(now.getHours() * Math.PI / 12) * 0.5;
-            const randomFactor = (Math.random() - 0.5) * 0.1;
-
-            return [
-                {
-                    stationId: 1,
-                    level: baseLevel + randomFactor,
-                    recordTime: now.toISOString(),
-                    station: { name: '北京通惠河监测站' }
-                },
-                {
-                    stationId: 2,
-                    level: baseLevel * 1.1 + randomFactor,
-                    recordTime: now.toISOString(),
-                    station: { name: '上海黄浦江监测站' }
-                },
-                {
-                    stationId: 3,
-                    level: baseLevel * 0.9 + randomFactor,
-                    recordTime: now.toISOString(),
-                    station: { name: '广州珠江监测站' }
-                },
-                {
-                    stationId: 4,
-                    level: baseLevel * 1.2 + randomFactor,
-                    recordTime: now.toISOString(),
-                    station: { name: '深圳深圳河监测站' }
-                }
-            ];
-        }
-
-        // 更新水位图表
+        // 闂佸搫娲ら悺銊╁蓟婵犲偆娼╃紓鍫㈠Х缁夋挳鏌涢妷锕€绀冮柕?
         function updateLevelChart(waterLevels) {
             if (!levelChart) return;
 
             const now = new Date();
             const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
 
-            // 获取当前图表数据
+            // 闂佸吋鍎抽崲鑼躲亹閸ヮ亗浜归柟鎯у暱椤ゅ懘鏌涢妷锕€绀冮柕鍡楀暣瀵偊鎮ч崼婵堛偊
             const option = levelChart.getOption();
             const timeData = option.xAxis[0].data || [];
             const realData = option.series[0].data || [];
             const predictData = option.series[2].data || [];
 
-            // 限制数据长度，保留最近20个点
+            // 闂傚倸瀚崝鏇㈠春濡ゅ懎鏋侀柣妤€鐗嗙粊锕傛⒒閳ь剟宕归纰卞敽闂佹寧绋戞總鏃傛崲濮樿埖鍋╂繛鍡樺姈娴犳﹢寮?0婵炴垶鎼╂禍鐐哄磻?
             if (timeData.length >= 20) {
                 timeData.shift();
                 realData.shift();
                 predictData.shift();
             }
 
-            // 添加新数据点
+            // 濠电儑缍€椤曆勬叏閻愬搫妫橀柣妤€鐗婂▓鍫曟煙鐠団€虫灓闁?
             timeData.push(currentTime);
 
-            // 计算平均水位
+            // 闁荤姳绶ょ槐鏇㈡偩婵犳氨宓侀柛鎰级缂嶅棙鎱ㄥΟ鑲╃瘈缂?
             const avgLevel = waterLevels.reduce((sum, item) => sum + (item.level || 0), 0) / waterLevels.length;
             realData.push(Number(avgLevel.toFixed(2)));
 
-            // 预测数据（基于当前趋势）
+            // 婵☆偅婢樼€氼厾绮婇幘顔兼瀬闁绘鐗嗙粊锕傛煥濞戞澧曢柣鏂哄亾婵炲瓨绮屾鍝ョ礊鐎ｎ喖绀堢€广儱鐗忔瓏闂佸憡鏌ㄧ亸鍛?
             const lastReal = realData[realData.length - 2] || avgLevel;
             const trend = avgLevel - lastReal;
             const lastPredict = predictData[predictData.length - 1] || avgLevel;
             const newPredict = Number((lastPredict + trend * 0.8 + (Math.random() - 0.5) * 0.05).toFixed(2));
             predictData.push(newPredict);
 
-            // 更新图表
+            // 闂佸搫娲ら悺銊╁蓟婵犲洤鐐婇柟瑙勫姂閳?
             levelChart.setOption({
                 xAxis: [{
                     data: timeData
@@ -1700,7 +1702,7 @@
                         data: realData
                     },
                     {
-                        data: Array(timeData.length).fill(3.5) // 警戒线
+                        data: Array(timeData.length).fill(3.5) // 闁荤姭鍋撻柨鏃囨閻忓﹦绱?
                     },
                     {
                         data: predictData
@@ -1709,11 +1711,11 @@
             });
         }
 
-        // 更新水位占比图表
+        // 闂佸搫娲ら悺銊╁蓟婵犲偆娼╃紓鍫㈠Х缁夋挳鏌涘Δ鍐ㄐｉ柣锔诲櫍瀹曞爼骞戦幇鈹惧亾?
         function updateLevelRatioChart(waterLevels) {
             if (!levelRatioChart) return;
 
-            // 根据水位计算分类
+            // 闂佸搫绉烽～澶婄暤娴ｅ壊娼╃紓鍫㈠Х缁夋挳鎮规笟濠勭？闁伙絽顭峰畷姘跺幢濞嗘帩娼?
             const categories = {
                 safe: { count: 0, totalLevel: 0, color: '#40e0d0' },
                 lowRisk: { count: 0, totalLevel: 0, color: '#4dabf7' },
@@ -1738,55 +1740,55 @@
                 }
             });
 
-            // 计算占比
+            // 闁荤姳绶ょ槐鏇㈡偩婵犳艾纭€闁绘ê纾Σ?
             const totalStations = waterLevels.length;
             const richColors = [
                 {
-                    name: '安全区',
+                    name: '闁诲海鎳撻ˇ顖炲矗韫囨稑绀?,
                     value: totalStations > 0 ? Math.round((categories.safe.count / totalStations) * 100) : 25,
                     color: '#40e0d0',
                     subColor: '#00cccc',
                     textColor: '#40e0d0',
                     stations: categories.safe.count,
                     avgLevel: categories.safe.count > 0 ? (categories.safe.totalLevel / categories.safe.count).toFixed(2) + 'm' : '0.00m',
-                    status: '正常'
+                    status: '濠殿喗绻愮徊浠嬫偉?
                 },
                 {
-                    name: '低风险区',
+                    name: '婵炶揪绲介柊锝壦夐幘缁樷挃闁宠桨绀侀梾?,
                     value: totalStations > 0 ? Math.round((categories.lowRisk.count / totalStations) * 100) : 25,
                     color: '#4dabf7',
                     subColor: '#2196f3',
                     textColor: '#4dabf7',
                     stations: categories.lowRisk.count,
                     avgLevel: categories.lowRisk.count > 0 ? (categories.lowRisk.totalLevel / categories.lowRisk.count).toFixed(2) + 'm' : '0.00m',
-                    status: '关注'
+                    status: '闂佺绻楀▍鏇㈠极?
                 },
                 {
-                    name: '警戒区',
+                    name: '闁荤姭鍋撻柨鏃囨閻忓﹪鏌?,
                     value: totalStations > 0 ? Math.round((categories.warning.count / totalStations) * 100) : 25,
                     color: '#ffa500',
                     subColor: '#ff8c00',
                     textColor: '#ffa500',
                     stations: categories.warning.count,
                     avgLevel: categories.warning.count > 0 ? (categories.warning.totalLevel / categories.warning.count).toFixed(2) + 'm' : '0.00m',
-                    status: '警告'
+                    status: '闁荤姭鍋撻柨鏇楀亾闁?
                 },
                 {
-                    name: '危险区',
+                    name: '闂佸憡顨婃禍璺衡枍閹捐绀?,
                     value: totalStations > 0 ? Math.round((categories.danger.count / totalStations) * 100) : 25,
                     color: '#ff3232',
                     subColor: '#ff0000',
                     textColor: '#ff3232',
                     stations: categories.danger.count,
                     avgLevel: categories.danger.count > 0 ? (categories.danger.totalLevel / categories.danger.count).toFixed(2) + 'm' : '0.00m',
-                    status: '危险'
+                    status: '闂佸憡顨婃禍璺衡枍?
                 }
             ];
 
-            // 更新总数显示
+            // 闂佸搫娲ら悺銊╁蓟婵犲洤绠戠紓浣股戝▓鍫曟煛閸曨偄鈷旈柕?
             document.getElementById('totalStations').textContent = totalStations;
 
-            // 更新图表
+            // 闂佸搫娲ら悺銊╁蓟婵犲洤鐐婇柟瑙勫姂閳?
             levelRatioChart.setOption({
                 series: [
                     {
@@ -1809,17 +1811,17 @@
                         data: [
                             {
                                 value: categories.safe.count > 0 ? 70 : 40,
-                                name: '正常',
+                                name: '濠殿喗绻愮徊浠嬫偉?,
                                 itemStyle: { color: 'rgba(64, 224, 208, 0.7)' }
                             },
                             {
                                 value: categories.lowRisk.count > 0 ? 20 : 30,
-                                name: '预警',
+                                name: '婵☆偅婢樼€氼垶顢?,
                                 itemStyle: { color: 'rgba(255, 165, 0, 0.7)' }
                             },
                             {
                                 value: categories.danger.count > 0 ? 10 : 30,
-                                name: '报警',
+                                name: '闂佺缈伴崕鎾敆?,
                                 itemStyle: { color: 'rgba(255, 50, 50, 0.7)' }
                             }
                         ]
@@ -1835,18 +1837,28 @@
             });
         }
 
-        // 更新预警数据
+        // 闂佸搫娲ら悺銊╁蓟婵犲喛绱ｉ柛鏇ㄥ櫘閸斿懘鏌℃担鍝勵暭鐎?
         function updateWarningData(warnings) {
-            if (!warnings || !Array.isArray(warnings)) return;
+            const safeWarnings = Array.isArray(warnings) ? warnings : [];
 
-            // 更新预警数量
-            document.getElementById('alertCount').textContent = `${warnings.length} 条`;
+            document.getElementById('alertCount').textContent = `${safeWarnings.length} 闁哄鎽?
 
-            // 更新预警列表
             const alertList = document.getElementById('alertList');
             alertList.innerHTML = '';
 
-            warnings.slice(0, 5).forEach(warning => {
+            if (safeWarnings.length === 0) {
+                alertList.innerHTML = `
+                <div class="alert-item">
+                    <div class="alert-details">
+                        <div class="alert-title">鏆傛棤鐪熷疄棰勮鏁版嵁</div>
+                        <div class="alert-desc">褰撳墠鎺ュ彛鏈繑鍥炲彲灞曠ず鐨勯璀﹁褰?/div>
+                    </div>
+                    <div class="alert-time">--:--</div>
+                </div>`;
+                return;
+            }
+
+            safeWarnings.slice(0, 5).forEach(warning => {
                 const alertItem = document.createElement('div');
                 alertItem.className = 'alert-item';
 
@@ -1855,8 +1867,8 @@
 
                 alertItem.innerHTML = `
                 <div class="alert-details">
-                    <div class="alert-title">${warning.title || '水位预警'}</div>
-                    <div class="alert-desc">${warning.content || '水位异常'}</div>
+                    <div class="alert-title">${warning.title || '姘翠綅棰勮'}</div>
+                    <div class="alert-desc">${warning.content || '姘翠綅寮傚父'}</div>
                 </div>
                 <div class="alert-time">${timeStr}</div>
             `;
@@ -1864,18 +1876,16 @@
                 alertList.appendChild(alertItem);
             });
         }
-
-        // 更新站点数据
         function updateStationData(stations) {
             if (!stations || !Array.isArray(stations)) return;
 
-            // 缓存站点数据
+            // 缂傚倸鍊归幐鎼佹偤閵娧呭崥婵炲棙鍨垫禒顖炴煛娴ｅ搫顣肩€?
             stations.forEach(station => {
                 stationDataCache[station.id] = station;
             });
         }
 
-        // 更新地图标记
+        // 闂佸搫娲ら悺銊╁蓟婵犲洤鎹堕柡澶嬪缁傚牓鏌″鍛┛妞?
         function updateMapMarkers(waterLevels) {
             if (!map || !markers.length) return;
 
@@ -1889,11 +1899,11 @@
                     if (!marker) return;
 
                     const level = waterData.level || 0;
-                    const status = level < 2.5 ? '正常' : level < 3.5 ? '预警' : '危险';
+                    const status = level < 2.5 ? '濠殿喗绻愮徊浠嬫偉? : level < 3.5 ? '婵☆偅婢樼€氼垶顢? : '闂佸憡顨婃禍璺衡枍?;
 
                     marker.setIcon(createMarkerIcon(getMarkerColorByStationStatus(status, level, stationDataCache?.[stationId])));
 
-                    const stationName = waterData.station?.name || `监测站${stationId}`;
+                    const stationName = waterData.station?.name || `闂佺儵鏅滈崹鍓佺矈鐎靛摜鍗?{stationId}`;
                     marker.setTitle(`${stationName} - ${level.toFixed(2)}m`);
                 });
                 return;
@@ -1905,120 +1915,39 @@
                 if (!waterData) return;
 
                 const level = waterData.level || 0;
-                const status = level < 2.5 ? '正常' : level < 3.5 ? '预警' : '危险';
+                const status = level < 2.5 ? '濠殿喗绻愮徊浠嬫偉? : level < 3.5 ? '婵☆偅婢樼€氼垶顢? : '闂佸憡顨婃禍璺衡枍?;
 
                 marker.setIcon(createMarkerIcon(getMarkerColorByStationStatus(status, level, stationDataCache?.[stationId])));
 
-                const stationName = waterData.station?.name || `监测站${stationId}`;
+                const stationName = waterData.station?.name || `闂佺儵鏅滈崹鍓佺矈鐎靛摜鍗?{stationId}`;
                 marker.setTitle(`${stationName} - ${level.toFixed(2)}m`);
             });
         }
 
-        // 更新当前水位显示
+        // 闂佸搫娲ら悺銊╁蓟婵犲懌浜归柟鎯у暱椤ゅ懏鎱ㄥΟ鑲╃瘈缂傚秴鎳樺浼村礈瑜嬫禒?
         function updateCurrentLevelDisplay(waterLevels) {
             if (!waterLevels || waterLevels.length === 0) return;
 
-            // 找到第一个站点的水位（或者计算平均水位）
+            // 闂佺懓鐏氶崕鎶藉春瀹€鈧划顓㈩敄鐠侯煈浼囨繛鎴炴惄娴滅偤鎮甸鐐村€烽柛锔诲幗閻ｈ鲸鎱ㄥΟ鑲╃瘈缂傚秴鎳橀弫宥夊醇閻旈浠愰梺鍏兼緲閹虫捇顢橀崫銉т笉婵°倐鍋撻梺瑙ｆ櫊瀹曟悂宕堕妸锕€鐦绘繛杈剧到缁嬪嫮妲?
             const firstStation = waterLevels[0];
             if (firstStation && firstStation.level !== undefined) {
                 document.getElementById('currentLevel').textContent = firstStation.level.toFixed(2);
             }
         }
 
-        // 模拟实时数据更新（独立于API）
-        function simulateRealTimeData() {
-            setInterval(() => {
-                // 更新天气影响雷达图
-                if (weatherImpactChart) {
-                    const now = new Date();
-                    const hour = now.getHours();
-
-                    // 模拟天气数据变化
-                    const rainfall = 45 + Math.sin(hour * Math.PI / 12) * 20 + (Math.random() - 0.5) * 5;
-                    const windSpeed = 8 + Math.sin(hour * Math.PI / 6) * 4 + (Math.random() - 0.5) * 2;
-                    const temperature = 18 + Math.sin(hour * Math.PI / 12) * 5 + (Math.random() - 0.5) * 1;
-
-                    weatherImpactChart.setOption({
-                        series: [{
-                            data: [
-                                {
-                                    value: [
-                                        Math.max(0, Math.min(100, rainfall)),
-                                        Math.max(0, Math.min(20, windSpeed)),
-                                        Math.max(-10, Math.min(40, temperature)),
-                                        75 + (Math.random() - 0.5) * 10,
-                                        1012 + (Math.random() - 0.5) * 5,
-                                        15 + (Math.random() - 0.5) * 3
-                                    ]
-                                },
-                                {
-                                    value: [
-                                        Math.max(0, Math.min(100, rainfall * 1.2)),
-                                        Math.max(0, Math.min(20, windSpeed * 1.1)),
-                                        Math.max(-10, Math.min(40, temperature + 2)),
-                                        85 + (Math.random() - 0.5) * 10,
-                                        1008 + (Math.random() - 0.5) * 5,
-                                        10 + (Math.random() - 0.5) * 3
-                                    ]
-                                }
-                            ]
-                        }]
-                    });
-                }
-
-                // 更新预测结果卡片
-                const now = new Date();
-                const hour = now.getHours();
-                const minute = now.getMinutes();
-
-                // 计算预测最高水位（基于正弦曲线模拟）
-                const peakLevel = 2.34 + Math.sin((hour + 6) * Math.PI / 12) * 0.5 + (Math.random() - 0.5) * 0.1;
-                const peakTimeHour = (hour + Math.floor(Math.random() * 3 + 5)) % 24;
-                const peakTimeMinute = Math.floor(Math.random() * 60);
-
-                // 更新预测结果
-                document.querySelector('.result-card:nth-child(1) .result-value').textContent = peakLevel.toFixed(2);
-                document.querySelector('.result-card:nth-child(2) .result-value').textContent =
-                    `${peakTimeHour.toString().padStart(2, '0')}:${peakTimeMinute.toString().padStart(2, '0')}`;
-
-                // 更新历史水位对比图
-                if (historyLevelChart) {
-                    const option = historyLevelChart.getOption();
-                    const todayData = option.series[0].data || [];
-
-                    if (todayData.length >= 4) {
-                        todayData.shift();
-                    }
-
-                    // 添加新的模拟数据
-                    const newLevel = 2.0 + Math.sin(hour * Math.PI / 12) * 0.4 + (Math.random() - 0.5) * 0.1;
-                    todayData.push(Number(newLevel.toFixed(2)));
-
-                    historyLevelChart.setOption({
-                        series: [
-                            { data: todayData },
-                            option.series[1],
-                            option.series[2]
-                        ]
-                    });
-                }
-
-            }, 3000); // 每3秒更新一次模拟数据
-        }
-
-        // 绑定返回主页按钮事件
+        // 濠碘槅鍨崜婵堚偓姘懅閳ь剙婀遍崑鐐差渻閸岀偛鏋侀柣妤€鐗嗙粊锕傛煛閸パ呮憼闁哄苯锕弫宥夊醇閵忕媭浠剧紓浣规煥椤戝嫮鑺遍悵绛咺闂?
         function bindBackHomeEvent() {
             const backBtn = document.getElementById('backButton');
             if (backBtn) {
                 backBtn.addEventListener('click', function() {
-                    alert('返回主页功能已触发，可替换为实际的跳转URL');
+                    alert('闁哄鏅滈弻銊ッ洪弽銊р枖濠电姵鍝庨埀顒€顦靛畷婵嬫偄鐠囨彃骞嬮悗瑙勭摃鐏忣亣顤傞梺鍛婄懄閸╁﹦妲愬┑瀣煑妞ゆ牗绋掔粋宀勬煙鐠団剝绶氶悹鎰枔閳ь剙婀遍崑銈咁瀶椤栫偞鍎嶉柛鏇ㄥ枤閸庢煡寮堕悙鍨亜RL');
                 });
             }
         }
 
-        // 初始化主地图（纯2D正俯视）
+        // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宥忕畱閻︽粓鏌涢敂鑺ョ凡婵炲瓨锕㈤弫宥夊醇閵忕姴姣?D濠殿喗绻愮徊濂稿礆婵犲嫭鍠嗛柛鈽嗗幘缁€?
         function initMainMap() {
-            // 2D地图配置：取消倾斜、3D模式
+            // 2D闂侀潻闄勫妯好瑰鈧弻濠傤吋閸モ晜鐎梺鎸庣⊕閼规崘銇愰崶褉妲堥柛顐ｇ妇閸嬫捇鎮欓浣轰粧闂?D濠碘槅鍨埀顒€纾涵鈧?
             map = new AMap.Map('mapContainer', {
                 zoom: 10,
                 center: new AMap.LngLat(116.39748, 39.908823),
@@ -2034,20 +1963,20 @@
                 }
             });
 
-            // 地图加载完成后添加控件
+            // 闂侀潻闄勫妯好瑰鈧畷婵嬫偐閻戞銈伴柣搴ｆ嚀閺堫剟宕瑰璺鸿Е閹兼番鍨瑰鎴︽煕閺冨倸校閻㈩垵鍩栫粋?
             map.on('complete', function() {
                 AMap.plugin(['AMap.Scale'], function() {
                     map.addControl(new AMap.Scale({ position: 'bottom-left' }));
                 });
             });
 
-            // 添加监测站标记
+            // 濠电儑缍€椤曆勬叏閻愮儤鍎庨柟瀵稿仧閵堝绱掗弮鈧悷锕傛偉閿濆洦濯?
             const stations = [
-                { id: 1, lng: 116.39748, lat: 39.908823, name: '北京通惠河监测站', level: '2.34m', update: '1分钟前', status: '在线' },
-                { id: 2, lng: 121.4737, lat: 31.2304, name: '上海黄浦江监测站', level: '3.12m', update: '3分钟前', status: '在线' },
-                { id: 3, lng: 113.2644, lat: 23.1291, name: '广州珠江监测站', level: '1.89m', update: '2分钟前', status: '在线' },
-                { id: 4, lng: 114.0579, lat: 22.5431, name: '深圳深圳河监测站', level: '--', update: '2小时前', status: '离线' },
-                { id: 5, lng: 114.3055, lat: 30.5931, name: '武汉监测站', level: '2.85m', update: '1分钟前', status: '在线'}
+                { id: 1, lng: 116.39748, lat: 39.908823, name: '闂佸憡鐗楅妵鐐哄触椤愶附鐒绘慨姗嗗幖閸旀洘绻涚仦鐣岋紞婵炴彃鍟湁閻庯綆鍓涜ぐ?, level: '2.34m', update: '1闂佸憡甯掑Λ婵嬪箰閹捐绀?, status: '闂侀潻璐熼崝搴ㄥ吹? },
+                { id: 2, lng: 121.4737, lat: 31.2304, name: '婵炴垶鎸搁敃銉╁箲閿濆棭娓堕柛鏇ㄥ墴閸忓繑鎱ㄩ崷顓炴灁婵炴彃鍟湁閻庯綆鍓涜ぐ?, level: '3.12m', update: '3闂佸憡甯掑Λ婵嬪箰閹捐绀?, status: '闂侀潻璐熼崝搴ㄥ吹? },
+                { id: 3, lng: 113.2644, lat: 23.1291, name: '濡ょ姷鍋涢悘婵堢玻閻愮儤鍋熼柣妯虹－濞笺倝鏌ｉ埡鍌氱仸缂佷礁顕划?, level: '1.89m', update: '2闂佸憡甯掑Λ婵嬪箰閹捐绀?, status: '闂侀潻璐熼崝搴ㄥ吹? },
+                { id: 4, lng: 114.0579, lat: 22.5431, name: '濠电儑绲藉畷顒€锕㈠畡鎵掑酣宕￠悙瀵稿珝濠电偛鑻壕顓灻洪崘顭嬪湱鈧綆鍓涜ぐ?, level: '--', update: '2闁诲繐绻愮换鎴濐渻閸岀偛绀?, status: '缂備礁鍊藉畷鐢稿吹? },
+                { id: 5, lng: 114.3055, lat: 30.5931, name: '濠殿喗绻愰梽鍕儑娴犲鍎庨柟瀵稿仧閵堝绱?, level: '2.85m', update: '1闂佸憡甯掑Λ婵嬪箰閹捐绀?, status: '闂侀潻璐熼崝搴ㄥ吹?}
             ];
 
             stations.forEach(station => {
@@ -2056,19 +1985,19 @@
                 const marker = new AMap.Marker({
                     position: position,
                     title: station.name,
-                    icon: createMarkerIcon(station.status === '在线' ? '#4facfe' : '#ff4d4f'),
+                    icon: createMarkerIcon(station.status === '闂侀潻璐熼崝搴ㄥ吹? ? '#4facfe' : '#ff4d4f'),
                     anchor: 'bottom-center'
                 });
 
                 const infoWindow = new AMap.InfoWindow({
                     content: `<div style="color:#333;padding:5px;font-size:10px;">
                     <h3 style="margin:0 0 2px 0;color:#0088ff;font-size:11px;">${station.name}</h3>
-                    <p style="margin:0;">状态: ${station.status}</p>
-                    <p style="margin:0;">水位: ${station.level}</p>
+                    <p style="margin:0;">闂佺粯顭堥崺鏍焵? ${station.status}</p>
+                    <p style="margin:0;">濠殿喗顭囩换婵堢礊? ${station.level}</p>
                     <p style="margin:0;color:#666;font-size:9px;">${station.update}</p>
                     <button style="margin-top:3px;padding:1px 4px;background:#0088ff;color:white;border:none;border-radius:2px;font-size:9px;cursor:pointer;"
-                            onclick="window.showWater2DView('${station.name.replace('监测站', '')}', '${station.level}', ${station.lng}, ${station.lat})">
-                        查看水位视图
+                            onclick="window.showWater2DView('${station.name.replace('闂佺儵鏅滈崹鍓佺矈鐎靛摜鍗?, '')}', '${station.level}', ${station.lng}, ${station.lat})">
+                        闂佸搫琚崕鍐诧耿閸涱収娼╃紓鍫㈠Х缁夋挳鎮峰▎蹇旑棞婵?
                     </button>
                 </div>`
                 });
@@ -2077,10 +2006,10 @@
                     infoWindow.open(map, marker.getPosition());
                     document.getElementById('currentLevel').textContent = station.level.replace('m', '') || '0';
                     selectedAreaData = {
-                        name: station.name.replace('监测站', ''),
+                        name: station.name.replace('闂佺儵鏅滈崹鍓佺矈鐎靛摜鍗?, ''),
                         level: parseFloat(station.level) || 0,
                         speed: station.id === 1 ? 1.8 : station.id === 2 ? 2.3 : 1.5,
-                        quality: station.id === 1 ? '良好' : station.id === 2 ? '一般' : '优'
+                        quality: station.id === 1 ? '闂佽壈顕栭崹浼村Χ? : station.id === 2 ? '婵炴垶鎸撮崑鎾绘煠? : '婵?
                     };
                 });
 
@@ -2094,7 +2023,7 @@
                 hasAutoFitView = true;
             }
 
-            // 地图点击事件
+            // 闂侀潻闄勫妯好瑰鈧幃娆撴偡閺夋寧鐦栨繛瀛樼矊椤戝嫬鈻?
             map.on('click', (e) => {
                 if (!e || !e.lnglat) return;
 
@@ -2110,19 +2039,19 @@
                     });
 
                     geocoder.getAddress([lng, lat], (status, result) => {
-                        let address = '未知区域';
+                        let address = '闂佸搫鐗滄禍鐐烘偂閿熺姴绀岄柛婵嗗閸?;
                         let randomLevel = (Math.random() * 1.5 + 1).toFixed(2);
                         let randomSpeed = (Math.random() * 1 + 1).toFixed(1);
 
                         if (status === 'complete' && result && result.regeocode) {
-                            address = result.regeocode.formattedAddress || '未知区域';
+                            address = result.regeocode.formattedAddress || '闂佸搫鐗滄禍鐐烘偂閿熺姴绀岄柛婵嗗閸?;
                         }
 
                         selectedAreaData = {
                             name: address,
                             level: parseFloat(randomLevel) || 0,
                             speed: parseFloat(randomSpeed) || 1.0,
-                            quality: Math.random() > 0.5 ? '良好' : '一般'
+                            quality: Math.random() > 0.5 ? '闂佽壈顕栭崹浼村Χ? : '婵炴垶鎸撮崑鎾绘煠?
                         };
 
                         window.showWater2DView(address, randomLevel + 'm', lng, lat);
@@ -2131,9 +2060,9 @@
             });
         }
 
-        // 初始化2D水位地图（替代3D）
+        // 闂佸憡甯楃换鍌烇綖閹版澘绀?D濠殿喗顭囩换婵堢礊閸涙潙鎹堕柡澶嬪缁傚牓鏌ㄥ☉妯煎婵炲瓨绋掔粋?D闂?
         function initWater2DMap(lng, lat) {
-            // 清理旧地图
+            // 濠电偞鎸搁幊鎰板箖婵犲洤绫嶇憸宥咃耿閹绢喖鐐?
             if (water2DMap) {
                 water2DMap.destroy();
                 water2DMap = null;
@@ -2146,11 +2075,11 @@
                 waterPolygon = null;
             }
 
-            // 强制坐标校验
+            // 閻庢鍠栭幖顐﹀春濡ゅ懎閿ら柟閭﹀幘閸ㄥジ鏌″蹇曠瘈闁?
             const validLng = parseFloat(lng) || 116.39748;
             const validLat = parseFloat(lat) || 39.908823;
 
-            // 2D地图配置（纯俯视）
+            // 2D闂侀潻闄勫妯好瑰鈧弻濠傤吋閸モ晜鐎梺鎸庣☉閻楀繘宕欓懞銉р攳妞ゆ牗绻嶅鎺楁煥?
             water2DMap = new AMap.Map('water3DMapContainer', {
                 zoom: 16,
                 center: new AMap.LngLat(validLng, validLat),
@@ -2168,7 +2097,7 @@
                 }
             });
 
-            // 地图加载完成后添加元素
+            // 闂侀潻闄勫妯好瑰鈧畷婵嬫偐閻戞銈伴柣搴ｆ嚀閺堫剟宕瑰璺鸿Е閹兼番鍨瑰鎴︽煕閺冨倸孝闁告ɑ鎸惧Σ?
             water2DMap.on('complete', function() {
                 AMap.plugin(['AMap.Scale'], function() {
                     water2DMap.addControl(new AMap.Scale({ position: 'bottom-left' }));
@@ -2176,7 +2105,7 @@
 
                 createWater2DPolygon(validLng, validLat);
 
-                // 添加中心点标记
+                // 濠电儑缍€椤曆勬叏閻愬鈻旀い鎾跺仧婵″洭鏌ｉ幇顖ｆ綈闁绘牭绲块幏?
                 const centerMarker = new AMap.Marker({
                     position: new AMap.LngLat(validLng, validLat),
                     icon: new AMap.Icon({
@@ -2190,7 +2119,7 @@
             });
         }
 
-        // 创建2D水位多边形（无高程）
+        // 闂佸憡甯楃粙鎴犵磽?D濠殿喗顭囩换婵堢礊閸涱喖绶炴慨妯虹－閻濆墎鎲搁柇锔界窙缂佽鲸鐟╁顕€鎮╅懡銈呰拫缂備礁顑呴鎴犳?
         function createWater2DPolygon(lng, lat) {
             const radius = 0.01;
             const points = [];
@@ -2206,10 +2135,10 @@
                 }
             }
             if (points.length > 0) {
-                points.push(points[0]); // 闭合
+                points.push(points[0]); // 闂傚倸鍋嗛崢濂稿箖?
             }
 
-            // 创建2D多边形（无高程）
+            // 闂佸憡甯楃粙鎴犵磽?D婵犮垼鍩栨穱铏圭博閻旀眹浜规い顐枤缁€鍕煛閸愵亜鈻堥柣婵愬枤缁瑧鈧絽澧庣粈?
             waterPolygon = new AMap.Polygon({
                 path: points,
                 fillColor: 'rgba(0, 170, 220, 0.7)',
@@ -2221,7 +2150,7 @@
             if (water2DMap && waterPolygon) {
                 water2DMap.add(waterPolygon);
 
-                // 水位波动动画
+                // 濠殿喗顭囩换婵堢礊閸涱厸鏋栭柕蹇曞Т琚熼梺鍛婃煟閸斿酣寮?
                 let waveOffset = 0;
                 waterAnimationInterval = setInterval(() => {
                     try {
@@ -2234,29 +2163,29 @@
                             fillColor: `rgba(0, 170, 220, ${alpha})`
                         });
                     } catch (e) {
-                        console.warn('动画执行异常:', e);
+                        console.warn('闂佸憡鏌ｉ崝搴ㄥ极妤ｅ啫绠ョ憸鎴︺€侀幋婵愬殨闁稿本姘ㄩ崺?', e);
                         clearInterval(waterAnimationInterval);
                     }
                 }, 100);
             }
         }
 
-        // 显示2D水位视图
+        // 闂佸搫瀚晶浠嬪Φ?D濠殿喗顭囩换婵堢礊閸涱垱鍠嗛柛鈩冾殕缁?
         function showWater2DView(areaName, waterLevel, lng, lat) {
             const validLng = parseFloat(lng) || 116.39748;
             const validLat = parseFloat(lat) || 39.908823;
             const validLevel = waterLevel || '0.00 m';
 
-            // 更新弹窗信息
-            document.getElementById('modalAreaName').textContent = areaName || '未知区域';
+            // 闂佸搫娲ら悺銊╁蓟婵犲偆鍤曢柛锔诲幘瀹曡泛菐閸ワ絽澧插ù?
+            document.getElementById('modalAreaName').textContent = areaName || '闂佸搫鐗滄禍鐐烘偂閿熺姴绀岄柛婵嗗閸?;
             document.getElementById('modalWaterLevel').textContent = validLevel;
             document.getElementById('modalWaterSpeed').textContent = selectedAreaData.speed + ' m/s';
-            document.getElementById('modalWaterQuality').textContent = selectedAreaData.quality || '良好';
+            document.getElementById('modalWaterQuality').textContent = selectedAreaData.quality || '闂佽壈顕栭崹浼村Χ?;
 
-            // 初始化2D地图
+            // 闂佸憡甯楃换鍌烇綖閹版澘绀?D闂侀潻闄勫妯好?
             initWater2DMap(validLng, validLat);
 
-            // 显示弹窗
+            // 闂佸搫瀚晶浠嬪Φ濮橆剦鍤曢柛锔诲幘瀹?
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('water3DModal').style.display = 'flex';
 
@@ -2267,10 +2196,10 @@
             }, 200);
         }
 
-        // 将函数设为全局可访问
+        // 闁诲繐绻愬Λ妤呭吹闁秴鏋侀柟宄扮焾閸熷骸鈽夐幘铏儓闁告瑥绻掓禒锕傚焵椤掑嫬鐭楁い鏍ㄧ箥閸熷繘姊?
         window.showWater2DView = showWater2DView;
 
-        // 关闭水位视图
+        // 闂佺绻戞繛濠偽涢弶鎴僵缂傚牏濮风粔鎾偡濞嗗繑顥滄繛?
         function closeWater2DView() {
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('water3DModal').style.display = 'none';
@@ -2286,9 +2215,9 @@
             }
         }
 
-        // 初始化图表
+        // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宓嫮顩柣?
         function initCharts() {
-            // 实时水位趋势图
+            // 闁诲骸婀遍崑鐐差渻閸屾凹娼╃紓鍫㈠Х缁夋挳鎮洪幒鎴剰濠电偛绉瑰畷?
             const levelChartDom = document.getElementById('waterLevelChart');
             if (levelChartDom) {
                 levelChart = echarts.init(levelChartDom);
@@ -2296,7 +2225,7 @@
                 const initialTimes = [];
                 const initialData = [];
 
-                // 初始化时间序列（过去2小时）
+                // 闂佸憡甯楃换鍌烇綖閹版澘绀岄柡宥冨妽椤ρ囨⒒閸屾稒缍戠紒顭戝弮瀹曟艾螖鐎ｎ剛顦╅柡澶嗘櫅濞层倝鐛?闁诲繐绻愮换鎴濐渻閸岀偞鏅?
                 for (let i = 12; i >= 0; i--) {
                     const time = new Date(now.getTime() - i * 10 * 60000);
                     initialTimes.push(`${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`);
@@ -2313,7 +2242,7 @@
                         borderWidth: 1
                     },
                     legend: {
-                        data: ['实时水位', '警戒水位', '预测水位'],
+                        data: ['闁诲骸婀遍崑鐐差渻閸屾凹娼╃紓鍫㈠Х缁?, '闁荤姭鍋撻柨鏃囨閻忓﹥鎱ㄥΟ鑲╃瘈缂?, '婵☆偅婢樼€氼厾绮婇弶鎴僵缂傚牏濮风粔?],
                         textStyle: { color: '#a0a0ff', fontSize: 7 },
                         top: '0%',
                         itemGap: 1,
@@ -2363,7 +2292,7 @@
                     },
                     series: [
                         {
-                            name: '实时水位',
+                            name: '闁诲骸婀遍崑鐐差渻閸屾凹娼╃紓鍫㈠Х缁?,
                             type: 'line',
                             data: initialData,
                             smooth: true,
@@ -2378,7 +2307,7 @@
                             }
                         },
                         {
-                            name: '警戒水位',
+                            name: '闁荤姭鍋撻柨鏃囨閻忓﹥鎱ㄥΟ鑲╃瘈缂?,
                             type: 'line',
                             data: Array(initialTimes.length).fill(3.5),
                             lineStyle: { color: '#ffa500', type: 'dashed', width: 0.8 },
@@ -2386,7 +2315,7 @@
                             symbol: 'none'
                         },
                         {
-                            name: '预测水位',
+                            name: '婵☆偅婢樼€氼厾绮婇弶鎴僵缂傚牏濮风粔?,
                             type: 'line',
                             data: initialData.map(d => d * 1.1),
                             smooth: true,
@@ -2398,7 +2327,7 @@
                 });
             }
 
-            // 天气影响雷达图
+            // 婵犮垹鐏堥弲婊堟儍娴ｅ啨浜归柛妤冨仦閹瑩姊婚崱娆愮効闁规椿浜畷?
             const weatherChartDom = document.getElementById('weatherImpactChart');
             if (weatherChartDom) {
                 weatherImpactChart = echarts.init(weatherChartDom);
@@ -2416,19 +2345,19 @@
                         bottom: '0%',
                         left: 'center',
                         textStyle: { color: '#a0a0ff', fontSize: 7 },
-                        data: ['当前', '预测', '阈值'],
+                        data: ['閻熸粎澧楅幐鍛婃櫠?, '婵☆偅婢樼€氼厾绮?, '闂傚倸鍟悧鍡涘焵?],
                         itemGap: 2,
                         itemWidth: 6,
                         itemHeight: 3
                     },
                     radar: {
                         indicator: [
-                            { name: '降雨量', max: 100 },
-                            { name: '风速', max: 20 },
-                            { name: '温度', max: 40 },
-                            { name: '湿度', max: 100 },
-                            { name: '气压', max: 1050 },
-                            { name: '蒸发量', max: 50 }
+                            { name: '闂傚倸瀚粔鐟懊洪敃鍌涚厒?, max: 100 },
+                            { name: '婵＄偛顑呴柊锝夊焵?, max: 20 },
+                            { name: '濠电偞鎸撮弲娑氣偓?, max: 40 },
+                            { name: '濠电姭鍋撻柛顭戝枛椤?, max: 100 },
+                            { name: '濠殿喗蓱閺屻劎鏁?, max: 1050 },
+                            { name: '闂佽棄鍊婚…鍫ｃ亹閸岀偞鐓?, max: 50 }
                         ],
                         shape: 'polygon',
                         axisName: {
@@ -2443,28 +2372,28 @@
                         radius: '45%'
                     },
                     series: [{
-                        name: '天气影响',
+                        name: '婵犮垹鐏堥弲婊堟儍娴ｅ啨浜归柛妤冨仦閹?,
                         type: 'radar',
                         lineStyle: { width: 1 },
                         symbolSize: 2,
                         data: [
                             {
                                 value: [45, 8, 18, 75, 1012, 15],
-                                name: '当前',
+                                name: '閻熸粎澧楅幐鍛婃櫠?,
                                 areaStyle: { color: 'rgba(64, 224, 208, 0.2)' },
                                 lineStyle: { color: '#40e0d0' },
                                 itemStyle: { color: '#40e0d0' }
                             },
                             {
                                 value: [65, 12, 20, 85, 1008, 10],
-                                name: '预测',
+                                name: '婵☆偅婢樼€氼厾绮?,
                                 areaStyle: { color: 'rgba(255, 50, 50, 0.2)' },
                                 lineStyle: { color: '#ff3232' },
                                 itemStyle: { color: '#ff3232' }
                             },
                             {
                                 value: [80, 15, 35, 90, 1000, 20],
-                                name: '阈值',
+                                name: '闂傚倸鍟悧鍡涘焵?,
                                 areaStyle: { color: 'rgba(255, 165, 0, 0.1)' },
                                 lineStyle: { color: '#ffa500', type: 'dashed' },
                                 itemStyle: { color: '#ffa500' }
@@ -2474,51 +2403,51 @@
                 });
             }
 
-            // 水位占比饼图
+            // 濠殿喗顭囩换婵堢礊閸涙潙纭€闁绘ê纾Σ宄拔斿Δ鍐ㄥ付婵?
             const ratioChartDom = document.getElementById('levelRatioChart');
             if (ratioChartDom) {
                 levelRatioChart = echarts.init(ratioChartDom);
 
                 const richColors = [
                     {
-                        name: '安全区',
+                        name: '闁诲海鎳撻ˇ顖炲矗韫囨稑绀?,
                         value: 16,
                         color: '#40e0d0',
                         subColor: '#00cccc',
                         textColor: '#40e0d0',
                         stations: 16,
                         avgLevel: '2.15m',
-                        status: '正常'
+                        status: '濠殿喗绻愮徊浠嬫偉?
                     },
                     {
-                        name: '低风险区',
+                        name: '婵炶揪绲介柊锝壦夐幘缁樷挃闁宠桨绀侀梾?,
                         value: 8,
                         color: '#4dabf7',
                         subColor: '#2196f3',
                         textColor: '#4dabf7',
                         stations: 8,
                         avgLevel: '2.85m',
-                        status: '关注'
+                        status: '闂佺绻楀▍鏇㈠极?
                     },
                     {
-                        name: '警戒区',
+                        name: '闁荤姭鍋撻柨鏃囨閻忓﹪鏌?,
                         value: 6,
                         color: '#ffa500',
                         subColor: '#ff8c00',
                         textColor: '#ffa500',
                         stations: 6,
                         avgLevel: '3.45m',
-                        status: '警告'
+                        status: '闁荤姭鍋撻柨鏇楀亾闁?
                     },
                     {
-                        name: '危险区',
+                        name: '闂佸憡顨婃禍璺衡枍閹捐绀?,
                         value: 4,
                         color: '#ff3232',
                         subColor: '#ff0000',
                         textColor: '#ff3232',
                         stations: 4,
                         avgLevel: '3.92m',
-                        status: '危险'
+                        status: '闂佸憡顨婃禍璺衡枍?
                     }
                 ];
 
@@ -2530,10 +2459,10 @@
                             const data = params.data;
                             return `<div style="font-size:8px;padding:3px;">
                             <div style="color:${data.textColor};font-weight:bold;margin-bottom:2px;">${data.name}</div>
-                            <div style="color:#a0a0ff;">占比: ${data.value}%</div>
-                            <div style="color:#a0a0ff;">站点数: ${data.stations}个</div>
-                            <div style="color:#a0a0ff;">平均水位: ${data.avgLevel}</div>
-                            <div style="color:${data.textColor};font-weight:bold;">状态: ${data.status}</div>
+                            <div style="color:#a0a0ff;">闂佸憡顨堟慨鐢告儊? ${data.value}%</div>
+                            <div style="color:#a0a0ff;">缂備焦姊归悷褔宕戦敐澶婃瀬? ${data.stations}婵?/div>
+                            <div style="color:#a0a0ff;">濡ょ姷鍋涢崯鍨焽鎼粹槅娼╃紓鍫㈠Х缁? ${data.avgLevel}</div>
+                            <div style="color:${data.textColor};font-weight:bold;">闂佺粯顭堥崺鏍焵? ${data.status}</div>
                         </div>`;
                         },
                         textStyle: {
@@ -2561,7 +2490,7 @@
                         data: richColors.map(item => item.name),
                         formatter: function(name) {
                             const item = richColors.find(d => d.name === name);
-                            return `{name|${name}} {value|${item.value}%}\n{stations|${item.stations}站}`;
+                            return `{name|${name}} {value|${item.value}%}\n{stations|${item.stations}缂備焦姊归鍒?
                         },
                         rich: {
                             name: {
@@ -2584,7 +2513,7 @@
                     },
                     series: [
                         {
-                            name: '水位占比',
+                            name: '濠殿喗顭囩换婵堢礊閸涙潙纭€闁绘ê纾Σ?,
                             type: 'pie',
                             radius: ['35%', '55%'],
                             center: ['30%', '50%'],
@@ -2642,7 +2571,7 @@
                             }
                         },
                         {
-                            name: '状态分布',
+                            name: '闂佺粯顭堥崺鏍焵椤戣法顦﹂柛銊ユ捣閺?,
                             type: 'pie',
                             radius: ['20%', '28%'],
                             center: ['30%', '50%'],
@@ -2656,17 +2585,17 @@
                             data: [
                                 {
                                     value: 70,
-                                    name: '正常',
+                                    name: '濠殿喗绻愮徊浠嬫偉?,
                                     itemStyle: { color: 'rgba(64, 224, 208, 0.7)' }
                                 },
                                 {
                                     value: 20,
-                                    name: '预警',
+                                    name: '婵☆偅婢樼€氼垶顢?,
                                     itemStyle: { color: 'rgba(255, 165, 0, 0.7)' }
                                 },
                                 {
                                     value: 10,
-                                    name: '报警',
+                                    name: '闂佺缈伴崕鎾敆?,
                                     itemStyle: { color: 'rgba(255, 50, 50, 0.7)' }
                                 }
                             ],
@@ -2676,14 +2605,14 @@
                             }
                         },
                         {
-                            name: '中心文字',
+                            name: '婵炴垶鎼╅崢鑲╃紦妤ｅ啫妫橀柛銉戝懏鎲?,
                             type: 'pie',
                             radius: ['0%', '15%'],
                             center: ['30%', '50%'],
                             label: {
                                 show: true,
                                 position: 'center',
-                                formatter: '总计\n{total|24站}',
+                                formatter: '闂佽鍓氬Σ鎺楊敇缁斿攳{total|24缂備焦姊归?,
                                 rich: {
                                     total: {
                                         fontSize: 10,
@@ -2738,13 +2667,13 @@
                 });
             }
 
-            // 历史水位对比图
+            // 闂佸憡锚濡銇愮捄渚僵缂傚牏濮风粔鎾倵娴ｅ喚娼愰柣锔诲櫍瀹?
             const historyChartDom = document.getElementById('historyLevelChart');
             if (historyChartDom) {
                 historyLevelChart = echarts.init(historyChartDom);
 
                 const now = new Date();
-                const timeLabels = ['0时', '6时', '12时', '18时'];
+                const timeLabels = ['0闂?, '6闂?, '12闂?, '18闂?];
 
                 historyLevelChart.setOption({
                     backgroundColor: 'transparent',
@@ -2755,7 +2684,7 @@
                         borderColor: 'rgba(64, 224, 208, 0.3)',
                     },
                     legend: {
-                        data: ['今日', '昨日', '上周同期'],
+                        data: ['婵炲濮撮敃銉ノ?, '闂佸搫瀚ㄩ崝宥呂?, '婵炴垶鎸搁敃銈夊箠閸℃稑瑙﹂悘鐐靛亾閸?],
                         textStyle: { color: '#a0a0ff', fontSize: 6 },
                         top: '0%',
                         itemGap: 1,
@@ -2798,7 +2727,7 @@
                     },
                     series: [
                         {
-                            name: '今日',
+                            name: '婵炲濮撮敃銉ノ?,
                             type: 'line',
                             data: [1.98, 2.15, 2.34, 2.42],
                             smooth: true,
@@ -2807,7 +2736,7 @@
                             symbolSize: 1.5
                         },
                         {
-                            name: '昨日',
+                            name: '闂佸搫瀚ㄩ崝宥呂?,
                             type: 'line',
                             data: [1.85, 2.02, 2.18, 2.25],
                             smooth: true,
@@ -2816,7 +2745,7 @@
                             symbolSize: 1.5
                         },
                         {
-                            name: '上周同期',
+                            name: '婵炴垶鎸搁敃銈夊箠閸℃稑瑙﹂悘鐐靛亾閸?,
                             type: 'line',
                             data: [1.72, 1.88, 2.05, 2.12],
                             smooth: true,
@@ -2829,9 +2758,9 @@
             }
         }
 
-        // 绑定所有事件
+        // 缂傚倷鐒﹂崹鐢告偩妤ｅ啫绠ラ柍褜鍓熷鍨緞婢跺瞼娈ゆ繛?
         function bindEvents() {
-            // 滑块事件
+            // 濠电姴锕ラ崹闈涱焽閳╁啰顩查悗锝傛櫆椤?
             document.getElementById('predictionHours').addEventListener('input', function() {
                 document.getElementById('hoursValue').textContent = this.value;
             });
@@ -2839,17 +2768,17 @@
                 document.getElementById('rateValue').textContent = this.value;
             });
 
-            // 关闭水位视图事件
+            // 闂佺绻戞繛濠偽涢弶鎴僵缂傚牏濮风粔鎾偡濞嗗繑顥滄繛瀛樕戠粋宥団偓锝傛櫆椤?
             document.getElementById('closeModalBtn').addEventListener('click', closeWater2DView);
             document.getElementById('overlay').addEventListener('click', closeWater2DView);
 
-            // 搜索站点事件
+            // 闂佺懓鍚嬬划搴ㄥ磼閵娧呭崥婵炲棙鍨垫禒顖毭瑰鍐惧剮婵?
             document.getElementById('searchBtn').addEventListener('click', searchStation);
             document.getElementById('stationSearch').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') searchStation();
             });
 
-            // 窗口大小调整事件
+            // 缂備焦鍔栭〃鍛般亹濞戞瑥绶炵憸宥夋儍椤掑倹瀚柛鎰ㄦ櫆濞堣霉濠婂喚鍎庢繛?
             window.addEventListener('resize', function() {
                 if (levelChart) levelChart.resize();
                 if (weatherImpactChart) weatherImpactChart.resize();
@@ -2859,12 +2788,12 @@
                 if (water2DMap) setTimeout(() => water2DMap.resize(), 100);
             });
 
-            // 防止弹窗内部点击穿透
+            // 闂傚倸鍟鍫曨敆濞戞﹩鍤曢柛锔诲幘瀹曞爼鏌涢幇顒佸殗闁稿孩鎸抽幃娆撴偡閺夋寧鐦栫紓浣歌嫰濞硷繝鍩€?
             document.getElementById('water3DModal').addEventListener('click', function(e) {
                 e.stopPropagation();
             });
 
-            // 页面卸载时清理资源
+            // 婵＄偑鍊楅弫璇差焽娴兼潙纭€婵繂鏈粊浼存煛閸愵厼鐓愮紒鏂款煼閹爼宕卞渚垮亽濠?
             window.addEventListener('beforeunload', function() {
                 if (realTimeUpdateInterval) clearInterval(realTimeUpdateInterval);
                 if (waterAnimationInterval) clearInterval(waterAnimationInterval);
@@ -2873,11 +2802,11 @@
             });
         }
 
-        // 搜索站点功能
+        // 闂佺懓鍚嬬划搴ㄥ磼閵娧呭崥婵炲棙鍨垫禒顖炴煕閺冨倸鏋欓柛?
         function searchStation() {
             const keyword = document.getElementById('stationSearch').value.trim().toLowerCase();
             if (!keyword) {
-                alert('请输入站点名称关键词');
+                alert('闁荤姴娲ㄩ弻澶屾椤撱垹绀傞柕澹懎璁查梺缁樺姉閹虫捇骞冮弴鐘电煋闁哄鐏濊ぐ鐘绘⒑濞嗘儳鏋﹂柣?);
                 return;
             }
 
@@ -2896,22 +2825,22 @@
                 }
                 document.getElementById('stationSearch').value = '';
             } else {
-                alert(`未搜索到包含"${keyword}"的站点`);
+                alert(`闂佸搫鐗滄禍婵嬪箖瀹曞洦顫曢柕蹇曞Т閻撳倿鏌涢弽褎鍣归柟?${keyword}"闂佹眹鍔岀€氼噣鎮甸鐐村€风紒?;
             }
         }
 
-        // 全局错误处理
+        // 闂佺绻堥崝宀勬儑椤掑嫭鐓ユ繛鍡樺俯閸ゆ牕顭跨捄鍝勵伀闁?
         window.addEventListener('error', function(e) {
-            console.error('运行时错误:', e.message, e.filename, e.lineno);
+            console.error('闁哄鏅滈崝姗€銆侀幋锕€绫嶉柛顐ｆ礃閺呪晠鎮?', e.message, e.filename, e.lineno);
 
             if (e.message.includes('NaN') && e.filename.includes('amap.com')) {
                 return;
             }
 
-            alert('系统发生错误: ' + e.message);
+            alert('缂備緡鍨靛畷鐢靛垝濞差亜鐭楅柟瀵稿У閺呮悂姊洪幐搴ｆ噯妞? ' + e.message);
         });
 
-        // 页面加载完成后初始化
+        // 婵＄偑鍊楅弫璇差焽娴兼潙绀夐柣妯煎劋缁佷即鎮楅悷鐗堟拱闁搞劍宀稿畷銉︽償閳ュ磭浠存繝娈垮枛椤戝懐鈧?
         if (document.readyState === 'complete') {
             initAll();
         } else {

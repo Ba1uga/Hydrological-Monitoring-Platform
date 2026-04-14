@@ -1,83 +1,75 @@
 package com.baluga.module.waterlevel.controller;
 
+import java.util.List;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.baluga.module.waterlevel.dto.WarningDTO;
 import com.baluga.module.waterlevel.entity.Warning;
 import com.baluga.module.waterlevel.service.IWarningService;
 import com.baluga.module.waterlevel.util.Result;
-import jakarta.annotation.Resource;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import jakarta.annotation.Resource;
 
 @RestController("WaterLevelWarningController")
 @RequestMapping("/api/waterlevel/warning")
 public class WarningController {
+
     @Resource(name = "WaterLevelWarningService")
     private IWarningService warningService;
 
-    /**
-     * 鏌ヨ鎵€鏈夐璀?
-     */
     @GetMapping("/list")
     public Result<List<Warning>> getAllWarnings() {
         try {
             return Result.success(warningService.list());
         } catch (Exception ex) {
-            return Result.success(List.of());
+            return Result.error("预警数据加载失败");
         }
     }
 
-    /**
-     * 鏍规嵁绔欑偣ID鏌ヨ棰勮淇℃伅
-     */
     @GetMapping("/station/{stationId}")
     public Result<List<Warning>> getWarningByStationId(@PathVariable Long stationId) {
         try {
             return Result.success(warningService.getWarningByStationId(stationId));
         } catch (Exception ex) {
-            return Result.success(List.of());
+            return Result.error("站点预警数据加载失败");
         }
     }
 
-    /**
-     * 鏌ヨ鏈鐞嗛璀?
-     */
     @GetMapping("/unprocessed")
     public Result<List<Warning>> getUnprocessedWarnings() {
         try {
             return Result.success(warningService.getUnprocessedWarnings());
         } catch (Exception ex) {
-            return Result.success(List.of());
+            return Result.error("未处理预警数据加载失败");
         }
     }
 
-    /**
-     * 鏍规嵁棰勮绛夌骇鏌ヨ
-     */
     @GetMapping("/level/{level}")
     public Result<List<Warning>> getWarningByLevel(@PathVariable Integer level) {
         try {
             return Result.success(warningService.getWarningByLevel(level));
         } catch (Exception ex) {
-            return Result.success(List.of());
+            return Result.error("按等级加载预警失败");
         }
     }
 
-    /**
-     * 鏍囪棰勮涓哄凡澶勭悊
-     */
     @PutMapping("/process/{id}")
     public Result<Boolean> markWarningAsProcessed(@PathVariable Long id) {
         try {
             return Result.success(warningService.markWarningAsProcessed(id));
         } catch (Exception ex) {
-            return Result.success(false);
+            return Result.error("预警处理失败");
         }
     }
 
-    /**
-     * 鏂板棰勮
-     */
     @PostMapping("/add")
     public Result<Boolean> addWarning(@RequestBody WarningDTO warningDTO) {
         try {
@@ -89,20 +81,16 @@ public class WarningController {
             warning.setStatus(0);
             return Result.success(warningService.save(warning));
         } catch (Exception ex) {
-            return Result.success(false);
+            return Result.error("新增预警失败");
         }
     }
 
-    /**
-     * 鍒犻櫎棰勮
-     */
     @DeleteMapping("/{id}")
     public Result<Boolean> deleteWarning(@PathVariable Long id) {
         try {
             return Result.success(warningService.removeById(id));
         } catch (Exception ex) {
-            return Result.success(false);
+            return Result.error("删除预警失败");
         }
     }
 }
-
