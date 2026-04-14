@@ -194,7 +194,7 @@ Remove simulated success fallback behavior from backend endpoints.
 For endpoints that currently swallow exceptions and return fake success:
 
 - keep response shape stable where possible
-- return error responses using the module’s existing `Result` wrapper
+- return error responses using the module's existing `Result` wrapper
 - do not manufacture substitute entities
 
 ### Frontend
