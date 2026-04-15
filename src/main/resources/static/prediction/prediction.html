@@ -1311,7 +1311,7 @@
         </div>
         <div class="header-right">
             <div class="time-info">
-                <div id="currentDate">2025å¹´12æ12æ¥ ææäº</div>
+                <div id="currentDate">2025年12月12日 星期五</div>
                 <div id="currentTime">10:30:15</div>
             </div>
         </div>
@@ -1341,7 +1341,7 @@
             <div class="left-chart-3">
                 <div class="left-chart-header">
                     <div class="left-chart-title">左三 水质水位趋势对比</div>
-                    <div class="left-chart-subtitle" id="trendComparisonTitle" style="color: #4dabf7; font-size: 0.7rem;">è¿ 10 å¤©è¶å¿</div>
+                    <div class="left-chart-subtitle" id="trendComparisonTitle" style="color: #4dabf7; font-size: 0.7rem;">近 10 天趋势</div>
                 </div>
                 <div class="left-chart-container" id="leftChart3Container"></div>
             </div>
@@ -1350,7 +1350,7 @@
             <div class="chart-panel">
                 <div class="chart-header">
                     <div class="chart-title">中部 水质水位预测图</div>
-                    <div class="chart-subtitle" id="selectedStationName">ææ éä¸­ç«ç¹</div>
+                    <div class="chart-subtitle" id="selectedStationName">暂无选中站点</div>
                 </div>
                 <div class="chart-container" id="chartContainer"></div>
             </div>
@@ -1368,23 +1368,23 @@
                     <div class="legend-grid">
                         <div class="legend-item">
                             <div class="legend-color" style="background: #00a854;"></div>
-                            <span>婵?/span>
+                            <span>正常</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: #a3d930;"></div>
-                            <span>闂?/span>
+                            <span>关注</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: #f8e71c;"></div>
-                            <span>婵?/span>
+                            <span>预警</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: #ff9800;"></div>
-                            <span>闂?/span>
+                            <span>警报</span>
                         </div>
                         <div class="legend-item">
                             <div class="legend-color" style="background: #ff5722;"></div>
-                            <span>闂?/span>
+                            <span>危险</span>
                         </div>
                     </div>
                 </div>
@@ -1424,17 +1424,17 @@
             <div class="radar-panel">
                 <div class="radar-header">
                     <div class="radar-title">右三 水质指标雷达图</div>
-                    <div class="radar-station" id="radarStationName">ææ éä¸­ç«ç¹</div>
+                    <div class="radar-station" id="radarStationName">暂无选中站点</div>
                 </div>
                 <div class="radar-container" id="radarContainer"></div>
                 <!-- 闂傚倸鍊搁崐鎼佸磹閹间礁纾圭紒瀣嚦濞戞ǚ妲堥柕蹇曞Ь閹芥洘绻濋姀锝呯厫闁告梹娲滅划濠氬垂椤愮姳绨婚棅顐㈡处閹哥偓鏅堕弴銏＄厽闁归偊鍓ㄩ煬顒勬煛瀹€鈧崰鎾诲箟閹绢喖绀嬫い鎰╁焺濞兼洟姊绘担鍛婃儓妞ゆ垵鎳樺畷鎰板锤濡も偓閽冪喖鏌ｉ弮鍥仩缁炬儳銈搁弻鏇＄疀閺囩倫銏㈢磼閻樿櫕銇濋柡宀嬬秮婵偓闁宠桨鑳舵禒鈺呮⒑缂佹澧遍柛妯犲洦鍋?-->
                 <div class="radar-controls">
                     <button class="radar-btn" id="prevStation">
-                        <span>ä¸ä¸ç«</span>
+                        <span>上一站</span>
                     </button>
                     <div class="radar-indicator" id="radarIndicator"></div>
                     <button class="radar-btn" id="nextStation">
-                        ä¸ä¸ç«<span> &gt;</span>
+                        下一站<span> &gt;</span>
                     </button>
                 </div>
             </div>
@@ -1443,7 +1443,7 @@
             <div class="warning-panel">
                 <div class="warning-header">
                     <div class="warning-title">重点预警信息轮播</div>
-                    <div class="warning-count" id="warningCount">0 æ¡</div>
+                    <div class="warning-count" id="warningCount">0 条</div>
                     <div class="warning-count" id="warningCount">0 鏉?/div>
                 <div class="warning-container" id="warningContainer">
                     <div class="warning-slider" id="warningSlider"></div>
@@ -1632,7 +1632,7 @@
             const stationsResponse = await api.get(API_ENDPOINTS.STATIONS);
             monitoringStations = Array.isArray(stationsResponse) ? stationsResponse : [];
             if (!monitoringStations.length) {
-                console.warn('æªå è½½å°çå®ç«ç¹æ°æ®');
+                console.warn('未加载到真实站点数据');
                 showNotification('未加载到真实站点数据', 'warning');
             }
 
@@ -1873,12 +1873,12 @@
             try {
                 await ensureAmapLoaded();
             } catch (mapError) {
-                console.error('é«å¾·å°å¾å è½½å¤±è´¥:', mapError);
+                console.error('????????:', mapError);
                 showNotification('高德地图加载失败，地图功能受限', 'error');
             }
 
             if (typeof echarts === 'undefined') {
-                console.error('EChartsæªå è½½');
+                console.error('ECharts???');
                 showNotification('图表库加载失败，部分功能受限', 'error');
                 return;
             }
@@ -1898,7 +1898,7 @@
                 document.getElementById('map').innerHTML =
                     '<div style="color: white; text-align: center; padding-top: 180px;">闁革附婢樺ù姗€宕濋悩鐑樼グ濠㈡儼绮剧憴锕傛晬瀹€鍐惧殲婵☆偀鍋撻柡灞诲劦閻濐喖顕ラ悜钘夊赋缂?/div>';
             }
-                    '<div style="color: white; text-align: center; padding-top: 180px;">å°å¾å è½½å¤±è´¥ï¼è¯·æ£æ¥é«å¾·é
+                    '<div style="color: white; text-align: center; padding-top: 180px;">地图加载失败，请检查高德配置</div>';
 ç½®</div>';
             initializeRadarChart();
             initializeLeftCharts();
@@ -1917,8 +1917,8 @@
             startRadarAutoScroll();
 
         } catch (error) {
-            console.error('闁告帗绻傞～鎰板礌閺嵮佷杭閻?', error);
-            console.error('åå§åå¤±è´¥:', error);
+            console.error('初始化失败:', error);
+            showNotification('初始化失败，请刷新页面后重试', 'error');
             showNotification('åå§åå¤±è´¥ï¼è¯·å·æ°é¡µé¢åéè¯', 'error');
     }
 
@@ -2803,34 +2803,34 @@
 
             infoWindow.innerHTML = `
                     <div class="info-header">
-                        <div class="info-title">${station.name}</div>
-                        <button class="info-close" id="closeInfoWindow">闂?/button>
-                    </div>
-                    <div class="info-location">
+                        <button class="info-close" id="closeInfoWindow">?</button>
+                        <button class="info-close" id="closeInfoWindow">×</button>
+                        <span>监测位置：${station.location || 未知位置}</span>
+                        <span style="color: ${statusColor}; font-weight: bold;">${statusText}</span>
                         <span>濠电姷顣藉Σ鍛村磻閹捐泛绶ゅù鐘差儏閻ゎ喗銇勯弽顐粶缂?${station.location || '闂傚倸鍊搁崐椋庣矆娓氣偓楠炴牠顢曢敂钘変罕濠电姴锕ょ€氼噣銆呴弻銉︾厽闁归偊鍠栭崝瀣煕鐎ｎ亜鈧潡寮诲澶婄厸濞达絽鎲″▓鍙夌節濞堝灝鐏犳い鏇ㄥ弮閸┾偓妞ゆ巻鍋撶紒鐘茬Ч瀹曟洟宕￠悘缁樻そ婵℃悂鍩℃担绋挎?}</span>
                         <span style="color: ${statusColor}; font-weight: bold;">闂?${statusText}</span>
                     </div>
                     <div class="info-quality">
                         <div>
-                            <span class="quality-class ${qualityClass}">${station.qualityClass || 'III缂?}</span>
+                            <span class="quality-class ${qualityClass}">${station.qualityClass || III?}</span>
+                            <span>${trendIcon} ${station.trend || 趋势稳定}</span>
                         </div>
                         <div class="info-trend ${trendClass}">
-                            <span>${trendIcon} ${station.trend || '缂傚倸鍊搁崐鎼佸磹妞嬪海鐭嗗〒姘ｅ亾妞ゃ垺鐗犲畷銊╁级閹寸姵鐒鹃梻浣侯潒閸曞灚鐣烽梺?}</span>
-                        </div>
+                            <span>${trendIcon} ${station.trend || 趋势稳定}</span>
                     </div>
                     <div class="info-metrics">
                         <div class="info-metric">
                             <div class="metric-value" style="color: ${waterQuality.pH < 6.5 || waterQuality.pH > 8.5 ? '#ff5722' : waterQuality.pH < 7.0 || waterQuality.pH > 8.0 ? '#ff9800' : '#4dabf7'}">
                                 ${waterQuality.pH.toFixed(1)}
                             </div>
-                            <div class="metric-label">pH闂?/div>
+                            <div class="metric-label">pH值</div>
                         </div>
                         <div class="info-metric">
                             <div class="metric-value" style="color: ${waterQuality.DO < 2 ? '#ff5722' : waterQuality.DO < 5 ? '#ff9800' : '#4dabf7'}">
+                            <div class="metric-value" style="color: ${waterQuality.DO < 2 ? #ff5722 : waterQuality.DO < 5 ? #ff9800 : #4dabf7}">
                                 ${waterQuality.DO.toFixed(1)}
                             </div>
-                            <div class="metric-label">濠电姷鏁告慨鐑藉极閸涘﹥鍙忕€广儱顦粈瀣亜閹扳晛鐏╃粭鎴︽⒑閼姐倕浠︾痪鏉跨Ч閹兘鏁冮崒姘辩杽?/div>
-                        </div>
+                            <div class="metric-label">溶解氧</div>
                         <div class="info-metric">
                             <div class="metric-value" style="color: ${waterQuality.COD > 20 ? '#ff5722' : waterQuality.COD > 15 ? '#ff9800' : '#4dabf7'}">
                                 ${waterQuality.COD.toFixed(1)}
@@ -2839,15 +2839,15 @@
                         </div>
                         <div class="info-metric">
                             <div class="metric-value" style="color: ${waterQuality.NH3N > 1.0 ? '#ff5722' : waterQuality.NH3N > 0.5 ? '#ff9800' : '#4dabf7'}">
+                            <div class="metric-value" style="color: ${waterQuality.NH3N > 1.0 ? #ff5722 : waterQuality.NH3N > 0.5 ? #ff9800 : #4dabf7}">
                                 ${waterQuality.NH3N.toFixed(2)}
                             </div>
-                            <div class="metric-label">濠电姷鏁告慨鐢割敊閺嶎厼绐楁俊銈呭缂嶆﹢姊绘担鍛婂暈闁哄被鍔庣划鏃囥亹閹烘垹鐣?/div>
-                        </div>
+                            <div class="metric-label">氨氮</div>
                     </div>
                     <div class="info-tags">
                         ${(station.tags || []).slice(0, 2).map(tag => `<span class="info-tag">${tag}</span>`).join('')}
                         <span class="info-tag">${station.type || '闂傚倸鍊搁崐鐑芥嚄閸洖纾块柣銏㈩焾閻ょ偓绻濇繝鍌滃闁搞劌鍊块弻娑㈠箻閼艰泛鍘￠梺娲诲幖閻楁捇骞冨Δ鍛棃婵炴垶鐟﹂崰鎰版⒑?}</span>
-                    </div>
+                        <span class="info-tag">${station.type || 监测站点}</span>
                     <div class="info-arrow"></div>
                 `;
 
@@ -3084,7 +3084,7 @@
             renderChart(station, chartData.historical, chartData.prediction);
         } catch (error) {
             console.error('闂傚倸鍊风粈渚€宕ョ€ｎ喖纾块柟鎯版鎼村﹪鏌ら懝鎵牚濞存粌缍婇弻娑㈠Ψ椤旂厧顫╅梺缁樺姇閿曨亪寮婚悢鐑樺枂闁告洦鍋勯～鍥⒑闁偛鑻晶顕€鏌涢悢鍛婄稇妞ゆ洩缍侀、鏇㈡晜閽樺缃曢梻浣稿閸嬪懐鎹㈤崟顖毼ч柨鏃傛櫕缁♀偓闂侀潧绻嗛埀顒€鍟挎慨鍝ョ磽娓氬洤鏋涘褌绮欓獮?', error);
-            renderChart(station, { dates: [], pH: [], DO: [], COD: [], level: [] }, { dates: [], pH: [], DO: [], COD: [], level: [] });
+            showNotification('未加载到真实历史/预测数据', 'warning');
             showNotification('未加载到真实历史/预测数据', 'warning');
         }
     }
@@ -3093,7 +3093,7 @@
 
         if (!historicalData || !Array.isArray(historicalData.dates) || historicalData.dates.length === 0) {
             currentChart.setOption({
-                title: {
+                    text: '暂无真实历史/预测数据', 
                     text: '闁哄棗鍊瑰Λ銈夋儑閻旈鏉介柛妯烘瑜?濡澘瀚粊鎾极閻楀牆绁?, 
                     left: 'center',
                     top: 'center',
@@ -3347,14 +3347,14 @@
 
         try {
             const response = await axios.post(`${DATA_API_BASE_URL}/prediction/run`, { stationId: selectedStationId, days });
-            if (!response.data || response.data.code !== 200) {
+                throw new Error((response.data && (response.data.message || response.data.msg)) || '预测接口执行失败');
                 throw new Error((response.data && (response.data.message || response.data.msg)) || 'é¢æµæ¥å£æ§è¡å¤±è´¥');
             }
 
-            await updateChartData();
+            showNotification(`已刷新未来 ${days} 天的真实预测数据`, 'success');
             showNotification(`å·²å·æ°æªæ¥ ${days} å¤©ççå®é¢æµæ°æ®`, 'success');
-        } catch (error) {
             console.error('预测失败:', error);
+            showNotification('预测接口执行失败', 'error');
             showNotification('预测接口执行失败', 'error');
             showNotification('濠碘槅鍋呭妯尖偓姘煎幘缁﹪骞橀鑲╊唺闂侀潧顦崕杈╃礊閹剧粯鐓欑紒妤佺☉濡參寮ㄩ挊澶樼唵闁诡垱澹嗙花鍧楁偡?, 'error');
             btn.innerHTML = originalText;
@@ -3474,7 +3474,7 @@
         if (typeof axios === 'undefined') missingResources.push('Axios HTTP闂?);
 
         if (missingResources.length > 0) {
-            console.warn('婵犵數濮烽弫鎼佸磻濞戙埄鏁嬫い鎾跺枑閸欏繐霉閸忓吋缍戠痪鎯ф健閺岀喎鈻撻崹顔界亾缂備胶濮靛Λ鍐蓟濞戞ǚ妲堥柛妤冨仧娴狀參鏌ｈ箛鎾剁闂佸府缍佸璇测槈閵忕姴宓嗛梺闈涱焾閸庨亶锝為锔解拺缂備焦顭囨晶闈浢瑰鍐煟鐎殿喖顭烽弫鎾绘偐閺屻儱鏁规俊鐐€栭崝褏妲愰弴銏″剮閹兼番鍨荤弧鈧┑鐐茬墕閻忔繈寮搁妶澶嬬厱閻庯綆鍓欐禒婊勩亜?', missingResources.join(', '));
+            showNotification(`部分资源加载失败: ${missingResources.join(', ')}`, 'warning');
             showNotification(`部分资源加载失败: ${missingResources.join(', ')}`, 'warning');
         }
 

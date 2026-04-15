@@ -29,18 +29,18 @@ class WaterlevelFrontendFallbackGuardTest {
     void waterlevelPage_usesReadableUserFacingCopy() throws IOException {
         String html = Files.readString(PAGE, StandardCharsets.UTF_8);
 
-        assertTrue(html.contains("动态水位监测平台"));
-        assertTrue(html.contains("当前水位"));
-        assertTrue(html.contains("警戒"));
-        assertTrue(html.contains("危险"));
-        assertTrue(html.contains("天气影响与水位分析"));
-        assertTrue(html.contains("搜索"));
-        assertTrue(html.contains("水位占比分布"));
-        assertTrue(html.contains("预测参数设置"));
-        assertTrue(html.contains("预警信息"));
-        assertTrue(html.contains("历史水位对比"));
-        assertTrue(html.contains("监测区域"));
-        assertTrue(html.contains("水位预警"));
-        assertTrue(html.contains("水位异常"));
+        assertTrue(html.contains("\u52a8\u6001\u6c34\u4f4d\u76d1\u6d4b\u5e73\u53f0"));
+        assertTrue(html.contains("\u5f53\u524d\u6c34\u4f4d"));
+        assertTrue(html.contains("\u8b66\u6212"));
+        assertTrue(html.contains("\u5371\u9669"));
+        assertTrue(html.contains("\u5929\u6c14\u5f71\u54cd\u4e0e\u6c34\u4f4d\u5206\u6790"));
+        assertTrue(html.contains("\u641c\u7d22"));
+        assertTrue(html.contains("\u6c34\u4f4d\u5360\u6bd4\u5206\u5e03"));
+        assertTrue(html.contains("\u9884\u6d4b\u53c2\u6570\u8bbe\u7f6e"));
+        assertTrue(html.contains("\u9884\u8b66\u4fe1\u606f"));
+        assertTrue(html.contains("\u5386\u53f2\u6c34\u4f4d\u5bf9\u6bd4"));
+        assertTrue(html.contains("\u76d1\u6d4b\u533a\u57df"));
+        assertTrue(html.contains("\u6c34\u4f4d\u9884\u8b66"));
+        assertTrue(html.contains("\u6c34\u4f4d\u5f02\u5e38"));
     }
 }
