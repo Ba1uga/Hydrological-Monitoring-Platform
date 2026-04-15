@@ -49,4 +49,25 @@ class PredictionFrontendFallbackGuardTest {
         assertTrue(html.contains("\u9884\u6d4b\u63a5\u53e3\u6267\u884c\u5931\u8d25"));
         assertTrue(html.contains("\u90e8\u5206\u8d44\u6e90\u52a0\u8f7d\u5931\u8d25"));
     }
+
+    @Test
+    void predictionPage_usesReadableLegendAndPopupCopy() throws IOException {
+        String html = Files.readString(PAGE, StandardCharsets.UTF_8);
+
+        assertTrue(html.contains("\u6b63\u5e38"));
+        assertTrue(html.contains("\u5173\u6ce8"));
+        assertTrue(html.contains("\u9884\u8b66"));
+        assertTrue(html.contains("\u8b66\u62a5"));
+        assertTrue(html.contains("\u5371\u9669"));
+        assertTrue(html.contains("\u76d1\u6d4b\u4f4d\u7f6e"));
+        assertTrue(html.contains("\u8d8b\u52bf\u7a33\u5b9a"));
+        assertTrue(html.contains("pH\u503c"));
+        assertTrue(html.contains("\u6eb6\u89e3\u6c27"));
+        assertTrue(html.contains("\u6c28\u6c2e"));
+        assertTrue(html.contains("\u76d1\u6d4b\u7ad9\u70b9"));
+        assertTrue(html.contains("closeInfoWindow\">\u00d7<"));
+
+        int warningCountOccurrences = html.split("id=\\\"warningCount\\\"", -1).length - 1;
+        assertTrue(warningCountOccurrences == 1);
+    }
 }

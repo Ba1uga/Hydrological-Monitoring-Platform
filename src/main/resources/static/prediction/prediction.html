@@ -1444,7 +1444,7 @@
                 <div class="warning-header">
                     <div class="warning-title">重点预警信息轮播</div>
                     <div class="warning-count" id="warningCount">0 条</div>
-                    <div class="warning-count" id="warningCount">0 鏉?/div>
+                </div>
                 <div class="warning-container" id="warningContainer">
                     <div class="warning-slider" id="warningSlider"></div>
                 </div>
@@ -2803,20 +2803,17 @@
 
             infoWindow.innerHTML = `
                     <div class="info-header">
-                        <button class="info-close" id="closeInfoWindow">?</button>
                         <button class="info-close" id="closeInfoWindow">×</button>
-                        <span>监测位置：${station.location || 未知位置}</span>
+                        <span>监测位置：${station.location || '未知位置'}</span>
                         <span style="color: ${statusColor}; font-weight: bold;">${statusText}</span>
-                        <span>濠电姷顣藉Σ鍛村磻閹捐泛绶ゅù鐘差儏閻ゎ喗銇勯弽顐粶缂?${station.location || '闂傚倸鍊搁崐椋庣矆娓氣偓楠炴牠顢曢敂钘変罕濠电姴锕ょ€氼噣銆呴弻銉︾厽闁归偊鍠栭崝瀣煕鐎ｎ亜鈧潡寮诲澶婄厸濞达絽鎲″▓鍙夌節濞堝灝鐏犳い鏇ㄥ弮閸┾偓妞ゆ巻鍋撶紒鐘茬Ч瀹曟洟宕￠悘缁樻そ婵℃悂鍩℃担绋挎?}</span>
-                        <span style="color: ${statusColor}; font-weight: bold;">闂?${statusText}</span>
                     </div>
                     <div class="info-quality">
                         <div>
-                            <span class="quality-class ${qualityClass}">${station.qualityClass || III?}</span>
-                            <span>${trendIcon} ${station.trend || 趋势稳定}</span>
+                            <span class="quality-class ${qualityClass}">${station.qualityClass || 'III类'}</span>
                         </div>
                         <div class="info-trend ${trendClass}">
-                            <span>${trendIcon} ${station.trend || 趋势稳定}</span>
+                            <span>${trendIcon} ${station.trend || '趋势稳定'}</span>
+                        </div>
                     </div>
                     <div class="info-metrics">
                         <div class="info-metric">
@@ -2827,10 +2824,10 @@
                         </div>
                         <div class="info-metric">
                             <div class="metric-value" style="color: ${waterQuality.DO < 2 ? '#ff5722' : waterQuality.DO < 5 ? '#ff9800' : '#4dabf7'}">
-                            <div class="metric-value" style="color: ${waterQuality.DO < 2 ? #ff5722 : waterQuality.DO < 5 ? #ff9800 : #4dabf7}">
                                 ${waterQuality.DO.toFixed(1)}
                             </div>
                             <div class="metric-label">溶解氧</div>
+                        </div>
                         <div class="info-metric">
                             <div class="metric-value" style="color: ${waterQuality.COD > 20 ? '#ff5722' : waterQuality.COD > 15 ? '#ff9800' : '#4dabf7'}">
                                 ${waterQuality.COD.toFixed(1)}
@@ -2839,15 +2836,15 @@
                         </div>
                         <div class="info-metric">
                             <div class="metric-value" style="color: ${waterQuality.NH3N > 1.0 ? '#ff5722' : waterQuality.NH3N > 0.5 ? '#ff9800' : '#4dabf7'}">
-                            <div class="metric-value" style="color: ${waterQuality.NH3N > 1.0 ? #ff5722 : waterQuality.NH3N > 0.5 ? #ff9800 : #4dabf7}">
                                 ${waterQuality.NH3N.toFixed(2)}
                             </div>
                             <div class="metric-label">氨氮</div>
+                        </div>
                     </div>
                     <div class="info-tags">
                         ${(station.tags || []).slice(0, 2).map(tag => `<span class="info-tag">${tag}</span>`).join('')}
-                        <span class="info-tag">${station.type || '闂傚倸鍊搁崐鐑芥嚄閸洖纾块柣銏㈩焾閻ょ偓绻濇繝鍌滃闁搞劌鍊块弻娑㈠箻閼艰泛鍘￠梺娲诲幖閻楁捇骞冨Δ鍛棃婵炴垶鐟﹂崰鎰版⒑?}</span>
-                        <span class="info-tag">${station.type || 监测站点}</span>
+                        <span class="info-tag">${station.type || '监测站点'}</span>
+                    </div>
                     <div class="info-arrow"></div>
                 `;
 
