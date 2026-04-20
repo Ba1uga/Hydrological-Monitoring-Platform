@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Local Agent / Runtime Artifacts ###
+.agents/
+hs_err_pid*.log
