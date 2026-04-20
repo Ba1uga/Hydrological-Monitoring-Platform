@@ -35,3 +35,4 @@ build/
 ### Local Agent / Runtime Artifacts ###
 .agents/
 hs_err_pid*.log
+docs/
