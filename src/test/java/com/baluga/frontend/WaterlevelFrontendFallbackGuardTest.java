@@ -119,8 +119,8 @@ class WaterlevelFrontendFallbackGuardTest {
         String html = Files.readString(PAGE, StandardCharsets.UTF_8);
 
         assertTrue(html.contains("min-height: 100dvh;"));
-        assertTrue(html.contains("overflow-y: auto;"));
-        assertTrue(html.contains("grid-template-columns: minmax(240px, 18vw) minmax(0, 1fr) minmax(180px, 16vw);"));
+        assertFalse(html.contains("overflow-y: auto;"));
+        assertTrue(html.contains("grid-template-columns: minmax(var(--header-nav-width), 18vw) minmax(0, 1fr) minmax(var(--header-side-width), 16vw);"));
         assertTrue(html.contains("grid-template-columns: minmax(280px, 22vw) minmax(0, 1.45fr) minmax(340px, 24vw);"));
         assertTrue(html.contains(".user-info {\n        position: relative;")
                 || html.contains(".user-info {\r\n        position: relative;"));
@@ -128,5 +128,39 @@ class WaterlevelFrontendFallbackGuardTest {
         assertFalse(html.contains("height: calc(100vh - 62px);"));
         assertFalse(html.contains("height: calc(100vh - 55px);"));
         assertFalse(html.contains("min-width: 320px;"));
+    }
+
+    @Test
+    void waterlevelPage_usesViewportFitVariablesAndNoPageScrollStrategy() throws IOException {
+        String html = Files.readString(PAGE, StandardCharsets.UTF_8);
+
+        assertTrue(html.contains("--viewport-height:"));
+        assertTrue(html.contains("--fit-density:"));
+        assertTrue(html.contains("--panel-gap:"));
+        assertTrue(html.contains("body[data-fit-density=\"compact\"]"));
+        assertTrue(html.contains("body[data-fit-density=\"ultra-compact\"]"));
+        assertTrue(html.contains("function applyViewportFit()"));
+        assertTrue(html.contains("document.body.dataset.fitDensity"));
+        assertTrue(html.contains("document.documentElement.style.setProperty('--viewport-height'"));
+        assertFalse(html.contains("overflow-y: auto;"));
+        assertFalse(html.contains("min-height: 420px;"));
+        assertFalse(html.contains("min-height: 320px;"));
+        assertFalse(html.contains("min-height: 220px;"));
+    }
+
+    @Test
+    void waterlevelPage_usesAlertAutoScrollAndLargerRadarProfiles() throws IOException {
+        String html = Files.readString(PAGE, StandardCharsets.UTF_8);
+
+        assertTrue(html.contains(".alert-scroll-track {"));
+        assertTrue(html.contains("function clearAlertAutoScroll()"));
+        assertTrue(html.contains("function renderWarningItems(warnings)"));
+        assertTrue(html.contains("function setupAlertAutoScroll(warnings)"));
+        assertTrue(html.contains("alertList.addEventListener('mouseenter'"));
+        assertTrue(html.contains("alertList.addEventListener('mouseleave'"));
+        assertTrue(html.contains("safeWarnings.forEach(warning => {"));
+        assertTrue(html.contains("radarRadius: '50%'"));
+        assertTrue(html.contains("radarRadius: '46%'"));
+        assertTrue(html.contains("radarRadius: '42%'"));
     }
 }

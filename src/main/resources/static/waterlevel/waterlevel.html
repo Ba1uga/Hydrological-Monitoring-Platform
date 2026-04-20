@@ -16,14 +16,34 @@
         font-family: 'Microsoft YaHei', Arial, sans-serif;
     }
 
+    :root {
+        --viewport-height: 100dvh;
+        --fit-density: 1;
+        --page-pad: 12px;
+        --panel-gap: 12px;
+        --header-height: 92px;
+        --header-nav-width: 240px;
+        --header-side-width: 180px;
+        --card-pad: 10px;
+        --card-radius: 14px;
+        --title-size: 14px;
+        --subtitle-size: 12px;
+        --meta-size: 11px;
+        --metric-size: 16px;
+        --hero-size: 1.8rem;
+        --icon-box-size: 36px;
+        --result-min-height: 74px;
+    }
+
     body {
         background-color: #0a1625;
         color: #e6f7ff;
         line-height: 1.6;
         min-height: 100dvh;
-        padding: clamp(12px, 1.1vw, 20px);
+        height: var(--viewport-height);
+        padding: var(--page-pad);
         overflow-x: hidden;
-        overflow-y: auto;
+        overflow-y: hidden;
         position: relative;
     }
 
@@ -33,10 +53,12 @@
         position: relative;
         z-index: 10;
         padding: 0;
-        min-height: calc(100dvh - 32px);
+        height: calc(var(--viewport-height) - (var(--page-pad) * 2));
+        min-height: 0;
         display: flex;
         flex-direction: column;
-        gap: clamp(10px, 0.8vw, 16px);
+        gap: var(--panel-gap);
+        overflow: hidden;
     }
 
     /* ===== 濠电偛顕慨瀵哥玻瀵ょ本iwen.html濠电姰鍨煎▔娑氱矓閹绢喖鏄ユ俊銈呮噺閸庡秹鏌涢弴銊ユ灈闁告挸缍婇弻锟犲椽娴ｅ摜浠梺鍝勬噷閸庨潧�?===== */
@@ -123,11 +145,11 @@
     .header-decoration {
         position: relative;
         display: grid;
-        grid-template-columns: minmax(240px, 18vw) minmax(0, 1fr) minmax(180px, 16vw);
+        grid-template-columns: minmax(var(--header-nav-width), 18vw) minmax(0, 1fr) minmax(var(--header-side-width), 16vw);
         align-items: start;
-        gap: clamp(12px, 1vw, 18px);
-        padding: 4px 0 0;
-        min-height: 92px;
+        gap: var(--panel-gap);
+        padding: 0;
+        min-height: var(--header-height);
     }
 
     .header-spacer {
@@ -158,7 +180,7 @@
         justify-content: center;
         width: min(100%, 720px);
         min-width: 0;
-        padding: 12px 18px 10px;
+        padding: calc(var(--card-pad) + 2px) calc(var(--card-pad) + 8px);
         background: linear-gradient(135deg, rgba(20, 30, 45, 0.9), rgba(30, 40, 60, 0.9));
         border-radius: 12px;
         border: 1px solid rgba(0, 150, 255, 0.3);
@@ -184,7 +206,7 @@
     }
 
     .decoration-title {
-        font-size: clamp(1.42rem, 1.08rem + 0.75vw, 1.95rem);
+        font-size: var(--hero-size);
         font-weight: 700;
         color: #f2fbff;
         text-shadow: 0 2px 10px rgba(0, 150, 255, 0.28);
@@ -229,21 +251,21 @@
         align-self: start;
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: calc(var(--panel-gap) - 4px);
         color: #a0a0ff;
-        padding: 10px 12px;
+        padding: calc(var(--card-pad) + 1px) calc(var(--card-pad) + 2px);
         background: rgba(10, 15, 40, 0.7);
         border-radius: 10px;
         border: 1px solid rgba(64, 224, 208, 0.2);
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         z-index: 100;
         max-width: min(100%, 240px);
-        min-height: 52px;
+        min-height: calc(var(--header-height) - 20px);
     }
 
     .user-avatar {
-        width: 28px;
-        height: 28px;
+        width: calc(var(--icon-box-size) - 6px);
+        height: calc(var(--icon-box-size) - 6px);
         border-radius: 50%;
         background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
         display: flex;
@@ -251,7 +273,7 @@
         justify-content: center;
         color: #0c0c2e;
         font-weight: bold;
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         flex-shrink: 0;
     }
 
@@ -264,35 +286,37 @@
     .time-date {
         color: #40e0d0;
         font-weight: bold;
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         overflow-wrap: anywhere;
     }
 
     .time-week {
         color: #a0a0ff;
-        font-size: 11px;
+        font-size: var(--meta-size);
     }
 
     .main-wrapper {
         display: grid;
         grid-template-columns: minmax(280px, 22vw) minmax(0, 1.45fr) minmax(340px, 24vw);
         grid-template-areas: "left map right";
-        gap: clamp(8px, 0.55vw, 12px);
+        gap: var(--panel-gap);
         background: rgba(20, 30, 45, 0.9);
         border-radius: 16px;
-        padding: clamp(8px, 0.7vw, 12px);
+        padding: var(--card-pad);
         border: 1px solid rgba(0, 150, 255, 0.2);
-        min-height: min(820px, calc(100dvh - 176px));
+        height: calc(var(--viewport-height) - (var(--page-pad) * 2) - var(--header-height) - var(--panel-gap));
+        min-height: 0;
+        max-height: calc(var(--viewport-height) - (var(--page-pad) * 2) - var(--header-height) - var(--panel-gap));
         flex: 1 1 auto;
-        overflow: visible;
+        overflow: hidden;
         align-items: stretch;
     }
 
     .left-column {
         grid-area: left;
         display: grid;
-        grid-template-rows: minmax(320px, 1.14fr) minmax(260px, 0.86fr);
-        gap: clamp(8px, 0.55vw, 12px);
+        grid-template-rows: minmax(0, 1.16fr) minmax(0, 0.84fr);
+        gap: var(--panel-gap);
         height: 100%;
         min-width: 0;
         min-height: 0;
@@ -304,7 +328,7 @@
         position: relative;
         display: grid;
         grid-template-rows: auto minmax(0, 1fr);
-        gap: clamp(8px, 0.55vw, 12px);
+        gap: var(--panel-gap);
         min-width: 0;
         min-height: 0;
     }
@@ -312,8 +336,8 @@
     .right-column {
         grid-area: right;
         display: grid;
-        grid-template-rows: minmax(240px, 0.76fr) minmax(408px, 1.24fr);
-        gap: clamp(8px, 0.55vw, 12px);
+        grid-template-rows: minmax(0, 0.74fr) minmax(0, 1.26fr);
+        gap: var(--panel-gap);
         height: 100%;
         min-width: 0;
         min-height: 0;
@@ -322,7 +346,7 @@
     .right-bottom-sub {
         display: grid;
         grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-        gap: clamp(8px, 0.55vw, 12px);
+        gap: var(--panel-gap);
         height: 100%;
         min-width: 0;
         min-height: 0;
@@ -331,7 +355,7 @@
     #mapContainer {
         width: 100%;
         height: 100%;
-        min-height: 420px;
+        min-height: 0;
         border-radius: 12px;
         border: 1px solid rgba(64, 224, 208, 0.2);
     }
@@ -340,7 +364,7 @@
         position: relative;
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
-        gap: 8px;
+        gap: calc(var(--panel-gap) - 2px);
         z-index: 10;
         min-width: 0;
     }
@@ -348,24 +372,24 @@
     .search-input {
         width: 100%;
         min-width: 0;
-        padding: 10px 12px;
+        padding: calc(var(--card-pad) + 1px) calc(var(--card-pad) + 2px);
         background: rgba(10, 15, 40, 0.9);
         border: 1px solid rgba(64, 224, 208, 0.3);
         border-radius: 10px;
         color: #e0e0ff;
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         backdrop-filter: blur(4px);
     }
 
     .search-btn {
-        padding: 10px 14px;
+        padding: calc(var(--card-pad) + 1px) calc(var(--card-pad) + 4px);
         background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
         border: none;
         border-radius: 10px;
         color: #0c0c2e;
         font-weight: bold;
         cursor: pointer;
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -375,8 +399,8 @@
 
     .card {
         background: rgba(16, 22, 58, 0.7);
-        border-radius: 14px;
-        padding: 10px 12px;
+        border-radius: var(--card-radius);
+        padding: var(--card-pad);
         border: 1px solid rgba(64, 224, 208, 0.1);
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
         display: flex;
@@ -391,21 +415,21 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        gap: 10px;
+        gap: var(--panel-gap);
         flex-wrap: wrap;
-        margin-bottom: 4px;
-        padding-bottom: 6px;
+        margin-bottom: calc(var(--panel-gap) * 0.4);
+        padding-bottom: calc(var(--panel-gap) * 0.5);
         border-bottom: 1px solid rgba(64, 224, 208, 0.2);
-        min-height: 44px;
+        min-height: 0;
         height: auto;
     }
 
     .card-title {
-        font-size: 14px;
+        font-size: var(--title-size);
         color: #40e0d0;
         display: flex;
         align-items: flex-start;
-        gap: 6px;
+        gap: calc(var(--panel-gap) * 0.5);
         font-weight: 600;
         white-space: normal;
         line-height: 1.3;
@@ -413,7 +437,7 @@
     }
 
     .card-title i {
-        font-size: 13px;
+        font-size: calc(var(--title-size) - 1px);
         margin-top: 2px;
         flex-shrink: 0;
     }
@@ -431,16 +455,16 @@
         width: 100%;
         height: 100%;
         position: relative;
-        min-height: 180px;
+        min-height: 0;
     }
 
     .water-level-info {
         display: flex;
         align-items: center;
         justify-content: flex-end;
-        gap: 8px 12px;
+        gap: calc(var(--panel-gap) * 0.5) var(--panel-gap);
         flex-wrap: wrap;
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         color: #a0a0ff;
         max-width: 100%;
     }
@@ -468,20 +492,20 @@
 
     .ratio-card .chart-container {
         height: 100%;
-        min-height: 220px;
+        min-height: 0;
     }
 
     .param-alert-card {
         display: grid;
-        grid-template-rows: minmax(0, 1fr) minmax(0, 0.92fr);
-        gap: clamp(8px, 0.55vw, 12px);
+        grid-template-rows: minmax(0, 0.98fr) minmax(0, 1.02fr);
+        gap: var(--panel-gap);
         height: 100%;
         min-width: 0;
         min-height: 0;
     }
 
     .prediction-controls, .alert-container {
-        padding: 8px;
+        padding: var(--card-pad);
         border-radius: 10px;
         background: rgba(10, 15, 40, 0.5);
         border: 1px solid rgba(64, 224, 208, 0.1);
@@ -494,22 +518,22 @@
     }
 
     .control-group {
-        margin-bottom: 10px;
+        margin-bottom: var(--panel-gap);
     }
 
     .control-label {
         display: block;
-        margin-bottom: 6px;
+        margin-bottom: calc(var(--panel-gap) * 0.5);
         color: #a0a0ff;
         font-weight: 500;
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         line-height: 1.35;
     }
 
     .slider-container {
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: calc(var(--panel-gap) * 0.6);
     }
 
     .slider {
@@ -535,14 +559,14 @@
         text-align: center;
         color: #40e0d0;
         font-weight: bold;
-        font-size: 12px;
+        font-size: var(--subtitle-size);
     }
 
     .model-selector {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
-        margin-top: 8px;
+        gap: calc(var(--panel-gap) * 0.6);
+        margin-top: calc(var(--panel-gap) * 0.6);
     }
 
     .model-option {
@@ -551,14 +575,14 @@
         align-items: center;
         justify-content: center;
         gap: 4px;
-        padding: 8px 6px;
+        padding: calc(var(--card-pad) - 1px);
         background: rgba(10, 15, 40, 0.8);
         border-radius: 8px;
         border: 1px solid rgba(64, 224, 208, 0.2);
         cursor: pointer;
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         line-height: 1.25;
-        min-height: 78px;
+        min-height: 0;
         text-align: center;
     }
 
@@ -569,7 +593,7 @@
     }
 
     .model-text {
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         font-weight: 600;
         line-height: 1.2;
         overflow-wrap: anywhere;
@@ -580,7 +604,7 @@
         color: #ff3232;
         padding: 2px 8px;
         border-radius: 999px;
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         font-weight: bold;
         white-space: nowrap;
     }
@@ -589,21 +613,29 @@
         flex: 1;
         min-height: 0;
         max-height: none;
-        overflow-y: auto;
-        padding-right: 4px;
-        margin-top: 8px;
+        overflow: hidden;
+        position: relative;
+        margin-top: calc(var(--panel-gap) * 0.5);
+    }
+
+    .alert-scroll-track {
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--panel-gap) * 0.5);
+        transform: translateY(0);
+        transition: transform 400ms ease;
+        will-change: transform;
     }
 
     .alert-item {
-        padding: 10px 12px;
+        padding: var(--card-pad);
         background: rgba(255, 50, 50, 0.1);
         border: 1px solid rgba(255, 50, 50, 0.22);
         border-radius: 8px;
-        margin-bottom: 8px;
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
-        gap: 10px;
-        font-size: 12px;
+        gap: calc(var(--panel-gap) * 0.6);
+        font-size: var(--subtitle-size);
         line-height: 1.35;
         align-items: start;
     }
@@ -613,7 +645,7 @@
     }
 
     .alert-title {
-        font-size: 13px;
+        font-size: var(--title-size);
         font-weight: 600;
         color: #ffe1e1;
         overflow-wrap: anywhere;
@@ -621,35 +653,35 @@
 
     .alert-desc {
         margin-top: 4px;
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         color: #cbd8ff;
         overflow-wrap: anywhere;
     }
 
     .alert-time {
-        font-size: 11px;
+        font-size: var(--meta-size);
         color: #ffb3b3;
         white-space: nowrap;
     }
 
     .result-chart-card {
         display: grid;
-        grid-template-rows: minmax(216px, 0.9fr) minmax(260px, 1.1fr);
-        gap: clamp(8px, 0.55vw, 12px);
+        grid-template-rows: minmax(0, 0.88fr) minmax(0, 1.12fr);
+        gap: var(--panel-gap);
         height: 100%;
         min-width: 0;
         min-height: 0;
     }
 
     .prediction-results {
-        padding: 8px;
+        padding: var(--card-pad);
         border-radius: 10px;
         background: rgba(10, 15, 40, 0.5);
         border: 1px solid rgba(64, 224, 208, 0.1);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        gap: 8px;
+        gap: calc(var(--panel-gap) * 0.6);
         height: 100%;
         min-width: 0;
         min-height: 0;
@@ -658,23 +690,23 @@
     .result-card {
         background: rgba(10, 15, 40, 0.8);
         border-radius: 10px;
-        padding: 10px 12px;
+        padding: var(--card-pad);
         border: 1px solid rgba(64, 224, 208, 0.2);
         display: flex;
         align-items: center;
-        gap: 10px;
-        min-height: 74px;
+        gap: calc(var(--panel-gap) * 0.7);
+        min-height: var(--result-min-height);
     }
 
     .result-icon {
-        width: 36px;
-        height: 36px;
+        width: var(--icon-box-size);
+        height: var(--icon-box-size);
         background: linear-gradient(135deg, rgba(64, 224, 208, 0.2), rgba(79, 172, 254, 0.2));
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
+        font-size: calc(var(--metric-size) - 1px);
         color: #40e0d0;
         flex-shrink: 0;
     }
@@ -684,7 +716,7 @@
     }
 
     .result-value {
-        font-size: 16px;
+        font-size: var(--metric-size);
         font-weight: bold;
         color: #40e0d0;
         margin: 2px 0;
@@ -692,14 +724,14 @@
     }
 
     .result-label {
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         color: #a0a0ff;
         line-height: 1.35;
         overflow-wrap: anywhere;
     }
 
     .result-trend {
-        font-size: 11px;
+        font-size: var(--meta-size);
         display: flex;
         align-items: center;
         gap: 4px;
@@ -707,7 +739,7 @@
     }
 
     .history-chart-item {
-        padding: 8px;
+        padding: var(--card-pad);
         border-radius: 10px;
         background: rgba(10, 15, 40, 0.5);
         border: 1px solid rgba(64, 224, 208, 0.1);
@@ -724,7 +756,7 @@
     }
 
     .history-chart-item .card-title {
-        font-size: 13px;
+        font-size: calc(var(--title-size) - 1px);
     }
 
     .overlay {
@@ -744,10 +776,10 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: min(92vw, 1100px);
+        width: min(92vw, 1040px);
         max-width: none;
-        height: min(88dvh, 820px);
-        max-height: min(88dvh, 820px);
+        height: min(calc(var(--viewport-height) - 40px), 760px);
+        max-height: min(calc(var(--viewport-height) - 40px), 760px);
         background: rgba(16, 22, 58, 0.98);
         border-radius: 14px;
         border: 2px solid rgba(64, 224, 208, 0.5);
@@ -801,7 +833,7 @@
 
     .modal-body {
         display: grid;
-        grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.9fr);
+        grid-template-columns: minmax(0, 1.62fr) minmax(220px, 0.88fr);
         flex: 1;
         padding: 0;
         min-height: 0;
@@ -810,36 +842,36 @@
 
     #water3DMapContainer {
         height: 100%;
-        min-height: 320px;
+        min-height: 0;
         background: rgba(10, 15, 40, 0.8);
     }
 
     .water-3d-info {
-        padding: 12px;
+        padding: var(--card-pad);
         background: rgba(16, 22, 58, 0.9);
         border-left: 1px solid rgba(64, 224, 208, 0.2);
-        overflow-y: auto;
+        overflow: auto;
         min-width: 0;
         min-height: 0;
     }
 
     .info-item {
-        padding: 10px;
-        margin-bottom: 10px;
+        padding: var(--card-pad);
+        margin-bottom: calc(var(--panel-gap) * 0.7);
         background: rgba(10, 15, 40, 0.6);
         border-radius: 8px;
         border: 1px solid rgba(64, 224, 208, 0.1);
     }
 
     .info-label {
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         color: #a0a0ff;
         margin-bottom: 4px;
         line-height: 1.35;
     }
 
     .info-value {
-        font-size: 16px;
+        font-size: var(--metric-size);
         font-weight: bold;
         color: #40e0d0;
         margin-bottom: 4px;
@@ -847,10 +879,87 @@
     }
 
     .info-desc {
-        font-size: 12px;
+        font-size: var(--subtitle-size);
         color: #80d4ff;
         line-height: 1.4;
         overflow-wrap: anywhere;
+    }
+
+    body[data-fit-density="standard"] {
+        --fit-density: 1;
+        --page-pad: 12px;
+        --panel-gap: 12px;
+        --header-height: 92px;
+        --header-nav-width: 240px;
+        --header-side-width: 180px;
+        --card-pad: 10px;
+        --title-size: 14px;
+        --subtitle-size: 12px;
+        --meta-size: 11px;
+        --metric-size: 16px;
+        --hero-size: 1.8rem;
+        --icon-box-size: 36px;
+        --result-min-height: 74px;
+    }
+
+    body[data-fit-density="compact"] {
+        --fit-density: 0.92;
+        --page-pad: 10px;
+        --panel-gap: 8px;
+        --header-height: 78px;
+        --header-nav-width: 212px;
+        --header-side-width: 168px;
+        --card-pad: 8px;
+        --title-size: 13px;
+        --subtitle-size: 11px;
+        --meta-size: 10px;
+        --metric-size: 15px;
+        --hero-size: 1.55rem;
+        --icon-box-size: 32px;
+        --result-min-height: 64px;
+    }
+
+    body[data-fit-density="ultra-compact"] {
+        --fit-density: 0.84;
+        --page-pad: 8px;
+        --panel-gap: 6px;
+        --header-height: 68px;
+        --header-nav-width: 188px;
+        --header-side-width: 156px;
+        --card-pad: 6px;
+        --title-size: 12px;
+        --subtitle-size: 10px;
+        --meta-size: 9px;
+        --metric-size: 14px;
+        --hero-size: 1.35rem;
+        --icon-box-size: 28px;
+        --result-min-height: 56px;
+    }
+
+    body[data-fit-density="compact"] .main-wrapper {
+        grid-template-columns: minmax(252px, 21vw) minmax(0, 1.4fr) minmax(302px, 23vw);
+    }
+
+    body[data-fit-density="ultra-compact"] .main-wrapper {
+        grid-template-columns: minmax(232px, 20vw) minmax(0, 1.32fr) minmax(278px, 22vw);
+    }
+
+    body[data-fit-density="ultra-compact"] .right-column {
+        grid-template-rows: minmax(0, 0.68fr) minmax(0, 1.32fr);
+    }
+
+    body[data-fit-density="ultra-compact"] .right-bottom-sub {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    }
+
+    body[data-fit-density="ultra-compact"] .param-alert-card {
+        grid-template-rows: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    }
+
+    body[data-fit-density="ultra-compact"] .history-chart-item .card-header {
+        padding-bottom: 4px;
+        min-height: 28px;
     }
 
     @media (max-width: 1600px) {
@@ -1225,7 +1334,7 @@
             <div class="right-bottom-sub">
                 <div class="card param-alert-card">
                     <div class="prediction-controls">
-                        <div class="card-header" style="margin-bottom: 0; padding-bottom: 1px; height: 22px;">
+                        <div class="card-header" style="margin-bottom: 0; padding-bottom: 4px;">
                             <h2 class="card-title"><i class="fas fa-sliders-h"></i> 预测参数设置</h2>
                         </div>
                         <div class="control-group">
@@ -1265,7 +1374,7 @@
                     </div>
 
                     <div class="alert-container">
-                        <div class="card-header" style="margin-bottom: 0; padding-bottom: 1px; height: 22px;">
+                        <div class="card-header" style="margin-bottom: 0; padding-bottom: 4px;">
                             <h2 class="card-title"><i class="fas fa-exclamation-triangle"></i> 预警信息</h2>
                             <span class="alert-count" id="alertCount">3 条</span>
                         </div>
@@ -1333,8 +1442,8 @@
                     </div>
 
                     <div class="history-chart-item">
-                        <div class="card-header" style="margin-bottom: 0; padding-bottom: 0.5px; height: 18px;">
-                            <h2 class="card-title" style="font-size: 10px;"><i class="fas fa-chart-line"></i> 历史水位对比</h2>
+                        <div class="card-header" style="margin-bottom: 0; padding-bottom: 4px;">
+                            <h2 class="card-title"><i class="fas fa-chart-line"></i> 历史水位对比</h2>
                         </div>
                         <div class="chart-container" id="historyLevelChart"></div>
                     </div>
@@ -1400,6 +1509,13 @@
         let markers = [];
         let markerByStationId = {};
         let stationDataCache = {};
+        let latestWarnings = [];
+        let alertAutoScrollInterval = null;
+        let alertAutoScrollResetTimeout = null;
+        let alertAutoScrollState = {
+            currentIndex: 0,
+            running: false
+        };
         let selectedAreaData = {
             name: '\u672a\u77e5\u533a\u57df',
             level: 0,
@@ -1410,6 +1526,95 @@
         let amapLoadPromise = null;
 
         const markerSvgIconCache = {};
+        const VIEWPORT_FIT_PROFILES = {
+            standard: {
+                density: 'standard',
+                fit: 1,
+                pagePad: 12,
+                gap: 12,
+                headerHeight: 92,
+                titleSize: 14,
+                subtitleSize: 12,
+                metaSize: 11,
+                metricSize: 16,
+                heroSize: '1.8rem',
+                iconBox: 36,
+                resultMinHeight: 74,
+                alertLimit: 3,
+                chart: {
+                    legendFont: 11,
+                    axisFont: 10,
+                    metaFont: 10,
+                    labelFont: 10,
+                    levelGridTop: '16%',
+                    levelGridBottom: '12%',
+                    historyGridTop: '18%',
+                    historyGridBottom: '14%',
+                    ratioCenter: ['34%', '48%'],
+                    ratioRadius: ['38%', '62%'],
+                    radarCenter: ['50%', '40%'],
+                    radarRadius: '50%'
+                }
+            },
+            compact: {
+                density: 'compact',
+                fit: 0.92,
+                pagePad: 10,
+                gap: 8,
+                headerHeight: 78,
+                titleSize: 13,
+                subtitleSize: 11,
+                metaSize: 10,
+                metricSize: 15,
+                heroSize: '1.55rem',
+                iconBox: 32,
+                resultMinHeight: 64,
+                alertLimit: 2,
+                chart: {
+                    legendFont: 10,
+                    axisFont: 9,
+                    metaFont: 9,
+                    labelFont: 9,
+                    levelGridTop: '15%',
+                    levelGridBottom: '11%',
+                    historyGridTop: '16%',
+                    historyGridBottom: '12%',
+                    ratioCenter: ['36%', '50%'],
+                    ratioRadius: ['36%', '60%'],
+                    radarCenter: ['50%', '41%'],
+                    radarRadius: '46%'
+                }
+            },
+            'ultra-compact': {
+                density: 'ultra-compact',
+                fit: 0.84,
+                pagePad: 8,
+                gap: 6,
+                headerHeight: 68,
+                titleSize: 12,
+                subtitleSize: 10,
+                metaSize: 9,
+                metricSize: 14,
+                heroSize: '1.35rem',
+                iconBox: 28,
+                resultMinHeight: 56,
+                alertLimit: 2,
+                chart: {
+                    legendFont: 9,
+                    axisFont: 8,
+                    metaFont: 8,
+                    labelFont: 8,
+                    levelGridTop: '14%',
+                    levelGridBottom: '10%',
+                    historyGridTop: '15%',
+                    historyGridBottom: '11%',
+                    ratioCenter: ['38%', '52%'],
+                    ratioRadius: ['34%', '58%'],
+                    radarCenter: ['50%', '42%'],
+                    radarRadius: '42%'
+                }
+            }
+        };
         const levelTrendState = {
             times: [],
             realData: [],
@@ -1526,6 +1731,201 @@
             document.getElementById('currentWeek').textContent = weekDays[now.getDay()];
         }
 
+        function getViewportFitProfileByViewport(width = window.innerWidth, height = window.innerHeight) {
+            if (height <= 899 || width <= 1366) {
+                return VIEWPORT_FIT_PROFILES['ultra-compact'];
+            }
+            if (height <= 1079 || width <= 1600) {
+                return VIEWPORT_FIT_PROFILES.compact;
+            }
+            return VIEWPORT_FIT_PROFILES.standard;
+        }
+
+        function getViewportFitProfile() {
+            const density = document.body?.dataset.fitDensity;
+            return VIEWPORT_FIT_PROFILES[density] || VIEWPORT_FIT_PROFILES.standard;
+        }
+
+        function getAlertDisplayLimit() {
+            return getViewportFitProfile().alertLimit;
+        }
+
+        function applyViewportFit() {
+            const width = Math.max(window.innerWidth || document.documentElement.clientWidth || 1366, 960);
+            const height = Math.max(window.innerHeight || document.documentElement.clientHeight || 768, 640);
+            const profile = getViewportFitProfileByViewport(width, height);
+
+            document.body.dataset.fitDensity = profile.density;
+            document.documentElement.style.setProperty('--viewport-height', `${height}px`);
+            document.documentElement.style.setProperty('--fit-density', String(profile.fit));
+            document.documentElement.style.setProperty('--page-pad', `${profile.pagePad}px`);
+            document.documentElement.style.setProperty('--panel-gap', `${profile.gap}px`);
+            document.documentElement.style.setProperty('--header-height', `${profile.headerHeight}px`);
+            document.documentElement.style.setProperty('--card-pad', `${Math.max(6, profile.gap)}px`);
+            document.documentElement.style.setProperty('--title-size', `${profile.titleSize}px`);
+            document.documentElement.style.setProperty('--subtitle-size', `${profile.subtitleSize}px`);
+            document.documentElement.style.setProperty('--meta-size', `${profile.metaSize}px`);
+            document.documentElement.style.setProperty('--metric-size', `${profile.metricSize}px`);
+            document.documentElement.style.setProperty('--hero-size', profile.heroSize);
+            document.documentElement.style.setProperty('--icon-box-size', `${profile.iconBox}px`);
+            document.documentElement.style.setProperty('--result-min-height', `${profile.resultMinHeight}px`);
+        }
+
+        function applyChartDensity() {
+            const profile = getViewportFitProfile().chart;
+
+            if (levelChart) {
+                levelChart.setOption({
+                    legend: { textStyle: { color: '#a0a0ff', fontSize: profile.legendFont } },
+                    grid: {
+                        left: '5%',
+                        right: '5%',
+                        top: profile.levelGridTop,
+                        bottom: profile.levelGridBottom,
+                        containLabel: true
+                    },
+                    xAxis: { axisLabel: { color: '#a0a0ff', fontSize: profile.axisFont } },
+                    yAxis: { axisLabel: { color: '#a0a0ff', fontSize: profile.axisFont } }
+                });
+            }
+
+            if (weatherImpactChart) {
+                weatherImpactChart.setOption({
+                    legend: { textStyle: { color: '#a0a0ff', fontSize: profile.legendFont } },
+                    radar: {
+                        center: profile.radarCenter,
+                        radius: profile.radarRadius,
+                        axisName: { color: '#40e0d0', fontSize: profile.axisFont }
+                    }
+                });
+            }
+
+            if (historyLevelChart) {
+                historyLevelChart.setOption({
+                    legend: { textStyle: { color: '#a0a0ff', fontSize: profile.legendFont } },
+                    grid: {
+                        left: '6%',
+                        right: '6%',
+                        top: profile.historyGridTop,
+                        bottom: profile.historyGridBottom,
+                        containLabel: true
+                    },
+                    xAxis: { axisLabel: { color: '#a0a0ff', fontSize: profile.axisFont } },
+                    yAxis: { axisLabel: { color: '#a0a0ff', fontSize: profile.axisFont } }
+                });
+            }
+
+            if (levelRatioChart) {
+                const ratioOption = { legend: { textStyle: { color: '#a0a0ff', fontSize: profile.legendFont } } };
+                const existingSeries = levelRatioChart.getOption()?.series || [];
+                if (existingSeries.length) {
+                    ratioOption.series = [{
+                        radius: profile.ratioRadius,
+                        center: profile.ratioCenter,
+                        label: {
+                            show: true,
+                            formatter: '{d}%',
+                            color: '#ffffff',
+                            fontSize: profile.labelFont
+                        }
+                    }];
+                }
+                levelRatioChart.setOption(ratioOption);
+            }
+        }
+
+        function clearAlertAutoScroll() {
+            if (alertAutoScrollInterval) {
+                clearInterval(alertAutoScrollInterval);
+                alertAutoScrollInterval = null;
+            }
+            if (alertAutoScrollResetTimeout) {
+                clearTimeout(alertAutoScrollResetTimeout);
+                alertAutoScrollResetTimeout = null;
+            }
+
+            alertAutoScrollState.currentIndex = 0;
+            alertAutoScrollState.running = false;
+
+            const alertList = document.getElementById('alertList');
+            const track = alertList?.querySelector('.alert-scroll-track');
+            if (track) {
+                track.style.transition = 'none';
+                track.style.transform = 'translateY(0)';
+            }
+            alertList?.classList.remove('is-auto-scrolling');
+        }
+
+        function renderWarningItems(warnings) {
+            const safeWarnings = Array.isArray(warnings) ? warnings : [];
+            const track = document.createElement('div');
+            track.className = 'alert-scroll-track';
+
+            safeWarnings.forEach(warning => {
+                const time = new Date(warning.createTime || Date.now());
+                const timeStr = `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}`;
+                const item = document.createElement('div');
+                item.className = 'alert-item';
+                item.innerHTML = `
+                    <div class=\"alert-details\">
+                        <div class=\"alert-title\">${escapeHtml(toDisplayText(warning.title || '\\u6c34\\u4f4d\\u9884\\u8b66'))}</div>
+                        <div class=\"alert-desc\">${escapeHtml(toDisplayText(warning.content || '\\u6c34\\u4f4d\\u5f02\\u5e38'))}</div>
+                    </div>
+                    <div class=\"alert-time\">${timeStr}</div>`;
+                track.appendChild(item);
+            });
+
+            return track;
+        }
+
+        function setupAlertAutoScroll(warnings) {
+            const alertList = document.getElementById('alertList');
+            const track = alertList?.querySelector('.alert-scroll-track');
+            const visibleCount = getAlertDisplayLimit();
+
+            if (!alertList || !track || warnings.length <= visibleCount) {
+                return;
+            }
+
+            const originalItems = Array.from(track.children);
+            originalItems.slice(0, visibleCount).forEach(item => {
+                track.appendChild(item.cloneNode(true));
+            });
+
+            const duplicateAnchor = track.children[warnings.length];
+            const offsets = Array.from(track.children).map(item => item.offsetTop);
+            const duplicateOffset = duplicateAnchor ? duplicateAnchor.offsetTop : 0;
+
+            const moveToIndex = (index, animate) => {
+                const offset = offsets[index] ?? 0;
+                track.style.transition = animate ? 'transform 400ms ease' : 'none';
+                track.style.transform = `translateY(-${offset}px)`;
+            };
+
+            alertList.classList.add('is-auto-scrolling');
+            alertAutoScrollState.running = true;
+            moveToIndex(0, false);
+
+            alertAutoScrollInterval = setInterval(() => {
+                if (!alertAutoScrollState.running) return;
+
+                const nextIndex = alertAutoScrollState.currentIndex + 1;
+                if (nextIndex < warnings.length) {
+                    alertAutoScrollState.currentIndex = nextIndex;
+                    moveToIndex(nextIndex, true);
+                    return;
+                }
+
+                track.style.transition = 'transform 400ms ease';
+                track.style.transform = `translateY(-${duplicateOffset}px)`;
+                alertAutoScrollState.currentIndex = 0;
+                alertAutoScrollResetTimeout = setTimeout(() => {
+                    track.style.transition = 'none';
+                    track.style.transform = 'translateY(0)';
+                }, 420);
+            }, 3200);
+        }
+
         function createTechParticles() {
             const container = document.getElementById('techParticles');
             if (!container || container.children.length) return;
@@ -1558,6 +1958,8 @@
             const alertCount = document.getElementById('alertCount');
             const alertList = document.getElementById('alertList');
             const color = type === 'error' ? '#ff4d4f' : '#faad14';
+            clearAlertAutoScroll();
+            latestWarnings = [];
 
             if (alertCount) {
                 alertCount.textContent = '0 \u6761';
@@ -1594,6 +1996,7 @@
 
         function initCharts() {
             initLevelTrendState();
+            const chartProfile = getViewportFitProfile().chart;
 
             const levelChartDom = document.getElementById('waterLevelChart');
             if (levelChartDom) {
@@ -1603,18 +2006,24 @@
                     tooltip: { trigger: 'axis' },
                     legend: {
                         data: ['\u5b9e\u65f6\u6c34\u4f4d', '\u8b66\u6212\u6c34\u4f4d', '\u9884\u6d4b\u6c34\u4f4d'],
-                        textStyle: { color: '#a0a0ff', fontSize: 11 }
+                        textStyle: { color: '#a0a0ff', fontSize: chartProfile.legendFont }
                     },
-                    grid: { left: '5%', right: '5%', top: '16%', bottom: '12%', containLabel: true },
+                    grid: {
+                        left: '5%',
+                        right: '5%',
+                        top: chartProfile.levelGridTop,
+                        bottom: chartProfile.levelGridBottom,
+                        containLabel: true
+                    },
                     xAxis: {
                         type: 'category',
                         data: levelTrendState.times,
-                        axisLabel: { color: '#a0a0ff', fontSize: 10 }
+                        axisLabel: { color: '#a0a0ff', fontSize: chartProfile.axisFont }
                     },
                     yAxis: {
                         type: 'value',
                         min: 0,
-                        axisLabel: { color: '#a0a0ff', fontSize: 10 },
+                        axisLabel: { color: '#a0a0ff', fontSize: chartProfile.axisFont },
                         splitLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.08)' } }
                     },
                     series: [
@@ -1633,11 +2042,11 @@
                     legend: {
                         data: ['\u5f53\u524d', '\u9884\u6d4b', '\u9608\u503c'],
                         bottom: 0,
-                        textStyle: { color: '#a0a0ff', fontSize: 11 }
+                        textStyle: { color: '#a0a0ff', fontSize: chartProfile.legendFont }
                     },
                     radar: {
-                        center: ['50%', '40%'],
-                        radius: '45%',
+                        center: chartProfile.radarCenter,
+                        radius: chartProfile.radarRadius,
                         indicator: [
                             { name: '\u964d\u96e8\u91cf', max: 100 },
                             { name: '\u98ce\u901f', max: 20 },
@@ -1646,7 +2055,7 @@
                             { name: '\u6c14\u538b', max: 1050 },
                             { name: '\u84b8\u53d1\u91cf', max: 50 }
                         ],
-                        axisName: { color: '#40e0d0', fontSize: 10 },
+                        axisName: { color: '#40e0d0', fontSize: chartProfile.axisFont },
                         splitLine: { lineStyle: { color: 'rgba(64,224,208,0.1)' } },
                         splitArea: { areaStyle: { color: 'rgba(16,22,58,0.2)' } },
                         axisLine: { lineStyle: { color: 'rgba(64,224,208,0.3)' } }
@@ -1685,11 +2094,25 @@
                     backgroundColor: 'transparent',
                     legend: {
                         data: ['\u4eca\u65e5', '\u6628\u65e5', '\u4e0a\u5468\u540c\u671f'],
-                        textStyle: { color: '#a0a0ff', fontSize: 10 }
+                        textStyle: { color: '#a0a0ff', fontSize: chartProfile.legendFont }
                     },
-                    grid: { left: '6%', right: '6%', top: '18%', bottom: '14%', containLabel: true },
-                    xAxis: { type: 'category', data: ['0\\u65f6', '6\\u65f6', '12\\u65f6', '18\\u65f6'], axisLabel: { color: '#a0a0ff', fontSize: 10 } },
-                    yAxis: { type: 'value', axisLabel: { color: '#a0a0ff', fontSize: 10 }, splitLine: { lineStyle: { color: 'rgba(64,224,208,0.08)' } } },
+                    grid: {
+                        left: '6%',
+                        right: '6%',
+                        top: chartProfile.historyGridTop,
+                        bottom: chartProfile.historyGridBottom,
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'category',
+                        data: ['0\\u65f6', '6\\u65f6', '12\\u65f6', '18\\u65f6'],
+                        axisLabel: { color: '#a0a0ff', fontSize: chartProfile.axisFont }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        axisLabel: { color: '#a0a0ff', fontSize: chartProfile.axisFont },
+                        splitLine: { lineStyle: { color: 'rgba(64,224,208,0.08)' } }
+                    },
                     series: [
                         { name: '\u4eca\u65e5', type: 'line', smooth: true, data: [2.1, 2.2, 2.3, 2.4], lineStyle: { color: '#40e0d0', width: 1 }, symbolSize: 2 },
                         { name: '\u6628\u65e5', type: 'line', smooth: true, data: [2.0, 2.1, 2.2, 2.25], lineStyle: { color: '#4facfe', width: 1 }, symbolSize: 2 },
@@ -1697,6 +2120,8 @@
                     ]
                 });
             }
+
+            applyChartDensity();
         }
 
         function updateLevelChart(waterLevels) {
@@ -1843,6 +2268,8 @@
 
         function updateWarningData(warnings) {
             const safeWarnings = Array.isArray(warnings) ? warnings : [];
+            latestWarnings = safeWarnings;
+            clearAlertAutoScroll();
             document.getElementById('alertCount').textContent = `${safeWarnings.length} \u6761`;
 
             const alertList = document.getElementById('alertList');
@@ -1860,19 +2287,8 @@
                 return;
             }
 
-            safeWarnings.slice(0, 5).forEach(warning => {
-                const time = new Date(warning.createTime || Date.now());
-                const timeStr = `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}`;
-                const item = document.createElement('div');
-                item.className = 'alert-item';
-                item.innerHTML = `
-                    <div class=\"alert-details\">
-                        <div class=\"alert-title\">${escapeHtml(toDisplayText(warning.title || '\\u6c34\\u4f4d\\u9884\\u8b66'))}</div>
-                        <div class=\"alert-desc\">${escapeHtml(toDisplayText(warning.content || '\\u6c34\\u4f4d\\u5f02\\u5e38'))}</div>
-                    </div>
-                    <div class=\"alert-time\">${timeStr}</div>`;
-                alertList.appendChild(item);
-            });
+            alertList.appendChild(renderWarningItems(safeWarnings));
+            setupAlertAutoScroll(safeWarnings);
         }
 
         function updateStationData(stations) {
@@ -2153,17 +2569,32 @@
                 if (event.key === 'Enter') searchStation();
             });
             document.getElementById('water3DModal')?.addEventListener('click', event => event.stopPropagation());
+            const alertList = document.getElementById('alertList');
+            if (alertList) {
+                alertList.addEventListener('mouseenter', () => {
+                    alertAutoScrollState.running = false;
+                });
+                alertList.addEventListener('mouseleave', () => {
+                    if (latestWarnings.length > getAlertDisplayLimit()) {
+                        alertAutoScrollState.running = true;
+                    }
+                });
+            }
             window.addEventListener('resize', () => {
+                applyViewportFit();
                 levelChart?.resize();
                 weatherImpactChart?.resize();
                 levelRatioChart?.resize();
                 historyLevelChart?.resize();
                 map?.resize();
+                applyChartDensity();
+                updateWarningData(latestWarnings);
                 if (water2DMap) setTimeout(() => water2DMap.resize(), 100);
             });
             window.addEventListener('beforeunload', () => {
                 if (realTimeUpdateInterval) clearInterval(realTimeUpdateInterval);
                 if (waterAnimationInterval) clearInterval(waterAnimationInterval);
+                clearAlertAutoScroll();
                 map?.destroy();
                 water2DMap?.destroy();
             });
@@ -2209,6 +2640,7 @@
         async function initAll() {
             try {
                 await ensureAmapLoaded();
+                applyViewportFit();
                 updateRealTime();
                 setInterval(updateRealTime, 1000);
                 createTechParticles();
