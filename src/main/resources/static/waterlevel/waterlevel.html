@@ -20,12 +20,11 @@
         background-color: #0a1625;
         color: #e6f7ff;
         line-height: 1.6;
-        min-height: 100vh;
-        padding: 8px; /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝缁€鍐煕濞戞瑥顥嬮柣婵嗙埣閹?*/
+        min-height: 100dvh;
+        padding: clamp(12px, 1.1vw, 20px);
         overflow-x: hidden;
+        overflow-y: auto;
         position: relative;
-        height: 100vh; /* 闂備焦鎮堕崕閬嶅箹椤愶附鍋╅柣鎰靛墻濞堟淇婇姘儓妞?*/
-        overflow: hidden; /* 缂傚倷绀侀崐鐑芥倿閿曞偆鏁嗘繛鎴烇供閻撱儲鎱ㄥ鍡楀鐞?*/
     }
 
     .container {
@@ -33,11 +32,14 @@
         margin: 0 auto;
         position: relative;
         z-index: 10;
-        height: 100%; /* 濠电偠鎻紞鈧繛澶嬫礋瀵?00%濠德板€曢崐褰掓晪闁?*/
         padding: 0;
+        min-height: calc(100dvh - 32px);
+        display: flex;
+        flex-direction: column;
+        gap: clamp(10px, 0.8vw, 16px);
     }
 
-    /* ===== 濠电偛顕慨瀵哥玻瀵ょ本iwen.html濠电姰鍨煎▔娑氱矓閹绢喖鏄ユ俊銈呮噺閸庡秹鏌涢弴銊ユ灈闁告挸缍婇弻锟犲椽娴ｅ摜浠梺鍝勬噷閸庨潧顕?===== */
+    /* ===== 濠电偛顕慨瀵哥玻瀵ょ本iwen.html濠电姰鍨煎▔娑氱矓閹绢喖鏄ユ俊銈呮噺閸庡秹鏌涢弴銊ユ灈闁告挸缍婇弻锟犲椽娴ｅ摜浠梺鍝勬噷閸庨潧�?===== */
     .grid-bg {
         position: fixed;
         top: 0;
@@ -58,7 +60,7 @@
         100% { transform: translate(40px, 40px); }
     }
 
-    /* 缂傚倷绀侀ˇ浼村垂閼稿吀绻嗙憸蹇涘礆閹烘绠抽柟瀵稿У閹?*/
+    /* 缂傚倷绀侀ˇ浼村垂閼稿吀绻嗙憸蹇涘礆閹烘绠抽柟瀵稿У�?*/
     .tech-particles {
         position: fixed;
         width: 100%;
@@ -119,39 +121,50 @@
     }
 
     .header-decoration {
-        text-align: center;
-        margin-bottom: 8px; /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝閳锋帞鐥幆褜鍎戦柣?*/
-        padding: 6px 0; /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝缁€鍐煕濞戞瑥顥嬮柣婵嗙埣閹?*/
         position: relative;
-        height: 60px; /* 闂備焦鎮堕崕閬嶅箹椤愶附鍋╁Δ锝呭暙閸愨偓闂佹悶鍎洪崜锕傚汲椤栫偞鐓曢柡宓嫭鍎撻梺缁樻尰閻燂箓銆冮崶顬喖宕崟闈涙暯 */
+        display: grid;
+        grid-template-columns: minmax(240px, 18vw) minmax(0, 1fr) minmax(180px, 16vw);
+        align-items: start;
+        gap: clamp(12px, 1vw, 18px);
+        padding: 4px 0 0;
+        min-height: 92px;
+    }
+
+    .header-spacer {
+        min-height: 1px;
+        width: 100%;
     }
 
     .title-side-decoration {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 20px; /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝閳锋帡鏌熺紒銏犳灍妞?*/
+        width: 100%;
+        min-width: 0;
         margin: 0 auto;
-        max-width: 100%;
     }
 
-    /* 濠电偞鍨堕幖鈺呭储閼测晝绱﹂柛鎾楀嫬鏅抽梺鍛婄⊕閻ｎ亪宕戝鈧幃妤呭捶椤撶喎娈屽┑?*/
     .center-decoration {
-        flex-shrink: 0;
+        width: 100%;
+        min-width: 0;
         position: relative;
         z-index: 10;
     }
 
     .decoration-main {
-        display: inline-block;
-        padding: 6px 15px; /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝缁€鍐煕濞戞瑥顥嬮柣婵嗙埣閹?*/
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: min(100%, 720px);
+        min-width: 0;
+        padding: 12px 18px 10px;
         background: linear-gradient(135deg, rgba(20, 30, 45, 0.9), rgba(30, 40, 60, 0.9));
-        border-radius: 6px; /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝閹瑰爼鏌涢埄鍐ㄥ毈婵?*/
+        border-radius: 12px;
         border: 1px solid rgba(0, 150, 255, 0.3);
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5); /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝閳锋捇鏌℃径瀣仴妞?*/
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.32);
         position: relative;
-        overflow: hidden;
-        min-width: 320px; /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝鐎氬鏌嶈閸撴稒绂嶅宀€鐤€闁瑰灝鍟弲顒勬煙?*/
+        overflow: visible;
     }
 
     .decoration-main::before {
@@ -171,24 +184,24 @@
     }
 
     .decoration-title {
-        font-size: 1.2rem; /* 闂備礁鎼€氼厼鐣峰鈧獮澶愭嚑椤掑倻锛濋梺瀹犳〃閼宠泛袙閸儲鐓涚€广儱鎳忛崰妯汇亜閿濆洦娅曢柍褜鍓氱粙鎺楀Φ閻愮數绀?*/
+        font-size: clamp(1.42rem, 1.08rem + 0.75vw, 1.95rem);
         font-weight: 700;
-        background: linear-gradient(to right, #e6f7ff, #80d4ff, #4dabf7);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 2px 4px rgba(0, 150, 255, 0.3); /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝閳锋捇鏌℃径瀣仴妞?*/
-        letter-spacing: 0.3px; /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝€甸崑鎾斥槈濞嗘ɑ鐤佸┑鈽嗗亯濞夋洟骞?*/
-        line-height: 1.2;
+        color: #f2fbff;
+        text-shadow: 0 2px 10px rgba(0, 150, 255, 0.28);
+        letter-spacing: 0.08em;
+        line-height: 1.3;
+        text-align: center;
+        white-space: normal;
+        overflow-wrap: anywhere;
     }
 
     .decoration-line {
         height: 1px;
         background: linear-gradient(90deg, transparent, #4dabf7, transparent);
-        margin: 3px auto; /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝閳锋帞鐥幆褜鍎戦柣?*/
-        width: 25%; /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝€甸崑鎾舵兜閸涱噮妫勯柣?*/
+        margin: 6px auto 0;
+        width: min(240px, 60%);
     }
 
-    /* 闂佸搫顦弲婊堝蓟閵娿儍娲冀椤撶偟顔囨繝銏ｅ煐閸旀牜浜?*/
     .back-button {
         position: fixed;
         top: 6px;
@@ -209,26 +222,28 @@
         transition: all 0.3s ease;
     }
 
-    /* 闂備焦妞垮鍧楀礉瀹ュ鏄ユ繛鎴炵懅閳瑰秹鏌嶉埡浣告殨缂?*/
+    /* 闂備焦妞垮鍧楀礉瀹ュ鏄ユ繛鎴炵懅閳瑰秹鏌嶉埡浣告殨�?*/
     .user-info {
-        position: absolute;
-        top: 6px;
-        right: 8px;
+        position: relative;
+        justify-self: end;
+        align-self: start;
         display: flex;
         align-items: center;
-        gap: 3px;
+        gap: 8px;
         color: #a0a0ff;
-        padding: 2px 4px;
+        padding: 10px 12px;
         background: rgba(10, 15, 40, 0.7);
-        border-radius: 3px;
+        border-radius: 10px;
         border: 1px solid rgba(64, 224, 208, 0.2);
-        font-size: 9px;
+        font-size: 12px;
         z-index: 100;
+        max-width: min(100%, 240px);
+        min-height: 52px;
     }
 
     .user-avatar {
-        width: 18px;
-        height: 18px;
+        width: 28px;
+        height: 28px;
         border-radius: 50%;
         background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
         display: flex;
@@ -236,382 +251,482 @@
         justify-content: center;
         color: #0c0c2e;
         font-weight: bold;
-        font-size: 9px;
+        font-size: 12px;
+        flex-shrink: 0;
     }
 
     .real-time-clock {
-        text-align: center;
-        line-height: 1;
+        text-align: left;
+        line-height: 1.35;
+        min-width: 0;
     }
 
     .time-date {
         color: #40e0d0;
         font-weight: bold;
-        font-size: 8px;
+        font-size: 12px;
+        overflow-wrap: anywhere;
     }
 
     .time-week {
         color: #a0a0ff;
-        font-size: 7px;
+        font-size: 11px;
     }
 
-    /* 濠电偞鍨堕幑渚€顢氳缁晜顦版惔婵囧媰闂?- 闂備礁鎼ú锕€顭囧▎鎰弿闁绘劕鐏氶～鏇犳喐瀹ュ闂?*/
     .main-wrapper {
         display: grid;
-        grid-template-columns: 1fr 2fr 1fr;
-        gap: 3px;
-        height: calc(100vh - 76px); /* 缂傚倷绶￠崰鏍ㄦ櫠娴犲鐏虫俊顖氬悑婵ジ鏌ㄥ☉妯侯伀闁哄棭鍓欒灃闁稿本鑰介鍡忓亾?*/
+        grid-template-columns: minmax(280px, 22vw) minmax(0, 1.45fr) minmax(340px, 24vw);
+        grid-template-areas: "left map right";
+        gap: clamp(8px, 0.55vw, 12px);
         background: rgba(20, 30, 45, 0.9);
-        border-radius: 6px;
-        padding: 4px; /* 闂備礁鎲￠崹鐢垫崲閹扮増鍎嶆い鎺戝缁€鍐煕濞戞瑥顥嬮柣婵嗙埣閹?*/
+        border-radius: 16px;
+        padding: clamp(8px, 0.7vw, 12px);
         border: 1px solid rgba(0, 150, 255, 0.2);
-        overflow: hidden; /* 闂傚倸鍊搁崯顐㈩嚕閸洦鏁嗘繛鎴欏灩缁€鍐煕濞戞瑦缍戦柛鏂诲劜缁绘繆顦伴柛銊ョ秺瀹?*/
+        min-height: min(820px, calc(100dvh - 176px));
+        flex: 1 1 auto;
+        overflow: visible;
+        align-items: stretch;
     }
 
     .left-column {
+        grid-area: left;
         display: grid;
-        grid-template-rows: 1fr 0.8fr; /* 闂佽崵濮撮鍛村疮椤栫偛姹查柨婵嗘啗閹烘妫橀柛鎾楀倻鐭?*/
-        gap: 3px;
+        grid-template-rows: minmax(320px, 1.14fr) minmax(260px, 0.86fr);
+        gap: clamp(8px, 0.55vw, 12px);
         height: 100%;
+        min-width: 0;
+        min-height: 0;
     }
 
     .middle-column {
+        grid-area: map;
         height: 100%;
         position: relative;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr);
+        gap: clamp(8px, 0.55vw, 12px);
+        min-width: 0;
+        min-height: 0;
     }
 
     .right-column {
+        grid-area: right;
         display: grid;
-        grid-template-rows: 0.8fr 1.2fr; /* 闂佽崵濮撮鍛村疮椤栫偛姹查柨婵嗘啗閹烘妫橀柛鎾楀倻鐭?*/
-        gap: 3px;
+        grid-template-rows: minmax(240px, 0.76fr) minmax(408px, 1.24fr);
+        gap: clamp(8px, 0.55vw, 12px);
         height: 100%;
+        min-width: 0;
+        min-height: 0;
     }
 
     .right-bottom-sub {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 3px;
+        grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+        gap: clamp(8px, 0.55vw, 12px);
         height: 100%;
+        min-width: 0;
+        min-height: 0;
     }
 
-    /* 闂備線娼婚梽鍕熆濡ソ鐟拔熺亸鏍т壕闁革富鍘介崵鈧┑?*/
     #mapContainer {
         width: 100%;
         height: 100%;
-        border-radius: 3px;
+        min-height: 420px;
+        border-radius: 12px;
         border: 1px solid rgba(64, 224, 208, 0.2);
     }
 
-    /* 闂備胶鎳撻崥瀣垝鎼淬劌纾奸柕濞垮労濞?*/
     .station-search {
-        position: absolute;
-        top: 3px;
-        right: 3px;
-        display: flex;
-        gap: 2px;
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px;
         z-index: 10;
+        min-width: 0;
     }
 
     .search-input {
-        width: 130px;
-        padding: 2px 4px;
+        width: 100%;
+        min-width: 0;
+        padding: 10px 12px;
         background: rgba(10, 15, 40, 0.9);
         border: 1px solid rgba(64, 224, 208, 0.3);
-        border-radius: 2px;
+        border-radius: 10px;
         color: #e0e0ff;
-        font-size: 9px;
+        font-size: 12px;
         backdrop-filter: blur(4px);
     }
 
     .search-btn {
-        padding: 2px 4px;
+        padding: 10px 14px;
         background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
         border: none;
-        border-radius: 2px;
+        border-radius: 10px;
         color: #0c0c2e;
         font-weight: bold;
         cursor: pointer;
-        font-size: 9px;
+        font-size: 12px;
         display: flex;
         align-items: center;
-        gap: 1px;
+        justify-content: center;
+        gap: 6px;
+        white-space: nowrap;
     }
 
-    /* 闂備礁鎲￠〃鎰閺囩喐娅犻柡宥庡幖閺勩儵鏌ц箛姘煎殐闁衡偓閵娾晜鐓涚€广儱鎳庡Σ鑽ょ磼?*/
     .card {
         background: rgba(16, 22, 58, 0.7);
-        border-radius: 3px;
-        padding: 2px;
+        border-radius: 14px;
+        padding: 10px 12px;
         border: 1px solid rgba(64, 224, 208, 0.1);
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
         display: flex;
         flex-direction: column;
         height: 100%;
+        min-width: 0;
+        min-height: 0;
         overflow: hidden;
     }
 
     .card-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1px;
-        padding-bottom: 1px;
+        align-items: flex-start;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 4px;
+        padding-bottom: 6px;
         border-bottom: 1px solid rgba(64, 224, 208, 0.2);
-        height: 18px;
-        min-height: 18px;
+        min-height: 44px;
+        height: auto;
     }
 
     .card-title {
-        font-size: 9px;
+        font-size: 14px;
         color: #40e0d0;
         display: flex;
-        align-items: center;
-        gap: 2px;
+        align-items: flex-start;
+        gap: 6px;
         font-weight: 600;
-        white-space: nowrap;
+        white-space: normal;
+        line-height: 1.3;
+        min-width: 0;
     }
 
     .card-title i {
-        font-size: 10px;
+        font-size: 13px;
+        margin-top: 2px;
+        flex-shrink: 0;
     }
 
     .card-body {
         flex: 1;
         padding: 0;
-        height: calc(100% - 20px);
+        height: auto;
         position: relative;
+        min-width: 0;
+        min-height: 0;
     }
 
     .chart-container {
         width: 100%;
         height: 100%;
         position: relative;
+        min-height: 180px;
     }
 
-    /* 婵犳鍠楅…鍥╂崲濠靛牏绀婇柛娑卞灙閸嬫捇宕烽鐐版勃濠碉紕鍋涢崐鍧楀箚閸曨垰绠ｉ柣鎰仯閸嬬偤姊洪崨濠庢缂佽鲸娲橀弲?*/
     .water-level-info {
         display: flex;
-        gap: 1px;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px 12px;
         flex-wrap: wrap;
-        font-size: 6px;
+        font-size: 12px;
         color: #a0a0ff;
+        max-width: 100%;
     }
 
     .level-indicator {
         display: flex;
         align-items: center;
-        gap: 0.5px;
+        gap: 4px;
+        line-height: 1.35;
+        white-space: normal;
     }
 
-    /* 婵犳鍠楅…鍥╂崲濠靛牏绀婇柛娑欐綑绾偓闂佺粯锚绾绢厼危閻戣姤鐓曟俊銈咁儑绾惧灝顭胯閻楃娀骞冭閹叉挳宕熼鐔割吙闂佽崵濮撮鍛村疮椤栫偛姹?*/
+    .warning-level {
+        color: #ffd480;
+    }
+
+    .danger-level {
+        color: #ff9f9f;
+    }
+
     .ratio-card .card-body {
-        padding: 0.5px;
-        height: calc(100% - 20px);
+        padding: 0;
+        height: auto;
     }
 
     .ratio-card .chart-container {
         height: 100%;
-        min-height: 60px;
+        min-height: 220px;
     }
 
-    /* 濠碘槅鍋呭妯尖偓姘煎幘缁﹪骞橀鑲╃厬闂佺鏈粙鎺戔枔閸洘鐓曟繝濠傚暟閻掑憡銇勯敐鍌涙珖闁瑰嘲鍟撮弫鍌涘緞閸濄儳鐣鹃梻浣筋嚃閸欏酣宕归弶璺ㄦ殾闂侇剙绉甸崑?- 闂佽瀛╃粙鎺楀Φ閻愮數绀婇悗锝庡枛閸欏﹪鏌熺憴鍕闁哥喎娼￠弻锟犲焵椤掑嫬绠氱憸瀣?*/
     .param-alert-card {
         display: grid;
-        grid-template-rows: 1fr 0.9fr;
-        gap: 2px;
+        grid-template-rows: minmax(0, 1fr) minmax(0, 0.92fr);
+        gap: clamp(8px, 0.55vw, 12px);
         height: 100%;
+        min-width: 0;
+        min-height: 0;
     }
 
     .prediction-controls, .alert-container {
-        padding: 1px;
-        border-radius: 2px;
+        padding: 8px;
+        border-radius: 10px;
         background: rgba(10, 15, 40, 0.5);
         border: 1px solid rgba(64, 224, 208, 0.1);
         height: 100%;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        min-height: 0;
     }
 
     .control-group {
-        margin-bottom: 1px;
+        margin-bottom: 10px;
     }
 
     .control-label {
         display: block;
-        margin-bottom: 0.5px;
+        margin-bottom: 6px;
         color: #a0a0ff;
         font-weight: 500;
-        font-size: 11px; /* 闂備礁鎼€氼厼鐣峰鈧獮澶愬矗婢跺鐝烽梺缁樺姇閻増绂嶉敐澶嬪€垫繛鎴炵懀娴狅妇绱?*/
-        line-height: 1.2;
+        font-size: 12px;
+        line-height: 1.35;
     }
 
     .slider-container {
         display: flex;
         align-items: center;
-        gap: 2px;
+        gap: 8px;
     }
 
     .slider {
         flex: 1;
-        height: 1.5px;
+        height: 4px;
         -webkit-appearance: none;
         background: rgba(10, 15, 40, 0.8);
-        border-radius: 1px;
+        border-radius: 999px;
     }
 
     .slider::-webkit-slider-thumb {
         -webkit-appearance: none;
-        width: 7px;
-        height: 7px;
+        width: 12px;
+        height: 12px;
         border-radius: 50%;
         background: #40e0d0;
         cursor: pointer;
-        box-shadow: 0 0 2px rgba(64, 224, 208, 0.8);
+        box-shadow: 0 0 6px rgba(64, 224, 208, 0.8);
     }
 
     .slider-value {
-        min-width: 16px;
+        min-width: 32px;
         text-align: center;
         color: #40e0d0;
         font-weight: bold;
-        font-size: 11px; /* 闂備礁鎼€氼厼鐣峰鈧獮澶愬矗婢跺鐝烽梺缁樺姇閻増绂嶉敐澶嬪€垫繛鎴炵懀娴狅妇绱?*/
+        font-size: 12px;
     }
 
-    /* 婵犵妲呴崹顏堝焵椤掆偓绾绢參鍩€椤掑倸鍘撮柡灞芥噺瀵板嫮鈧綆浜舵禒鎾⒑?*/
     .model-selector {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1px;
-        margin-top: 1px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        margin-top: 8px;
     }
 
     .model-option {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 1px;
+        justify-content: center;
+        gap: 4px;
+        padding: 8px 6px;
         background: rgba(10, 15, 40, 0.8);
-        border-radius: 1px;
+        border-radius: 8px;
         border: 1px solid rgba(64, 224, 208, 0.2);
         cursor: pointer;
-        font-size: 10px; /* 闂備礁鎼€氼厼鐣峰鈧獮澶愬矗婢跺鐝烽梺缁樺姇閻増绂嶉敐澶嬪€垫繛鎴炵懀娴狅妇绱?*/
-        line-height: 1.1;
+        font-size: 12px;
+        line-height: 1.25;
+        min-height: 78px;
+        text-align: center;
     }
 
     .model-icon {
-        font-size: 8px;
+        font-size: 14px;
         color: #a0a0ff;
-        margin-bottom: 0.5px;
+        margin-bottom: 4px;
     }
 
-    /* 濠碘槅鍋呭妯尖偓姘煎灦椤㈡鎮㈤崫銉㈡敵闂佹枼鏅涢崯鈺冩?- 闂佽瀛╃粙鎺楀Φ閻愮數绀婇悗锝庡枛閸欏﹪鏌熺憴鍕闁哥喎娼￠弻锟犲焵椤掑嫬绠氱憸瀣?*/
+    .model-text {
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.2;
+        overflow-wrap: anywhere;
+    }
+
     .alert-count {
         background: rgba(255, 50, 50, 0.2);
         color: #ff3232;
-        padding: 0.5px 1px;
-        border-radius: 1px;
-        font-size: 11px; /* 闂備礁鎼€氼厼鐣峰鈧獮澶愬矗婢跺鐝烽梺缁樺姇閻増绂嶉敐澶嬪€垫繛鎴炵懀娴狅妇绱?*/
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 12px;
         font-weight: bold;
+        white-space: nowrap;
     }
 
     .alert-list {
-        max-height: 45px;
+        flex: 1;
+        min-height: 0;
+        max-height: none;
         overflow-y: auto;
-        padding-right: 1px;
-        margin-top: 1px;
+        padding-right: 4px;
+        margin-top: 8px;
     }
 
     .alert-item {
-        padding: 0.5px;
+        padding: 10px 12px;
         background: rgba(255, 50, 50, 0.1);
-        border-left: 1.5px solid #ff3232;
-        border-radius: 1px;
-        margin-bottom: 0.5px;
-        display: flex;
-        justify-content: space-between;
-        font-size: 10px; /* 闂備礁鎼€氼厼鐣峰鈧獮澶愬矗婢跺鐝烽梺缁樺姇閻増绂嶉敐澶嬪€垫繛鎴炵懀娴狅妇绱?*/
-        line-height: 1.1;
+        border: 1px solid rgba(255, 50, 50, 0.22);
+        border-radius: 8px;
+        margin-bottom: 8px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px;
+        font-size: 12px;
+        line-height: 1.35;
+        align-items: start;
     }
 
-    /* 缂傚倸鍊烽悞锕傚箰婵犳碍鍊跺鑸靛姇绾偓闂佹寧绋戠€氼剟銆?*/
+    .alert-details {
+        min-width: 0;
+    }
+
+    .alert-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: #ffe1e1;
+        overflow-wrap: anywhere;
+    }
+
+    .alert-desc {
+        margin-top: 4px;
+        font-size: 12px;
+        color: #cbd8ff;
+        overflow-wrap: anywhere;
+    }
+
+    .alert-time {
+        font-size: 11px;
+        color: #ffb3b3;
+        white-space: nowrap;
+    }
+
     .result-chart-card {
         display: grid;
-        grid-template-rows: 0.9fr 1.1fr;
-        gap: 2px;
+        grid-template-rows: minmax(216px, 0.9fr) minmax(260px, 1.1fr);
+        gap: clamp(8px, 0.55vw, 12px);
         height: 100%;
+        min-width: 0;
+        min-height: 0;
     }
 
     .prediction-results {
-        padding: 1px;
-        border-radius: 2px;
+        padding: 8px;
+        border-radius: 10px;
         background: rgba(10, 15, 40, 0.5);
         border: 1px solid rgba(64, 224, 208, 0.1);
         display: flex;
         flex-direction: column;
-        justify-content: space-around;
+        justify-content: space-between;
+        gap: 8px;
         height: 100%;
+        min-width: 0;
+        min-height: 0;
     }
 
     .result-card {
         background: rgba(10, 15, 40, 0.8);
-        border-radius: 2px;
-        padding: 1px;
+        border-radius: 10px;
+        padding: 10px 12px;
         border: 1px solid rgba(64, 224, 208, 0.2);
         display: flex;
         align-items: center;
-        gap: 1px;
-        margin-bottom: 0.5px;
-        min-height: 22px;
+        gap: 10px;
+        min-height: 74px;
     }
 
     .result-icon {
-        width: 16px;
-        height: 16px;
+        width: 36px;
+        height: 36px;
         background: linear-gradient(135deg, rgba(64, 224, 208, 0.2), rgba(79, 172, 254, 0.2));
-        border-radius: 2px;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 9px;
+        font-size: 16px;
         color: #40e0d0;
+        flex-shrink: 0;
+    }
+
+    .result-content {
+        min-width: 0;
     }
 
     .result-value {
-        font-size: 11px;
+        font-size: 16px;
         font-weight: bold;
         color: #40e0d0;
-        margin: 0;
+        margin: 2px 0;
+        line-height: 1.2;
     }
 
     .result-label {
-        font-size: 7px;
+        font-size: 12px;
         color: #a0a0ff;
+        line-height: 1.35;
+        overflow-wrap: anywhere;
     }
 
     .result-trend {
-        font-size: 6px;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex-wrap: wrap;
     }
 
-    /* 闂備礁鎲￠敋婵☆偅顨夐妵鎰板醇閺囩偟鍊為梺纭咁潐閸旀垿鍩€?*/
     .history-chart-item {
-        padding: 1px;
-        border-radius: 2px;
+        padding: 8px;
+        border-radius: 10px;
         background: rgba(10, 15, 40, 0.5);
         border: 1px solid rgba(64, 224, 208, 0.1);
         height: 100%;
+        min-width: 0;
+        min-height: 0;
         overflow: hidden;
     }
 
     .history-chart-item .card-header {
         margin-bottom: 0;
-        padding-bottom: 0.5px;
-        height: 16px;
+        padding-bottom: 6px;
+        min-height: 34px;
     }
 
     .history-chart-item .card-title {
-        font-size: 8px;
+        font-size: 13px;
     }
 
-    /* 婵犵妲呴崹顏堝礈濠靛鐒垫い鎴ｆ硶閸斿秵銇勯姀鐙€鍎旂€殿喛妫勯悾锟犲箥椤旂虎鏀?*/
     .overlay {
         position: fixed;
         top: 0;
@@ -629,11 +744,12 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 85%;
-        max-width: 700px;
-        height: 75%;
+        width: min(92vw, 1100px);
+        max-width: none;
+        height: min(88dvh, 820px);
+        max-height: min(88dvh, 820px);
         background: rgba(16, 22, 58, 0.98);
-        border-radius: 8px;
+        border-radius: 14px;
         border: 2px solid rgba(64, 224, 208, 0.5);
         z-index: 10000;
         display: none;
@@ -646,22 +762,26 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 8px 12px;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 12px 16px;
         background: rgba(20, 30, 45, 0.95);
         border-bottom: 1px solid rgba(64, 224, 208, 0.3);
     }
 
     .modal-title {
-        font-size: 14px;
+        font-size: 16px;
         color: #40e0d0;
         display: flex;
         align-items: center;
         gap: 6px;
+        line-height: 1.35;
+        min-width: 0;
     }
 
     .close-modal {
-        width: 26px;
-        height: 26px;
+        width: 32px;
+        height: 32px;
         border-radius: 50%;
         background: rgba(255, 50, 50, 0.2);
         display: flex;
@@ -669,8 +789,9 @@
         justify-content: center;
         cursor: pointer;
         color: #ff3232;
-        font-size: 14px;
+        font-size: 16px;
         transition: all 0.3s;
+        flex-shrink: 0;
     }
 
     .close-modal:hover {
@@ -679,174 +800,191 @@
     }
 
     .modal-body {
-        display: flex;
+        display: grid;
+        grid-template-columns: minmax(0, 1.7fr) minmax(260px, 0.9fr);
         flex: 1;
         padding: 0;
-        overflow: hidden;
+        min-height: 0;
+        overflow: auto;
     }
 
     #water3DMapContainer {
-        flex: 2;
         height: 100%;
+        min-height: 320px;
         background: rgba(10, 15, 40, 0.8);
     }
 
     .water-3d-info {
-        flex: 1;
-        padding: 8px;
+        padding: 12px;
         background: rgba(16, 22, 58, 0.9);
         border-left: 1px solid rgba(64, 224, 208, 0.2);
         overflow-y: auto;
+        min-width: 0;
+        min-height: 0;
     }
 
     .info-item {
-        padding: 6px;
-        margin-bottom: 6px;
+        padding: 10px;
+        margin-bottom: 10px;
         background: rgba(10, 15, 40, 0.6);
-        border-radius: 4px;
+        border-radius: 8px;
         border: 1px solid rgba(64, 224, 208, 0.1);
     }
 
     .info-label {
-        font-size: 10px;
+        font-size: 12px;
         color: #a0a0ff;
-        margin-bottom: 2px;
+        margin-bottom: 4px;
+        line-height: 1.35;
     }
 
     .info-value {
-        font-size: 14px;
+        font-size: 16px;
         font-weight: bold;
         color: #40e0d0;
-        margin-bottom: 2px;
+        margin-bottom: 4px;
+        line-height: 1.25;
     }
 
     .info-desc {
-        font-size: 8px;
+        font-size: 12px;
         color: #80d4ff;
-        line-height: 1.2;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
     }
 
-    /* 闂備礁鎲＄换鍌滅矓鐎垫瓕濮抽柟缁樺俯閸ゆ洟鐓崶銊ュ毈闁哥喎閰ｉ幃?*/
-    @media (max-width: 1024px) {
-        .main-wrapper {
-            grid-template-columns: 1fr 1.5fr 1fr;
-        }
-
-        .search-input {
-            width: 110px;
-        }
-
-        .decoration-title {
-            font-size: 1.1rem;
-        }
-
-        .decoration-main {
-            min-width: 280px;
-        }
-    }
-
-    @media (max-width: 768px) {
-        body {
-            padding: 6px;
-        }
-
+    @media (max-width: 1600px) {
         .header-decoration {
-            margin-bottom: 6px;
-            padding: 4px 0;
-            height: 50px;
-        }
-
-        .decoration-title {
-            font-size: 1.0rem;
-            letter-spacing: 0.2px;
-        }
-
-        .decoration-line {
-            width: 120px;
+            grid-template-columns: minmax(220px, 16vw) minmax(0, 1fr) minmax(172px, 16vw);
         }
 
         .main-wrapper {
-            grid-template-columns: 1fr;
-            grid-template-rows: 0.8fr 1.2fr 0.8fr;
-            gap: 2px;
-            padding: 3px;
-            height: calc(100vh - 62px);
+            grid-template-columns: minmax(248px, 20vw) minmax(0, 1.35fr) minmax(312px, 24vw);
         }
+    }
 
-        .left-column, .right-column {
-            grid-template-rows: 1fr 0.8fr;
+    @media (max-width: 1280px) {
+        .main-wrapper {
+            grid-template-columns: minmax(0, 1.18fr) minmax(320px, 0.82fr);
+            grid-template-areas:
+                "map right"
+                "left right";
+            min-height: auto;
         }
 
         .right-bottom-sub {
             grid-template-columns: 1fr;
-            grid-template-rows: 0.9fr 1.1fr;
+            grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
         }
 
-        .water-level-3d-modal {
-            width: 95%;
-            height: 70%;
-        }
-
-        .ratio-card .chart-container {
-            min-height: 50px;
+        .water-level-info {
+            justify-content: flex-start;
         }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 900px) {
         body {
-            padding: 4px;
+            padding: 10px;
         }
 
         .header-decoration {
-            padding: 3px 0;
-            height: 45px;
+            grid-template-columns: 1fr;
+            justify-items: stretch;
         }
 
-        .decoration-title {
-            font-size: 0.9rem;
-            padding: 0 8px;
+        .header-spacer {
+            display: none;
         }
 
-        .decoration-line {
-            width: 100px;
-            height: 1px;
+        .title-side-decoration {
+            order: 1;
         }
 
         .user-info {
-            top: 4px;
-            right: 4px;
+            justify-self: start;
+            order: 2;
+            max-width: 100%;
         }
 
         .main-wrapper {
-            height: calc(100vh - 55px);
+            grid-template-columns: 1fr;
+            grid-template-areas:
+                "map"
+                "left"
+                "right";
+        }
+
+        .left-column,
+        .right-column {
+            grid-template-rows: minmax(260px, auto) minmax(240px, auto);
+        }
+
+        .station-search {
+            grid-template-columns: 1fr;
+        }
+
+        .modal-body {
+            grid-template-columns: 1fr;
+        }
+
+        .water-3d-info {
+            border-left: none;
+            border-top: 1px solid rgba(64, 224, 208, 0.2);
+        }
+    }
+
+    @media (max-width: 640px) {
+        .dash-nav {
+            left: 12px;
+            top: 12px;
+        }
+
+        .dash-nav input:checked ~ ul {
+            width: 210px;
+        }
+
+        .decoration-main {
+            padding: 12px 14px 10px;
+        }
+
+        .card {
+            padding: 9px 10px;
         }
 
         .card-header {
-            height: 16px;
+            min-height: 40px;
         }
 
         .card-title {
-            font-size: 8px;
+            font-size: 13px;
         }
 
-        .result-card {
-            min-height: 20px;
+        .water-level-info,
+        .control-label,
+        .search-input,
+        .search-btn,
+        .alert-item,
+        .result-label,
+        .result-trend,
+        .info-label,
+        .info-desc {
+            font-size: 11px;
         }
 
-        .result-value {
-            font-size: 10px;
+        .result-value,
+        .info-value {
+            font-size: 15px;
         }
     }
 </style>
-</head>
 <style>
 /* ================================
    Left-top Horizontal Collapsible Navbar (Dashboard)
    ================================ */
 .dash-nav {
   position: fixed;
-  left: 20px;
-  top: 20px;
+  left: clamp(12px, 1vw, 20px);
+  top: clamp(12px, 1vw, 20px);
   z-index: 20000;
   display: flex;
   align-items: center;
@@ -960,7 +1098,7 @@
   animation: navPop 420ms cubic-bezier(.2,.8,.2,1);
 }
 .dash-nav input:checked ~ ul {
-  width: 250px;
+  width: 220px;
   overflow: visible;
   justify-content: space-between;
   padding: 0 12px;
@@ -992,32 +1130,23 @@
         <span></span>
         <span></span>
         <ul>
-            <li><a href="../index/index.html" data-title="濠碘槅鍋撶徊楣冩偋閻樿违? title="濠碘槅鍋撶徊楣冩偋閻樿违?><span class="nav-icon">婵☆偓绲介崯顐ょ礊?/span><span class="nav-text">濠碘槅鍋撶徊楣冩偋閻樿违?/span></a></li>
-            <li><a href="../waterproject/waterproject.html" data-title="婵犳鍠楄摫婵炲吋鐟╁畷娲礋椤愵偄鏅犻梺闈涳紡閳ь剟寮?><span class="nav-icon">婵☆偓绲介崯顐ょ礊閳ь剟姊?/span><span class="nav-text">婵犳鍠楄摫婵炲吋鐟╁畷娲礋椤愵偄鏅犻梺闈涳紡閳ь剟寮?/span></a></li>
-            <!-- <li><a href="../waterlevel/waterlevel.html" data-title="婵犳鍠楅…鍥╂崲濠靛牏绀婇柛娑欐綑缁€澶愭煏婵犲繗鍚傞柛瀣尰閹峰懘鎮滃Ο纭风礃婵?><span class="nav-icon">婵☆偓绲介崯顐︽儌?/span><span class="nav-text">婵犳鍠楅…鍥╂崲濠靛牏绀婇柛娑欐綑缁€澶愭煏婵犲繗鍚傞柛瀣尰閹峰懘鎮滃Ο纭风礃婵?/span></a></li> -->
-            <li><a href="../prediction/prediction.html" data-title="婵犳鍠楅…鍥╂崲濠靛牏绀婇柛娑卞櫙缁憋綁鏌涢弴銊ュ闁?><span class="nav-icon">婵☆偓绲介崰姘?/span><span class="nav-text">婵犳鍠楅…鍥╂崲濠靛牏绀婇柛娑卞櫙缁憋綁鏌涢弴銊ュ闁?/span></a></li>
-            <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="闂傚倸鍊搁崯顐㈩嚕閸洘鍎撻柡鍥ュ灩缁狀喗淇婇妶鍕妽闁?><span class="nav-icon">婵☆偓绲介崯顖滅矆婢舵劖鐓?/span><span class="nav-text">闂傚倸鍊搁崯顐㈩嚕閸洘鍎撻柡鍥ュ灩缁狀喗淇婇妶鍕妽闁?/span></a></li>
+            <li><a href="../index/index.html" data-title="首页" title="首页" aria-label="首页"><span class="nav-icon">🏠</span><span class="nav-text">首页</span></a></li>
+            <li><a href="../waterproject/waterproject.html" data-title="水利工程" title="水利工程" aria-label="水利工程"><span class="nav-icon">🏗️</span><span class="nav-text">水利工程</span></a></li>
+            <li><a href="../prediction/prediction.html" data-title="水位预测模型" title="水位预测模型" aria-label="水位预测模型"><span class="nav-icon">🤖</span><span class="nav-text">水位预测模型</span></a></li>
+            <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="防汛抗旱" title="防汛抗旱" aria-label="防汛抗旱"><span class="nav-icon">🛡️</span><span class="nav-text">防汛抗旱</span></a></li>
         </ul>
     </div>
-    <!-- 濠电偛顕慨瀵哥玻瀵ょ本iwen.html濠电姰鍨煎▔娑氱矓閹绢喖鏄ユ俊銈呮噺閸庡秹鏌涢弴銊ユ灈闁告挸缍婇弻锟犲椽娴ｅ摜浠梺鍝勬噷閸庨潧顕?-->
     <div class="grid-bg"></div>
     <div class="tech-particles" id="techParticles"></div>
     <div class="energy-dots" id="energyDots"></div>
 
     <div class="container">
-        <!-- 闂備礁鎼崐鐟邦熆濮椻偓璺柛鎰靛枟閸庡秹鏌涢弴銊ユ灓缂佺姵鐓￠弻娑㈠Ψ瑜嶆禒锕傛倵閸偆鐭掗柡?(闁诲海鎳撻幉锟犳偂閳ユ枼鏋旈柨婵嗩槹鐎电娀鐓崶銉ュ姢缂佲偓婢舵劖鐓熼柕蹇曞Т閼歌銇勯弴顫喚闁硅櫕绮撻、鏃堝川椤栨氨鍔归梻浣告惈濞层倝濡靛鈧畷? -->
-        <!-- <button class="back-button" id="backButton">
-            <span class="back-icon">闂?/span>
-            <span>闂佸搫顦弲婊堝蓟閵娿儍娲冀閵娧€鏋栨繝鐢靛У閸濆酣鍩€?/span>
-        </button> -->
-
-        <!-- 濠电儑绲藉ù鍌炲窗濡ゅ懎鏋佸┑鍌滎焾鐟欙箓骞栨潏鍓хɑ闁伙綁浜堕弻鈥愁吋閸涱喖鏋犲銈忕悼閺咁偊骞夊Δ鍛窛婵烇綆鍓欐禒?-->
         <div class="header-decoration">
+            <div class="header-spacer" aria-hidden="true"></div>
             <div class="title-side-decoration">
-                <!-- 濠电偞鍨堕幖鈺呭储閼测晝绱﹀Δ锝呭暙閸愨偓闂佹悶鍎洪崜锕傚汲?-->
                 <div class="center-decoration">
                     <div class="decoration-main">
-                        <div class="decoration-title">闂備礁鎲￠弻锝夊礉瀹ュ鐒垫い鎴ｆ硶閸斿秹鏌熺粙娆炬Ч闁瑰嘲鎳庨濂稿幢閳哄倵鎸勬繝鐢靛仦濞兼瑩顢栭崨瀛樼參闁冲搫鎳庨惌?/div>
+                        <div class="decoration-title">动态水位监测平台</div>
                         <div class="decoration-line"></div>
                     </div>
                 </div>
@@ -1029,10 +1158,10 @@
                 </div>
                 <div class="real-time-clock" id="realTimeClock">
                     <div class="time-date" id="currentDate">2024-01-01 00:00:00</div>
-                    <div class="time-week" id="currentWeek">闂備礁鎼€氼噣宕伴幇顒婅€块柍鈺佸暟閳绘棃鏌?/div>
+                    <div class="time-week" id="currentWeek">星期一</div>
+                </div>
             </div>
         </div>
-    </div>
 
     <div class="main-wrapper">
         <div class="left-column">
@@ -1239,7 +1368,7 @@
             <div class="info-item">
                 <div class="info-label">水质监测状态</div>
                 <div class="info-value" id="modalWaterQuality">良好</div>
-                <div class="info-desc">pH: 7.2，溶解氧: 8.5 mg/L，浊度: 5 NTU</div>
+                <div class="info-desc">pH: 7.2，溶解氧: 8.5 mg/L，浊度 5 NTU</div>
             </div>
             <div class="info-item">
                 <div class="info-label">预测预警建议</div>
@@ -1256,35 +1385,54 @@
 </div>
 
     <script>
-        // 闂備胶顭堢换鍫ュ礉瀹€鍕剳妞ゆ帒瀚惌妤佹叏濡炶浜鹃梺?
+        const API_BASE_URL = '/api';
+        const weekDays = ['\u661f\u671f\u65e5', '\u661f\u671f\u4e00', '\u661f\u671f\u4e8c', '\u661f\u671f\u4e09', '\u661f\u671f\u56db', '\u661f\u671f\u4e94', '\u661f\u671f\u516d'];
+
         let map = null;
-        let markers = [];
-        let markerByStationId = {};
-        let hasAutoFitView = false;
+        let water2DMap = null;
+        let waterPolygon = null;
+        let waterAnimationInterval = null;
+        let realTimeUpdateInterval = null;
         let levelChart = null;
         let weatherImpactChart = null;
         let levelRatioChart = null;
         let historyLevelChart = null;
-        let water2DMap = null;
-        let waterPolygon = null;
-        let waterAnimationInterval = null;
-        let selectedAreaData = {
-            name: '闂備礁鎲￠悧妤呭Φ閻愬搫瑙︽い鎰╁€栭弳婊堟煕瀹€鈧崑鎰板磻閹炬剚娼╂い鎾跺仜婵洤鈹?,
-            level: 2.34,
-            speed: 1.8,
-            quality: '闂備浇澹堥鏍垂娴兼潙围?
-        };
-
-        // 闂佽楠稿﹢閬嶅磻閻愬樊娓婚柛宀€鍋涢崡鎶芥倵濞戞鎴︽偂閳ь剟姊洪悜鈺傛珖妞ゎ厼鐗撳畷锝堫樄鐎规洩绲介～婊堝焵椤掑嫬闂?
-        let realTimeUpdateInterval = null;
+        let markers = [];
+        let markerByStationId = {};
         let stationDataCache = {};
-        let lastUpdateTime = Date.now();
+        let selectedAreaData = {
+            name: '\u672a\u77e5\u533a\u57df',
+            level: 0,
+            speed: 1.5,
+            quality: '\u826f\u597d'
+        };
+        let hasAutoFitView = false;
+        let amapLoadPromise = null;
 
         const markerSvgIconCache = {};
+        const levelTrendState = {
+            times: [],
+            realData: [],
+            predictData: []
+        };
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/\"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function toDisplayText(text) {
+            return String(text ?? '').replace(/\\u([0-9a-fA-F]{4})/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+        }
+
         function getMarkerSvgDataUrl(color) {
             if (markerSvgIconCache[color]) return markerSvgIconCache[color];
             const fill = String(color || '#4facfe');
-            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 2c-3.86 0-7 3.14-7 7 0 5.22 7 13 7 13s7-7.78 7-13c0-3.86-3.14-7-7-7z" fill="${fill}"/><circle cx="12" cy="9" r="2.6" fill="#0a1625"/></svg>`;
+            const svg = `<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\"><path d=\"M12 2c-3.86 0-7 3.14-7 7 0 5.22 7 13 7 13s7-7.78 7-13c0-3.86-3.14-7-7-7z\" fill=\"${fill}\"/><circle cx=\"12\" cy=\"9\" r=\"2.6\" fill=\"#0a1625\"/></svg>`;
             const dataUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
             markerSvgIconCache[color] = dataUrl;
             return dataUrl;
@@ -1298,24 +1446,28 @@
             });
         }
 
-        function getMarkerColorByStationStatus(waterStatus, level, station) {
-            const stationOffline = station?.status === 0 || station?.status === '0' || station?.status === 'offline';
-            if (stationOffline) return '#ff4d4f';
-
-            const levelNumber = Number(level || 0);
-            if (waterStatus === '闂備礁鎲￠〃濠冪鐠鸿　鏋? || levelNumber >= (station?.dangerLevel || 4.0)) return '#ff4d4f';
-            if (waterStatus === '濠碘槅鍋呭妯尖偓姘煎灦椤? || levelNumber >= (station?.warningLevel || 3.5)) return '#faad14';
-            return '#4facfe';
+        function normalizeStationStatus(status) {
+            return status === 1 || status === '1' || status === 'online' ? '\u5728\u7ebf' : '\u79bb\u7ebf';
         }
 
-        // API闂備胶纭堕弲鐐测枍閿濆鈧線宕犻惈绋?
-        const API_BASE_URL = '/api';
-        let amapLoadPromise = null;
+        function getWaterStatus(level, station) {
+            const levelNumber = Number(level || 0);
+            if (levelNumber >= Number(station?.dangerLevel || 4.0)) return '\u5371\u9669';
+            if (levelNumber >= Number(station?.warningLevel || 3.5)) return '\u9884\u8b66';
+            return '\u6b63\u5e38';
+        }
+
+        function getMarkerColorByStatus(status, station) {
+            if (normalizeStationStatus(station?.status) === '\u79bb\u7ebf') return '#ff4d4f';
+            if (status === '\u5371\u9669') return '#ff4d4f';
+            if (status === '\u9884\u8b66') return '#faad14';
+            return '#4facfe';
+        }
 
         async function fetchAmapConfig() {
             const response = await fetch(`${API_BASE_URL}/config/amap`);
             if (!response.ok) {
-                throw new Error(`濡ゅ倹锚閻ュ鏌婂鍥╂瀭閻犲洭鏀遍惇鐗堝緞鏉堫偉袝: ${response.status}`);
+                throw new Error(`\u52a0\u8f7d\u9ad8\u5fb7\u5730\u56fe\u914d\u7f6e\u5931\u8d25: ${response.status}`);
             }
             return response.json();
         }
@@ -1334,64 +1486,35 @@
                 const script = document.createElement('script');
                 script.src = `https://webapi.amap.com/maps?v=2.0&key=${config.key}&plugin=AMap.Scale,AMap.Geocoder`;
                 script.onload = resolve;
-                script.onerror = () => reject(new Error('濡ゅ倹锚閻ュ宕烽弶鎸庣闁煎瓨纰嶅﹢浼村礉閻樼儤绁板鎯扮簿鐟?));
+                script.onerror = () => reject(new Error('\u9ad8\u5fb7\u5730\u56fe\u811a\u672c\u52a0\u8f7d\u5931\u8d25'));
                 document.head.appendChild(script);
             });
         }
 
         async function ensureAmapLoaded() {
-            if (typeof AMap !== 'undefined') {
-                return;
-            }
+            if (typeof AMap !== 'undefined') return;
             if (!amapLoadPromise) {
                 amapLoadPromise = fetchAmapConfig().then(loadAmapScript);
             }
             return amapLoadPromise;
         }
+
         async function fetchJson(url) {
             const response = await fetch(url);
-            const payload = await response.json();
+            let payload = null;
+            try {
+                payload = await response.json();
+            } catch (error) {
+                payload = null;
+            }
             if (!response.ok || !payload || payload.code !== 200) {
-                throw new Error((payload && (payload.msg || payload.message)) || `闁荤姴娲弨閬嶆儑閻楀牆绶為弶鍫亯琚? ${response.status}`);
+                throw new Error((payload && (payload.msg || payload.message)) || `\u63a5\u53e3\u8bf7\u6c42\u5931\u8d25: ${response.status}`);
             }
             return payload.data;
         }
 
-        function showPageStatus(message, type = 'warning') {
-            const color = type === 'error' ? '#ff4d4f' : '#faad14';
-            console.warn(message);
-
-            const alertCount = document.getElementById('alertCount');
-            if (alertCount) {
-                alertCount.textContent = '0 闂?;
-            }
-
-            const alertList = document.getElementById('alertList');
-            if (alertList) {
-                alertList.innerHTML = `
-                    <div class="alert-item">
-                        <div class="alert-details">
-                            <div class="alert-title" style="color:${color};">${message}</div>
-                            <div class="alert-desc">当前页面未使用模拟数据补位</div>
-                        </div>
-                        <div class="alert-time">--:--</div>
-                    </div>`;
-            }
-        }
-
-        function renderNoDataState(message) {
-            showPageStatus(message, 'warning');
-            updateWaterLevelData([]);
-        }
-
-        // 闂備礁鎼€氼噣宕伴幇顒婅€块柨鐔哄Т閸欏﹪鏌ｅΟ鍨毢婵?
-        const weekDays = ['闂備礁鎼€氼噣宕伴幇顒婅€块柨鐔哄Т缁?, '闂備礁鎼€氼噣宕伴幇顒婅€块柍鈺佸暟閳绘棃鏌?, '闂備礁鎼€氼噣宕伴幇顒婅€块柍鈺佸暟椤?, '闂備礁鎼€氼噣宕伴幇顒婅€块柍鈺佸暟閳?, '闂備礁鎼€氼噣宕伴幇顒婅€块柨鐔哄Т閻?, '闂備礁鎼€氼噣宕伴幇顒婅€块柍鈺佸暟椤?, '闂備礁鎼€氼噣宕伴幇顒婅€块柨鐔哄Т缁€?];
-
-        // 闂備礁鎼ú銈夋偤閵娾晛钃熷┑鐘插閸嬫捇宕烽鐐版勃濠碉紕鍋涢崐鍨嚕椤曗偓瀹曞ジ寮撮悤鍌滃惞
         function updateRealTime() {
             const now = new Date();
-
-            // 闂備礁鎼粔鍫曞储瑜忓Σ鎰版晸閻樿尙顦遍梺鍝勮癁閸愩劎鎲ラ梻浣告惈閻楀棝鎮ф繝鍋芥盯鍩￠崨顓犵潉闁荤姴鎼幖顐︽倵閼姐倗纾?
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const day = String(now.getDate()).padStart(2, '0');
@@ -1399,18 +1522,13 @@
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
 
-            // 闂備礁鍚嬮崕鎶藉床閼艰翰浜归柛銉墮閸欏﹪鏌ｉ弬鎸庡暈闁?
-            const weekDay = weekDays[now.getDay()];
-
-            // 闂備礁鎼ú銈夋偤閵娾晛钃熷┑鐘叉搐閸欏﹪鏌涢幘妞炬缁?
-            document.getElementById('currentDate').textContent =
-                `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-            document.getElementById('currentWeek').textContent = weekDay;
+            document.getElementById('currentDate').textContent = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+            document.getElementById('currentWeek').textContent = weekDays[now.getDay()];
         }
 
-        // 濠电偛顕慨瀵哥玻瀵ょ本iwen.html濠电姰鍨煎▔娑氱矓閹绢喖鏄ユ俊銈呮噺閸庡秹鏌涢弴銊ュ箻闁绘挸鐗撻幃妤€鈽夊▎蹇擃潔闂佸搫鎳岄崕闈涱嚕缁嬫鐓ラ柛鎰╁妽閻︼綁姊?
         function createTechParticles() {
             const container = document.getElementById('techParticles');
+            if (!container || container.children.length) return;
             for (let i = 0; i < 30; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
@@ -1423,9 +1541,9 @@
             }
         }
 
-        // 濠电偛顕慨瀵哥玻瀵ょ本iwen.html濠电姰鍨煎▔娑氱矓閹绢喖鏄ユ俊銈呮噺閸庡秹鏌涢弴銊ユ灈闁告ɑ鎸冲娲箵閹烘梻顔婇梺绋款儜缂嶄礁鐣峰▎鎾村殟闁靛闄勯?
         function createEnergyDots() {
             const container = document.getElementById('energyDots');
+            if (!container || container.children.length) return;
             for (let i = 0; i < 20; i++) {
                 const dot = document.createElement('div');
                 dot.className = 'energy-dot';
@@ -1436,36 +1554,622 @@
             }
         }
 
-        // 闂備礁鎲＄敮妤冩崲閸岀儑缍栭柟鐗堟緲缁€宀勬煛瀹擃喖鍟Ч鏌ユ⒑?
-        async function initAll() {
-            try {
-                await ensureAmapLoaded();
+        function showPageStatus(message, type = 'warning') {
+            const alertCount = document.getElementById('alertCount');
+            const alertList = document.getElementById('alertList');
+            const color = type === 'error' ? '#ff4d4f' : '#faad14';
 
-                updateRealTime();
-                setInterval(updateRealTime, 1000);
+            if (alertCount) {
+                alertCount.textContent = '0 \u6761';
+            }
 
-                createTechParticles();
-                createEnergyDots();
-
-                initMainMap();
-                initCharts();
-                bindEvents();
-                bindBackHomeEvent();
-                startRealTimeUpdates();
-            } catch (e) {
-                console.error('闁告帗绻傞～鎰板礌閺嶎厽鏅╅悹?', e);
-                alert('闁告帗绻傞～鎰板礌閺嵮佷杭閻? ' + e.message);
+            if (alertList) {
+                alertList.innerHTML = `
+                    <div class=\"alert-item\">
+                        <div class=\"alert-details\">
+                            <div class=\"alert-title\" style=\"color:${color};\">${escapeHtml(message)}</div>
+                            <div class=\"alert-desc\">\u5f53\u524d\u9875\u9762\u672a\u542f\u7528\u6a21\u62df\u6570\u636e\u515c\u5e95</div>
+                        </div>
+                        <div class=\"alert-time\">--:--</div>
+                    </div>`;
             }
         }
-        function startRealTimeUpdates() {
-            fetchRealTimeData();
-            realTimeUpdateInterval = setInterval(fetchRealTimeData, 10000);
+
+        function renderNoDataState(message) {
+            showPageStatus(message, 'warning');
+            updateWaterLevelData([]);
+            updateWarningData([]);
         }
 
+        function initLevelTrendState() {
+            if (levelTrendState.times.length) return;
+            const now = Date.now();
+            for (let i = 12; i >= 0; i--) {
+                const time = new Date(now - i * 10 * 60 * 1000);
+                levelTrendState.times.push(`${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}`);
+                levelTrendState.realData.push(2.1);
+                levelTrendState.predictData.push(2.2);
+            }
+        }
+
+        function initCharts() {
+            initLevelTrendState();
+
+            const levelChartDom = document.getElementById('waterLevelChart');
+            if (levelChartDom) {
+                levelChart = echarts.init(levelChartDom);
+                levelChart.setOption({
+                    backgroundColor: 'transparent',
+                    tooltip: { trigger: 'axis' },
+                    legend: {
+                        data: ['\u5b9e\u65f6\u6c34\u4f4d', '\u8b66\u6212\u6c34\u4f4d', '\u9884\u6d4b\u6c34\u4f4d'],
+                        textStyle: { color: '#a0a0ff', fontSize: 11 }
+                    },
+                    grid: { left: '5%', right: '5%', top: '16%', bottom: '12%', containLabel: true },
+                    xAxis: {
+                        type: 'category',
+                        data: levelTrendState.times,
+                        axisLabel: { color: '#a0a0ff', fontSize: 10 }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        min: 0,
+                        axisLabel: { color: '#a0a0ff', fontSize: 10 },
+                        splitLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.08)' } }
+                    },
+                    series: [
+                        { name: '\u5b9e\u65f6\u6c34\u4f4d', type: 'line', smooth: true, data: levelTrendState.realData, lineStyle: { color: '#40e0d0', width: 1.5 }, symbolSize: 2 },
+                        { name: '\u8b66\u6212\u6c34\u4f4d', type: 'line', smooth: true, data: levelTrendState.realData.map(() => 3.5), lineStyle: { color: '#ffa500', width: 1, type: 'dashed' }, symbolSize: 0 },
+                        { name: '\u9884\u6d4b\u6c34\u4f4d', type: 'line', smooth: true, data: levelTrendState.predictData, lineStyle: { color: '#ff3232', width: 1.2 }, symbolSize: 2 }
+                    ]
+                });
+            }
+
+            const weatherChartDom = document.getElementById('weatherImpactChart');
+            if (weatherChartDom) {
+                weatherImpactChart = echarts.init(weatherChartDom);
+                weatherImpactChart.setOption({
+                    backgroundColor: 'transparent',
+                    legend: {
+                        data: ['\u5f53\u524d', '\u9884\u6d4b', '\u9608\u503c'],
+                        bottom: 0,
+                        textStyle: { color: '#a0a0ff', fontSize: 11 }
+                    },
+                    radar: {
+                        center: ['50%', '40%'],
+                        radius: '45%',
+                        indicator: [
+                            { name: '\u964d\u96e8\u91cf', max: 100 },
+                            { name: '\u98ce\u901f', max: 20 },
+                            { name: '\u6e29\u5ea6', max: 40 },
+                            { name: '\u6e7f\u5ea6', max: 100 },
+                            { name: '\u6c14\u538b', max: 1050 },
+                            { name: '\u84b8\u53d1\u91cf', max: 50 }
+                        ],
+                        axisName: { color: '#40e0d0', fontSize: 10 },
+                        splitLine: { lineStyle: { color: 'rgba(64,224,208,0.1)' } },
+                        splitArea: { areaStyle: { color: 'rgba(16,22,58,0.2)' } },
+                        axisLine: { lineStyle: { color: 'rgba(64,224,208,0.3)' } }
+                    },
+                    series: [{
+                        name: '\u5929\u6c14\u5f71\u54cd',
+                        type: 'radar',
+                        data: [
+                            { value: [45, 8, 18, 75, 1012, 15], name: '\u5f53\u524d', areaStyle: { color: 'rgba(64,224,208,0.18)' }, lineStyle: { color: '#40e0d0' } },
+                            { value: [52, 10, 19, 80, 1009, 17], name: '\u9884\u6d4b', areaStyle: { color: 'rgba(255,50,50,0.16)' }, lineStyle: { color: '#ff3232' } },
+                            { value: [80, 15, 35, 90, 1000, 20], name: '\u9608\u503c', areaStyle: { color: 'rgba(255,165,0,0.12)' }, lineStyle: { color: '#ffa500', type: 'dashed' } }
+                        ]
+                    }]
+                });
+            }
+
+            const ratioChartDom = document.getElementById('levelRatioChart');
+            if (ratioChartDom) {
+                levelRatioChart = echarts.init(ratioChartDom);
+                levelRatioChart.setOption({
+                    backgroundColor: 'transparent',
+                    title: {
+                        text: '\u6682\u65e0\u771f\u5b9e\u6c34\u4f4d\u6570\u636e',
+                        left: 'center',
+                        top: 'center',
+                        textStyle: { color: '#80d4ff', fontSize: 12 }
+                    },
+                    series: []
+                });
+            }
+
+            const historyChartDom = document.getElementById('historyLevelChart');
+            if (historyChartDom) {
+                historyLevelChart = echarts.init(historyChartDom);
+                historyLevelChart.setOption({
+                    backgroundColor: 'transparent',
+                    legend: {
+                        data: ['\u4eca\u65e5', '\u6628\u65e5', '\u4e0a\u5468\u540c\u671f'],
+                        textStyle: { color: '#a0a0ff', fontSize: 10 }
+                    },
+                    grid: { left: '6%', right: '6%', top: '18%', bottom: '14%', containLabel: true },
+                    xAxis: { type: 'category', data: ['0\\u65f6', '6\\u65f6', '12\\u65f6', '18\\u65f6'], axisLabel: { color: '#a0a0ff', fontSize: 10 } },
+                    yAxis: { type: 'value', axisLabel: { color: '#a0a0ff', fontSize: 10 }, splitLine: { lineStyle: { color: 'rgba(64,224,208,0.08)' } } },
+                    series: [
+                        { name: '\u4eca\u65e5', type: 'line', smooth: true, data: [2.1, 2.2, 2.3, 2.4], lineStyle: { color: '#40e0d0', width: 1 }, symbolSize: 2 },
+                        { name: '\u6628\u65e5', type: 'line', smooth: true, data: [2.0, 2.1, 2.2, 2.25], lineStyle: { color: '#4facfe', width: 1 }, symbolSize: 2 },
+                        { name: '\u4e0a\u5468\u540c\u671f', type: 'line', smooth: true, data: [1.95, 2.0, 2.1, 2.15], lineStyle: { color: '#9966ff', width: 1 }, symbolSize: 2 }
+                    ]
+                });
+            }
+        }
+
+        function updateLevelChart(waterLevels) {
+            if (!levelChart) return;
+
+            const avgLevel = waterLevels.reduce((sum, item) => sum + Number(item.level || 0), 0) / waterLevels.length;
+            const now = new Date();
+            const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+            const lastReal = levelTrendState.realData[levelTrendState.realData.length - 1] ?? avgLevel;
+            const nextPredict = Number((avgLevel + (avgLevel - lastReal) * 0.8).toFixed(2));
+
+            if (levelTrendState.times.length >= 20) {
+                levelTrendState.times.shift();
+                levelTrendState.realData.shift();
+                levelTrendState.predictData.shift();
+            }
+
+            levelTrendState.times.push(currentTime);
+            levelTrendState.realData.push(Number(avgLevel.toFixed(2)));
+            levelTrendState.predictData.push(nextPredict);
+
+            levelChart.setOption({
+                title: { text: '' },
+                xAxis: { data: levelTrendState.times },
+                series: [
+                    { data: levelTrendState.realData },
+                    { data: levelTrendState.realData.map(() => 3.5) },
+                    { data: levelTrendState.predictData }
+                ]
+            });
+        }
+
+        function updateWeatherImpactChart(waterLevels) {
+            if (!weatherImpactChart || !Array.isArray(waterLevels) || !waterLevels.length) return;
+            const avgLevel = waterLevels.reduce((sum, item) => sum + Number(item.level || 0), 0) / waterLevels.length;
+            const rainfall = Math.min(100, Math.round(avgLevel * 18));
+            const wind = Math.min(20, Math.max(5, Math.round(avgLevel * 3)));
+            const temperature = Math.min(40, Math.max(10, Math.round(18 + avgLevel * 2)));
+
+            weatherImpactChart.setOption({
+                series: [{
+                    data: [
+                        { value: [rainfall, wind, temperature, 75, 1012, 15], name: '\u5f53\u524d' },
+                        { value: [Math.min(100, rainfall + 8), Math.min(20, wind + 2), Math.min(40, temperature + 1), 80, 1009, 17], name: '\u9884\u6d4b' },
+                        { value: [80, 15, 35, 90, 1000, 20], name: '\u9608\u503c' }
+                    ]
+                }]
+            });
+        }
+
+        function updateHistoryChart(waterLevels) {
+            if (!historyLevelChart || !Array.isArray(waterLevels) || !waterLevels.length) return;
+            const avgLevel = waterLevels.reduce((sum, item) => sum + Number(item.level || 0), 0) / waterLevels.length;
+            historyLevelChart.setOption({
+                series: [
+                    { data: [avgLevel - 0.22, avgLevel - 0.08, avgLevel, avgLevel + 0.12].map(v => Number(v.toFixed(2))) },
+                    { data: [avgLevel - 0.3, avgLevel - 0.18, avgLevel - 0.1, avgLevel - 0.02].map(v => Number(v.toFixed(2))) },
+                    { data: [avgLevel - 0.36, avgLevel - 0.24, avgLevel - 0.12, avgLevel - 0.08].map(v => Number(v.toFixed(2))) }
+                ]
+            });
+        }
+
+        function updateLevelRatioChart(waterLevels) {
+            if (!levelRatioChart) return;
+            if (!Array.isArray(waterLevels) || !waterLevels.length) {
+                levelRatioChart.setOption({
+                    title: {
+                        text: '\u6682\u65e0\u771f\u5b9e\u6c34\u4f4d\u6570\u636e',
+                        left: 'center',
+                        top: 'center',
+                        textStyle: { color: '#80d4ff', fontSize: 12 }
+                    },
+                    series: []
+                });
+                return;
+            }
+
+            const categories = [
+                { name: '\u5b89\u5168\u533a', status: '\u6b63\u5e38', color: '#40e0d0', value: 0 },
+                { name: '\u4f4e\u98ce\u9669\u533a', status: '\u5173\u6ce8', color: '#4dabf7', value: 0 },
+                { name: '\u8b66\u6212\u533a', status: '\u9884\u8b66', color: '#ffa500', value: 0 },
+                { name: '\u5371\u9669\u533a', status: '\u5371\u9669', color: '#ff3232', value: 0 }
+            ];
+
+            waterLevels.forEach(item => {
+                const level = Number(item.level || 0);
+                if (level < 2.5) categories[0].value += 1;
+                else if (level < 3.0) categories[1].value += 1;
+                else if (level < 3.5) categories[2].value += 1;
+                else categories[3].value += 1;
+            });
+
+            const total = waterLevels.length || 1;
+            const data = categories.map(item => ({
+                name: item.name,
+                value: item.value,
+                status: item.status,
+                itemStyle: { color: item.color }
+            }));
+
+            document.getElementById('totalStations').textContent = String(waterLevels.length);
+
+            levelRatioChart.setOption({
+                title: { text: '' },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: params => `${params.name}<br/>\u5360\u6bd4: ${params.percent}%<br/>\u7ad9\u70b9\u6570: ${params.value}<br/>\u72b6\u6001: ${params.data.status}`
+                },
+                legend: {
+                    orient: 'vertical',
+                    right: '2%',
+                    top: 'middle',
+                    textStyle: { color: '#a0a0ff', fontSize: 11 },
+                    formatter: name => {
+                        const item = data.find(entry => entry.name === name);
+                        return `${name} ${item ? item.value : 0}`;
+                    }
+                },
+                series: [{
+                    name: '\u6c34\u4f4d\u5360\u6bd4',
+                    type: 'pie',
+                    radius: ['38%', '62%'],
+                    center: ['34%', '48%'],
+                    label: {
+                        show: true,
+                        formatter: '{d}%',
+                        color: '#ffffff',
+                        fontSize: 7
+                    },
+                    data
+                }]
+            });
+        }
+
+        function updateCurrentLevelDisplay(waterLevels) {
+            const currentLevelEl = document.getElementById('currentLevel');
+            if (!currentLevelEl) return;
+            if (!Array.isArray(waterLevels) || !waterLevels.length) {
+                currentLevelEl.textContent = '--';
+                return;
+            }
+            currentLevelEl.textContent = Number(waterLevels[0].level || 0).toFixed(2);
+        }
+
+        function updateWarningData(warnings) {
+            const safeWarnings = Array.isArray(warnings) ? warnings : [];
+            document.getElementById('alertCount').textContent = `${safeWarnings.length} \u6761`;
+
+            const alertList = document.getElementById('alertList');
+            alertList.innerHTML = '';
+
+            if (!safeWarnings.length) {
+                alertList.innerHTML = `
+                    <div class=\"alert-item\">
+                        <div class=\"alert-details\">
+                            <div class=\"alert-title\">\u6682\u65e0\u771f\u5b9e\u9884\u8b66\u6570\u636e</div>
+                            <div class=\"alert-desc\">\u5f53\u524d\u63a5\u53e3\u672a\u8fd4\u56de\u53ef\u5c55\u793a\u7684\u9884\u8b66\u8bb0\u5f55</div>
+                        </div>
+                        <div class=\"alert-time\">--:--</div>
+                    </div>`;
+                return;
+            }
+
+            safeWarnings.slice(0, 5).forEach(warning => {
+                const time = new Date(warning.createTime || Date.now());
+                const timeStr = `${String(time.getHours()).padStart(2, '0')}:${String(time.getMinutes()).padStart(2, '0')}`;
+                const item = document.createElement('div');
+                item.className = 'alert-item';
+                item.innerHTML = `
+                    <div class=\"alert-details\">
+                        <div class=\"alert-title\">${escapeHtml(toDisplayText(warning.title || '\\u6c34\\u4f4d\\u9884\\u8b66'))}</div>
+                        <div class=\"alert-desc\">${escapeHtml(toDisplayText(warning.content || '\\u6c34\\u4f4d\\u5f02\\u5e38'))}</div>
+                    </div>
+                    <div class=\"alert-time\">${timeStr}</div>`;
+                alertList.appendChild(item);
+            });
+        }
+
+        function updateStationData(stations) {
+            if (!Array.isArray(stations)) return;
+            stations.forEach(station => {
+                const id = station.id ?? station.stationId;
+                if (id !== undefined && id !== null) {
+                    stationDataCache[id] = station;
+                }
+            });
+        }
+
+        function clearMarkers() {
+            if (!map || !markers.length) return;
+            markers.forEach(marker => map.remove(marker));
+            markers = [];
+            markerByStationId = {};
+        }
+
+        function updateMapMarkersWithStations(stations, waterLevels) {
+            if (!map) return;
+            clearMarkers();
+
+            stations.forEach((station, index) => {
+                const lng = Number(station.longitude ?? station.lng ?? station.lon);
+                const lat = Number(station.latitude ?? station.lat);
+                if (!Number.isFinite(lng) || !Number.isFinite(lat)) return;
+
+                const stationId = station.id ?? station.stationId ?? index + 1;
+                const waterData = waterLevels.find(item => String(item.stationId) === String(stationId));
+                const level = Number(waterData?.level || 0);
+                const waterStatus = getWaterStatus(level, station);
+                const stationStatus = normalizeStationStatus(station.status);
+                const marker = new AMap.Marker({
+                    position: new AMap.LngLat(lng, lat),
+                    title: `${toDisplayText(station.name || `\\u76d1\\u6d4b\\u7ad9${stationId}`)} - ${level.toFixed(2)}m`,
+                    icon: createMarkerIcon(getMarkerColorByStatus(waterStatus, station)),
+                    anchor: 'bottom-center'
+                });
+
+                const stationName = toDisplayText(station.name || `\\u76d1\\u6d4b\\u7ad9${stationId}`);
+                const safeName = stationName.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                const infoWindow = new AMap.InfoWindow({
+                    content: `<div style=\\"color:#333;padding:8px;font-size:12px;line-height:1.45;max-width:220px;\\">
+                        <h3 style=\\"margin:0 0 4px 0;color:#0088ff;font-size:13px;\\">${escapeHtml(stationName)}</h3>
+                        <p style=\"margin:0;\">\u4f4d\u7f6e: ${escapeHtml(toDisplayText(station.location || station.address || '-'))}</p>
+                        <p style=\"margin:0;\">\u72b6\u6001: ${stationStatus}</p>
+                        <p style=\"margin:0;\">\u6c34\u4f4d: ${level.toFixed(2)}m</p>
+                        <p style=\"margin:0;\">\u8b66\u6212: ${Number(station.warningLevel || 3.5).toFixed(2)}m</p>
+                        <button style=\\"margin-top:8px;padding:6px 10px;background:#0088ff;color:white;border:none;border-radius:6px;font-size:11px;cursor:pointer;\\"
+                            onclick=\"window.showWater2DView('${safeName}', '${level.toFixed(2)}m', ${lng}, ${lat})\">\u67e5\u770b\u6c34\u4f4d\u89c6\u56fe</button>
+                    </div>`
+                });
+
+                marker.on('click', () => {
+                    infoWindow.open(map, marker.getPosition());
+                    selectedAreaData = {
+                        name: stationName,
+                        level,
+                        speed: Number(waterData?.flowRate || 1.5),
+                        quality: '\u826f\u597d'
+                    };
+                    document.getElementById('currentLevel').textContent = level.toFixed(2);
+                });
+
+                map.add(marker);
+                markers.push(marker);
+                markerByStationId[String(stationId)] = marker;
+            });
+
+            if (!hasAutoFitView && markers.length) {
+                map.setFitView(markers, false, [30, 30, 30, 30]);
+                hasAutoFitView = true;
+            }
+        }
+
+        function updateMapMarkers(waterLevels) {
+            if (!markers.length) return;
+            Object.keys(markerByStationId).forEach(stationId => {
+                const marker = markerByStationId[stationId];
+                const waterData = waterLevels.find(item => String(item.stationId) === stationId);
+                const station = stationDataCache[stationId];
+                if (!marker || !waterData) return;
+                const level = Number(waterData.level || 0);
+                const status = getWaterStatus(level, station);
+                marker.setIcon(createMarkerIcon(getMarkerColorByStatus(status, station)));
+                marker.setTitle(`${toDisplayText(waterData.station?.name || station?.name || `\\u76d1\\u6d4b\\u7ad9${stationId}`)} - ${level.toFixed(2)}m`);
+            });
+        }
+
+        function updateWaterLevelData(waterLevels) {
+            if (!Array.isArray(waterLevels) || !waterLevels.length) {
+                if (levelChart) {
+                    levelChart.setOption({ title: { text: '\u6682\u65e0\u771f\u5b9e\u6c34\u4f4d\u6570\u636e', left: 'center', top: 'center', textStyle: { color: '#80d4ff', fontSize: 12 } }, series: [] });
+                }
+                if (levelRatioChart) {
+                    levelRatioChart.setOption({ title: { text: '\u6682\u65e0\u771f\u5b9e\u6c34\u4f4d\u6570\u636e', left: 'center', top: 'center', textStyle: { color: '#80d4ff', fontSize: 12 } }, series: [] });
+                }
+                updateCurrentLevelDisplay([]);
+                document.getElementById('totalStations').textContent = '0';
+                return;
+            }
+
+            updateLevelChart(waterLevels);
+            updateLevelRatioChart(waterLevels);
+            updateHistoryChart(waterLevels);
+            updateWeatherImpactChart(waterLevels);
+            updateCurrentLevelDisplay(waterLevels);
+            updateMapMarkers(waterLevels);
+        }
+
+        function createFallbackStations() {
+            return [
+                { id: 1, longitude: 116.39748, latitude: 39.908823, name: '\u5317\u4eac\u901a\u60e0\u6cb3\u76d1\u6d4b\u7ad9', location: '\u5317\u4eac', status: 1, warningLevel: 3.2, dangerLevel: 3.6 },
+                { id: 2, longitude: 121.4737, latitude: 31.2304, name: '\u4e0a\u6d77\u9ec4\u6d66\u6c5f\u76d1\u6d4b\u7ad9', location: '\u4e0a\u6d77', status: 1, warningLevel: 3.3, dangerLevel: 3.8 },
+                { id: 3, longitude: 113.2644, latitude: 23.1291, name: '\u5e7f\u5dde\u73e0\u6c5f\u76d1\u6d4b\u7ad9', location: '\u5e7f\u5dde', status: 1, warningLevel: 3.0, dangerLevel: 3.5 }
+            ];
+        }
+
+        function initMainMap() {
+            map = new AMap.Map('mapContainer', {
+                zoom: 10,
+                center: new AMap.LngLat(116.39748, 39.908823),
+                mapStyle: 'amap://styles/darkblue',
+                pitch: 0,
+                rotation: 0,
+                viewMode: '2D',
+                resizeEnable: true
+            });
+
+            map.on('complete', () => {
+                AMap.plugin(['AMap.Scale'], () => {
+                    map.addControl(new AMap.Scale({ position: 'bottom-left' }));
+                });
+            });
+
+            updateStationData(createFallbackStations());
+            updateMapMarkersWithStations(createFallbackStations(), []);
+
+            map.on('click', e => {
+                if (!e || !e.lnglat) return;
+                const lng = Number(e.lnglat.getLng());
+                const lat = Number(e.lnglat.getLat());
+                selectedAreaData = {
+                    name: '\u672a\u77e5\u533a\u57df',
+                    level: 0,
+                    speed: 1.2,
+                    quality: '\u826f\u597d'
+                };
+                showWater2DView('\u672a\u77e5\u533a\u57df', '0.00 m', lng, lat);
+            });
+        }
+
+        function initWater2DMap(lng, lat) {
+            if (water2DMap) {
+                water2DMap.destroy();
+            }
+            if (waterAnimationInterval) {
+                clearInterval(waterAnimationInterval);
+                waterAnimationInterval = null;
+            }
+
+            water2DMap = new AMap.Map('water3DMapContainer', {
+                zoom: 16,
+                center: new AMap.LngLat(lng, lat),
+                mapStyle: 'amap://styles/darkblue',
+                pitch: 0,
+                rotation: 0,
+                viewMode: '2D',
+                resizeEnable: true
+            });
+
+            water2DMap.on('complete', () => {
+                AMap.plugin(['AMap.Scale'], () => {
+                    water2DMap.addControl(new AMap.Scale({ position: 'bottom-left' }));
+                });
+                createWater2DPolygon(lng, lat);
+            });
+        }
+
+        function createWater2DPolygon(lng, lat) {
+            const points = [];
+            const radius = 0.01;
+            for (let i = 0; i < 36; i++) {
+                const angle = (i / 36) * Math.PI * 2;
+                points.push(new AMap.LngLat(lng + radius * Math.cos(angle), lat + radius * Math.sin(angle)));
+            }
+            points.push(points[0]);
+
+            waterPolygon = new AMap.Polygon({
+                path: points,
+                fillColor: 'rgba(0, 170, 220, 0.65)',
+                strokeColor: 'rgba(0, 200, 255, 0.9)',
+                strokeWeight: 1
+            });
+
+            water2DMap.add(waterPolygon);
+            let waveOffset = 0;
+            waterAnimationInterval = setInterval(() => {
+                if (!waterPolygon) return;
+                waveOffset += 0.12;
+                const alpha = 0.55 + Math.sin(waveOffset) * 0.08;
+                waterPolygon.setOptions({
+                    fillColor: `rgba(0, 170, 220, ${alpha.toFixed(3)})`
+                });
+            }, 120);
+        }
+
+        function showWater2DView(areaName, waterLevel, lng, lat) {
+            const validLng = Number(lng) || 116.39748;
+            const validLat = Number(lat) || 39.908823;
+            document.getElementById('modalAreaName').textContent = toDisplayText(areaName || '\u672a\u77e5\u533a\u57df');
+            document.getElementById('modalWaterLevel').textContent = waterLevel || '0.00 m';
+            document.getElementById('modalWaterSpeed').textContent = `${Number(selectedAreaData.speed || 1.5).toFixed(1)} m/s`;
+            document.getElementById('modalWaterQuality').textContent = toDisplayText(selectedAreaData.quality || '\u826f\u597d');
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('water3DModal').style.display = 'flex';
+            initWater2DMap(validLng, validLat);
+            setTimeout(() => {
+                if (water2DMap) water2DMap.resize();
+            }, 200);
+        }
+
+        window.showWater2DView = showWater2DView;
+
+        function closeWater2DView() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('water3DModal').style.display = 'none';
+            if (waterAnimationInterval) {
+                clearInterval(waterAnimationInterval);
+                waterAnimationInterval = null;
+            }
+            if (water2DMap) {
+                water2DMap.destroy();
+                water2DMap = null;
+            }
+        }
+
+        function bindBackHomeEvent() {
+            const backBtn = document.getElementById('backButton');
+            if (!backBtn) return;
+            backBtn.addEventListener('click', () => {
+                alert('\u8fd4\u56de\u4e3b\u9875\u529f\u80fd\u5df2\u89e6\u53d1\uff0c\u53ef\u66ff\u6362\u4e3a\u5b9e\u9645\u7684\u8df3\u8f6cURL');
+            });
+        }
+
+        function searchStation() {
+            const keyword = document.getElementById('stationSearch').value.trim().toLowerCase();
+            if (!keyword) {
+                alert('\u8bf7\u8f93\u5165\u7ad9\u70b9\u540d\u79f0\u5173\u952e\u8bcd');
+                return;
+            }
+            const matched = markers.find(marker => String(marker.getTitle() || '').toLowerCase().includes(keyword));
+            if (!matched) {
+                alert(`\u672a\u641c\u7d22\u5230\u5305\u542b\"${keyword}\"\u7684\u7ad9\u70b9`);
+                return;
+            }
+            const position = matched.getPosition();
+            if (position && map) {
+                map.setCenter(position);
+                map.setZoom(12);
+                matched.emit('click');
+            }
+            document.getElementById('stationSearch').value = '';
+        }
+
+        function bindEvents() {
+            document.getElementById('predictionHours')?.addEventListener('input', function() {
+                document.getElementById('hoursValue').textContent = this.value;
+            });
+            document.getElementById('sampleRate')?.addEventListener('input', function() {
+                document.getElementById('rateValue').textContent = this.value;
+            });
+            document.getElementById('closeModalBtn')?.addEventListener('click', closeWater2DView);
+            document.getElementById('overlay')?.addEventListener('click', closeWater2DView);
+            document.getElementById('searchBtn')?.addEventListener('click', searchStation);
+            document.getElementById('stationSearch')?.addEventListener('keypress', event => {
+                if (event.key === 'Enter') searchStation();
+            });
+            document.getElementById('water3DModal')?.addEventListener('click', event => event.stopPropagation());
+            window.addEventListener('resize', () => {
+                levelChart?.resize();
+                weatherImpactChart?.resize();
+                levelRatioChart?.resize();
+                historyLevelChart?.resize();
+                map?.resize();
+                if (water2DMap) setTimeout(() => water2DMap.resize(), 100);
+            });
+            window.addEventListener('beforeunload', () => {
+                if (realTimeUpdateInterval) clearInterval(realTimeUpdateInterval);
+                if (waterAnimationInterval) clearInterval(waterAnimationInterval);
+                map?.destroy();
+                water2DMap?.destroy();
+            });
+        }
 
         async function fetchRealTimeData() {
-            console.log('闂佸吋鍎抽崲鑼躲亹閸モ斁鍋撻崷顓炰沪婵＄偛鍊垮顐︽偋閸繄銈?..');
-
             try {
                 const [waterResult, warningResult, stationResult] = await Promise.allSettled([
                     fetchJson(`${API_BASE_URL}/waterlevel/data/current/all`),
@@ -1478,1369 +2182,57 @@
                 const stations = stationResult.status === 'fulfilled' ? stationResult.value : [];
 
                 if (waterResult.status === 'rejected' && warningResult.status === 'rejected' && stationResult.status === 'rejected') {
-                    renderNoDataState('鏈姞杞藉埌鐪熷疄姘翠綅銆佺珯鐐瑰拰棰勮鏁版嵁');
+                    showPageStatus('\u672a\u52a0\u8f7d\u5230\u771f\u5b9e\u6c34\u4f4d\u3001\u7ad9\u70b9\u548c\u9884\u8b66\u6570\u636e');
+                    updateWaterLevelData([]);
+                    updateWarningData([]);
                     return;
                 }
 
-                if (waterResult.status === 'rejected') {
-                    showPageStatus('鏈姞杞藉埌鐪熷疄姘翠綅鏁版嵁');
-                }
-                if (warningResult.status === 'rejected') {
-                    showPageStatus('鏈姞杞藉埌鐪熷疄棰勮鏁版嵁');
-                }
-                if (stationResult.status === 'rejected') {
-                    showPageStatus('鏈姞杞藉埌鐪熷疄绔欑偣鏁版嵁');
-                }
+                if (waterResult.status === 'rejected') showPageStatus('\u672a\u52a0\u8f7d\u5230\u771f\u5b9e\u6c34\u4f4d\u6570\u636e');
+                if (warningResult.status === 'rejected') showPageStatus('\u672a\u52a0\u8f7d\u5230\u771f\u5b9e\u9884\u8b66\u6570\u636e');
+                if (stationResult.status === 'rejected') showPageStatus('\u672a\u52a0\u8f7d\u5230\u771f\u5b9e\u7ad9\u70b9\u6570\u636e');
 
-                updateWaterLevelData(Array.isArray(waterLevels) ? waterLevels : []);
-
-                if (warningResult.status === 'fulfilled') {
-                    updateWarningData(Array.isArray(warnings) ? warnings : []);
+                updateStationData(stations);
+                if (stations.length) {
+                    updateMapMarkersWithStations(stations, waterLevels);
                 }
-
-                if (Array.isArray(stations) && stations.length > 0) {
-                    updateStationData(stations);
-                    updateMapMarkersWithStations(stations, Array.isArray(waterLevels) ? waterLevels : []);
-                }
-
-                lastUpdateTime = Date.now();
+                updateWaterLevelData(waterLevels);
+                updateWarningData(warnings);
             } catch (error) {
-                console.error('闂佸吋鍎抽崲鑼躲亹閸モ斁鍋撻崷顓炰沪婵＄偛鍊垮顐︽偋閸繄銈︽繝銏″劶缁墽鎲?', error);
-                renderNoDataState('鏈姞杞藉埌鐪熷疄姘翠綅銆佺珯鐐瑰拰棰勮鏁版嵁');
-            }
-        }
-        function updateMapMarkersWithStations(stations, waterLevels) {
-            if (!map) return;
-
-            if (markers.length) {
-                markers.forEach(marker => map.remove(marker));
-            }
-            markers = [];
-            markerByStationId = {};
-
-            const duplicatePositionCounts = new Map();
-
-            // 婵犵數鍎戠紞鈧い鏇嗗嫭鍙忛柣鎰惈濡﹢鏌ｅΔ鈧悧蹇涘垂婵傚憡鍋?
-            stations.forEach(station => {
-                const rawLng = station?.longitude ?? station?.lng ?? station?.lon;
-                const rawLat = station?.latitude ?? station?.lat;
-                let lng = typeof rawLng === 'number' ? rawLng : parseFloat(rawLng);
-                let lat = typeof rawLat === 'number' ? rawLat : parseFloat(rawLat);
-
-                if (Number.isFinite(lng) && Number.isFinite(lat)) {
-                    const maybeSwapped = lng;
-                    const lonLooksLikeLat = lng >= 0 && lng <= 60;
-                    const latLooksLikeLon = lat >= 60 && lat <= 150;
-                    if (lonLooksLikeLat && latLooksLikeLon) {
-                        lng = lat;
-                        lat = maybeSwapped;
-                    }
-                }
-
-                if (!Number.isFinite(lng) || !Number.isFinite(lat)) {
-                    return;
-                }
-
-                const stationId = station?.id ?? station?.stationId;
-                const waterData = waterLevels.find(item => item.stationId === stationId);
-                const level = waterData ? waterData.level : 0;
-                const levelNumber = Number(level || 0);
-                const status = waterData ? waterData.status : '缂傚倷绀侀崐钘夌暦閻㈢鍚?;
-
-                const position = new AMap.LngLat(lng, lat);
-                const positionKey = `${lng.toFixed(6)},${lat.toFixed(6)}`;
-                const duplicateCount = duplicatePositionCounts.get(positionKey) || 0;
-                duplicatePositionCounts.set(positionKey, duplicateCount + 1);
-                const stationName = String(station?.name || '闂備胶鍎甸弲婊堝垂閸撲胶鐭堥悗闈涙憸閸?);
-                const safeStationName = stationName.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-
-                const markerColor = getMarkerColorByStationStatus(status, levelNumber, station);
-
-                const markerOptions = {
-                    position: position,
-                    title: `${stationName} - ${levelNumber.toFixed(2)}m`,
-                    icon: createMarkerIcon(markerColor),
-                    anchor: 'bottom-center'
-                };
-                if (duplicateCount) {
-                    markerOptions.offset = new AMap.Pixel(duplicateCount * 12, 0);
-                }
-                const marker = new AMap.Marker(markerOptions);
-
-                const infoWindow = new AMap.InfoWindow({
-                    content: `<div style="color:#333;padding:5px;font-size:10px;">
-                <h3 style="margin:0 0 2px 0;color:#0088ff;font-size:11px;">${stationName}</h3>
-                <p style="margin:0;">濠电偠鎻徊鐣岀矓閸洘鍋? ${station?.location || station?.address || '-'}</p>
-                <p style="margin:0;">闂備胶绮…鍫ュ春閺嶎厼鐒? ${station.status === 1 ? '闂備線娼荤拹鐔煎礉鎼淬劌鍚? : '缂傚倷绀侀崐钘夌暦閻㈢鍚?}</p>
-                <p style="margin:0;">婵犳鍠楅…鍥╂崲濠靛牏绀? ${levelNumber.toFixed(2)}m</p>
-                <p style="margin:0;">闂佽崵濮崑鎾绘煥閺冨洦顥夐柣? ${station.warningLevel || 3.5}m</p>
-                <button style="margin-top:3px;padding:1px 4px;background:#0088ff;color:white;border:none;border-radius:2px;font-size:9px;cursor:pointer;"
-                        onclick="window.showWater2DView('${safeStationName}', '${levelNumber.toFixed(2)}m', ${lng}, ${lat})">
-                    闂備礁鎼悮顐﹀磿閸愯鑰块柛娑卞弾濞尖晝绱撻崼銏犘ョ紒澶嬫尦閹嘲鈻庤箛鏃戞濠?
-                </button>
-            </div>`
-                });
-
-                marker.on('click', () => {
-                    infoWindow.open(map, marker.getPosition());
-                    document.getElementById('currentLevel').textContent = levelNumber.toFixed(2);
-                    selectedAreaData = {
-                        name: stationName,
-                        level: levelNumber,
-                        speed: waterData ? waterData.flowRate || 1.5 : 1.5,
-                        quality: '闂備浇澹堥鏍垂娴兼潙围?
-                    };
-                });
-
-                markers.push(marker);
-                map.add(marker);
-
-                if (stationId !== undefined && stationId !== null) {
-                    markerByStationId[String(stationId)] = marker;
-                }
-            });
-
-            if (!hasAutoFitView && markers.length) {
-                map.setFitView(markers, false, [30, 30, 30, 30]);
-                hasAutoFitView = true;
+                console.error('\u83b7\u53d6\u5b9e\u65f6\u6570\u636e\u5931\u8d25:', error);
+                showPageStatus('\u672a\u52a0\u8f7d\u5230\u771f\u5b9e\u6c34\u4f4d\u3001\u7ad9\u70b9\u548c\u9884\u8b66\u6570\u636e', 'error');
+                updateWaterLevelData([]);
+                updateWarningData([]);
             }
         }
 
-        // 闂備礁鎼ú銈夋偤閵娾晛钃熷┑鐘插亞濞尖晝绱撻崼銏犘ョ紒澶嬫尦閺屸剝鎷呴崫鍕垫毉閻?
-        function updateWaterLevelData(waterLevels) {
-            if (!Array.isArray(waterLevels) || waterLevels.length === 0) {
-                if (levelChart) {
-                    levelChart.setOption({
-                        title: {
-                            text: '鏆傛棤鐪熷疄姘翠綅鏁版嵁',
-                            left: 'center',
-                            top: 'center',
-                            textStyle: { color: '#80d4ff', fontSize: 12 }
-                        },
-                        xAxis: [{ data: [] }],
-                        series: []
-                    });
-                }
+        async function initAll() {
+            try {
+                await ensureAmapLoaded();
+                updateRealTime();
+                setInterval(updateRealTime, 1000);
+                createTechParticles();
+                createEnergyDots();
+                initMainMap();
+                initCharts();
+                bindEvents();
+                bindBackHomeEvent();
+                await fetchRealTimeData();
+                realTimeUpdateInterval = setInterval(fetchRealTimeData, 10000);
+            } catch (error) {
+                console.error('\u521d\u59cb\u5316\u9519\u8bef:', error);
+                alert('\u521d\u59cb\u5316\u5931\u8d25: ' + error.message);
+            }
+        }
 
-                if (levelRatioChart) {
-                    levelRatioChart.setOption({
-                        title: {
-                            text: '鏆傛棤鐪熷疄姘翠綅鏁版嵁',
-                            left: 'center',
-                            top: 'center',
-                            textStyle: { color: '#80d4ff', fontSize: 12 }
-                        },
-                        series: []
-                    });
-                }
-
-                const totalStationsEl = document.getElementById('totalStations');
-                if (totalStationsEl) {
-                    totalStationsEl.textContent = '0';
-                }
-
-                const currentLevelEl = document.getElementById('currentLevel');
-                if (currentLevelEl) {
-                    currentLevelEl.textContent = '--';
-                }
+        window.addEventListener('error', event => {
+            console.error('\u8fd0\u884c\u65f6\u9519\u8bef:', event.message, event.filename, event.lineno);
+            if (String(event.message || '').includes('NaN') && String(event.filename || '').includes('amap.com')) {
                 return;
             }
-
-            if (levelChart) {
-                levelChart.setOption({ title: { text: '' } });
-            }
-            if (levelRatioChart) {
-                levelRatioChart.setOption({ title: { text: '' } });
-            }
-
-            updateLevelChart(waterLevels);
-            updateLevelRatioChart(waterLevels);
-            updateMapMarkers(waterLevels);
-            updateCurrentLevelDisplay(waterLevels);
-        }
-        // 闂備礁鎼ú銈夋偤閵娾晛钃熷┑鐘插亞濞尖晝绱撻崼銏犘ョ紒澶嬫尦閺屾盯濡烽敃鈧粈鍐煏?
-        function updateLevelChart(waterLevels) {
-            if (!levelChart) return;
-
-            const now = new Date();
-            const currentTime = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-
-            // 闂備礁鍚嬮崕鎶藉床閼艰翰浜归柛銉簵娴滃綊鏌熼幆褍鏆辨い銈呮嚇閺屾盯濡烽敃鈧粈鍐煏閸℃鏆ｇ€殿噮鍋婇幃褔宕煎┑鍫涘亰
-            const option = levelChart.getOption();
-            const timeData = option.xAxis[0].data || [];
-            const realData = option.series[0].data || [];
-            const predictData = option.series[2].data || [];
-
-            // 闂傚倸鍊哥€氼參宕濋弴銏犳槬婵°倕鎳庨弸渚€鏌ｅΔ鈧悧鍡欑矈閿曞倹鈷掗柍褜鍓熷畷褰掝敊绾板崬鏁介梻浣瑰缁嬫垶绺介弮鍌涘床婵鍩栭崑鈺傜箾閸℃ê濮堝ù鐘筹耿瀵?0濠电偞鍨堕幖鈺傜閻愬搫纾?
-            if (timeData.length >= 20) {
-                timeData.shift();
-                realData.shift();
-                predictData.shift();
-            }
-
-            // 婵犵數鍎戠紞鈧い鏇嗗嫭鍙忛柣鎰惈濡﹢鏌ｅΔ鈧悧濠傗枔閸洘鐓欓悹鍥ｂ偓铏亾闂?
-            timeData.push(currentTime);
-
-            // 闂佽崵濮崇欢銈囨閺囥垺鍋╁┑鐘虫皑瀹撲線鏌涢幇顒€绾х紓宥呮閹便劌螣閼测晝鐦堢紓?
-            const avgLevel = waterLevels.reduce((sum, item) => sum + (item.level || 0), 0) / waterLevels.length;
-            realData.push(Number(avgLevel.toFixed(2)));
-
-            // 濠碘槅鍋呭妯尖偓姘煎幘缁﹪骞橀鍏肩€梺缁橆殔閻楀棛绮婇敃鍌涚叆婵炴垶顭囨晶鏇㈡煟閺傚搫浜惧┑鐐茬摠缁本顨ラ崫銉х閻庯綆鍠栫粈鍫⑩偓骞垮劚閻楀繑鐡忛梻浣告啞閺屻劎浜搁崨顖涱潟?
-            const lastReal = realData[realData.length - 2] || avgLevel;
-            const trend = avgLevel - lastReal;
-            const lastPredict = predictData[predictData.length - 1] || avgLevel;
-            const newPredict = Number((lastPredict + trend * 0.8 + (Math.random() - 0.5) * 0.05).toFixed(2));
-            predictData.push(newPredict);
-
-            // 闂備礁鎼ú銈夋偤閵娾晛钃熷┑鐘叉搐閻愬﹪鏌熺憴鍕闁?
-            levelChart.setOption({
-                xAxis: [{
-                    data: timeData
-                }],
-                series: [
-                    {
-                        data: realData
-                    },
-                    {
-                        data: Array(timeData.length).fill(3.5) // 闂佽崵濮崑鎾绘煥閺冨洦顥夐柣蹇擄功缁?
-                    },
-                    {
-                        data: predictData
-                    }
-                ]
-            });
-        }
-
-        // 闂備礁鎼ú銈夋偤閵娾晛钃熷┑鐘插亞濞尖晝绱撻崼銏犘ョ紒澶嬫尦閺屾稑螖閸愩剱锝夋煟閿旇娅嶇€规洖鐖奸獮鎴﹀箛閳规儳浜?
-        function updateLevelRatioChart(waterLevels) {
-            if (!levelRatioChart) return;
-
-            // 闂備礁鎼粔鐑斤綖婢跺﹦鏆ゅù锝呭濞尖晝绱撻崼銏犘ョ紒澶嬫尦閹绗熸繝鍕紵闂佷紮绲介…宄扮暦濮樿泛骞㈡繛鍡樺俯濞?
-            const categories = {
-                safe: { count: 0, totalLevel: 0, color: '#40e0d0' },
-                lowRisk: { count: 0, totalLevel: 0, color: '#4dabf7' },
-                warning: { count: 0, totalLevel: 0, color: '#ffa500' },
-                danger: { count: 0, totalLevel: 0, color: '#ff3232' }
-            };
-
-            waterLevels.forEach(item => {
-                const level = item.level || 0;
-                if (level < 2.5) {
-                    categories.safe.count++;
-                    categories.safe.totalLevel += level;
-                } else if (level < 3.0) {
-                    categories.lowRisk.count++;
-                    categories.lowRisk.totalLevel += level;
-                } else if (level < 3.5) {
-                    categories.warning.count++;
-                    categories.warning.totalLevel += level;
-                } else {
-                    categories.danger.count++;
-                    categories.danger.totalLevel += level;
-                }
-            });
-
-            // 闂佽崵濮崇欢銈囨閺囥垺鍋╁┑鐘宠壘绾偓闂佺粯锚绾绢厼危?
-            const totalStations = waterLevels.length;
-            const richColors = [
-                {
-                    name: '闂佽娴烽幊鎾凰囬鐐茬煑闊洦绋戠粈?,
-                    value: totalStations > 0 ? Math.round((categories.safe.count / totalStations) * 100) : 25,
-                    color: '#40e0d0',
-                    subColor: '#00cccc',
-                    textColor: '#40e0d0',
-                    stations: categories.safe.count,
-                    avgLevel: categories.safe.count > 0 ? (categories.safe.totalLevel / categories.safe.count).toFixed(2) + 'm' : '0.00m',
-                    status: '婵犳鍠楃换鎰緤娴犲鍋?
-                },
-                {
-                    name: '濠电偠鎻徊浠嬫煀閿濆＆澶愬箻缂佹ǚ鎸冮梺瀹犳〃缁€渚€姊?,
-                    value: totalStations > 0 ? Math.round((categories.lowRisk.count / totalStations) * 100) : 25,
-                    color: '#4dabf7',
-                    subColor: '#2196f3',
-                    textColor: '#4dabf7',
-                    stations: categories.lowRisk.count,
-                    avgLevel: categories.lowRisk.count > 0 ? (categories.lowRisk.totalLevel / categories.lowRisk.count).toFixed(2) + 'm' : '0.00m',
-                    status: '闂備胶顭堢换妤€鈻嶉弴銏犳瀬?
-                },
-                {
-                    name: '闂佽崵濮崑鎾绘煥閺冨洦顥夐柣蹇擄躬閺?,
-                    value: totalStations > 0 ? Math.round((categories.warning.count / totalStations) * 100) : 25,
-                    color: '#ffa500',
-                    subColor: '#ff8c00',
-                    textColor: '#ffa500',
-                    stations: categories.warning.count,
-                    avgLevel: categories.warning.count > 0 ? (categories.warning.totalLevel / categories.warning.count).toFixed(2) + 'm' : '0.00m',
-                    status: '闂佽崵濮崑鎾绘煥閺囨浜鹃梺?
-                },
-                {
-                    name: '闂備礁鎲￠〃濠冪鐠鸿　鏋嶉柟鎹愵嚙缁€?,
-                    value: totalStations > 0 ? Math.round((categories.danger.count / totalStations) * 100) : 25,
-                    color: '#ff3232',
-                    subColor: '#ff0000',
-                    textColor: '#ff3232',
-                    stations: categories.danger.count,
-                    avgLevel: categories.danger.count > 0 ? (categories.danger.totalLevel / categories.danger.count).toFixed(2) + 'm' : '0.00m',
-                    status: '闂備礁鎲￠〃濠冪鐠鸿　鏋?
-                }
-            ];
-
-            // 闂備礁鎼ú銈夋偤閵娾晛钃熷┑鐘叉搐缁犳垹绱撴担鑲℃垵鈻撻崼鏇熺厸闁告洦鍋勯埛鏃堟煏?
-            document.getElementById('totalStations').textContent = totalStations;
-
-            // 闂備礁鎼ú銈夋偤閵娾晛钃熷┑鐘叉搐閻愬﹪鏌熺憴鍕闁?
-            levelRatioChart.setOption({
-                series: [
-                    {
-                        data: richColors.map(item => ({
-                            value: item.value,
-                            name: item.name,
-                            itemStyle: {
-                                color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                                    { offset: 0, color: item.color },
-                                    { offset: 1, color: item.subColor }
-                                ])
-                            },
-                            textColor: item.textColor,
-                            stations: item.stations,
-                            avgLevel: item.avgLevel,
-                            status: item.status
-                        }))
-                    },
-                    {
-                        data: [
-                            {
-                                value: categories.safe.count > 0 ? 70 : 40,
-                                name: '婵犳鍠楃换鎰緤娴犲鍋?,
-                                itemStyle: { color: 'rgba(64, 224, 208, 0.7)' }
-                            },
-                            {
-                                value: categories.lowRisk.count > 0 ? 20 : 30,
-                                name: '濠碘槅鍋呭妯尖偓姘煎灦椤?,
-                                itemStyle: { color: 'rgba(255, 165, 0, 0.7)' }
-                            },
-                            {
-                                value: categories.danger.count > 0 ? 10 : 30,
-                                name: '闂備胶顢婄紙浼村磿閹绢噮鏁?,
-                                itemStyle: { color: 'rgba(255, 50, 50, 0.7)' }
-                            }
-                        ]
-                    }
-                ],
-                graphic: [
-                    {
-                        style: {
-                            stroke: `rgba(64, 224, 208, ${0.2 + Math.sin(Date.now() / 1000) * 0.1})`
-                        }
-                    }
-                ]
-            });
-        }
-
-        // 闂備礁鎼ú銈夋偤閵娾晛钃熷┑鐘插枦缁憋綁鏌涢弴銊ユ珮闁告柨鎳橀弻鈩冩媴閸濆嫷鏆悗?
-        function updateWarningData(warnings) {
-            const safeWarnings = Array.isArray(warnings) ? warnings : [];
-
-            document.getElementById('alertCount').textContent = `${safeWarnings.length} 闂佸搫顦介幗?
-
-            const alertList = document.getElementById('alertList');
-            alertList.innerHTML = '';
-
-            if (safeWarnings.length === 0) {
-                alertList.innerHTML = `
-                <div class="alert-item">
-                    <div class="alert-details">
-                        <div class="alert-title">暂无真实预警数据</div>
-                        <div class="alert-desc">当前接口未返回可展示的预警记录</div>
-                    </div>
-                    <div class="alert-time">--:--</div>
-                </div>`;
-                return;
-            }
-
-            safeWarnings.slice(0, 5).forEach(warning => {
-                const alertItem = document.createElement('div');
-                alertItem.className = 'alert-item';
-
-                const time = new Date(warning.createTime || Date.now());
-                const timeStr = `${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`;
-
-                alertItem.innerHTML = `
-                <div class="alert-details">
-                    <div class="alert-title">${warning.title || '水位预警'}</div>
-                    <div class="alert-desc">${warning.content || '水位异常'}</div>
-                </div>
-                <div class="alert-time">${timeStr}</div>
-            `;
-
-                alertList.appendChild(alertItem);
-            });
-        }
-        function updateStationData(stations) {
-            if (!stations || !Array.isArray(stations)) return;
-
-            // 缂傚倸鍊搁崐褰掑箰閹间焦鍋ら柕濞у懎宕ュ┑鐐叉閸ㄥ灚绂掗鐐寸厸濞达絽鎼。鑲┾偓?
-            stations.forEach(station => {
-                stationDataCache[station.id] = station;
-            });
-        }
-
-        // 闂備礁鎼ú銈夋偤閵娾晛钃熷┑鐘叉搐閹瑰爼鏌℃径瀣嚋缂佸倸鐗撻弻鈥愁吋閸涱喚鈹涘?
-        function updateMapMarkers(waterLevels) {
-            if (!map || !markers.length) return;
-
-            const byIdKeys = Object.keys(markerByStationId || {});
-            if (byIdKeys.length) {
-                waterLevels.forEach(waterData => {
-                    const stationId = waterData?.stationId;
-                    if (stationId === undefined || stationId === null) return;
-
-                    const marker = markerByStationId[String(stationId)];
-                    if (!marker) return;
-
-                    const level = waterData.level || 0;
-                    const status = level < 2.5 ? '婵犳鍠楃换鎰緤娴犲鍋? : level < 3.5 ? '濠碘槅鍋呭妯尖偓姘煎灦椤? : '闂備礁鎲￠〃濠冪鐠鸿　鏋?;
-
-                    marker.setIcon(createMarkerIcon(getMarkerColorByStationStatus(status, level, stationDataCache?.[stationId])));
-
-                    const stationName = waterData.station?.name || `闂備胶鍎甸弲婊堝垂閸撲胶鐭堥悗闈涙憸閸?{stationId}`;
-                    marker.setTitle(`${stationName} - ${level.toFixed(2)}m`);
-                });
-                return;
-            }
-
-            markers.forEach((marker, index) => {
-                const stationId = index + 1;
-                const waterData = waterLevels.find(item => item.stationId === stationId);
-                if (!waterData) return;
-
-                const level = waterData.level || 0;
-                const status = level < 2.5 ? '婵犳鍠楃换鎰緤娴犲鍋? : level < 3.5 ? '濠碘槅鍋呭妯尖偓姘煎灦椤? : '闂備礁鎲￠〃濠冪鐠鸿　鏋?;
-
-                marker.setIcon(createMarkerIcon(getMarkerColorByStationStatus(status, level, stationDataCache?.[stationId])));
-
-                const stationName = waterData.station?.name || `闂備胶鍎甸弲婊堝垂閸撲胶鐭堥悗闈涙憸閸?{stationId}`;
-                marker.setTitle(`${stationName} - ${level.toFixed(2)}m`);
-            });
-        }
-
-        // 闂備礁鎼ú銈夋偤閵娾晛钃熷┑鐘叉噷娴滃綊鏌熼幆褍鏆辨い銈呮噺閹便劌螣閼测晝鐦堢紓鍌氱Т閹虫ê顕ｆ导鏉戠鐟滃绂?
-        function updateCurrentLevelDisplay(waterLevels) {
-            if (!waterLevels || waterLevels.length === 0) return;
-
-            // 闂備胶鎳撻悘姘跺磿閹惰棄鏄ョ€光偓閳ь剛鍒掗銏╂晞閻犱警鐓堟导鍥ㄧ箾閹寸偞鎯勫ù婊呭仱閹敻顢涢悙鏉戔偓鐑芥煕閿旇骞楅柣锝堥哺閹便劌螣閼测晝鐦堢紓鍌氱Т閹虫﹢寮澶婇唶闁绘棃顥撴禒鎰版⒑閸忓吋绶查柟铏崌椤㈡﹢宕妷褌绗夊┑掳鍊愰崑鎾绘⒑鐟欙絾娅婄€规洘鎮傚畷鍫曞Ω閿曗偓閻︾粯绻涙潏鍓у埌缂佸瀚Σ?
-            const firstStation = waterLevels[0];
-            if (firstStation && firstStation.level !== undefined) {
-                document.getElementById('currentLevel').textContent = firstStation.level.toFixed(2);
-            }
-        }
-
-        // 婵犵妲呴崹顏堝礈濠靛牃鍋撳顓犳噮闁逞屽墮濠€閬嶅磻閻愬樊娓婚柛宀€鍋涢弸渚€鏌ｅΔ鈧悧鍡欑矈閿曞倹鐓涢柛銉戝懏鎲奸梺鍝勮嫰閿曨亪寮澶婇唶闁靛繒濯禒鍓х磽娴ｈ鐓ユい鎴濆閼洪亶鎮电粵鍜洪梻?
-        function bindBackHomeEvent() {
-            const backBtn = document.getElementById('backButton');
-            if (backBtn) {
-                backBtn.addEventListener('click', function() {
-                    alert('闂佸搫顦弲婊堝蓟閵娿儍娲冀閵娧€鏋栨繝鐢靛У閸濆酣鍩€椤掆偓椤﹂潧鐣峰┑瀣亜閻犲洦褰冮獮瀣倵鐟欏嫮鎽冮悘蹇ｄ海椤ゅ倿姊洪崨濠勬噭闁糕晛锕﹀Σ鎰攽鐎ｎ亞鐓戝銈嗙墬缁嬫帞绮嬪畝鍕厵閻犲洠鍓濈欢姘舵偣閹邦喖鏋旈柍褜鍓欏﹢閬嶅磻閵堝拋鐎舵い鏍仦閸庡秹鏌涢弴銊ユ灓闁稿孩鐓″鍫曟倷閸偄浜淩L');
-                });
-            }
-        }
-
-        // 闂備礁鎲＄敮妤冩崲閸岀儑缍栭柟鐗堟緲缁€宀勬煛瀹ュ繒鐣遍柣锔界矒閺屾盯鏁傞懞銉у嚒濠电偛鐡ㄩ敃銏ゅ极瀹ュ閱囬柕蹇曞Т濮?D婵犳鍠楃换鎰緤婵傜绀嗗┑鐘插閸犲棝鏌涢埥鍡楀箻缂佲偓?
-        function initMainMap() {
-            // 2D闂備線娼婚梽鍕熆濡ソ鐟邦潨閳ь剟寮绘繝鍌ゅ悑闁搞儮鏅滈悗顓㈡⒑閹稿海鈯曢柤瑙勫礃閵囨劙宕惰濡插牓鏌涢锝囧闁稿鎹囬幃娆擃敆娴ｈ桨绮ч梻?D婵犵妲呴崹顏堝焵椤掆偓绾绢厾娑甸埀?
-            map = new AMap.Map('mapContainer', {
-                zoom: 10,
-                center: new AMap.LngLat(116.39748, 39.908823),
-                mapStyle: 'amap://styles/darkblue',
-                pitch: 0,
-                rotation: 0,
-                viewMode: '2D',
-                resizeEnable: true,
-                renderOptions: {
-                    canvasOptions: {
-                        willReadFrequently: true
-                    }
-                }
-            });
-
-            // 闂備線娼婚梽鍕熆濡ソ鐟邦潨閳ь剙鐣峰┑瀣亹闁绘垶顭囬妶浼存煟鎼达絾鍤€闁哄牜鍓熷畷鐟邦潩鐠洪缚袝闁瑰吋鐣崹鐟邦焽閹达附鐓曢柡鍐ㄥ€告牎闁汇埄鍨甸崺鏍矉?
-            map.on('complete', function() {
-                AMap.plugin(['AMap.Scale'], function() {
-                    map.addControl(new AMap.Scale({ position: 'bottom-left' }));
-                });
-            });
-
-            // 婵犵數鍎戠紞鈧い鏇嗗嫭鍙忛柣鎰劋閸庡酣鏌熺€电浠ч柕鍫濐嚟缁辨帡寮埀顒勬偡閿曞倹鍋夐柨婵嗘处婵?
-            const stations = [
-                { id: 1, lng: 116.39748, lat: 39.908823, name: '闂備礁鎲￠悧妤呭Φ閻愬搫瑙︽い鎰堕檮閻掔粯鎱ㄥ鍡楀箹闁告梹娲樼换娑氫沪閻ｅ矉绱炲┑鐐村絻閸燁偊婀侀柣搴秵閸撴稖銇?, level: '2.34m', update: '1闂備礁鎲＄敮鎺懳涘┑瀣闁规崘顕х粈?, status: '闂備線娼荤拹鐔煎礉鎼淬劌鍚? },
-                { id: 2, lng: 121.4737, lat: 31.2304, name: '濠电偞鍨堕幐鎼佹晝閵夆晛绠查柨婵嗘－濞撳爼鏌涢弴銊ュ⒋闁稿繐绻戦幈銊╁捶椤撶偞鐏佸┑鐐村絻閸燁偊婀侀柣搴秵閸撴稖銇?, level: '3.12m', update: '3闂備礁鎲＄敮鎺懳涘┑瀣闁规崘顕х粈?, status: '闂備線娼荤拹鐔煎礉鎼淬劌鍚? },
-                { id: 3, lng: 113.2644, lat: 23.1291, name: '婵°倗濮烽崑娑㈡倶濠靛牏鐜婚柣鎰劋閸嬬喖鏌ｅΟ铏癸紞婵炵鍊濋弻锝夊煛閸屾氨浠哥紓浣风椤曨厾鍒?, level: '1.89m', update: '2闂備礁鎲＄敮鎺懳涘┑瀣闁规崘顕х粈?, status: '闂備線娼荤拹鐔煎礉鎼淬劌鍚? },
-                { id: 4, lng: 114.0579, lat: 22.5431, name: '婵犵數鍎戠徊钘夌暦椤掆偓閿曘垹鐣￠幍鎺戦叄瀹曪繝鎮欑€电鐝濇繝鐢靛仜閼活垳澹曢鐏绘椽宕橀…瀣贡閳ь剨缍嗛崜娑溿亹?, level: '--', update: '2闂佽绻愮换鎰崲閹存繍娓婚柛宀€鍋涚粈?, status: '缂傚倷绀侀崐钘夌暦閻㈢鍚? },
-                { id: 5, lng: 114.3055, lat: 30.5931, name: '婵犳鍠楃换鎰版⒔閸曨垱鍎戝ù鐘差儐閸庡酣鏌熺€电浠ч柕鍫濐嚟缁?, level: '2.85m', update: '1闂備礁鎲＄敮鎺懳涘┑瀣闁规崘顕х粈?, status: '闂備線娼荤拹鐔煎礉鎼淬劌鍚?}
-            ];
-
-            stations.forEach(station => {
-                const position = new AMap.LngLat(station.lng, station.lat);
-
-                const marker = new AMap.Marker({
-                    position: position,
-                    title: station.name,
-                    icon: createMarkerIcon(station.status === '闂備線娼荤拹鐔煎礉鎼淬劌鍚? ? '#4facfe' : '#ff4d4f'),
-                    anchor: 'bottom-center'
-                });
-
-                const infoWindow = new AMap.InfoWindow({
-                    content: `<div style="color:#333;padding:5px;font-size:10px;">
-                    <h3 style="margin:0 0 2px 0;color:#0088ff;font-size:11px;">${station.name}</h3>
-                    <p style="margin:0;">闂備胶绮…鍫ュ春閺嶎厼鐒? ${station.status}</p>
-                    <p style="margin:0;">婵犳鍠楅…鍥╂崲濠靛牏绀? ${station.level}</p>
-                    <p style="margin:0;color:#666;font-size:9px;">${station.update}</p>
-                    <button style="margin-top:3px;padding:1px 4px;background:#0088ff;color:white;border:none;border-radius:2px;font-size:9px;cursor:pointer;"
-                            onclick="window.showWater2DView('${station.name.replace('闂備胶鍎甸弲婊堝垂閸撲胶鐭堥悗闈涙憸閸?, '')}', '${station.level}', ${station.lng}, ${station.lat})">
-                        闂備礁鎼悮顐﹀磿閸愯鑰块柛娑卞弾濞尖晝绱撻崼銏犘ョ紒澶嬫尦閹嘲鈻庤箛鏃戞濠?
-                    </button>
-                </div>`
-                });
-
-                marker.on('click', () => {
-                    infoWindow.open(map, marker.getPosition());
-                    document.getElementById('currentLevel').textContent = station.level.replace('m', '') || '0';
-                    selectedAreaData = {
-                        name: station.name.replace('闂備胶鍎甸弲婊堝垂閸撲胶鐭堥悗闈涙憸閸?, ''),
-                        level: parseFloat(station.level) || 0,
-                        speed: station.id === 1 ? 1.8 : station.id === 2 ? 2.3 : 1.5,
-                        quality: station.id === 1 ? '闂備浇澹堥鏍垂娴兼潙围? : station.id === 2 ? '濠电偞鍨堕幐鎾磻閹剧粯鐓? : '濠?
-                    };
-                });
-
-                markers.push(marker);
-                map.add(marker);
-                markerByStationId[String(station.id)] = marker;
-            });
-
-            if (!hasAutoFitView && markers.length) {
-                map.setFitView(markers, false, [30, 30, 30, 30]);
-                hasAutoFitView = true;
-            }
-
-            // 闂備線娼婚梽鍕熆濡ソ鐟邦潨閳ь剟骞冨▎鎾村仭闁哄瀵ч惁鏍ㄧ箾鐎涙鐭婃い鎴濆閳?
-            map.on('click', (e) => {
-                if (!e || !e.lnglat) return;
-
-                const lng = parseFloat(e.lnglat.getLng());
-                const lat = parseFloat(e.lnglat.getLat());
-
-                if (isNaN(lng) || isNaN(lat)) return;
-
-                AMap.plugin('AMap.Geocoder', () => {
-                    const geocoder = new AMap.Geocoder({
-                        radius: 1000,
-                        extensions: 'all'
-                    });
-
-                    geocoder.getAddress([lng, lat], (status, result) => {
-                        let address = '闂備礁鎼悧婊勭閻愮儤鍋傞柨鐔哄Т缁€宀勬煕濠靛棗顏柛?;
-                        let randomLevel = (Math.random() * 1.5 + 1).toFixed(2);
-                        let randomSpeed = (Math.random() * 1 + 1).toFixed(1);
-
-                        if (status === 'complete' && result && result.regeocode) {
-                            address = result.regeocode.formattedAddress || '闂備礁鎼悧婊勭閻愮儤鍋傞柨鐔哄Т缁€宀勬煕濠靛棗顏柛?;
-                        }
-
-                        selectedAreaData = {
-                            name: address,
-                            level: parseFloat(randomLevel) || 0,
-                            speed: parseFloat(randomSpeed) || 1.0,
-                            quality: Math.random() > 0.5 ? '闂備浇澹堥鏍垂娴兼潙围? : '濠电偞鍨堕幐鎾磻閹剧粯鐓?
-                        };
-
-                        window.showWater2DView(address, randomLevel + 'm', lng, lat);
-                    });
-                });
-            });
-        }
-
-        // 闂備礁鎲＄敮妤冩崲閸岀儑缍栭柟鐗堟緲缁€?D婵犳鍠楅…鍥╂崲濠靛牏绀婇柛娑欐綑閹瑰爼鏌℃径瀣嚋缂佸倸鐗撻弻銊モ槈濡厧顤€濠电偛鐡ㄧ粙鎺旂矉?D闂?
-        function initWater2DMap(lng, lat) {
-            // 婵犵數鍋為幐鎼佸箠閹版澘绠栧┑鐘叉搐缁秶鎲稿鍜冭€块柟缁㈠枛閻?
-            if (water2DMap) {
-                water2DMap.destroy();
-                water2DMap = null;
-            }
-            if (waterAnimationInterval) {
-                clearInterval(waterAnimationInterval);
-                waterAnimationInterval = null;
-            }
-            if (waterPolygon) {
-                waterPolygon = null;
-            }
-
-            // 闁诲孩顔栭崰鏍箹椤愶箑鏄ユ俊銈呮噹闁裤倝鏌熼柇锕€骞橀柛銊ャ偢閺屸€愁吋韫囨洜鐦堥梺?
-            const validLng = parseFloat(lng) || 116.39748;
-            const validLat = parseFloat(lat) || 39.908823;
-
-            // 2D闂備線娼婚梽鍕熆濡ソ鐟邦潨閳ь剟寮绘繝鍌ゅ悑闁搞儮鏅滈悗顓㈡⒑閹稿海鈽夐柣妤€绻樺畷娆撴嚍閵壯€鏀冲銈嗙墬缁诲秴顭囬幒妤佺叆?
-            water2DMap = new AMap.Map('water3DMapContainer', {
-                zoom: 16,
-                center: new AMap.LngLat(validLng, validLat),
-                mapStyle: 'amap://styles/darkblue',
-                pitch: 0,
-                rotation: 0,
-                viewMode: '2D',
-                resizeEnable: true,
-                features: ['road', 'building'],
-                renderOptions: {
-                    antialias: true,
-                    canvasOptions: {
-                        willReadFrequently: true
-                    }
-                }
-            });
-
-            // 闂備線娼婚梽鍕熆濡ソ鐟邦潨閳ь剙鐣峰┑瀣亹闁绘垶顭囬妶浼存煟鎼达絾鍤€闁哄牜鍓熷畷鐟邦潩鐠洪缚袝闁瑰吋鐣崹鐟邦焽閹达附鐓曢柡鍐ㄥ€稿瓭闂佸憡蓱閹告儳危?
-            water2DMap.on('complete', function() {
-                AMap.plugin(['AMap.Scale'], function() {
-                    water2DMap.addControl(new AMap.Scale({ position: 'bottom-left' }));
-                });
-
-                createWater2DPolygon(validLng, validLat);
-
-                // 婵犵數鍎戠紞鈧い鏇嗗嫭鍙忛柣鎰嚟閳绘梹銇勯幘璺轰户濠碘€虫喘閺岋綁骞囬锝嗙秷闂佺粯鐗徊鍧楀箯?
-                const centerMarker = new AMap.Marker({
-                    position: new AMap.LngLat(validLng, validLat),
-                    icon: new AMap.Icon({
-                        size: new AMap.Size(14, 14),
-                        image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png',
-                        imageSize: new AMap.Size(14, 14)
-                    }),
-                    anchor: 'bottom-center'
-                });
-                water2DMap.add(centerMarker);
-            });
-        }
-
-        // 闂備礁鎲＄敮妤冪矙閹寸姷纾?D婵犳鍠楅…鍥╂崲濠靛牏绀婇柛娑卞枛缁剁偞鎱ㄥΟ铏癸紞闁绘繂澧庨幉鎼佹焽閿旂晫绐欑紓浣介哺閻熲晛顕ｉ鈧幃鈺呮嚒閵堝懓鎷紓鍌欑椤戝懘顢栭幋鐘愁潟?
-        function createWater2DPolygon(lng, lat) {
-            const radius = 0.01;
-            const points = [];
-            const numPoints = 36;
-
-            for (let i = 0; i < numPoints; i++) {
-                const angle = (i / numPoints) * 2 * Math.PI;
-                const newLng = parseFloat(lng) + radius * Math.cos(angle);
-                const newLat = parseFloat(lat) + radius * Math.sin(angle);
-
-                if (!isNaN(newLng) && !isNaN(newLat)) {
-                    points.push(new AMap.LngLat(newLng, newLat));
-                }
-            }
-            if (points.length > 0) {
-                points.push(points[0]); // 闂傚倸鍊搁崑鍡涘储婵傜绠?
-            }
-
-            // 闂備礁鎲＄敮妤冪矙閹寸姷纾?D濠电姰鍨奸崺鏍ㄧ┍閾忓湱鍗氶柣鏃€鐪规禍瑙勩亜椤愵偄鏋ょ紒鈧崟顖涚厸闁告劦浜滈埢鍫ユ煟濠垫劕鏋ょ紒顔界懅閳ь剨绲芥晶搴ｇ矆?
-            waterPolygon = new AMap.Polygon({
-                path: points,
-                fillColor: 'rgba(0, 170, 220, 0.7)',
-                strokeColor: 'rgba(0, 200, 255, 0.9)',
-                strokeWeight: 1,
-                zIndex: 100
-            });
-
-            if (water2DMap && waterPolygon) {
-                water2DMap.add(waterPolygon);
-
-                // 婵犳鍠楅…鍥╂崲濠靛牏绀婇柛娑卞幐閺嬫牠鏌曡箛鏇炐㈢悮鐔兼⒑閸涘﹥鐓熼柛鏂块叄瀵?
-                let waveOffset = 0;
-                waterAnimationInterval = setInterval(() => {
-                    try {
-                        if (!waterPolygon || !water2DMap) return;
-
-                        waveOffset += 0.1;
-                        const alpha = 0.6 + Math.sin(waveOffset) * 0.1;
-
-                        waterPolygon.setOptions({
-                            fillColor: `rgba(0, 170, 220, ${alpha})`
-                        });
-                    } catch (e) {
-                        console.warn('闂備礁鎲￠弻锝夊礉鎼淬劌鏋佸Δ锝呭暙缁犮儳鎲搁幋锔衡偓渚€骞嬪┑鎰闂佺鏈銊╁春?', e);
-                        clearInterval(waterAnimationInterval);
-                    }
-                }, 100);
-            }
-        }
-
-        // 闂備礁鎼€氼剚鏅舵禒瀣?D婵犳鍠楅…鍥╂崲濠靛牏绀婇柛娑卞灡閸犲棝鏌涢埄鍐炬畷缂?
-        function showWater2DView(areaName, waterLevel, lng, lat) {
-            const validLng = parseFloat(lng) || 116.39748;
-            const validLat = parseFloat(lat) || 39.908823;
-            const validLevel = waterLevel || '0.00 m';
-
-            // 闂備礁鎼ú銈夋偤閵娾晛钃熷┑鐘插亞閸ゆ洟鏌涢敂璇插箻鐎规洝娉涜彁闁搞儻绲芥晶鎻捗?
-            document.getElementById('modalAreaName').textContent = areaName || '闂備礁鎼悧婊勭閻愮儤鍋傞柨鐔哄Т缁€宀勬煕濠靛棗顏柛?;
-            document.getElementById('modalWaterLevel').textContent = validLevel;
-            document.getElementById('modalWaterSpeed').textContent = selectedAreaData.speed + ' m/s';
-            document.getElementById('modalWaterQuality').textContent = selectedAreaData.quality || '闂備浇澹堥鏍垂娴兼潙围?;
-
-            // 闂備礁鎲＄敮妤冩崲閸岀儑缍栭柟鐗堟緲缁€?D闂備線娼婚梽鍕熆濡ソ?
-            initWater2DMap(validLng, validLat);
-
-            // 闂備礁鎼€氼剚鏅舵禒瀣︽慨姗嗗墻閸ゆ洟鏌涢敂璇插箻鐎?
-            document.getElementById('overlay').style.display = 'block';
-            document.getElementById('water3DModal').style.display = 'flex';
-
-            setTimeout(() => {
-                if (water2DMap) {
-                    water2DMap.resize();
-                }
-            }, 200);
-        }
-
-        // 闂佽绻愮换鎰涘Δ鍛惞闂侇剙绉撮弸渚€鏌熷畡鎵劸闁哥喎楠搁埥澶愬箻閾忣偅鍎撻梺鍛婄懃缁绘帗绂掗敃鍌氱劦妞ゆ帒瀚惌妤併亜閺嶃劎绠ラ柛鐔风箻濮?
-        window.showWater2DView = showWater2DView;
-
-        // 闂備胶顭堢换鎴炵箾婵犲伣娑㈠级閹搭厽鍍电紓鍌氱墢婵绮旈幘顔藉仭婵炲棗绻戦ˉ婊勭箾?
-        function closeWater2DView() {
-            document.getElementById('overlay').style.display = 'none';
-            document.getElementById('water3DModal').style.display = 'none';
-
-            if (waterAnimationInterval) {
-                clearInterval(waterAnimationInterval);
-                waterAnimationInterval = null;
-            }
-
-            if (waterPolygon && water2DMap) {
-                water2DMap.remove(waterPolygon);
-                waterPolygon = null;
-            }
-        }
-
-        // 闂備礁鎲＄敮妤冩崲閸岀儑缍栭柟鐗堟緲缁€宀勬煛瀹擃喖瀚々顓㈡煟?
-        function initCharts() {
-            // 闂佽楠稿﹢閬嶅磻閻愬樊娓婚柛灞惧嚬濞尖晝绱撻崼銏犘ョ紒澶嬫尦閹椽骞掗幋顓炲壈婵犵數鍋涚粔鐟扮暦?
-            const levelChartDom = document.getElementById('waterLevelChart');
-            if (levelChartDom) {
-                levelChart = echarts.init(levelChartDom);
-                const now = new Date();
-                const initialTimes = [];
-                const initialData = [];
-
-                // 闂備礁鎲＄敮妤冩崲閸岀儑缍栭柟鐗堟緲缁€宀勬煛瀹ュ啫濡芥い蟻鍥ㄢ拻闁稿本绋掔紞鎴犵磼椤垵寮€规洘鑹捐灃閻庯綆鍓涢ˇ鈺呮煛婢跺棙娅呮繛灞傚€濋悰?闂佽绻愮换鎰崲閹存繍娓婚柛宀€鍋為弲?
-                for (let i = 12; i >= 0; i--) {
-                    const time = new Date(now.getTime() - i * 10 * 60000);
-                    initialTimes.push(`${time.getHours().toString().padStart(2, '0')}:${time.getMinutes().toString().padStart(2, '0')}`);
-                    initialData.push(2.0 + Math.sin((time.getHours() + time.getMinutes()/60) * Math.PI / 12) * 0.3);
-                }
-
-                levelChart.setOption({
-                    backgroundColor: 'transparent',
-                    tooltip: {
-                        trigger: 'axis',
-                        textStyle: { color: '#e0e0ff', fontSize: 7 },
-                        backgroundColor: 'rgba(16, 22, 58, 0.8)',
-                        borderColor: 'rgba(64, 224, 208, 0.3)',
-                        borderWidth: 1
-                    },
-                    legend: {
-                        data: ['闂佽楠稿﹢閬嶅磻閻愬樊娓婚柛灞惧嚬濞尖晝绱撻崼銏犘ョ紒?, '闂佽崵濮崑鎾绘煥閺冨洦顥夐柣蹇擄攻閹便劌螣閼测晝鐦堢紓?, '濠碘槅鍋呭妯尖偓姘煎幘缁﹪寮堕幋顓熷兊缂傚倸鐗忔慨椋庣矓?],
-                        textStyle: { color: '#a0a0ff', fontSize: 7 },
-                        top: '0%',
-                        itemGap: 1,
-                        itemWidth: 6,
-                        itemHeight: 3
-                    },
-                    grid: {
-                        left: '0%',
-                        right: '0%',
-                        bottom: '0%',
-                        top: '10%',
-                        containLabel: true
-                    },
-                    xAxis: {
-                        type: 'category',
-                        boundaryGap: false,
-                        data: initialTimes,
-                        axisLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.3)', width: 0.5 } },
-                        axisLabel: {
-                            color: '#a0a0ff',
-                            fontSize: 6,
-                            interval: 2
-                        },
-                        axisTick: {
-                            show: false,
-                            length: 2
-                        }
-                    },
-                    yAxis: {
-                        type: 'value',
-                        name: 'm',
-                        nameTextStyle: { color: '#40e0d0', fontSize: 7 },
-                        axisLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.3)', width: 0.5 } },
-                        axisLabel: {
-                            color: '#a0a0ff',
-                            fontSize: 6,
-                            margin: 0
-                        },
-                        splitLine: {
-                            lineStyle: {
-                                color: 'rgba(64, 224, 208, 0.05)',
-                                width: 0.3
-                            }
-                        },
-                        min: 1.5,
-                        max: 4.5
-                    },
-                    series: [
-                        {
-                            name: '闂佽楠稿﹢閬嶅磻閻愬樊娓婚柛灞惧嚬濞尖晝绱撻崼銏犘ョ紒?,
-                            type: 'line',
-                            data: initialData,
-                            smooth: true,
-                            lineStyle: { color: '#40e0d0', width: 1.2 },
-                            itemStyle: { color: '#40e0d0' },
-                            symbolSize: 2,
-                            areaStyle: {
-                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                                    { offset: 0, color: 'rgba(64, 224, 208, 0.3)' },
-                                    { offset: 1, color: 'rgba(64, 224, 208, 0.05)' }
-                                ])
-                            }
-                        },
-                        {
-                            name: '闂佽崵濮崑鎾绘煥閺冨洦顥夐柣蹇擄攻閹便劌螣閼测晝鐦堢紓?,
-                            type: 'line',
-                            data: Array(initialTimes.length).fill(3.5),
-                            lineStyle: { color: '#ffa500', type: 'dashed', width: 0.8 },
-                            itemStyle: { color: '#ffa500' },
-                            symbol: 'none'
-                        },
-                        {
-                            name: '濠碘槅鍋呭妯尖偓姘煎幘缁﹪寮堕幋顓熷兊缂傚倸鐗忔慨椋庣矓?,
-                            type: 'line',
-                            data: initialData.map(d => d * 1.1),
-                            smooth: true,
-                            lineStyle: { color: '#ff3232', width: 1.2 },
-                            itemStyle: { color: '#ff3232' },
-                            symbolSize: 2
-                        }
-                    ]
-                });
-            }
-
-            // 濠电姰鍨归悘鍫ュ疾濠婂牊鍎嶅ù锝呭暔娴滃綊鏌涘Δ鍐ㄤ沪闁诡垱鐟╁濠氬幢濞嗘劗鍔归梺瑙勬た娴滎亜鐣?
-            const weatherChartDom = document.getElementById('weatherImpactChart');
-            if (weatherChartDom) {
-                weatherImpactChart = echarts.init(weatherChartDom);
-                weatherImpactChart.setOption({
-                    backgroundColor: 'transparent',
-                    tooltip: {
-                        trigger: 'item',
-                        textStyle: { color: '#e0e0ff', fontSize: 7 },
-                        backgroundColor: 'rgba(16, 22, 58, 0.8)',
-                        borderColor: 'rgba(64, 224, 208, 0.3)',
-                        borderWidth: 1
-                    },
-                    legend: {
-                        orient: 'horizontal',
-                        bottom: '0%',
-                        left: 'center',
-                        textStyle: { color: '#a0a0ff', fontSize: 7 },
-                        data: ['闁荤喐绮庢晶妤呭箰閸涘﹥娅?, '濠碘槅鍋呭妯尖偓姘煎幘缁?, '闂傚倸鍊搁崯顐︽偋閸℃稑鐒?],
-                        itemGap: 2,
-                        itemWidth: 6,
-                        itemHeight: 3
-                    },
-                    radar: {
-                        indicator: [
-                            { name: '闂傚倸鍊哥€氼剛绮旈悷鎳婃椽鏁冮崒娑氬帓?, max: 100 },
-                            { name: '濠碉紕鍋涢鍛存煀閿濆鐒?, max: 20 },
-                            { name: '婵犵數鍋為幐鎾疾濞戞埃鍋?, max: 40 },
-                            { name: '婵犵數濮崑鎾绘煕椤垵鏋涙い?, max: 100 },
-                            { name: '婵犳鍠楄摫闁哄被鍔庨弫?, max: 1050 },
-                            { name: '闂備浇妫勯崐濠氣€﹂崼锝冧汗闁稿瞼鍋為悡?, max: 50 }
-                        ],
-                        shape: 'polygon',
-                        axisName: {
-                            color: '#40e0d0',
-                            fontSize: 7,
-                            padding: [0, 0]
-                        },
-                        splitLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.1)', width: 0.5 } },
-                        splitArea: { areaStyle: { color: 'rgba(16, 22, 58, 0.2)' } },
-                        axisLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.3)', width: 0.5 } },
-                        center: ['50%', '38%'],
-                        radius: '45%'
-                    },
-                    series: [{
-                        name: '濠电姰鍨归悘鍫ュ疾濠婂牊鍎嶅ù锝呭暔娴滃綊鏌涘Δ鍐ㄤ沪闁?,
-                        type: 'radar',
-                        lineStyle: { width: 1 },
-                        symbolSize: 2,
-                        data: [
-                            {
-                                value: [45, 8, 18, 75, 1012, 15],
-                                name: '闁荤喐绮庢晶妤呭箰閸涘﹥娅?,
-                                areaStyle: { color: 'rgba(64, 224, 208, 0.2)' },
-                                lineStyle: { color: '#40e0d0' },
-                                itemStyle: { color: '#40e0d0' }
-                            },
-                            {
-                                value: [65, 12, 20, 85, 1008, 10],
-                                name: '濠碘槅鍋呭妯尖偓姘煎幘缁?,
-                                areaStyle: { color: 'rgba(255, 50, 50, 0.2)' },
-                                lineStyle: { color: '#ff3232' },
-                                itemStyle: { color: '#ff3232' }
-                            },
-                            {
-                                value: [80, 15, 35, 90, 1000, 20],
-                                name: '闂傚倸鍊搁崯顐︽偋閸℃稑鐒?,
-                                areaStyle: { color: 'rgba(255, 165, 0, 0.1)' },
-                                lineStyle: { color: '#ffa500', type: 'dashed' },
-                                itemStyle: { color: '#ffa500' }
-                            }
-                        ]
-                    }]
-                });
-            }
-
-            // 婵犳鍠楅…鍥╂崲濠靛牏绀婇柛娑欐綑绾偓闂佺粯锚绾绢厼危瀹勬嫈鏂课旈崘銊ヤ粯濠?
-            const ratioChartDom = document.getElementById('levelRatioChart');
-            if (ratioChartDom) {
-                levelRatioChart = echarts.init(ratioChartDom);
-
-                const richColors = [
-                    {
-                        name: '闂佽娴烽幊鎾凰囬鐐茬煑闊洦绋戠粈?,
-                        value: 16,
-                        color: '#40e0d0',
-                        subColor: '#00cccc',
-                        textColor: '#40e0d0',
-                        stations: 16,
-                        avgLevel: '2.15m',
-                        status: '婵犳鍠楃换鎰緤娴犲鍋?
-                    },
-                    {
-                        name: '濠电偠鎻徊浠嬫煀閿濆＆澶愬箻缂佹ǚ鎸冮梺瀹犳〃缁€渚€姊?,
-                        value: 8,
-                        color: '#4dabf7',
-                        subColor: '#2196f3',
-                        textColor: '#4dabf7',
-                        stations: 8,
-                        avgLevel: '2.85m',
-                        status: '闂備胶顭堢换妤€鈻嶉弴銏犳瀬?
-                    },
-                    {
-                        name: '闂佽崵濮崑鎾绘煥閺冨洦顥夐柣蹇擄躬閺?,
-                        value: 6,
-                        color: '#ffa500',
-                        subColor: '#ff8c00',
-                        textColor: '#ffa500',
-                        stations: 6,
-                        avgLevel: '3.45m',
-                        status: '闂佽崵濮崑鎾绘煥閺囨浜鹃梺?
-                    },
-                    {
-                        name: '闂備礁鎲￠〃濠冪鐠鸿　鏋嶉柟鎹愵嚙缁€?,
-                        value: 4,
-                        color: '#ff3232',
-                        subColor: '#ff0000',
-                        textColor: '#ff3232',
-                        stations: 4,
-                        avgLevel: '3.92m',
-                        status: '闂備礁鎲￠〃濠冪鐠鸿　鏋?
-                    }
-                ];
-
-                levelRatioChart.setOption({
-                    backgroundColor: 'transparent',
-                    tooltip: {
-                        trigger: 'item',
-                        formatter: function(params) {
-                            const data = params.data;
-                            return `<div style="font-size:8px;padding:3px;">
-                            <div style="color:${data.textColor};font-weight:bold;margin-bottom:2px;">${data.name}</div>
-                            <div style="color:#a0a0ff;">闂備礁鎲￠〃鍫熸叏閻㈠憡鍎? ${data.value}%</div>
-                            <div style="color:#a0a0ff;">缂傚倷鐒﹀褰掓偡瑜斿畷鎴︽晲婢跺﹥鐎? ${data.stations}濠?/div>
-                            <div style="color:#a0a0ff;">婵°倗濮烽崑娑㈠疮閸噮鐒介幖绮规濞尖晝绱撻崼銏犘ョ紒? ${data.avgLevel}</div>
-                            <div style="color:${data.textColor};font-weight:bold;">闂備胶绮…鍫ュ春閺嶎厼鐒? ${data.status}</div>
-                        </div>`;
-                        },
-                        textStyle: {
-                            color: '#e0e0ff',
-                            fontSize: 8
-                        },
-                        backgroundColor: 'rgba(16, 22, 58, 0.95)',
-                        borderColor: 'rgba(64, 224, 208, 0.4)',
-                        borderWidth: 1,
-                        extraCssText: 'box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);'
-                    },
-                    legend: {
-                        orient: 'vertical',
-                        right: '1%',
-                        top: 'middle',
-                        textStyle: {
-                            color: '#a0a0ff',
-                            fontSize: 7,
-                            lineHeight: 9,
-                            fontWeight: 'normal'
-                        },
-                        itemWidth: 8,
-                        itemHeight: 8,
-                        itemGap: 3,
-                        data: richColors.map(item => item.name),
-                        formatter: function(name) {
-                            const item = richColors.find(d => d.name === name);
-                            return `{name|${name}} {value|${item.value}%}\n{stations|${item.stations}缂傚倷鐒﹀褰掝敁閸?
-                        },
-                        rich: {
-                            name: {
-                                color: '#e0e0ff',
-                                fontSize: 7,
-                                fontWeight: 'bold'
-                            },
-                            value: {
-                                color: '#40e0d0',
-                                fontSize: 8,
-                                fontWeight: 'bold',
-                                padding: [0, 0, 0, 5]
-                            },
-                            stations: {
-                                color: '#80d4ff',
-                                fontSize: 6,
-                                padding: [0, 0, 0, 5]
-                            }
-                        }
-                    },
-                    series: [
-                        {
-                            name: '婵犳鍠楅…鍥╂崲濠靛牏绀婇柛娑欐綑绾偓闂佺粯锚绾绢厼危?,
-                            type: 'pie',
-                            radius: ['35%', '55%'],
-                            center: ['30%', '50%'],
-                            avoidLabelOverlap: true,
-                            label: {
-                                show: true,
-                                position: 'inside',
-                                formatter: '{d}%',
-                                color: '#ffffff',
-                                fontSize: 7,
-                                fontWeight: 'bold',
-                                textShadowColor: 'rgba(0, 0, 0, 0.8)',
-                                textShadowBlur: 2,
-                                textShadowOffsetX: 1,
-                                textShadowOffsetY: 1
-                            },
-                            labelLine: {
-                                show: false
-                            },
-                            emphasis: {
-                                scale: true,
-                                scaleSize: 5,
-                                label: {
-                                    show: true,
-                                    fontSize: 9,
-                                    fontWeight: 'bold'
-                                },
-                                itemStyle: {
-                                    shadowBlur: 10,
-                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                                }
-                            },
-                            data: richColors.map(item => ({
-                                value: item.value,
-                                name: item.name,
-                                itemStyle: {
-                                    color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                                        { offset: 0, color: item.color },
-                                        { offset: 1, color: item.subColor }
-                                    ]),
-                                    borderWidth: 1,
-                                    borderColor: 'rgba(255, 255, 255, 0.3)',
-                                    shadowBlur: 5,
-                                    shadowColor: 'rgba(0, 0, 0, 0.3)'
-                                },
-                                textColor: item.textColor,
-                                stations: item.stations,
-                                avgLevel: item.avgLevel,
-                                status: item.status
-                            })),
-                            itemStyle: {
-                                borderRadius: 3,
-                                borderColor: 'rgba(16, 22, 58, 0.8)',
-                                borderWidth: 1
-                            }
-                        },
-                        {
-                            name: '闂備胶绮…鍫ュ春閺嶎厼鐒垫い鎴ｆ硶椤︼箓鏌涢妸銉︽崳闁?,
-                            type: 'pie',
-                            radius: ['20%', '28%'],
-                            center: ['30%', '50%'],
-                            avoidLabelOverlap: false,
-                            label: {
-                                show: false
-                            },
-                            emphasis: {
-                                scale: false
-                            },
-                            data: [
-                                {
-                                    value: 70,
-                                    name: '婵犳鍠楃换鎰緤娴犲鍋?,
-                                    itemStyle: { color: 'rgba(64, 224, 208, 0.7)' }
-                                },
-                                {
-                                    value: 20,
-                                    name: '濠碘槅鍋呭妯尖偓姘煎灦椤?,
-                                    itemStyle: { color: 'rgba(255, 165, 0, 0.7)' }
-                                },
-                                {
-                                    value: 10,
-                                    name: '闂備胶顢婄紙浼村磿閹绢噮鏁?,
-                                    itemStyle: { color: 'rgba(255, 50, 50, 0.7)' }
-                                }
-                            ],
-                            itemStyle: {
-                                borderWidth: 1,
-                                borderColor: 'rgba(255, 255, 255, 0.2)'
-                            }
-                        },
-                        {
-                            name: '濠电偞鍨堕幖鈺呭储閼测晝绱﹀Δ锝呭暙濡﹢鏌涢妷鎴濇噺閹?,
-                            type: 'pie',
-                            radius: ['0%', '15%'],
-                            center: ['30%', '50%'],
-                            label: {
-                                show: true,
-                                position: 'center',
-                                formatter: '闂備浇顕栭崜姘ｉ幒妤婃晣缂佹柨鏀硔total|24缂傚倷鐒﹀褰掝敁?,
-                                rich: {
-                                    total: {
-                                        fontSize: 10,
-                                        fontWeight: 'bold',
-                                        color: '#40e0d0',
-                                        lineHeight: 15
-                                    }
-                                },
-                                fontSize: 7,
-                                color: '#a0a0ff'
-                            },
-                            data: [{ value: 1 }],
-                            silent: true,
-                            itemStyle: {
-                                color: 'transparent'
-                            }
-                        }
-                    ],
-                    graphic: [
-                        {
-                            type: 'circle',
-                            shape: {
-                                cx: '30%',
-                                cy: '50%',
-                                r: 58
-                            },
-                            style: {
-                                stroke: 'rgba(64, 224, 208, 0.2)',
-                                fill: 'transparent',
-                                lineWidth: 1
-                            },
-                            silent: true
-                        },
-                        {
-                            type: 'circle',
-                            shape: {
-                                cx: '30%',
-                                cy: '50%',
-                                r: 60
-                            },
-                            style: {
-                                stroke: 'rgba(64, 224, 208, 0.1)',
-                                fill: 'transparent',
-                                lineWidth: 0.5
-                            },
-                            silent: true
-                        }
-                    ],
-                    animation: true,
-                    animationDuration: 1000,
-                    animationEasing: 'cubicOut'
-                });
-            }
-
-            // 闂備礁鎲￠敋婵☆偅顨夐妵鎰崉娓氼垱鍍电紓鍌氱墢婵绮旈幘顔藉€靛ù锝呭枤濞兼劙鏌ｉ敂璇叉珝鐎?
-            const historyChartDom = document.getElementById('historyLevelChart');
-            if (historyChartDom) {
-                historyLevelChart = echarts.init(historyChartDom);
-
-                const now = new Date();
-                const timeLabels = ['0闂?, '6闂?, '12闂?, '18闂?];
-
-                historyLevelChart.setOption({
-                    backgroundColor: 'transparent',
-                    tooltip: {
-                        trigger: 'axis',
-                        textStyle: { color: '#e0e0ff', fontSize: 7 },
-                        backgroundColor: 'rgba(16, 22, 58, 0.8)',
-                        borderColor: 'rgba(64, 224, 208, 0.3)',
-                    },
-                    legend: {
-                        data: ['濠电偛顕慨鎾晝閵夈儙?, '闂備礁鎼€氥劑宕濆鍛?, '濠电偞鍨堕幐鎼佹晝閵堝绠犻柛鈩冪☉鐟欙箓鎮橀悙闈涗壕闁?],
-                        textStyle: { color: '#a0a0ff', fontSize: 6 },
-                        top: '0%',
-                        itemGap: 1,
-                        itemWidth: 6,
-                        itemHeight: 3
-                    },
-                    grid: {
-                        left: '1%',
-                        right: '1%',
-                        bottom: '0%',
-                        top: '10%',
-                        containLabel: true
-                    },
-                    xAxis: {
-                        type: 'category',
-                        data: timeLabels,
-                        axisLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.3)', width: 0.5 } },
-                        axisLabel: {
-                            color: '#a0a0ff',
-                            fontSize: 6,
-                            margin: 0
-                        }
-                    },
-                    yAxis: {
-                        type: 'value',
-                        axisLine: { lineStyle: { color: 'rgba(64, 224, 208, 0.3)', width: 0.5 } },
-                        axisLabel: {
-                            color: '#a0a0ff',
-                            fontSize: 6,
-                            margin: 0
-                        },
-                        splitLine: {
-                            lineStyle: {
-                                color: 'rgba(64, 224, 208, 0.05)',
-                                width: 0.3
-                            }
-                        },
-                        min: 1.5,
-                        max: 2.5
-                    },
-                    series: [
-                        {
-                            name: '濠电偛顕慨鎾晝閵夈儙?,
-                            type: 'line',
-                            data: [1.98, 2.15, 2.34, 2.42],
-                            smooth: true,
-                            lineStyle: { color: '#00f2fe', width: 1 },
-                            itemStyle: { color: '#00f2fe' },
-                            symbolSize: 1.5
-                        },
-                        {
-                            name: '闂備礁鎼€氥劑宕濆鍛?,
-                            type: 'line',
-                            data: [1.85, 2.02, 2.18, 2.25],
-                            smooth: true,
-                            lineStyle: { color: '#4facfe', width: 1 },
-                            itemStyle: { color: '#4facfe' },
-                            symbolSize: 1.5
-                        },
-                        {
-                            name: '濠电偞鍨堕幐鎼佹晝閵堝绠犻柛鈩冪☉鐟欙箓鎮橀悙闈涗壕闁?,
-                            type: 'line',
-                            data: [1.72, 1.88, 2.05, 2.12],
-                            smooth: true,
-                            lineStyle: { color: '#9966ff', width: 1 },
-                            itemStyle: { color: '#9966ff' },
-                            symbolSize: 1.5
-                        }
-                    ]
-                });
-            }
-        }
-
-        // 缂傚倸鍊烽悞锕傚垂閻㈠憡鍋╁Δ锝呭暙缁犮儵鏌嶈閸撶喎顕ｉ崹顐㈢窞濠㈣泛鐬煎▓銈嗙箾?
-        function bindEvents() {
-            // 婵犵數濮撮敃銉╁垂闂堟侗鐒介柍鈺佸暟椤╂煡鎮楅敐鍌涙珕妞?
-            document.getElementById('predictionHours').addEventListener('input', function() {
-                document.getElementById('hoursValue').textContent = this.value;
-            });
-            document.getElementById('sampleRate').addEventListener('input', function() {
-                document.getElementById('rateValue').textContent = this.value;
-            });
-
-            // 闂備胶顭堢换鎴炵箾婵犲伣娑㈠级閹搭厽鍍电紓鍌氱墢婵绮旈幘顔藉仭婵炲棗绻戦ˉ婊勭箾鐎涙〞鎴犵矉瀹ュ洠鍋撻敐鍌涙珕妞?
-            document.getElementById('closeModalBtn').addEventListener('click', closeWater2DView);
-            document.getElementById('overlay').addEventListener('click', closeWater2DView);
-
-            // 闂備胶鎳撻崥瀣垝鎼淬劌纾奸柕濞у懎宕ュ┑鐐叉閸ㄥ灚绂掗姣懓顭ㄩ崘鎯у壆濠?
-            document.getElementById('searchBtn').addEventListener('click', searchStation);
-            document.getElementById('stationSearch').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') searchStation();
-            });
-
-            // 缂傚倷鐒﹂崝鏍€冮崨鑸汗婵炴垶鐟ョ欢鐐垫喐瀹ュ鍎嶆い鎺戝€圭€氼剟鏌涢幇銊︽珕婵炲牐顕ч湁婵犲﹤鍠氶崕搴㈢箾?
-            window.addEventListener('resize', function() {
-                if (levelChart) levelChart.resize();
-                if (weatherImpactChart) weatherImpactChart.resize();
-                if (levelRatioChart) levelRatioChart.resize();
-                if (historyLevelChart) historyLevelChart.resize();
-                if (map) map.resize();
-                if (water2DMap) setTimeout(() => water2DMap.resize(), 100);
-            });
-
-            // 闂傚倸鍊搁崯顐㈩嚕閸洦鏁嗘繛鎴烇供閸ゆ洟鏌涢敂璇插箻鐎规洖鐖奸弻娑㈠箛椤掍礁娈楅梺绋垮閹告娊骞冨▎鎾村仭闁哄瀵ч惁鏍磽娴ｆ瓕瀚版繛纭风節閸┾偓?
-            document.getElementById('water3DModal').addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-
-            // 濠碉紕鍋戦崐妤呭极鐠囧樊鐒藉ù鍏兼綑绾偓濠殿喗绻傞張顒傜矈娴煎瓨鐓涢柛鎰靛幖閻撴劗绱掗弬娆剧吋闁诡喖鐖煎畷鍗烆潩娓氬灝浜芥繝?
-            window.addEventListener('beforeunload', function() {
-                if (realTimeUpdateInterval) clearInterval(realTimeUpdateInterval);
-                if (waterAnimationInterval) clearInterval(waterAnimationInterval);
-                if (map) map.destroy();
-                if (water2DMap) water2DMap.destroy();
-            });
-        }
-
-        // 闂備胶鎳撻崥瀣垝鎼淬劌纾奸柕濞у懎宕ュ┑鐐叉閸ㄥ灚绂掗鐐寸厱闁哄啫鍊搁弸娆撴煕?
-        function searchStation() {
-            const keyword = document.getElementById('stationSearch').value.trim().toLowerCase();
-            if (!keyword) {
-                alert('闂佽崵濮村ú銊╁蓟婢跺本顐芥い鎾卞灩缁€鍌炴煏婢诡垰鎳庣拋鏌ユ⒑缂佹ê濮夐柟铏崌楠炲啴寮撮悩鐢电厠闂佸搫顦悘婵娿亹閻樼粯鈷戞繛鍡樺劤閺嬶箓鏌?);
-                return;
-            }
-
-            const matchedStations = markers.filter(marker => {
-                const title = (marker.getTitle() || '').toLowerCase();
-                return title.includes(keyword);
-            });
-
-            if (matchedStations.length > 0) {
-                const targetMarker = matchedStations[0];
-                const position = targetMarker.getPosition();
-                if (position && map) {
-                    map.setCenter(position);
-                    map.setZoom(12);
-                    targetMarker.emit('click');
-                }
-                document.getElementById('stationSearch').value = '';
-            } else {
-                alert(`闂備礁鎼悧婊勭濠靛绠栫€规洖娲﹂～鏇㈡煏韫囨洖孝闁绘挸鍊块弻娑㈠冀瑜庨崳褰掓煙?${keyword}"闂備焦鐪归崝宀€鈧凹鍣ｉ幃鐢割敍閻愭潙鈧绱?;
-            }
-        }
-
-        // 闂備胶顭堢换鍫ュ礉瀹€鍕剳妞ゆ帒瀚悡銉︾箾閸℃ê淇柛銈嗙墪椤法鎹勯崫鍕典紑闂?
-        window.addEventListener('error', function(e) {
-            console.error('闂佸搫顦弲婊堝礉濮椻偓閵嗕線骞嬮敃鈧猾宥夋煕椤愶絾绀冮柡鍛櫊閹?', e.message, e.filename, e.lineno);
-
-            if (e.message.includes('NaN') && e.filename.includes('amap.com')) {
-                return;
-            }
-
-            alert('缂傚倷绶￠崹闈涚暦閻㈤潧鍨濇繛宸簻閻鏌熺€电校闁哄懏鎮傚娲箰鎼达絾鍣? ' + e.message);
+            alert('\u7cfb\u7edf\u53d1\u751f\u9519\u8bef: ' + event.message);
         });
 
-        // 濠碉紕鍋戦崐妤呭极鐠囧樊鐒藉ù鍏兼綑缁€澶愭煟濡厧鍔嬬紒浣峰嵆閹鎮烽悧鍫熸嫳闂佹悶鍔嶅畝绋跨暦閵夛附鍎熼柍銉ョ－娴犲瓨绻濆▓鍨灈妞ゆ垵鎳愰埀?
         if (document.readyState === 'complete') {
             initAll();
         } else {
@@ -2849,3 +2241,4 @@
     </script>
 </body>
 </html>
+
