@@ -36,3 +36,4 @@ build/
 .agents/
 hs_err_pid*.log
 docs/
+src/main/resources/application-local.yml

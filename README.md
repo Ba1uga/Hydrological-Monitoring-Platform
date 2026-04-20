@@ -54,6 +54,13 @@
 
 可参考 `src/main/resources/application-example.yml` 作为本地示例配置。
 
+### Local Override Flow
+
+- Keep `src/main/resources/application.yml` safe for commit.
+- Put real local credentials into `src/main/resources/application-local.yml`.
+- That file is ignored by git and is imported automatically at runtime when present.
+- Use `src/main/resources/application-example.yml` as the template if you need to recreate the local file.
+
 ## Local Start
 
 环境要求：

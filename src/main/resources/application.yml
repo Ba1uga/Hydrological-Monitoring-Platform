@@ -2,6 +2,11 @@ server:
   port: ${SERVER_PORT:8080}
 
 spring:
+  config:
+    import:
+      - optional:classpath:application-local.yml
+      - optional:file:./application-local.yml
+      - optional:file:./config/application-local.yml
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL:jdbc:mysql://localhost:3306/china_hydrology_monitor}
