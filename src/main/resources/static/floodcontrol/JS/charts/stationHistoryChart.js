@@ -3,6 +3,7 @@
 /* 展示站点过去7天的水位变化，支持缩放和自动更新 */
 
 import { getCurrentMode, setCurrentView } from '../map/initMap.js';
+import { buildQueryTimeParams, getSelectedQueryTime } from '../state/queryTimeContext.js';
 
 /**
  * @typedef {Object} StationHistoryItem
@@ -76,7 +77,7 @@ export async function initStationHistoryChart(stationName, mode = getCurrentMode
 async function fetchStationHistoryData(stationName, mode) {
   try {
     const res = await axios.get('/currentOverview/sevenDaysHistory', {
-      params: { stationName, mode }
+      params: buildQueryTimeParams({ stationName, mode, queryTime: getSelectedQueryTime() })
     });
     
     if (res.data.code === 200) {
