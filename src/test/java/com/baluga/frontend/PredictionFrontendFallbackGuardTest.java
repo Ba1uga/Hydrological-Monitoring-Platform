@@ -38,10 +38,16 @@ class PredictionFrontendFallbackGuardTest {
     void predictionPage_usesReadableUserFacingCopy() throws IOException {
         String html = Files.readString(PAGE, StandardCharsets.UTF_8);
 
-        assertTrue(containsAny(html, "中国水质水位预测可视化平台", "涓浗姘磋川姘翠綅棰勬祴鍙鍖栧钩鍙?"));
-        assertTrue(containsAny(html, "水利工程", "姘村埄宸ョ▼"));
-        assertTrue(containsAny(html, "水位动态监测", "姘翠綅鍔ㄦ€佺洃娴?"));
-        assertTrue(containsAny(html, "水位预测", "姘翠綅棰勬祴"));
+        assertTrue(containsAny(
+            html,
+            "中国水质水位预测可视化平台",
+            "水质水位预测中心",
+            "涓浗姘磋川姘翠綅棰勬祴鍙鍖栧钩鍙?",
+            "姘磋川姘翠綅棰勬祴涓績"
+        ));
+        assertTrue(containsAny(html, "水利工程", "重点水利工程", "姘村埄宸ョ▼"));
+        assertTrue(containsAny(html, "水位动态监测", "动态水位监测", "姘翠綅鍔ㄦ€佺洃娴?"));
+        assertTrue(containsAny(html, "水位预测", "水质水位预测", "姘翠綅棰勬祴"));
         assertTrue(containsAny(html, "防汛抗旱", "闃叉睕鎶楁棻"));
         assertTrue(containsAny(html, "河流水位趋势", "娌虫祦姘翠綅瓒嬪娍"));
         assertTrue(containsAny(html, "水质变化对比", "姘磋川鍙樺寲瀵规瘮"));
@@ -157,8 +163,19 @@ class PredictionFrontendFallbackGuardTest {
     void predictionPage_usesRadarFocusedRightPanelLayout() throws IOException {
         String html = Files.readString(PAGE, StandardCharsets.UTF_8);
 
-        assertTrue(html.contains("grid-template-rows: minmax(108px, 0.22fr) minmax(108px, 0.22fr) minmax(320px, 0.78fr) minmax(160px, 0.44fr);"));
-        assertTrue(html.contains("grid-template-rows: minmax(98px, 0.2fr) minmax(98px, 0.2fr) minmax(280px, 0.72fr) minmax(148px, 0.4fr);"));
+        assertTrue(html.contains("grid-template-rows: minmax(236px, 0.44fr) minmax(320px, 0.78fr) minmax(160px, 0.44fr);"));
+        assertTrue(html.contains("grid-template-rows: minmax(216px, 0.4fr) minmax(280px, 0.72fr) minmax(148px, 0.4fr);"));
+        assertTrue(html.contains("id=\"rightFlipTitle\""));
+        assertTrue(html.contains("id=\"rightFlipPrev\""));
+        assertTrue(html.contains("id=\"rightFlipIndicator\""));
+        assertTrue(html.contains("id=\"rightFlipNext\""));
+        assertTrue(html.contains("id=\"rightFlipViewport\""));
+        assertTrue(html.contains("id=\"rightFlipTrack\""));
+        assertTrue(html.contains("\"flip\""));
+        assertFalse(html.contains("<div class=\"panel right-chart-1\">"));
+        assertFalse(html.contains("<div class=\"panel right-chart-2\">"));
+        int rightFlipSlideOccurrences = html.split("class=\\\"right-flip-slide\\\"", -1).length - 1;
+        assertTrue(rightFlipSlideOccurrences == 2);
         assertFalse(html.contains("grid-template-rows: 118px 118px minmax(320px, 1.48fr) minmax(146px, 0.54fr);"));
     }
 

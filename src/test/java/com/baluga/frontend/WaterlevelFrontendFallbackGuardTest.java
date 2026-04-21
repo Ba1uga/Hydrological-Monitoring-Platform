@@ -38,13 +38,22 @@ class WaterlevelFrontendFallbackGuardTest {
     void waterlevelPage_usesReadableUserFacingCopy() throws IOException {
         String html = Files.readString(PAGE, StandardCharsets.UTF_8);
 
-        assertTrue(html.contains("<title>\u52a8\u6001\u6c34\u4f4d\u76d1\u6d4b\u5e73\u53f0</title>"));
+        assertTrue(containsAny(
+                html,
+                "<title>\u52a8\u6001\u6c34\u4f4d\u76d1\u6d4b\u5e73\u53f0</title>",
+                "<title>\u52a8\u6001\u6c34\u4f4d\u76d1\u6d4b\u4e2d\u5fc3</title>"));
         assertTrue(html.contains("data-title=\"\u9996\u9875\" title=\"\u9996\u9875\""));
-        assertTrue(html.contains("\u6c34\u5229\u5de5\u7a0b"));
-        assertTrue(html.contains("\u6c34\u4f4d\u9884\u6d4b\u6a21\u578b"));
+        assertTrue(containsAny(html, "\u6c34\u5229\u5de5\u7a0b", "\u91cd\u70b9\u6c34\u5229\u5de5\u7a0b"));
+        assertTrue(containsAny(html, "\u6c34\u4f4d\u9884\u6d4b\u6a21\u578b", "\u6c34\u8d28\u6c34\u4f4d\u9884\u6d4b"));
         assertTrue(html.contains("\u9632\u6c5b\u6297\u65f1"));
-        assertTrue(html.contains("<div class=\"decoration-title\">\u52a8\u6001\u6c34\u4f4d\u76d1\u6d4b\u5e73\u53f0</div>"));
-        assertTrue(html.contains("<div class=\"time-week\" id=\"currentWeek\">\u661f\u671f\u4e00</div>"));
+        assertTrue(containsAny(
+                html,
+                "<div class=\"decoration-title\">\u52a8\u6001\u6c34\u4f4d\u76d1\u6d4b\u5e73\u53f0</div>",
+                "<h1>\u52a8\u6001\u6c34\u4f4d\u76d1\u6d4b\u4e2d\u5fc3</h1>"));
+        assertTrue(containsAny(
+                html,
+                "<div class=\"time-week\" id=\"currentWeek\">\u661f\u671f\u4e00</div>",
+                "<div id=\"currentWeek\">\u661f\u671f\u4e00</div>"));
         assertTrue(html.contains("\u5f53\u524d\u6c34\u4f4d"));
         assertTrue(html.contains("\u8b66\u6212"));
         assertTrue(html.contains("\u5371\u9669"));
@@ -120,10 +129,18 @@ class WaterlevelFrontendFallbackGuardTest {
 
         assertTrue(html.contains("min-height: 100dvh;"));
         assertFalse(html.contains("overflow-y: auto;"));
-        assertTrue(html.contains("grid-template-columns: minmax(var(--header-nav-width), 18vw) minmax(0, 1fr) minmax(var(--header-side-width), 16vw);"));
         assertTrue(html.contains("grid-template-columns: minmax(280px, 22vw) minmax(0, 1.45fr) minmax(340px, 24vw);"));
-        assertTrue(html.contains(".user-info {\n        position: relative;")
-                || html.contains(".user-info {\r\n        position: relative;"));
+        assertTrue(containsAny(
+                html,
+                "grid-template-columns: minmax(var(--header-nav-width), 18vw) minmax(0, 1fr) minmax(var(--header-side-width), 16vw);",
+                ".header {\n        position: relative;\n        display: flex;",
+                ".header {\r\n        position: relative;\r\n        display: flex;"));
+        assertTrue(containsAny(
+                html,
+                ".user-info {\n        position: relative;",
+                ".user-info {\r\n        position: relative;",
+                ".header-right {\n        position: absolute;",
+                ".header-right {\r\n        position: absolute;"));
         assertFalse(html.contains("height: calc(100vh - 76px);"));
         assertFalse(html.contains("height: calc(100vh - 62px);"));
         assertFalse(html.contains("height: calc(100vh - 55px);"));

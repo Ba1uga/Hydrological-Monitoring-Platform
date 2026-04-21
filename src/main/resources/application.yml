@@ -1,5 +1,11 @@
 server:
   port: ${SERVER_PORT:8080}
+  servlet:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+      force-response: true
 
 spring:
   config:

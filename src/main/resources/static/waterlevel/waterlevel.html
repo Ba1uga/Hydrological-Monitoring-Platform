@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>动态水位监测平台</title>
+    <title>动态水位监测中心</title>
     <!-- 高德地图脚本运行时按后端配置动态加载，避免在静态文件中暴露 key -->
     <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
     <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -36,29 +36,24 @@
     }
 
     body {
-        background-color: #0a1625;
+        background:
+            radial-gradient(circle at 20% 20%, rgba(0, 214, 255, 0.08), transparent 18%),
+            linear-gradient(135deg, #08131f 0%, #0f2033 48%, #16283f 100%);
         color: #e6f7ff;
-        line-height: 1.6;
         min-height: 100dvh;
-        height: var(--viewport-height);
-        padding: var(--page-pad);
-        overflow-x: hidden;
-        overflow-y: hidden;
-        position: relative;
+        padding: 0;
+        overflow: hidden;
     }
 
     .container {
-        max-width: 100%;
-        margin: 0 auto;
-        position: relative;
-        z-index: 10;
-        padding: 0;
-        height: calc(var(--viewport-height) - (var(--page-pad) * 2));
-        min-height: 0;
+        width: 100%;
+        max-width: none;
+        min-height: 100dvh;
+        height: 100dvh;
         display: flex;
         flex-direction: column;
-        gap: var(--panel-gap);
-        overflow: hidden;
+        gap: 10px;
+        padding: 10px;
     }
 
     /* ===== 濠电偛顕慨瀵哥玻瀵ょ本iwen.html濠电姰鍨煎▔娑氱矓閹绢喖鏄ユ俊銈呮噺閸庡秹鏌涢弴銊ユ灈闁告挸缍婇弻锟犲椽娴ｅ摜浠梺鍝勬噷閸庨潧�?===== */
@@ -142,86 +137,89 @@
         50% { transform: scale(1.5); opacity: 0.3; }
     }
 
-    .header-decoration {
+    .header {
         position: relative;
-        display: grid;
-        grid-template-columns: minmax(var(--header-nav-width), 18vw) minmax(0, 1fr) minmax(var(--header-side-width), 16vw);
-        align-items: start;
-        gap: var(--panel-gap);
-        padding: 0;
-        min-height: var(--header-height);
-    }
-
-    .header-spacer {
-        min-height: 1px;
-        width: 100%;
-    }
-
-    .title-side-decoration {
         display: flex;
-        align-items: center;
         justify-content: center;
-        width: 100%;
-        min-width: 0;
-        margin: 0 auto;
-    }
-
-    .center-decoration {
-        width: 100%;
-        min-width: 0;
-        position: relative;
-        z-index: 10;
-    }
-
-    .decoration-main {
-        display: flex;
-        flex-direction: column;
         align-items: center;
-        justify-content: center;
-        width: min(100%, 720px);
-        min-width: 0;
-        padding: calc(var(--card-pad) + 2px) calc(var(--card-pad) + 8px);
-        background: linear-gradient(135deg, rgba(20, 30, 45, 0.9), rgba(30, 40, 60, 0.9));
-        border-radius: 12px;
-        border: 1px solid rgba(0, 150, 255, 0.3);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.32);
-        position: relative;
+        min-height: 92px;
+        padding: 10px 24px;
+        border-radius: 18px;
+        background: rgba(21, 33, 52, 0.95);
+        border: 1px solid rgba(77, 171, 247, 0.22);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+        flex-shrink: 0;
         overflow: visible;
     }
 
-    .decoration-main::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
+    .header-left {
+        min-width: 0;
         width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(0, 150, 255, 0.1), transparent);
-        animation: shine 3s infinite;
+        padding-left: min(260px, 22vw);
+        padding-right: min(260px, 22vw);
+        display: flex;
+        justify-content: center;
     }
 
-    @keyframes shine {
-        0% { left: -100%; }
-        100% { left: 100%; }
-    }
-
-    .decoration-title {
-        font-size: var(--hero-size);
-        font-weight: 700;
-        color: #f2fbff;
-        text-shadow: 0 2px 10px rgba(0, 150, 255, 0.28);
-        letter-spacing: 0.08em;
-        line-height: 1.3;
-        text-align: center;
+    .header-left h1 {
+        font-size: clamp(1.7rem, 1.24rem + 0.8vw, 2.35rem);
+        letter-spacing: 1.5px;
+        background: linear-gradient(180deg, #fdfeff, #9fd8ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        position: relative;
+        padding: 0 18px;
+        line-height: 1.15;
         white-space: normal;
-        overflow-wrap: anywhere;
+        word-break: break-word;
+        text-align: center;
     }
 
-    .decoration-line {
-        height: 1px;
-        background: linear-gradient(90deg, transparent, #4dabf7, transparent);
-        margin: 6px auto 0;
-        width: min(240px, 60%);
+    .header-left h1::before,
+    .header-left h1::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 40px;
+        height: 2px;
+        background: linear-gradient(90deg, rgba(80, 199, 255, 0.1), rgba(80, 199, 255, 0.9));
+    }
+
+    .header-left h1::before {
+        left: -28px;
+    }
+
+    .header-left h1::after {
+        right: -28px;
+        transform: scaleX(-1);
+    }
+
+    .header-right {
+        position: absolute;
+        top: 50%;
+        right: 18px;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        max-width: min(320px, 28vw);
+    }
+
+    .time-info {
+        text-align: right;
+        font-family: "Courier New", Consolas, monospace;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #00f0ff;
+        line-height: 1.35;
+        letter-spacing: 1px;
+        padding: 6px 10px;
+        border: 1px solid rgba(0, 240, 255, 0.3);
+        border-radius: 4px;
+        background: rgba(0, 20, 40, 0.6);
+        box-shadow: 0 0 14px rgba(0, 240, 255, 0.18);
+        backdrop-filter: blur(4px);
     }
 
     .back-button {
@@ -299,14 +297,15 @@
         display: grid;
         grid-template-columns: minmax(280px, 22vw) minmax(0, 1.45fr) minmax(340px, 24vw);
         grid-template-areas: "left map right";
-        gap: var(--panel-gap);
-        background: rgba(20, 30, 45, 0.9);
+        gap: 10px;
+        background: rgba(22, 34, 54, 0.96);
         border-radius: 16px;
-        padding: var(--card-pad);
-        border: 1px solid rgba(0, 150, 255, 0.2);
-        height: calc(var(--viewport-height) - (var(--page-pad) * 2) - var(--header-height) - var(--panel-gap));
+        padding: 14px;
+        border: 1px solid rgba(77, 171, 247, 0.18);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+        height: calc(var(--viewport-height) - (var(--page-pad) * 2) - 92px - 10px);
         min-height: 0;
-        max-height: calc(var(--viewport-height) - (var(--page-pad) * 2) - var(--header-height) - var(--panel-gap));
+        max-height: calc(var(--viewport-height) - (var(--page-pad) * 2) - 92px - 10px);
         flex: 1 1 auto;
         overflow: hidden;
         align-items: stretch;
@@ -962,83 +961,163 @@
         min-height: 28px;
     }
 
-    @media (max-width: 1600px) {
-        .header-decoration {
-            grid-template-columns: minmax(220px, 16vw) minmax(0, 1fr) minmax(172px, 16vw);
+    @media (max-height: 760px) and (min-width: 1280px) {
+        .header {
+            min-height: 76px;
+            padding: 12px 18px;
+        }
+
+        .header-left h1 {
+            font-size: 1.55rem;
+        }
+
+        .time-info {
+            font-size: 0.82rem;
         }
 
         .main-wrapper {
-            grid-template-columns: minmax(248px, 20vw) minmax(0, 1.35fr) minmax(312px, 24vw);
+            height: auto;
         }
     }
 
-    @media (max-width: 1280px) {
-        .main-wrapper {
-            grid-template-columns: minmax(0, 1.18fr) minmax(320px, 0.82fr);
-            grid-template-areas:
-                "map right"
-                "left right";
-            min-height: auto;
-        }
-
-        .right-bottom-sub {
-            grid-template-columns: 1fr;
-            grid-template-rows: minmax(0, 1fr) minmax(0, 1fr);
-        }
-
-        .water-level-info {
-            justify-content: flex-start;
-        }
-    }
-
-    @media (max-width: 900px) {
+    @media (max-width: 1365px) {
         body {
-            padding: 10px;
+            overflow: auto;
         }
 
-        .header-decoration {
-            grid-template-columns: 1fr;
-            justify-items: stretch;
+        .container {
+            min-height: 100dvh;
+            height: auto;
         }
 
-        .header-spacer {
-            display: none;
+        .main-wrapper {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            grid-template-rows: minmax(340px, 1fr) auto;
+            grid-template-areas:
+                "map forecast"
+                "left right";
+            height: auto;
         }
 
-        .title-side-decoration {
-            order: 1;
+        .left-column {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-rows: auto auto;
+            grid-template-areas:
+                "left-one left-two"
+                "left-three left-three";
         }
 
-        .user-info {
-            justify-self: start;
-            order: 2;
-            max-width: 100%;
+        .left-column .card:nth-child(1) {
+            grid-area: left-one;
         }
 
+        .left-column .card:nth-child(2) {
+            grid-area: left-two;
+        }
+
+        .left-column .card:nth-child(3) {
+            grid-area: left-three;
+        }
+
+        .right-column {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-rows: auto auto auto;
+            grid-template-areas:
+                "right-one right-two"
+                "right-three right-three"
+                "right-four right-four";
+        }
+
+        .right-column .card:nth-child(1) {
+            grid-area: right-one;
+        }
+
+        .right-column .card:nth-child(2) {
+            grid-area: right-two;
+        }
+
+        .right-column .card:nth-child(3) {
+            grid-area: right-three;
+        }
+
+        .right-column .card:nth-child(4) {
+            grid-area: right-four;
+        }
+
+        .map-panel,
+        .chart-panel {
+            min-height: 340px;
+        }
+
+        .header {
+            min-height: 120px;
+            padding-top: 16px;
+        }
+
+        .dash-nav {
+            left: 16px;
+            top: 10px;
+        }
+
+        .header-left {
+            padding-left: min(220px, 22vw);
+            padding-right: min(220px, 22vw);
+        }
+
+        .header-right {
+            right: 16px;
+            top: 10px;
+            max-width: min(260px, 30vw);
+        }
+    }
+
+    @media (max-width: 960px) {
         .main-wrapper {
             grid-template-columns: 1fr;
             grid-template-areas:
                 "map"
+                "forecast"
                 "left"
                 "right";
+            grid-template-rows: auto;
         }
 
         .left-column,
         .right-column {
-            grid-template-rows: minmax(260px, auto) minmax(240px, auto);
-        }
-
-        .station-search {
             grid-template-columns: 1fr;
+            grid-template-areas: none;
         }
 
-        .modal-body {
-            grid-template-columns: 1fr;
+        .header {
+            min-height: auto;
+            padding: 14px 16px;
         }
 
-        .water-3d-info {
-            border-left: none;
-            border-top: 1px solid rgba(64, 224, 208, 0.2);
+        .dash-nav {
+            left: 12px;
+            top: 12px;
+        }
+
+        .header-right {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: auto;
+            max-width: min(180px, 42vw);
+            min-width: 0;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-end;
+        }
+
+        .time-info {
+            text-align: right;
+            font-size: 0.84rem;
+        }
+
+        .header-left {
+            padding-left: 72px;
+            padding-right: 140px;
         }
     }
 
@@ -1091,40 +1170,49 @@
    Left-top Horizontal Collapsible Navbar (Dashboard)
    ================================ */
 .dash-nav {
-  position: fixed;
-  left: clamp(12px, 1vw, 20px);
-  top: clamp(12px, 1vw, 20px);
-  z-index: 20000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 5px 10px;
-  border-radius: 50px;
-  background: rgba(13, 32, 60, 0.75);
-  border: 1px solid rgba(52, 134, 218, 0.45);
-  backdrop-filter: blur(6px);
-}
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 10px;
+        min-width: 48px;
+        min-height: 38px;
+        border-radius: 50px;
+        background: rgba(13, 32, 60, 0.75);
+        border: 1px solid rgba(52, 134, 218, 0.45);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+        backdrop-filter: blur(6px);
+    }
 .dash-nav input {
   width: 28px;
   height: 28px;
-  cursor: pointer;
   opacity: 0;
+  cursor: pointer;
+  z-index: 3;
 }
-.dash-nav span {
+.dash-nav > span {
   position: absolute;
   left: 16px;
   top: calc(50% - 6px);
   width: 18px;
   height: 2px;
-  border-radius: 15px;
   background: rgba(255,255,255,0.75);
+  border-radius: 15px;
+  transition: transform 0.3s ease-in-out, top 0.3s ease-in-out 0.3s, background 0.3s ease-in-out;
   pointer-events: none;
-  transition: transform 0.3s ease-in-out, top 0.3s ease-in-out 0.3s;
 }
-.dash-nav span:nth-child(3) {
+.dash-nav > span:nth-of-type(1) {
+  top: calc(50% - 6px);
+}
+.dash-nav > span:nth-of-type(2) {
   top: calc(50% + 2px);
 }
 .dash-nav ul {
+  list-style: none;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -1136,11 +1224,9 @@
   transition: width 0.5s;
 }
 .dash-nav ul li {
-  list-style: none;
   margin: 0;
 }
 .dash-nav ul li a {
-  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1148,14 +1234,48 @@
   height: 28px;
   font-size: 18px;
   font-weight: 700;
-  color: rgba(255,255,255,0.85);
-  position: relative;
   line-height: 1;
-  transition: transform 260ms cubic-bezier(.2,.8,.2,1), filter 260ms cubic-bezier(.2,.8,.2,1);
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  position: relative;
+  transition: transform 260ms cubic-bezier(.2,.8,.2,1), filter 260ms cubic-bezier(.2,.8,.2,1), color 260ms cubic-bezier(.2,.8,.2,1);
   will-change: transform;
 }
-.dash-nav ul li a .nav-text { display: none; }
-.dash-nav ul li a .nav-icon { display: inline-flex; align-items: center; justify-content: center; }
+.dash-nav ul li a:hover {
+  color: #07e5ff;
+  transform: translateY(-2px) scale(1.12);
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
+}
+.dash-nav .nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: static;
+  width: auto;
+  height: auto;
+  background: none;
+  transition: none;
+}
+
+.dash-nav .nav-text {
+  display: none;
+}
+.dash-nav input:checked ~ ul {
+  width: 220px;
+  overflow: visible;
+  justify-content: space-between;
+  padding: 0 12px;
+}
+.dash-nav input:checked ~ span:nth-of-type(1) {
+  top: calc(50% - 1px);
+  transform: rotate(-45deg);
+  background: #07e5ff;
+}
+.dash-nav input:checked ~ span:nth-of-type(2) {
+  top: calc(50% - 1px);
+  transform: rotate(45deg);
+  background: #07e5ff;
+}
 .dash-nav ul li a[data-title]:hover::after {
   content: attr(data-title);
   position: absolute;
@@ -1187,42 +1307,17 @@
   z-index: 10000;
   pointer-events: none;
 }
-.dash-nav ul li a .nav-icon,
-.dash-nav ul li a .nav-text {
-  position: static;
-  left: auto;
-  top: auto;
-  width: auto;
-  height: auto;
-  background: none;
-  transform: none;
-  transition: none;
-}
-.dash-nav ul li a:hover {
-  color: #07e5ff;
-  transform: translateY(-2px) scale(1.12);
-  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
-}
 .dash-nav ul li a:hover .nav-icon {
   animation: navPop 420ms cubic-bezier(.2,.8,.2,1);
 }
-.dash-nav input:checked ~ ul {
-  width: 220px;
-  overflow: visible;
-  justify-content: space-between;
-  padding: 0 12px;
+.dash-nav ul li a:active {
+  transform: translateY(0) scale(0.96);
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
 }
-.dash-nav input:checked ~ span:nth-child(2) {
-  top: calc(50% - 1px);
-  transform: rotate(-45deg);
-  background: #07e5ff;
-  transition: top 0.3s ease-in-out, transform 0.3s ease-in-out 0.3s;
-}
-.dash-nav input:checked ~ span:nth-child(3) {
-  top: calc(50% - 1px);
-  transform: rotate(45deg);
-  background: #07e5ff;
-  transition: top 0.3s ease-in-out, transform 0.3s ease-in-out 0.3s;
+.dash-nav ul li a:focus-visible {
+  outline: 2px solid rgba(52, 134, 218, 0.65);
+  outline-offset: 2px;
+  border-radius: 10px;
 }
 @keyframes navPop {
   0% { transform: scale(1); }
@@ -1233,41 +1328,31 @@
 </style>
 </head>
 <body>
-    <!-- Top-left collapsible nav (horizontal) -->
-    <div class="dash-nav" aria-label="Dashboard navigation">
-        <input id="dashNavToggle" type="checkbox" />
-        <span></span>
-        <span></span>
-        <ul>
-            <li><a href="../index/index.html" data-title="首页" title="首页" aria-label="首页"><span class="nav-icon">🏠</span><span class="nav-text">首页</span></a></li>
-            <li><a href="../waterproject/waterproject.html" data-title="水利工程" title="水利工程" aria-label="水利工程"><span class="nav-icon">🏗️</span><span class="nav-text">水利工程</span></a></li>
-            <li><a href="../prediction/prediction.html" data-title="水位预测模型" title="水位预测模型" aria-label="水位预测模型"><span class="nav-icon">🤖</span><span class="nav-text">水位预测模型</span></a></li>
-            <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="防汛抗旱" title="防汛抗旱" aria-label="防汛抗旱"><span class="nav-icon">🛡️</span><span class="nav-text">防汛抗旱</span></a></li>
-        </ul>
-    </div>
+
     <div class="grid-bg"></div>
     <div class="tech-particles" id="techParticles"></div>
     <div class="energy-dots" id="energyDots"></div>
 
     <div class="container">
-        <div class="header-decoration">
-            <div class="header-spacer" aria-hidden="true"></div>
-            <div class="title-side-decoration">
-                <div class="center-decoration">
-                    <div class="decoration-main">
-                        <div class="decoration-title">动态水位监测平台</div>
-                        <div class="decoration-line"></div>
-                    </div>
-                </div>
+        <div class="header">
+            <div class="dash-nav" aria-label="Dashboard navigation">
+                <input id="dashNavToggle" type="checkbox" />
+                <span></span>
+                <span></span>
+                <ul>
+                    <li><a href="../index/index.html" data-title="首页" title="首页" aria-label="首页"><span class="nav-icon">🏠</span><span class="nav-text">首页</span></a></li>
+                    <li><a href="../waterproject/waterproject.html" data-title="重点水利工程" title="重点水利工程" aria-label="重点水利工程"><span class="nav-icon">🏗️</span><span class="nav-text">重点水利工程</span></a></li>
+                    <li><a href="../prediction/prediction.html" data-title="水质水位预测" title="水质水位预测" aria-label="水质水位预测"><span class="nav-icon">🤖</span><span class="nav-text">水质水位预测</span></a></li>
+                    <li><a href="../floodcontrol/Flood_Control_And_Drought_Relief.html" data-title="防汛抗旱" title="防汛抗旱" aria-label="防汛抗旱"><span class="nav-icon">🛡️</span><span class="nav-text">防汛抗旱</span></a></li>
+                </ul>
             </div>
-
-            <div class="user-info">
-                <div class="user-avatar">
-                    <span>AD</span>
-                </div>
-                <div class="real-time-clock" id="realTimeClock">
-                    <div class="time-date" id="currentDate">2024-01-01 00:00:00</div>
-                    <div class="time-week" id="currentWeek">星期一</div>
+            <div class="header-left">
+                <h1>动态水位监测中心</h1>
+            </div>
+            <div class="header-right">
+                <div class="time-info">
+                    <div id="currentDate">2024-01-01 00:00:00</div>
+                    <div id="currentWeek">星期一</div>
                 </div>
             </div>
         </div>

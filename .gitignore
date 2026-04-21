@@ -34,7 +34,8 @@ build/
 
 ### Local Agent / Runtime Artifacts ###
 .agents/
+.superpowers/
 .worktrees/
 hs_err_pid*.log
-docs/
+docs/superpowers/
 src/main/resources/application-local.yml
