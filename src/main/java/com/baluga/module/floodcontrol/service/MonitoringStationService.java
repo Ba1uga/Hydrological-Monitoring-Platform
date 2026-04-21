@@ -56,6 +56,8 @@ public interface MonitoringStationService extends IService<MonitoringStation> {
     List<MonitoringStationHistoryVO> getHistoryList(LocalDateTime startDate, LocalDateTime endDate, String stationName);
 
     Map<String, Object> getHistoryPage(LocalDateTime startDate, LocalDateTime endDate, String stationName, int page, int size);
+
+    Map<String, LocalDateTime> getQueryTimeRange();
     
     /**
      * 获取当前整点的站点数据

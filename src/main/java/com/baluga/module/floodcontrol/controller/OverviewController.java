@@ -3,6 +3,7 @@ package com.baluga.module.floodcontrol.controller;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -68,6 +69,11 @@ public class OverviewController {
     @GetMapping("/stations")
     public Result<List<MonitoringStationVO>> getAllStations(@RequestParam(required = false, defaultValue = "all") String mode) {
         return Result.success(monitoringStationService.getAllStationVOs(mode));
+    }
+
+    @GetMapping("/queryTimeRange")
+    public Result<Map<String, LocalDateTime>> getQueryTimeRange() {
+        return Result.success(monitoringStationService.getQueryTimeRange());
     }
     
     /**

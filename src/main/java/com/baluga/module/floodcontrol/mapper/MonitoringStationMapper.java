@@ -13,6 +13,12 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 @Mapper
 public interface MonitoringStationMapper extends BaseMapper<MonitoringStation> {
+    @Select("SELECT MIN(value_record_time) FROM monitoring_station")
+    LocalDateTime findMinValueRecordTime();
+
+    @Select("SELECT MAX(value_record_time) FROM monitoring_station")
+    LocalDateTime findMaxValueRecordTime();
+
     /**
      * 根据站点ID列表查询受影响面积总和
      */

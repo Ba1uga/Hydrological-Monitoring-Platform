@@ -2,6 +2,8 @@ export const QUERY_TIME_EVENT = 'floodcontrol:query-time-changed';
 
 let selectedQueryTime = null;
 let controlsInitialized = false;
+let availableQueryTimeRange = null;
+let availableRangePromise = null;
 
 function pad(value) {
   return String(value).padStart(2, '0');
@@ -13,18 +15,22 @@ function currentHourDate() {
   return now;
 }
 
+function parseDateLike(value) {
+  if (!value) return null;
+  const parsed = value instanceof Date ? new Date(value.getTime()) : new Date(String(value).replace(' ', 'T'));
+  if (Number.isNaN(parsed.getTime())) return null;
+  parsed.setMinutes(0, 0, 0);
+  return parsed;
+}
+
 export function formatQueryTime(dateLike) {
-  const date = dateLike instanceof Date ? new Date(dateLike.getTime()) : new Date(dateLike);
-  date.setMinutes(0, 0, 0);
+  const date = parseDateLike(dateLike);
+  if (!date) return '';
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:00:00`;
 }
 
 function parseQueryTime(value) {
-  if (!value) return null;
-  const parsed = new Date(String(value).replace(' ', 'T'));
-  if (Number.isNaN(parsed.getTime())) return null;
-  parsed.setMinutes(0, 0, 0);
-  return parsed;
+  return parseDateLike(value);
 }
 
 function syncSelectValue(select, value) {
@@ -69,6 +75,56 @@ function updateDayOptions() {
   daySelect.value = String(Math.min(selectedDay, daysInMonth));
 }
 
+function clampToAvailableRange(date) {
+  if (!availableQueryTimeRange) {
+    return { date, adjusted: false };
+  }
+
+  const minDate = parseDateLike(availableQueryTimeRange.minTime);
+  const maxDate = parseDateLike(availableQueryTimeRange.maxTime);
+  if (!minDate || !maxDate) {
+    return { date, adjusted: false };
+  }
+
+  if (date < minDate) {
+    return { date: minDate, adjusted: true };
+  }
+  if (date > maxDate) {
+    return { date: maxDate, adjusted: true };
+  }
+
+  return { date, adjusted: false };
+}
+
+async function loadAvailableQueryTimeRange() {
+  if (availableQueryTimeRange) {
+    return availableQueryTimeRange;
+  }
+  if (availableRangePromise) {
+    return availableRangePromise;
+  }
+  if (typeof window === 'undefined' || !window.axios) {
+    return null;
+  }
+
+  availableRangePromise = window.axios.get('/currentOverview/queryTimeRange')
+    .then((res) => {
+      if (res?.data?.code === 200) {
+        availableQueryTimeRange = res.data.data;
+      }
+      return availableQueryTimeRange;
+    })
+    .catch((error) => {
+      console.warn('获取可用时间范围失败', error);
+      return null;
+    })
+    .finally(() => {
+      availableRangePromise = null;
+    });
+
+  return availableRangePromise;
+}
+
 function populateControls(baseDate) {
   const yearSelect = document.getElementById('queryYearSelect');
   const monthSelect = document.getElementById('queryMonthSelect');
@@ -76,8 +132,12 @@ function populateControls(baseDate) {
   const hourSelect = document.getElementById('queryHourSelect');
   if (!yearSelect || !monthSelect || !daySelect || !hourSelect) return;
 
+  const clamped = clampToAvailableRange(baseDate).date;
+
   if (yearSelect.options.length === 0) {
-    for (let year = baseDate.getFullYear() - 5; year <= baseDate.getFullYear() + 1; year += 1) {
+    const minDate = parseDateLike(availableQueryTimeRange?.minTime) || clamped;
+    const maxDate = parseDateLike(availableQueryTimeRange?.maxTime) || clamped;
+    for (let year = minDate.getFullYear(); year <= maxDate.getFullYear(); year += 1) {
       const option = document.createElement('option');
       option.value = String(year);
       option.textContent = String(year);
@@ -103,11 +163,11 @@ function populateControls(baseDate) {
     }
   }
 
-  syncSelectValue(yearSelect, baseDate.getFullYear());
-  syncSelectValue(monthSelect, baseDate.getMonth() + 1);
+  syncSelectValue(yearSelect, clamped.getFullYear());
+  syncSelectValue(monthSelect, clamped.getMonth() + 1);
   updateDayOptions();
-  syncSelectValue(daySelect, baseDate.getDate());
-  syncSelectValue(hourSelect, baseDate.getHours());
+  syncSelectValue(daySelect, clamped.getDate());
+  syncSelectValue(hourSelect, clamped.getHours());
 }
 
 function buildDateFromControls() {
@@ -140,7 +200,13 @@ export function renderQueryTimeHeader(displayValue) {
 export function setSelectedQueryTime(value) {
   selectedQueryTime = value || null;
   renderQueryTimeHeader(selectedQueryTime || formatQueryTime(currentHourDate()));
-  updateStatus(selectedQueryTime ? `当前查看 ${selectedQueryTime}` : '当前为最新整点数据');
+  if (selectedQueryTime) {
+    updateStatus(`当前查看 ${selectedQueryTime}`);
+  } else if (availableQueryTimeRange?.maxTime) {
+    updateStatus(`当前为最新整点数据，可用到 ${availableQueryTimeRange.maxTime}`);
+  } else {
+    updateStatus('当前为最新整点数据');
+  }
   window.dispatchEvent(new CustomEvent(QUERY_TIME_EVENT, { detail: { queryTime: selectedQueryTime } }));
 }
 
@@ -148,7 +214,7 @@ export function clearSelectedQueryTime() {
   setSelectedQueryTime(null);
 }
 
-export function initQueryTimeControls() {
+export async function initQueryTimeControls() {
   if (controlsInitialized) return;
   controlsInitialized = true;
 
@@ -159,9 +225,16 @@ export function initQueryTimeControls() {
   const applyBtn = document.getElementById('applyQueryTimeBtn');
   if (!trigger || !panel || !yearSelect || !monthSelect || !applyBtn) return;
 
-  populateControls(currentHourDate());
-  renderQueryTimeHeader(formatQueryTime(currentHourDate()));
-  updateStatus('当前为最新整点数据');
+  await loadAvailableQueryTimeRange();
+
+  const initial = clampToAvailableRange(currentHourDate()).date;
+  populateControls(initial);
+  renderQueryTimeHeader(formatQueryTime(initial));
+  if (availableQueryTimeRange?.maxTime) {
+    updateStatus(`当前为最新整点数据，可用到 ${availableQueryTimeRange.maxTime}`);
+  } else {
+    updateStatus('当前为最新整点数据');
+  }
 
   trigger.addEventListener('click', () => {
     const opening = panel.hidden;
@@ -180,7 +253,7 @@ export function initQueryTimeControls() {
       const baseDate = parseQueryTime(selectedQueryTime) || currentHourDate();
       if (action === 'latest') {
         clearSelectedQueryTime();
-        populateControls(currentHourDate());
+        populateControls(clampToAvailableRange(currentHourDate()).date);
         setPanelVisibility(false);
         return;
       }
@@ -192,13 +265,20 @@ export function initQueryTimeControls() {
       if (action === 'yesterday-same-hour') {
         next.setDate(next.getDate() - 1);
       }
-      populateControls(next);
-      updateStatus(`待应用 ${formatQueryTime(next)}`);
+      const result = clampToAvailableRange(next);
+      populateControls(result.date);
+      updateStatus(result.adjusted
+        ? `已切换到最近可用时点 ${formatQueryTime(result.date)}`
+        : `待应用 ${formatQueryTime(result.date)}`);
     });
   });
 
   applyBtn.addEventListener('click', () => {
-    setSelectedQueryTime(formatQueryTime(buildDateFromControls()));
+    const result = clampToAvailableRange(buildDateFromControls());
+    if (result.adjusted) {
+      updateStatus(`已切换到最近可用时点 ${formatQueryTime(result.date)}`);
+    }
+    setSelectedQueryTime(formatQueryTime(result.date));
     setPanelVisibility(false);
   });
 

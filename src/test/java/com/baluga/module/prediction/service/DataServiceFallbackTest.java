@@ -147,7 +147,7 @@ class DataServiceFallbackTest {
         data.setWaterLevel(waterLevel);
         data.setAmmoniaNitrogen(0.3);
         data.setWaterTemperature(18.5);
-        data.setWaterQualityCategory("II类");
+        data.setWaterQualityCategory("II");
         data.setIsPredicted(predicted);
         return data;
     }

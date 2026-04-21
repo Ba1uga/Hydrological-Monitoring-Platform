@@ -125,6 +125,14 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
     }
 
     @Override
+    public Map<String, LocalDateTime> getQueryTimeRange() {
+        Map<String, LocalDateTime> range = new HashMap<>();
+        range.put("minTime", baseMapper.findMinValueRecordTime());
+        range.put("maxTime", baseMapper.findMaxValueRecordTime());
+        return range;
+    }
+
+    @Override
     @Cacheable(value = "warningStations", key = "#mode + ':' + #root.target.currentCacheDate()", unless = "#result == null")
     public List<MonitoringStation> getWarningStations(String mode) {
         LocalDate today = now().toLocalDate();
