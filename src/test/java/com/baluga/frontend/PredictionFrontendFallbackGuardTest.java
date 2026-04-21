@@ -139,8 +139,18 @@ class PredictionFrontendFallbackGuardTest {
         assertTrue(containsAny(html, "left: 20px;", "left: 18px;"));
         assertTrue(html.contains("width: 220px;"));
         assertTrue(containsAny(html, ".dash-nav .nav-text {\n            display: none;", ".dash-nav .nav-text {\r\n            display: none;"));
-        assertTrue(html.contains("top: 8px;"));
-        assertTrue(containsAny(html, "data-title=\"水位预测\"", "data-title=\"姘翠綅棰勬祴\""));
+        int homeIndex = html.indexOf("href=\"../index/index.html\"");
+        int waterProjectIndex = html.indexOf("href=\"../waterproject/waterproject.html\"");
+        int waterLevelIndex = html.indexOf("href=\"../waterlevel/waterlevel.html\"");
+        int floodControlIndex = html.indexOf("href=\"../floodcontrol/Flood_Control_And_Drought_Relief.html\"");
+        int predictionNavIndex = html.indexOf("href=\"../prediction/prediction.html\"");
+
+        assertTrue(homeIndex >= 0);
+        assertTrue(homeIndex < waterProjectIndex);
+        assertTrue(waterProjectIndex < waterLevelIndex);
+        assertTrue(waterLevelIndex < floodControlIndex);
+        assertTrue(predictionNavIndex < 0);
+        assertTrue(html.contains("data-title=\"首页\""));
     }
 
     @Test
