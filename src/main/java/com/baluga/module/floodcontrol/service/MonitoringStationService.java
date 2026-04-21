@@ -61,7 +61,11 @@ public interface MonitoringStationService extends IService<MonitoringStation> {
      * 获取当前整点的站点数据
      * @param mode 模式：all-全部, flood-防汛, drought-抗旱
      */
-    List<MonitoringStationVO> getCurrentHourStationVOs(String mode);
+    default List<MonitoringStationVO> getCurrentHourStationVOs(String mode) {
+        return getCurrentHourStationVOs(mode, null);
+    }
+
+    List<MonitoringStationVO> getCurrentHourStationVOs(String mode, LocalDateTime queryTime);
     
     /**
      * 获取指定整点的历史数据
@@ -82,7 +86,11 @@ public interface MonitoringStationService extends IService<MonitoringStation> {
      * @param mode 模式：all-全部, flood-防汛, drought-抗旱
      * @return 实时卡片数据
      */
-    DashboardCardVO getRealTimeCardData(String mode);
+    default DashboardCardVO getRealTimeCardData(String mode) {
+        return getRealTimeCardData(mode, null);
+    }
+
+    DashboardCardVO getRealTimeCardData(String mode, LocalDateTime queryTime);
     
     /**
      * 获取过去七天的站点数据
@@ -90,5 +98,9 @@ public interface MonitoringStationService extends IService<MonitoringStation> {
      * @param mode 模式
      * @return 过去七天的站点历史数据
      */
-    List<MonitoringStationHistoryVO> getSevenDaysHistory(String stationName, String mode);
+    default List<MonitoringStationHistoryVO> getSevenDaysHistory(String stationName, String mode) {
+        return getSevenDaysHistory(stationName, mode, null);
+    }
+
+    List<MonitoringStationHistoryVO> getSevenDaysHistory(String stationName, String mode, LocalDateTime queryTime);
 }

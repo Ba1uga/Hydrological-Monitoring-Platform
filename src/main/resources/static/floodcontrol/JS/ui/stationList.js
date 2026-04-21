@@ -1,6 +1,7 @@
 import { getCurrentMode, setHoverStation } from '../map/initMap.js';
 import { animateNumber } from '../effects/numberAnimation.js';
 import { initStationHistoryChart } from '../charts/stationHistoryChart.js';
+import { buildQueryTimeParams, getSelectedQueryTime } from '../state/queryTimeContext.js';
 
 /**
  * @typedef {Object} Station
@@ -45,9 +46,9 @@ async function fetchAndRenderStations(container) {
   try {
     // 使用新的整点数据API
     const res = await axios.get('/currentOverview/currentHourStations', {
-      params: {
+      params: buildQueryTimeParams({
         mode: getCurrentMode()
-      }
+      })
     });
     if (res.data.code === 200) {
       allStations = res.data.data;
@@ -71,6 +72,10 @@ export function applyStations(stations) {
   const listContainer = document.getElementById('stationListContainer');
   if (!listContainer) return;
   allStations = Array.isArray(stations) ? stations : [];
+  if (allStations.length === 0) {
+    listContainer.innerHTML = '<div style="text-align:center; color:#666; padding:10px;">该时点暂无数据</div>';
+    return;
+  }
   filterStations(currentKeyword, listContainer);
 }
 
@@ -85,6 +90,10 @@ export async function refreshStationList() {
 function renderStationList(stations, container) {
   container.innerHTML = '';
   const currentMode = getCurrentMode();
+  if ((!stations || stations.length === 0) && getSelectedQueryTime()) {
+    container.innerHTML = '<div style="text-align:center; color:#666; padding:10px;">该时点暂无数据</div>';
+    return;
+  }
 
   if (!stations || stations.length === 0) {
     container.innerHTML = '<div style="text-align:center; color:#666; padding:10px;">未找到站点</div>';

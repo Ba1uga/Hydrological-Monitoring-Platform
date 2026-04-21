@@ -10,6 +10,7 @@ import { updateRadarChart, switchToRadarView } from '../charts/initRadarChart.js
 import { updateResourcesForMode } from '../ui/resources.js';
 import { refreshStationList } from '../ui/stationList.js';
 import { getIsChartVisible, hideChart } from '../charts/stationHistoryChart.js';
+import { getSelectedQueryTime, initQueryTimeControls, renderQueryTimeHeader, formatQueryTime } from '../state/queryTimeContext.js';
 
 // 当前可见的风险等级（通过图例点击控制）——默认全部可见
 let activeRisks = {
@@ -25,6 +26,13 @@ let selectedClickRisk = null;
 
 // 实时更新时间显示
 function updateTime() {
+  const selected = getSelectedQueryTime();
+  if (selected) {
+    renderQueryTimeHeader(selected);
+    return;
+  }
+  renderQueryTimeHeader(formatQueryTime(new Date()));
+  return;
   const now = new Date();
   const timeStr = now.toLocaleString('zh-CN', {
     year: 'numeric',
@@ -39,6 +47,7 @@ function updateTime() {
 
 // 绑定模式切换按钮点击事件
 async function initModeSwitch() {
+  initQueryTimeControls();
   const modeBtns = document.querySelectorAll('.mode-btn');
   modeBtns.forEach(btn => {
     btn.addEventListener('click', function () {

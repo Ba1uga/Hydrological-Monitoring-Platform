@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="CSS/base.css">
   <link rel="stylesheet" href="CSS/layout.css">
   <link rel="stylesheet" href="CSS/header-footer.css">
+  <link rel="stylesheet" href="CSS/time-selector.css">
   <link rel="stylesheet" href="CSS/panels.css">
   <link rel="stylesheet" href="CSS/map.css">
   <link rel="stylesheet" href="CSS/warnings.css">
@@ -68,6 +69,36 @@
         </div>
       </div>
       <div class="header-right">
+        <button class="time-weather time-selector-trigger" id="timeSelectorTrigger" type="button" aria-live="polite" aria-expanded="false" aria-controls="queryTimePanel">
+          最新数据 2025-12-16 14:00:00
+        </button>
+        <div class="time-selector-panel" id="queryTimePanel" hidden>
+          <div class="time-selector-grid">
+            <label class="time-selector-field">
+              <span>年</span>
+              <select id="queryYearSelect"></select>
+            </label>
+            <label class="time-selector-field">
+              <span>月</span>
+              <select id="queryMonthSelect"></select>
+            </label>
+            <label class="time-selector-field">
+              <span>日</span>
+              <select id="queryDaySelect"></select>
+            </label>
+            <label class="time-selector-field">
+              <span>时</span>
+              <select id="queryHourSelect"></select>
+            </label>
+          </div>
+          <div class="time-selector-actions">
+            <button type="button" class="time-selector-quick" data-quick-action="latest">返回最新</button>
+            <button type="button" class="time-selector-quick" data-quick-action="prev-hour">上一小时</button>
+            <button type="button" class="time-selector-quick" data-quick-action="yesterday-same-hour">昨天同小时</button>
+            <button type="button" class="time-selector-apply" id="applyQueryTimeBtn">应用时间</button>
+          </div>
+          <div class="time-selector-status" id="queryTimeStatus" aria-live="polite"></div>
+        </div>
         <div class="time-weather" id="timeWeather" aria-live="polite">2025-12-16 14:30:00 | 晴 | 温度: 22°C</div>
         <nav class="mode-switch" aria-label="模式切换">
           <button class="mode-btn active" data-mode="flood" aria-pressed="true" title="切换到防汛模式">

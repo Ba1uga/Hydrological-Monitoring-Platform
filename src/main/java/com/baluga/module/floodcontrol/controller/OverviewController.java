@@ -1,9 +1,11 @@
 package com.baluga.module.floodcontrol.controller;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,8 +76,11 @@ public class OverviewController {
      * @return 统一响应结果（包含站点VO列表）
      */
     @GetMapping("/currentHourStations")
-    public Result<List<MonitoringStationVO>> getCurrentHourStations(@RequestParam(required = false, defaultValue = "all") String mode) {
-        return Result.success(monitoringStationService.getCurrentHourStationVOs(mode));
+    public Result<List<MonitoringStationVO>> getCurrentHourStations(
+            @RequestParam(required = false, defaultValue = "all") String mode,
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime queryTime) {
+        return Result.success(monitoringStationService.getCurrentHourStationVOs(mode, queryTime));
     }
     
     /**
@@ -94,8 +99,11 @@ public class OverviewController {
      * @return 统一响应结果（包含实时卡片数据）
      */
     @GetMapping("/realtime-card")
-    public Result<DashboardCardVO> getRealTimeCardData(@RequestParam(required = false, defaultValue = "all") String mode) {
-        return Result.success(monitoringStationService.getRealTimeCardData(mode));
+    public Result<DashboardCardVO> getRealTimeCardData(
+            @RequestParam(required = false, defaultValue = "all") String mode,
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime queryTime) {
+        return Result.success(monitoringStationService.getRealTimeCardData(mode, queryTime));
     }
     
     /**
@@ -105,8 +113,12 @@ public class OverviewController {
      * @return 统一响应结果（包含过去七天的站点历史数据）
      */
     @GetMapping("/sevenDaysHistory")
-    public Result<List<MonitoringStationHistoryVO>> getSevenDaysHistory(@RequestParam String stationName, @RequestParam(required = false, defaultValue = "all") String mode) {
-        return Result.success(monitoringStationService.getSevenDaysHistory(stationName, mode));
+    public Result<List<MonitoringStationHistoryVO>> getSevenDaysHistory(
+            @RequestParam String stationName,
+            @RequestParam(required = false, defaultValue = "all") String mode,
+            @RequestParam(required = false)
+            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime queryTime) {
+        return Result.success(monitoringStationService.getSevenDaysHistory(stationName, mode, queryTime));
     }
     
 }

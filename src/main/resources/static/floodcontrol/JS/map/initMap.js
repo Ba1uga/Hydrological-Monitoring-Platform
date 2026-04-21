@@ -2,6 +2,7 @@
 /* 2D 地图初始化、监测点渲染、图例交互 */
 
 import { initStationHistoryChart } from '../charts/stationHistoryChart.js';
+import { buildQueryTimeParams } from '../state/queryTimeContext.js';
 
 /**
  * @typedef {Object} Station
@@ -272,9 +273,9 @@ function renderRiskLegend() {
 async function fetchStationData(mode) {
     try {
         const res = await axios.get('/currentOverview/currentHourStations', {
-            params: {
+            params: buildQueryTimeParams({
                 mode: mode
-            }
+            })
         });
         if (res.data.code === 200) {
             const stations = Array.isArray(res.data.data) ? res.data.data : [];

@@ -10,6 +10,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -69,6 +70,10 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
         return now().truncatedTo(ChronoUnit.HOURS);
     }
 
+    public LocalDateTime cacheHourKey(LocalDateTime queryTime) {
+        return queryTime == null ? currentCacheHour() : resolveQueryHour(queryTime);
+    }
+
     private static LocalDateTime dayStart(LocalDate date) {
         return date.atStartOfDay();
     }
@@ -90,6 +95,10 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
         } catch (DateTimeParseException ignored) {
         }
         return null;
+    }
+
+    private LocalDateTime resolveQueryHour(LocalDateTime queryTime) {
+        return (queryTime == null ? now() : queryTime).truncatedTo(ChronoUnit.HOURS);
     }
 
     @Override
@@ -336,11 +345,11 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
     }
 
     @Override
-    @Cacheable(value = "currentHourStations", key = "#mode + ':' + #root.target.currentCacheHour()", unless = "#result == null")
-    public List<MonitoringStationVO> getCurrentHourStationVOs(String mode) {
+    @Cacheable(value = "currentHourStations", key = "#mode + ':' + #root.target.cacheHourKey(#queryTime)", unless = "#result == null")
+    public List<MonitoringStationVO> getCurrentHourStationVOs(String mode, LocalDateTime queryTime) {
         // 获取当前时间，并将分钟和秒设置为0，得到当前整点时间
-        LocalDateTime base = now();
-        LocalDateTime currentHour = base.with(LocalTime.of(base.getHour(), 0, 0));
+        LocalDateTime currentHour = resolveQueryHour(queryTime);
+        boolean explicitQuery = queryTime != null;
         
         // 1. 首先尝试查询当前整点的站点数据
         QueryWrapper<MonitoringStation> query = new QueryWrapper<>();
@@ -355,7 +364,7 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
         List<MonitoringStation> stations = this.list(query);
         
         // 2. 如果没有当前整点的数据，回退到查询今天的数据
-        if (stations.isEmpty()) {
+        if (!explicitQuery && stations.isEmpty()) {
             LocalDate today = now().toLocalDate();
             QueryWrapper<MonitoringStation> todayQuery = new QueryWrapper<>();
             todayQuery.ge("value_record_time", dayStart(today))
@@ -370,9 +379,10 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
             stations = this.list(todayQuery);
             
             // 如果今天也没有数据，返回空列表
-            if (stations.isEmpty()) {
-                return List.of();
-            }
+        }
+        
+        if (stations.isEmpty()) {
+            return List.of();
         }
         
         // 查询上一个整点的历史数据，用于计算趋势
@@ -439,14 +449,14 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
     @Override
     @Cacheable(value = "dashboardCardData", key = "#mode + ':' + #root.target.currentCacheHour()", unless = "#result == null")
     public DashboardCardVO getDashboardCardData(String mode) {
-        return self.getRealTimeCardData(mode);
+        return self.getRealTimeCardData(mode, null);
     }
     
     @Override
-    @Cacheable(value = "realTimeCardData", key = "#mode + ':' + #root.target.currentCacheHour()", unless = "#result == null")
-    public DashboardCardVO getRealTimeCardData(String mode) {
+    @Cacheable(value = "realTimeCardData", key = "#mode + ':' + #root.target.cacheHourKey(#queryTime)", unless = "#result == null")
+    public DashboardCardVO getRealTimeCardData(String mode, LocalDateTime queryTime) {
         // 1. 获取时间切片 (当前整点 & 上一整点)
-        LocalDateTime currentHour = now().truncatedTo(ChronoUnit.HOURS);
+        LocalDateTime currentHour = resolveQueryHour(queryTime);
         LocalDateTime prevHour = currentHour.minusHours(1);
         
         // 2. 根据模式确定值单位
@@ -459,12 +469,10 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
 
         // 3. 获取警戒站点数 (查 History 表)
         // 3.1 当前整点警戒数
-        Long currentWarningCount = historyMapper.countWarningByTime(currentHour, mode, valueUnit);
-        if (currentWarningCount == null) currentWarningCount = 0L;
+        Long currentWarningCount = Optional.ofNullable(historyMapper.countWarningByTime(currentHour, mode, valueUnit)).orElse(0L);
 
         // 3.2 上一整点警戒数 (用于计算趋势)
-        Long prevWarningCount = historyMapper.countWarningByTime(prevHour, mode, valueUnit);
-        if (prevWarningCount == null) prevWarningCount = 0L;
+        Long prevWarningCount = Optional.ofNullable(historyMapper.countWarningByTime(prevHour, mode, valueUnit)).orElse(0L);
 
         // 4. 计算趋势 (Trend)
         long diff = currentWarningCount - prevWarningCount;
@@ -479,8 +487,8 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
             trendDirection = "flat";
         }
 
-        BigDecimal affectedArea = baseMapper.sumAffectedAreaByWarningTime(currentHour, mode, valueUnit);
-        if (affectedArea == null) affectedArea = BigDecimal.ZERO;
+        BigDecimal affectedArea = Optional.ofNullable(baseMapper.sumAffectedAreaByWarningTime(currentHour, mode, valueUnit))
+                .orElse(BigDecimal.ZERO);
 
         // 6. 封装结果返回
         DashboardCardVO vo = new DashboardCardVO();
@@ -494,9 +502,9 @@ public class MonitoringStationServiceImpl extends ServiceImpl<MonitoringStationM
     }
     
     @Override
-    public List<MonitoringStationHistoryVO> getSevenDaysHistory(String stationName, String mode) {
+    public List<MonitoringStationHistoryVO> getSevenDaysHistory(String stationName, String mode, LocalDateTime queryTime) {
         // 计算过去7天的时间范围
-        LocalDateTime endDate = now();
+        LocalDateTime endDate = queryTime == null ? now() : queryTime;
         LocalDateTime startDate = endDate.minusDays(7);
         
         // 查询指定站点过去7天的历史数据（从 monitoring_station 表查询）

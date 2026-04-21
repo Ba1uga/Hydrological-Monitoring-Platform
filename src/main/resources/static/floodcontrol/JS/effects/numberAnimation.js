@@ -12,6 +12,8 @@
 
 // 数字翻牌动画函数
 // 支持整数和小数，自动处理单位和格式
+import { buildQueryTimeParams, getSelectedQueryTime } from '../state/queryTimeContext.js';
+
 function animateNumber(el, target, duration = 1200, options = {}) {
   const {
     unit = '',
@@ -57,12 +59,20 @@ function animateNumber(el, target, duration = 1200, options = {}) {
 async function initNumberAnimations(mode = 'flood') {
   // 汇总信息数值动画（左侧面板）
   const summaryValues = document.querySelectorAll('.summary-value');
+  const queryTimeStatus = document.getElementById('queryTimeStatus');
   if (summaryValues.length > 0) {
     try {
         // 使用新的实时卡片接口获取数据
-        const cardRes = await axios.get(`/currentOverview/realtime-card?mode=${mode}`);
+        const cardRes = await axios.get('/currentOverview/realtime-card', {
+          params: buildQueryTimeParams({ mode })
+        });
         if (cardRes.data.code === 200) {
             const cardData = cardRes.data.data;
+            if (queryTimeStatus) {
+              queryTimeStatus.textContent = getSelectedQueryTime()
+                ? `当前查看 ${getSelectedQueryTime()}`
+                : '当前为最新整点数据';
+            }
             
             // 1. 警戒站点数
             const warningCount = cardData.alertStationCount;

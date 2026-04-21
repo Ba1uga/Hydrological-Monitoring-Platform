@@ -2,6 +2,7 @@
 /* 加载顺序、初始化所有模块 */
 
 import './utils/request.js';
+import { QUERY_TIME_EVENT, isLatestQueryTime } from './state/queryTimeContext.js';
 
 // 引入所有模块
 import { initModeSwitch, updateTime } from './ui/modeSwitch.js';
@@ -19,6 +20,28 @@ let stationsSubscription = null;
 let websocketReady = false;
 let httpFallbackActive = false;
 let httpFallbackTimerId = null;
+let websocketRefreshTimerId = null;
+
+function shouldUseRealtimeTransport() {
+  return isLatestQueryTime();
+}
+
+function stopRealtimeSubscriptions() {
+  websocketReady = false;
+  httpFallbackActive = false;
+  if (stationsSubscription) {
+    stationsSubscription.unsubscribe();
+    stationsSubscription = null;
+  }
+  if (httpFallbackTimerId != null) {
+    clearTimeout(httpFallbackTimerId);
+    httpFallbackTimerId = null;
+  }
+  if (websocketRefreshTimerId != null) {
+    clearTimeout(websocketRefreshTimerId);
+    websocketRefreshTimerId = null;
+  }
+}
 
 function connectWebSocket() {
   if (!window.SockJS || !window.Stomp) return Promise.reject(new Error('SockJS/Stomp 未加载'));
@@ -49,25 +72,29 @@ function subscribeStations(mode) {
 }
 
 function requestStations(mode) {
-  if (!stompClient) return;
+  if (!stompClient || !shouldUseRealtimeTransport()) return;
   stompClient.send('/app/currentHourStations', {}, mode);
 }
 
 function scheduleNextHourRequest() {
-  if (!websocketReady) return;
+  if (!websocketReady || !shouldUseRealtimeTransport()) return;
   const now = new Date();
   const nextHour = new Date(now);
   nextHour.setHours(now.getHours() + 1, 0, 0, 0);
   const delay = Math.max(0, nextHour - now);
-  setTimeout(() => {
-    if (!websocketReady) return;
+  websocketRefreshTimerId = setTimeout(() => {
+    websocketRefreshTimerId = null;
+    if (!websocketReady || !shouldUseRealtimeTransport()) {
+      // skip websocket refresh for historical query time
+      return;
+    }
     requestStations(getCurrentMode());
     scheduleNextHourRequest();
   }, delay);
 }
 
 function scheduleNextHourHttpRefresh() {
-  if (!httpFallbackActive) return;
+  if (!httpFallbackActive || !shouldUseRealtimeTransport()) return;
   if (httpFallbackTimerId != null) return;
   const now = new Date();
   const nextHour = new Date(now);
@@ -75,7 +102,7 @@ function scheduleNextHourHttpRefresh() {
   const delay = Math.max(0, nextHour - now);
   httpFallbackTimerId = setTimeout(async () => {
     httpFallbackTimerId = null;
-    if (!httpFallbackActive) return;
+    if (!httpFallbackActive || !shouldUseRealtimeTransport()) return;
     const stations = await refreshCurrentHourStationsByHttp(getCurrentMode());
     applyStations(stations);
     scheduleNextHourHttpRefresh();
@@ -83,6 +110,10 @@ function scheduleNextHourHttpRefresh() {
 }
 
 async function initRealtime() {
+  if (!shouldUseRealtimeTransport()) {
+    stopRealtimeSubscriptions();
+    return;
+  }
   try {
     stompClient = await connectWebSocket();
     websocketReady = true;
@@ -144,7 +175,7 @@ window.addEventListener('load', () => {
 
 window.addEventListener('modeChanged', async (event) => {
   const mode = event && event.detail ? event.detail.mode : getCurrentMode();
-  if (websocketReady && stompClient) {
+  if (websocketReady && stompClient && shouldUseRealtimeTransport()) {
     httpFallbackActive = false;
     if (httpFallbackTimerId != null) {
       clearTimeout(httpFallbackTimerId);
@@ -158,4 +189,17 @@ window.addEventListener('modeChanged', async (event) => {
   const stations = await refreshCurrentHourStationsByHttp(mode);
   applyStations(stations);
   scheduleNextHourHttpRefresh();
+});
+
+window.addEventListener(QUERY_TIME_EVENT, async () => {
+  const mode = getCurrentMode();
+  if (!shouldUseRealtimeTransport()) {
+    stopRealtimeSubscriptions();
+    const stations = await refreshCurrentHourStationsByHttp(mode);
+    applyStations(stations);
+    await initNumberAnimations(mode);
+    return;
+  }
+  await initRealtime();
+  await initNumberAnimations(mode);
 });
