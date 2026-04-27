@@ -36,6 +36,8 @@ build/
 .agents/
 .superpowers/
 .worktrees/
+.codex-output/
 hs_err_pid*.log
 docs/superpowers/
+docs/
 src/main/resources/application-local.yml
