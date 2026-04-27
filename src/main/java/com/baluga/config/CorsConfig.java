@@ -30,7 +30,7 @@ public class CorsConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("redirect:/floodcontrol/Flood_Control_And_Drought_Relief.html");
+        registry.addViewController("/").setViewName("redirect:/index/index.html");
         registry.addViewController("/floodcontrol").setViewName("redirect:/floodcontrol/Flood_Control_And_Drought_Relief.html");
     }
 }
