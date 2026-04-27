@@ -93,37 +93,11 @@ COLLATE utf8mb4_unicode_ci;
 
 当前仓库没有接入 `Flyway` 或 `Liquibase`，数据库、表结构和初始化数据需要用户自己导入。
 
-SQL 脚本位于 `src/main/resources/sql/`。建议在空库中执行，或先做好数据备份。
+SQL 脚本位于 `src/main/resources/sql/`。当前仓库提供一个合并后的初始化脚本：
 
-建议按以下顺序导入：
+- `src/main/resources/sql/china_hydrology_monitor.sql`
 
-#### floodcontrol
-
-1. `src/main/resources/sql/floodcontrol/monitoring_station.sql`
-2. `src/main/resources/sql/floodcontrol/monitoring_station_history.sql`
-3. `src/main/resources/sql/floodcontrol/rescue_material_category.sql`
-4. `src/main/resources/sql/floodcontrol/rescue_material.sql`
-5. `src/main/resources/sql/floodcontrol/rescue_material_usage.sql`
-
-#### prediction
-
-1. `src/main/resources/sql/prediction/stations.sql`
-2. `src/main/resources/sql/prediction/monitoring_data.sql`
-3. `src/main/resources/sql/prediction/warnings.sql`
-4. `src/main/resources/sql/prediction/configs.sql`
-
-#### waterlevel
-
-1. `src/main/resources/sql/waterlevel/station.sql`
-2. `src/main/resources/sql/waterlevel/water_level.sql`
-3. `src/main/resources/sql/waterlevel/warning.sql`
-4. `src/main/resources/sql/waterlevel/warnings.sql`
-5. `src/main/resources/sql/waterlevel/weather.sql`
-
-#### waterproject
-
-1. `src/main/resources/sql/waterproject/water_project.sql`
-2. `src/main/resources/sql/waterproject/major_river.sql`
+这个脚本已经包含建表语句和初始化数据，建议在空库中执行，或先做好数据备份。
 
 ### 4. 配置本地运行参数
 
@@ -174,7 +148,7 @@ amap:
 
 - MySQL 已启动
 - 数据库 `china_hydrology_monitor` 已存在
-- 所有 SQL 脚本已成功执行
+- 合并 SQL 脚本已成功执行
 - Redis 已启动
 
 ### 6. 启动项目
@@ -222,7 +196,7 @@ http://localhost:8080
 
 - 项目主启动类为 `com.baluga.ChinaHydrologicalMonitoringPlatformApplication`
 - `waterproject` 模块带有少量代码级初始化逻辑
-- 其他模块主要依赖 `src/main/resources/sql/` 中的初始化脚本
+- 其他模块主要依赖 `src/main/resources/sql/china_hydrology_monitor.sql` 中的初始化数据
 - 如果没有导入 SQL，部分页面会出现空数据或接口无结果
 
 ## 常见问题
